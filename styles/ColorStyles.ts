@@ -15,7 +15,7 @@ export const GRAY = css`
 `;
 
 export const MAIN = css`
-  --White: FFFFFF;
+  --White: #ffffff;
   --Violet: #5534da;
   --Violet8: #f1effd;
   --Red: #d6173a;
@@ -24,4 +24,7 @@ export const MAIN = css`
   --Orange: #ffa500;
   --Blue: #76a5ea;
   --Pink: #e876ea;
+
+  // 추가한 main color
+  --Main: #3c6255;
 `;
