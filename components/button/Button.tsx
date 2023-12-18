@@ -13,19 +13,6 @@ interface ButtonContentProps {
   disabled?: boolean;
 }
 
-const StyledButton = styled.button<ButtonContentProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--White);
-  color: var(--Black20);
-  font-weight: 500;
-  border: 1px solid var(--Gray30);
-  border-radius: 8px;
-
-  ${({ type, size }) => TYPES[type] && size in TYPES[type] && TYPES[type][size]}
-`;
-
 const ButtonContent: React.FC<ButtonContentProps> = ({ type, children }) => {
   switch (type) {
     case "addNewColumn":
@@ -70,5 +57,21 @@ const Button: React.FC<ButtonContentProps> = ({ type, size, children, ...props }
     </StyledButton>
   );
 };
+
+const StyledButton = styled.button<ButtonContentProps>`
+  border: 1px solid var(--Gray30);
+  border-radius: 8px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--White);
+  color: var(--Black20);
+
+  font-weight: 500;
+
+  ${({ type, size }) => TYPES[type] && size in TYPES[type] && TYPES[type][size]}
+`;
 
 export default Button;
