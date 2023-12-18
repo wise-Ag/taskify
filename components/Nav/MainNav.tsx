@@ -3,7 +3,7 @@ import SignButton from "@/components/Nav/SignButton";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 
-function Nav() {
+function MainNav() {
   return (
     <Wrapper>
       <LogoButton />
@@ -12,7 +12,7 @@ function Nav() {
   );
 }
 
-export default Nav;
+export default MainNav;
 
 const Wrapper = styled.nav`
   width: 100%;
