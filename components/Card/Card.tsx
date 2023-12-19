@@ -13,9 +13,9 @@ function Card({ cardData }: { cardData: getCardsResponse }) {
       <Title>{cardData.title}</Title>
       {cardData.tags[0] && (
         <Tags>
-          {cardData.tags.map((tag) => {
+          {cardData.tags.map((tag, idx) => {
             return (
-              <Tag bgColor="--Pink10" textColor="--Pink20">
+              <Tag key={idx} bgColor="--Pink10" textColor="--Pink20">
                 {tag}
               </Tag>
             );
