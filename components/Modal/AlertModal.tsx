@@ -19,20 +19,23 @@ function AlertModal({ type }: AlertProps) {
 
 export default AlertModal;
 
+const AlertModalWrapper = styled.div`
+  position: relative;
+  width: 54rem;
+  height: 25rem;
+  border-radius: 0.8rem;
+  background: var(--White);
+`;
+
 const AlertModalContents = styled.div`
-  // position: relative;
-  width: 50.8rem;
-  height: 22.2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 8px;
   text-align: center;
-  line-height: 22.2rem;
+  line-height: 25rem;
   color: var(--Black20);
   font-size: 1.8rem;
   font-weight: 500;
-`;
-
-const AlertModalWrapper = styled.div`
-  padding: 3.2rem 2.8rem;
-  border-radius: 0.8rem;
-  background: var(--White);
 `;
