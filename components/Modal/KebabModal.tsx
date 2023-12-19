@@ -21,8 +21,8 @@ const KebabWrapper = styled.div`
   width: 9.3rem;
   height: 8.2rem;
   border-radius: 6px;
-  border: 1px solid var(--gray-gray_D9D9D9, #d9d9d9);
-  background: var(--white-white_FFFFFF, #fff);
+  border: 1px solid var(--Gray30);
+  background: var(--White);
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
 
   @media screen and (max-width: ${DeviceSize.mobile}) {

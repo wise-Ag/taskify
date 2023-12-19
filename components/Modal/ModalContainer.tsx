@@ -19,5 +19,5 @@ export default ModalContainer;
 const Wrapper = styled.div`
   padding: 3.2rem 2.8rem;
   border-radius: 0.8rem;
-  background: var(--white-white_FFFFFF, #fff);
+  background: var(--White);
 `;

@@ -21,11 +21,10 @@ const AlertModalWrapper = styled.div`
   // position: relative;
   width: 50.8rem;
   height: 22.2rem;
-
+  border-radius: 8px;
   text-align: center;
   line-height: 22.2rem;
-
-  color: var(--black-black_333236, #333236);
+  color: var(--Black20);
   font-size: 1.8rem;
   font-weight: 500;
 `;
