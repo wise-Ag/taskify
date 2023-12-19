@@ -1,5 +1,5 @@
 import instance from "@/api/axios";
-import Column from "@/components/Column";
+import Column from "@/components/Column/Column";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useEffect, useState } from "react";
 import styled from "styled-components";

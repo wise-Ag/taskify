@@ -3,8 +3,8 @@ import mockIcon from "@/assets/icons/mockIcon.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 import Image from "next/image";
 import styled from "styled-components";
-import Tag from "./Chip/Tag";
-import { getCardsResponse } from "./Column";
+import Tag from "../Chip/Tag";
+import { getCardsResponse } from "../Column/Column";
 
 function Card({ cardData }: { cardData: getCardsResponse }) {
   return (

@@ -2,7 +2,7 @@ import circleIcon from "@/assets/icons/blue-circle.svg";
 import settingIcon from "@/assets/icons/settings.svg";
 import Image from "next/image";
 import styled from "styled-components";
-import CounterCard from "./Chip/CounterCard";
+import CounterCard from "@/components/Chip/CounterCard";
 
 interface ColumnHeaderProps {
   title: string;
