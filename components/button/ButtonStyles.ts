@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import { css } from "styled-components";
 
 interface ButtonTypeStyles {
   [key: string]: {
@@ -326,8 +326,4 @@ const TYPES = {
   },
 };
 
-const StyledSpan = styled.span`
-  margin: 0 0.8rem 0 1.6rem;
-`;
-
-export { TYPES, StyledSpan };
+export default TYPES;

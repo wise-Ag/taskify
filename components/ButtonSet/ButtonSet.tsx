@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import ArrowIcon from "../../assets/icons/arrow-forward.svg";
+import ArrowIcon from "@/assets/icons/arrow-forward.svg";
 import TYPES from "./ButtonSetStyles";
 
 interface ButtonProps {
