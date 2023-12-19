@@ -1,5 +1,5 @@
 import circleIcon from "@/assets/icons/blue-circle.svg";
-import settingIcon from "@/assets/icons/setting.svg";
+import settingIcon from "@/assets/icons/settings.svg";
 import Image from "next/image";
 
 interface ColumnHeaderProps {
