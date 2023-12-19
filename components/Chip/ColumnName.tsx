@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import Circle from "@/assets/icons/circle.svg";
+import circle from "@/assets/icons/circle.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 
 interface ColumnNameProps {
@@ -10,7 +10,7 @@ interface ColumnNameProps {
 function ColumnName({ status }: ColumnNameProps) {
   return (
     <Container>
-      <Image src={Circle} alt="circle" width={6} height={6} />
+      <Image src={circle} alt="circle" width={6} height={6} />
       <Text>{status}</Text>
     </Container>
   );
