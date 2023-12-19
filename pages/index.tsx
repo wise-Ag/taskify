@@ -1,7 +1,8 @@
 import KebobModal from "@/components/Modal/KebabModal";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import ModalContainer from "@/components/Modal/ModalContainer";
+import AlertModal from "@/components/Modal/AlertModal";
+import NewDashBoardModal from "@/components/Modal/NewDashBoardModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,7 +16,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <KebobModal />
-      <ModalContainer modalType="alert" />
+      <AlertModal type="complete" />
+      <NewDashBoardModal />
     </>
   );
 }

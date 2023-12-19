@@ -15,7 +15,7 @@ const GlobalStyles = createGlobalStyle`
   html {
     font-size: 62.5%;
     font-family: 'Pretendard';
-    background-color: #ffffff;
+    background-color: var(--Gray50);
     word-break: keep-all;
   }
 

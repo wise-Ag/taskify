@@ -1,12 +1,15 @@
 import styled from "styled-components";
 import ColorSelector from "@/components/Chip/DashBoardColor";
+import NameInput from "./NameInput";
 
 function NewDashBoardModal() {
   return (
     <NewDashBoardModalWrapper>
       <NewDashBoardTitle>새로운 대시보드</NewDashBoardTitle>
-      <DashBoardName>대시보드 이름</DashBoardName>
-      <DashBoardInputWrapper>인풋영역</DashBoardInputWrapper>
+      {/* <DashBoardName>대시보드 이름</DashBoardName> */}
+      {/* <DashBoardInputWrapper> */}
+      <NameInput titleType="이름" />
+      {/* </DashBoardInputWrapper> */}
       <ColorSelectorWrapper>
         <ColorSelector />
       </ColorSelectorWrapper>
@@ -31,18 +34,13 @@ const NewDashBoardTitle = styled.div`
   font-weight: 700;
 `;
 
-const DashBoardName = styled.div`
-  margin-top: 3.2rem;
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
-  font-weight: 500;
-`;
+// const DashBoardName = styled.div``;
 
-const DashBoardInputWrapper = styled.div`
-  width: 48.4rem;
-  height: 4.8rem;
-  border: 1px solid var(--Gray30);
-`;
+// const DashBoardInputWrapper = styled.div`
+//   width: 48.4rem;
+//   height: 4.8rem;
+//   border: 1px solid var(--Gray30);
+// `;
 
 const ColorSelectorWrapper = styled.div`
   margin-top: 2.8rem;
