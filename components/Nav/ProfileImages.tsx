@@ -2,9 +2,16 @@ import styled from "styled-components";
 import { memberData } from "./mockData";
 import Image from "next/image";
 import numberBackground from "@/assets/icons/number-background.svg";
+import { useMediaQuery } from "react-responsive";
 
 function ProfileImages() {
   const { members, totalCount } = memberData;
+  const isPc = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
+  const isTabletorMobile = useMediaQuery({
+    query: "(max-width: 1024px)",
+  });
 
   return (
     <>
@@ -16,7 +23,8 @@ function ProfileImages() {
           {totalCount > 4 && (
             <>
               <NumberBackground src={numberBackground} alt="숫자 배경" />
-              <Number>+{totalCount - 4}</Number> {/* 숫자는 어떻게 변경하는거지..ㅠㅠ */}
+              {isPc && <Number>+{totalCount - 4}</Number>}
+              {isTabletorMobile && <Number>+{totalCount - 2}</Number>}
             </>
           )}
         </Contents>
