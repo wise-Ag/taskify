@@ -5,25 +5,26 @@ import Image from "next/image";
 import styled from "styled-components";
 import Tag from "../Chip/Tag";
 import { getCardsResponse } from "../Column/Column";
+import { formatDate } from "@/utils/FormatDate";
 
 function Card({ cardData }: { cardData: getCardsResponse }) {
   return (
     <Wrapper>
-      {cardData.imageUrl && <CardImage cardImage={cardData.imageUrl} />}
+      {cardData.imageUrl && <CardImage cardimage={cardData.imageUrl || null} />}
       <Title>{cardData.title}</Title>
       {cardData.tags[0] && (
         <Tags>
           {cardData.tags.map((tag) => {
             return (
-              <Tag bgColor="#F7DBF0" textColor="#D549B6">
-                {tag}
-              </Tag>
+              // <Tag bgColor="#F7DBF0" textColor="#D549B6">
+              <div> {tag}</div>
+              // </Tag>
             );
           })}
         </Tags>
       )}
       <Date>
-        <Image src={calenderIcon} alt="calenderIcon" /> {cardData.createdAt}
+        <Image src={calenderIcon} alt="calenderIcon" /> {formatDate(cardData.createdAt)}
       </Date>
       <ProfileImage src={mockIcon} alt="userProfileIcon" />
     </Wrapper>
@@ -47,6 +48,8 @@ const Wrapper = styled.div`
 
   padding: 2rem;
 
+  cursor: pointer;
+
   @media (max-width: ${DeviceSize.tablet}) {
     width: 54.4rem;
     height: 11rem;
@@ -64,11 +67,11 @@ const Wrapper = styled.div`
   }
 `;
 
-const CardImage = styled.div<{ cardImage: string | null }>`
+const CardImage = styled.div<{ cardimage: string | null }>`
   width: 27.4rem;
   height: 16rem;
 
-  background-image: url(${(props) => props.cardImage});
+  background-image: url(${(props) => props.cardimage || ""});
   border-radius: 0.6rem;
   background-size: cover;
   background-repeat: no-repeat;
@@ -94,7 +97,7 @@ const Title = styled.div`
   font-weight: 500;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    width: 60%;
+    width: 70%;
     height: 50%;
     float: left;
 
@@ -131,7 +134,7 @@ const Date = styled.div`
   gap: 0.6rem;
   align-items: center;
 
-  color: (--Grey50);
+  color: var(--Gray50);
   font-size: 1.2rem;
   font-weight: 500;
 

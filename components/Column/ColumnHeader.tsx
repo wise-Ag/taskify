@@ -17,7 +17,7 @@ function ColumnHeader({ title, columnId, count }: ColumnHeaderProps) {
         <Title>{title}</Title>
         <CounterCard number={count} />
       </Content>
-      <Image src={settingIcon} alt="setting Icon" />
+      <Image src={settingIcon} alt="setting Icon" style={{ cursor: "pointer" }} />
     </Wrapper>
   );
 }
