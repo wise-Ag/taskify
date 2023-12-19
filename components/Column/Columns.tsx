@@ -20,22 +20,21 @@ export const MOCK_DATA = {
 function Columns() {
   const [columns, setColumns] = useState<Column[]>([]);
 
-  const getColumns = async () => {
-    const res = await instance.get("/columns", {
-      params: {
-        dashboardId: MOCK_DATA.dashboardId,
-      },
-      headers: {
-        Authorization: `Bearer ${MOCK_DATA.token}`,
-      },
-    });
-    const columns = res.data.data;
-    setColumns(() => {
-      return [...columns];
-    });
-  };
-
   useEffect(() => {
+    const getColumns = async () => {
+      const res = await instance.get("/columns", {
+        params: {
+          dashboardId: MOCK_DATA.dashboardId,
+        },
+        headers: {
+          Authorization: `Bearer ${MOCK_DATA.token}`,
+        },
+      });
+      const columns = res.data.data;
+      setColumns(() => {
+        return [...columns];
+      });
+    };
     getColumns();
   }, []);
 

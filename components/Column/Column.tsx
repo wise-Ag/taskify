@@ -26,22 +26,21 @@ export interface getCardsResponse {
 function Column({ columnId, title }: ColumnProps) {
   const [cards, setCards] = useState<getCardsResponse[]>([]);
 
-  const getCards = async () => {
-    const res = await instance.get("/cards", {
-      params: {
-        columnId,
-      },
-      headers: {
-        Authorization: `Bearer ${MOCK_DATA.token}`,
-      },
-    });
-    const cards = res.data.cards;
-    setCards(() => {
-      return [...cards];
-    });
-  };
-
   useEffect(() => {
+    const getCards = async () => {
+      const res = await instance.get("/cards", {
+        params: {
+          columnId,
+        },
+        headers: {
+          Authorization: `Bearer ${MOCK_DATA.token}`,
+        },
+      });
+      const cards = res.data.cards;
+      setCards(() => {
+        return [...cards];
+      });
+    };
     getCards();
   }, []);
 
