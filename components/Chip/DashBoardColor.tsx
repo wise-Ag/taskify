@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import checkIcon from "@/assets/icons/check.svg";
+import CheckIcon from "@/assets/icons/check.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { selectedColorAtom } from "@/states/atoms";
@@ -52,7 +52,7 @@ const ColorCircle = styled.div<ColorCircleProps>`
     position: absolute;
 
     content: "";
-    background-image: url(${checkIcon.src});
+    background-image: url(${CheckIcon.src});
     background-size: cover;
   }
 

@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import Image from "next/image";
-import addFillo from "@/assets/icons/add-fillo.svg";
+import AddFillo from "@/assets/icons/add-fillo.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 
 function AddColumn() {
   return (
     <Container>
-      <Image src={addFillo} alt="add" width={16} height={16} />
+      <AddFillo alt="add" width={16} height={16} />
     </Container>
   );
 }
