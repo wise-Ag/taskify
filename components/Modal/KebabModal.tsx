@@ -26,29 +26,29 @@ const KebabWrapper = styled.div`
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
-    width: 86px;
-    height: 74px;
+    width: 8.6rem;
+    height: 7.4rem;
     font-size: 1.2rem;
   }
-;
-`
+`;
 
 const KebabListWrapper = styled.ul`
-      display: column;
-    justify-content: center;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-`
+  display: column;
+  justify-content: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+`;
 
 const KebabList = styled.li`
-      padding: 8px;
-    justify-content: center;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1.4rem;
-    &:hover {
-      background: var(--Violet8);
-      color: var(--Violet);
-    }
-`
+  padding: 8px;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+  font-size: 1.4rem;
+  &:hover {
+    background: var(--Violet8);
+    color: var(--Violet);
+  }
+`;
