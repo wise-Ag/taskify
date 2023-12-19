@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import TYPES from "@/components/Button/ButtonStyles";
+import TYPES from "@/components/button/ButtonStyles";
 import AddBoxIcon from "@/assets/icons/add-box.svg";
 import ArrowIcon from "@/assets/icons/arrow-forward.svg";
 import CrownIcon from "@/assets/icons/crown.svg";

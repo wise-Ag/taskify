@@ -1,7 +1,6 @@
-import calenderIcon from "@/assets/icons/calender.svg";
-import mockIcon from "@/assets/icons/mockIcon.svg";
+import CalenderIcon from "@/assets/icons/calender.svg";
+import MockIcon from "@/assets/icons/mockIcon.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
-import Image from "next/image";
 import styled from "styled-components";
 import Tag from "../Chip/Tag";
 import { getCardsResponse } from "../Column/Column";
@@ -16,17 +15,17 @@ function Card({ cardData }: { cardData: getCardsResponse }) {
         <Tags>
           {cardData.tags.map((tag) => {
             return (
-              // <Tag bgColor="#F7DBF0" textColor="#D549B6">
-              <div> {tag}</div>
-              // </Tag>
+              <Tag bgColor="--Pink10" textColor="--Pink20">
+                {tag}
+              </Tag>
             );
           })}
         </Tags>
       )}
       <Date>
-        <Image src={calenderIcon} alt="calenderIcon" /> {formatDate(cardData.createdAt)}
+        <CalenderIcon /> {formatDate(cardData.createdAt)}
       </Date>
-      <ProfileImage src={mockIcon} alt="userProfileIcon" />
+      <ProfileImage />
     </Wrapper>
   );
 }
@@ -152,16 +151,16 @@ const Date = styled.div`
   }
 `;
 
-const ProfileImage = styled(Image)`
-  width: 2.4rem;
-  height: 2.4rem;
+const ProfileImage = styled(MockIcon)`
+  /* width: 2.4rem;
+  height: 2.4rem; */
 
   position: absolute;
   bottom: 2rem;
   right: 2rem;
 
   @media (max-width: ${DeviceSize.mobile}) {
-    width: 2.2rem;
-    height: 2.2rem;
+    /* width: 2.2rem;
+    height: 2.2rem; */
   }
 `;

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ColumnHeader from "./ColumnHeader";
 import { MOCK_DATA } from "./Columns";
+import Button from "../button/Button";
+import { DeviceSize } from "@/styles/DeviceSize";
 
 interface ColumnProps {
   columnId: number;
@@ -48,7 +50,9 @@ function Column({ columnId, title }: ColumnProps) {
     <Wrapper>
       <ColumnHeader title={title} columnId={columnId} count={cards.length} />
       <Container>
-        <button>+</button>
+        <Button type="plus" size="L" disabled>
+          +
+        </Button>
         {cards.map((card) => {
           return <Card key={card.id} cardData={card} />;
         })}
@@ -64,7 +68,11 @@ const Wrapper = styled.div`
   flex-direction: column;
 
   padding: 2rem;
-  border-left: 0.1rem solid var(--Gray30);
+  border-right: 0.1rem solid var(--Gray30);
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    border-bottom: 0.1rem solid var(--Gray30);
+  }
 `;
 
 const Container = styled.div`

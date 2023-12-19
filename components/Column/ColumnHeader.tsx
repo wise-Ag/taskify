@@ -1,5 +1,5 @@
-import circleIcon from "@/assets/icons/blue-circle.svg";
-import settingIcon from "@/assets/icons/settings.svg";
+import CircleIcon from "@/assets/icons/blue-circle.svg";
+import SettingIcon from "@/assets/icons/settings.svg";
 import Image from "next/image";
 import styled from "styled-components";
 import CounterCard from "@/components/Chip/CounterCard";
@@ -13,11 +13,11 @@ function ColumnHeader({ title, columnId, count }: ColumnHeaderProps) {
   return (
     <Wrapper>
       <Content>
-        <Image src={circleIcon} alt="Circle Icon" />
+        <CircleIcon />
         <Title>{title}</Title>
         <CounterCard number={count} />
       </Content>
-      <Image src={settingIcon} alt="setting Icon" style={{ cursor: "pointer" }} />
+      <SettingIcon style={{ cursor: "pointer" }} />
     </Wrapper>
   );
 }

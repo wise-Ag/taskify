@@ -3,6 +3,7 @@ import Column from "@/components/Column/Column";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import Button from "../button/Button";
 
 interface Column {
   createdAt: string;
@@ -43,6 +44,11 @@ function Columns() {
       {columns.map((column) => {
         return <Column key={column.id} title={column.title} columnId={column.id} />;
       })}
+      <ButtonWrapper>
+        <Button type="newDashboard" size="L" disabled>
+          새로운 컬럼 추가하기
+        </Button>
+      </ButtonWrapper>
     </Wrapper>
   );
 }
@@ -53,7 +59,6 @@ const Wrapper = styled.div`
   height: 100vh;
   height: 100%;
   display: flex;
-
   background: var(--Gray10);
 
   @media (max-width: ${DeviceSize.tablet}) {
@@ -63,5 +68,20 @@ const Wrapper = styled.div`
 
   @media (max-width: ${DeviceSize.mobile}) {
     flex-direction: column;
+  }
+`;
+
+const ButtonWrapper = styled.div`
+  width: 100%;
+  height: 11rem;
+  padding-top: 2rem;
+  margin-top: 6.3rem;
+  margin-left: 2rem;
+
+  background: var(--Gray10);
+  z-index: 1;
+  @media (max-width: ${DeviceSize.tablet}) {
+    position: sticky;
+    bottom: 0;
   }
 `;
