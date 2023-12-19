@@ -24,9 +24,6 @@ const ButtonContent: React.FC<ButtonContentProps> = ({ type, children }) => {
           <Image src={addBoxIcon} alt="추가 아이콘" width={22} height={22} />
         </>
       );
-    case "forward":
-    case "backward":
-      return <Image src={arrowForwardIcon} alt="넘어가기 아이콘" width={16} height={16} />;
     case "dashboardList":
       return (
         <>
