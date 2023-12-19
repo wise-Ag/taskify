@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import CheckIcon from "@/assets/icons/check.svg";
+import checkIcon from "@/assets/icons/check.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { selectedColorAtom } from "@/api/atoms";
+import { selectedColorAtom } from "@/states/atoms";
 
 interface ColorCircleProps {
   color: string;
@@ -45,13 +45,15 @@ const ColorCircle = styled.div<ColorCircleProps>`
   cursor: pointer;
 
   &:after {
-    content: "";
-    display: ${(props) => (props.selected ? "block" : "none")};
-    position: absolute;
-    background-image: url(${CheckIcon.src});
-    background-size: cover;
     width: 2.4rem;
     height: 2.4rem;
+
+    display: ${(props) => (props.selected ? "block" : "none")};
+    position: absolute;
+
+    content: "";
+    background-image: url(${checkIcon.src});
+    background-size: cover;
   }
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
