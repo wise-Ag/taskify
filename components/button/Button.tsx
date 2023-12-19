@@ -1,19 +1,29 @@
 import React from "react";
 import styled from "styled-components";
-import { TYPES, StyledSpan } from "./ButtonStyles";
-import Image from "next/image";
-import AddBoxIcon from "../../assets/icons/add-box.svg";
-import ArrowIcon from "../../assets/icons/arrow-forward.svg";
-import CrownIcon from "../../assets/icons/crown.svg";
+import TYPES from "@/components/Button/ButtonStyles";
+import AddBoxIcon from "@/assets/icons/add-box.svg";
+import ArrowIcon from "@/assets/icons/arrow-forward.svg";
+import CrownIcon from "@/assets/icons/crown.svg";
+import AddColumn from "@/components/Chip/AddColumn";
+import dashboardData from "./mockData";
 
 interface ButtonContentProps {
   size: "S" | "M" | "L";
   type: keyof typeof TYPES;
   children: React.ReactNode;
   disabled?: boolean;
+  id?: number;
+  color?: string;
+  title?: string;
 }
 
-const ButtonContent: React.FC<ButtonContentProps> = ({ type, children }) => {
+const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, id, color, title }) => {
+  let dashboard;
+  if (type === "dashboardList" && id !== undefined) {
+    // dashboard = dashboardData.dashboards.find((d) => d.id === id);
+    dashboard = dashboardData.dashboards[0];
+  }
+
   switch (type) {
     case "addNewColumn":
     case "plus":
@@ -21,19 +31,17 @@ const ButtonContent: React.FC<ButtonContentProps> = ({ type, children }) => {
       return (
         <>
           <span>{children}</span>
-          <AddBoxIcon />
-          {/* chip으로 변경 필요 */}
+          <AddColumn />
         </>
       );
     case "dashboardList":
       return (
         <>
-          <div>
-            <AddBoxIcon />
-            {/* chip으로 변경 필요 */}
-            <StyledSpan>{children}</StyledSpan>
+          <StyledTitleWrapper>
+            {dashboard?.color && <Color color={dashboard.color} />}
+            {dashboard?.title && <StyledDashboardTitle>{dashboard.title}</StyledDashboardTitle>}
             <CrownIcon />
-          </div>
+          </StyledTitleWrapper>
           <ArrowIcon />
         </>
       );
@@ -49,10 +57,10 @@ const ButtonContent: React.FC<ButtonContentProps> = ({ type, children }) => {
   }
 };
 
-const Button: React.FC<ButtonContentProps> = ({ type, size, children, ...props }) => {
+const Button: React.FC<ButtonContentProps> = ({ type, size, children, id, ...props }) => {
   return (
     <StyledButton type={type} size={size} {...props}>
-      <ButtonContent type={type} size={size} children={children} />
+      <ButtonContent type={type} size={size} children={children} id={id} />
     </StyledButton>
   );
 };
@@ -77,6 +85,24 @@ const StyledAddBoxIcon = styled(AddBoxIcon)`
   path {
     fill: ${({ type }) => (type === "invite" ? "var(--White)" : "currentColor")};
   }
+`;
+
+const Color = styled.div<{ color: string }>`
+  width: 0.8rem;
+  height: 0.8rem;
+
+  border-radius: 100%;
+
+  background-color: ${(props) => props.color};
+`;
+
+const StyledTitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const StyledDashboardTitle = styled.span`
+  margin: 0 0.8rem 0 1.6rem;
 `;
 
 export default Button;
