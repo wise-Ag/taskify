@@ -1,6 +1,8 @@
 import instance from "@/api/axios";
-import { useEffect, useState } from "react";
 import Column from "@/components/Column";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 interface Column {
   createdAt: string;
@@ -38,12 +40,28 @@ function Columns() {
   }, []);
 
   return (
-    <>
+    <Wrapper>
       {columns.map((column) => {
         return <Column key={column.id} title={column.title} columnId={column.id} />;
       })}
-    </>
+    </Wrapper>
   );
 }
 
 export default Columns;
+
+const Wrapper = styled.div`
+  height: 100vh;
+  display: flex;
+
+  background: var(--Gray10);
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    flex-direction: column;
+    width: auto;
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    flex-direction: column;
+  }
+`;

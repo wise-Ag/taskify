@@ -1,6 +1,7 @@
 import instance from "@/api/axios";
-import { useEffect, useState } from "react";
 import Card from "@/components/Card";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 import ColumnHeader from "./ColumnHeader";
 import { MOCK_DATA } from "./Columns";
 
@@ -45,13 +46,30 @@ function Column({ columnId, title }: ColumnProps) {
   }, []);
 
   return (
-    <>
+    <Wrapper>
       <ColumnHeader title={title} columnId={columnId} count={cards.length} />
-      {cards.map((card) => {
-        return <Card key={card.id} cardData={card} />;
-      })}
-    </>
+      <Container>
+        <button>+</button>
+        {cards.map((card) => {
+          return <Card key={card.id} cardData={card} />;
+        })}
+      </Container>
+    </Wrapper>
   );
 }
 
 export default Column;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  padding: 2rem;
+  border-left: 0.1rem solid var(--Gray30);
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+`;
