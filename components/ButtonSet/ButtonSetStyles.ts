@@ -79,11 +79,7 @@ const TYPES = {
 
       border-radius: 0 4px 4px 0;
 
-      &:disabled {
-        svg {
-          fill: var(--Gray30);
-        }
-      }
+      transform: scaleX(-1);
     `,
     M: css`
       width: 4rem;
@@ -91,11 +87,7 @@ const TYPES = {
 
       border-radius: 0 4px 4px 0;
 
-      &:disabled {
-        svg {
-          fill: var(--Gray30);
-        }
-      }
+      transform: scaleX(-1);
     `,
     L: css`
       width: 4rem;
@@ -103,11 +95,7 @@ const TYPES = {
 
       border-radius: 0 4px 4px 0;
 
-      &:disabled {
-        svg {
-          fill: var(--Gray30);
-        }
-      }
+      transform: scaleX(-1);
     `,
   },
   backward: {
@@ -116,39 +104,18 @@ const TYPES = {
       height: 3.6rem;
 
       border-radius: 0 4px 4px 0;
-
-      transform: scaleX(-1);
-      &:disabled {
-        svg {
-          fill: var(--Gray30);
-        }
-      }
     `,
     M: css`
       width: 4rem;
       height: 4rem;
 
       border-radius: 0 4px 4px 0;
-
-      transform: scaleX(-1);
-      &:disabled {
-        svg {
-          fill: var(--Gray30);
-        }
-      }
     `,
     L: css`
       width: 4rem;
       height: 4rem;
 
       border-radius: 0 4px 4px 0;
-
-      transform: scaleX(-1);
-      &:disabled {
-        svg {
-          fill: var(--Gray30);
-        }
-      }
     `,
   },
   basic: {

@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { TYPES, StyledSpan } from "./ButtonStyles";
 import Image from "next/image";
-import addBoxIcon from "../../assets/icons/add-box.svg";
-import arrowForwardIcon from "../../assets/icons/arrow-forward.svg";
-import crownIcon from "../../assets/icons/crown.svg";
+import AddBoxIcon from "../../assets/icons/add-box.svg";
+import ArrowIcon from "../../assets/icons/arrow-forward.svg";
+import CrownIcon from "../../assets/icons/crown.svg";
 
 interface ButtonContentProps {
   size: "S" | "M" | "L";
@@ -21,24 +21,26 @@ const ButtonContent: React.FC<ButtonContentProps> = ({ type, children }) => {
       return (
         <>
           <span>{children}</span>
-          <Image src={addBoxIcon} alt="추가 아이콘" width={22} height={22} />
+          <AddBoxIcon />
+          {/* chip으로 변경 필요 */}
         </>
       );
     case "dashboardList":
       return (
         <>
           <div>
-            <Image src={addBoxIcon} alt="추가 아이콘" width={10} height={10} />
+            <AddBoxIcon />
+            {/* chip으로 변경 필요 */}
             <StyledSpan>{children}</StyledSpan>
-            <Image src={crownIcon} alt="왕관 아이콘" width={15} height={12} />
+            <CrownIcon />
           </div>
-          <Image src={arrowForwardIcon} alt="넘어가기 아이콘" width={16} height={16} />
+          <ArrowIcon />
         </>
       );
     case "invite":
       return (
         <>
-          <Image src={addBoxIcon} alt="추가 아이콘" width={14} height={14} />
+          <StyledAddBoxIcon type={type} />
           <span>{children}</span>
         </>
       );
@@ -69,6 +71,12 @@ const StyledButton = styled.button<ButtonContentProps>`
   font-weight: 500;
 
   ${({ type, size }) => TYPES[type] && size in TYPES[type] && TYPES[type][size]}
+`;
+
+const StyledAddBoxIcon = styled(AddBoxIcon)`
+  path {
+    fill: ${({ type }) => (type === "invite" ? "var(--White)" : "currentColor")};
+  }
 `;
 
 export default Button;

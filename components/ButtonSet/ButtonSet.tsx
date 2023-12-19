@@ -1,8 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import ArrowIcon from "../../assets/icons/arrow-forward.svg";
 import TYPES from "./ButtonSetStyles";
-import Image from "next/image";
-import arrowForwardIcon from "../../assets/icons/arrow-forward.svg";
 
 interface ButtonProps {
   size: "S" | "M" | "L";
@@ -10,7 +9,9 @@ interface ButtonProps {
   buttonType: keyof typeof TYPES;
 }
 
-interface ButtonSetProps extends ButtonProps {
+type ButtonCommonProps = Omit<ButtonProps, "buttonType">;
+
+interface ButtonSetProps extends ButtonCommonProps {
   type: "forwardAndBackward" | "acceptAndReject" | "modalSet";
   children?: React.ReactNode;
 }
@@ -20,11 +21,11 @@ const ButtonSet: React.FC<ButtonSetProps> = ({ type, size, isDisabled, children 
     <ButtonSetContainer type={type}>
       {type === "forwardAndBackward" && (
         <>
-          <Button buttonType="backward" size={size} disabled={isDisabled}>
-            <Image src={arrowForwardIcon} alt="이전" width={16} height={16} />
-          </Button>
           <Button buttonType="forward" size={size} disabled={isDisabled}>
-            <Image src={arrowForwardIcon} alt="다음" width={16} height={16} />
+            <StyledArrowIcon disabled={isDisabled} />
+          </Button>
+          <Button buttonType="backward" size={size} disabled={isDisabled}>
+            <StyledArrowIcon disabled={isDisabled} />
           </Button>
         </>
       )}
@@ -77,6 +78,12 @@ const Button = styled.button<ButtonProps>`
   font-weight: 500;
 
   ${({ buttonType, size }) => TYPES[buttonType] && size in TYPES[buttonType] && TYPES[buttonType][size]}
+`;
+
+const StyledArrowIcon = styled(ArrowIcon)`
+  path {
+    fill: ${(props) => (props.disabled ? "var(--Gray30)" : "var(--Black20)")};
+  }
 `;
 
 export default ButtonSet;
