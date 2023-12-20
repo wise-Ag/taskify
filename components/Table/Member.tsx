@@ -29,7 +29,7 @@ function MembersList({ members, totalCount, currentPage }: MembersListProps) {
           <PageText>
             {totalCount} 페이지 중 {currentPage}
           </PageText>
-          <ButtonSet type="forwardAndBackward" size="S" isDisabled={true}></ButtonSet>
+          <ButtonSet type="forwardAndBackward" isDisabled={true}></ButtonSet>
         </PageInfo>
       </Header>
       <NameList>이름</NameList>
@@ -39,7 +39,7 @@ function MembersList({ members, totalCount, currentPage }: MembersListProps) {
             <Profile src={member.profileImageUrl} alt={member.nickname} />
             <Name>{member.nickname}</Name>
           </MemberInfo>
-          <Button type="delete" size="S" children="삭제" />
+          <Button type="delete" children="삭제" />
         </MemberItem>
       ))}
     </Container>
