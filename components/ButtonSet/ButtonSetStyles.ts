@@ -1,16 +1,31 @@
 import { css } from "styled-components";
-
-interface ButtonTypeStyles {
-  [key: string]: {
-    S: ReturnType<typeof css>;
-    M: ReturnType<typeof css>;
-    L: ReturnType<typeof css>;
-  };
-}
+import { DeviceSize } from "@/styles/DeviceSize";
 
 const TYPES = {
-  accept: {
-    S: css`
+  accept: css`
+    width: 8.4rem;
+
+    padding: 0.7rem 0;
+    border-radius: 4px;
+    border: none;
+
+    background-color: var(--Main);
+
+    color: var(--White);
+
+    @media (max-width: ${DeviceSize.tablet}) {
+      width: 7.2rem;
+
+      padding: 0.6rem 0;
+      border-radius: 4px;
+      border: none;
+
+      background-color: var(--Main);
+
+      color: var(--White);
+    }
+
+    @media (max-width: ${DeviceSize.mobile}) {
       width: 10.9rem;
 
       padding: 0.7rem 0;
@@ -21,32 +36,27 @@ const TYPES = {
 
       color: var(--White);
       font-size: 1.2rem;
-    `,
-    M: css`
+    }
+  `,
+
+  reject: css`
+    width: 8.4rem;
+
+    padding: 0.7rem 0;
+    border-radius: 4px;
+
+    color: var(--Main);
+
+    @media (max-width: ${DeviceSize.tablet}) {
       width: 7.2rem;
 
       padding: 0.6rem 0;
       border-radius: 4px;
-      border: none;
 
-      background-color: var(--Main);
+      color: var(--Main);
+    }
 
-      color: var(--White);
-    `,
-    L: css`
-      width: 8.4rem;
-
-      padding: 0.7rem 0;
-      border-radius: 4px;
-      border: none;
-
-      background-color: var(--Main);
-
-      color: var(--White);
-    `,
-  },
-  reject: {
-    S: css`
+    @media (max-width: ${DeviceSize.mobile}) {
       width: 10.9rem;
 
       padding: 0.7rem 0;
@@ -54,72 +64,53 @@ const TYPES = {
 
       color: var(--Main);
       font-size: 1.2rem;
-    `,
-    M: css`
-      width: 7.2rem;
+    }
+  `,
 
-      padding: 0.6rem 0;
-      border-radius: 4px;
+  forward: css`
+    width: 4rem;
+    height: 4rem;
 
-      color: var(--Main);
-    `,
-    L: css`
-      width: 8.4rem;
+    border-radius: 0 4px 4px 0;
 
-      padding: 0.7rem 0;
-      border-radius: 4px;
+    transform: scaleX(-1);
 
-      color: var(--Main);
-    `,
-  },
-  forward: {
-    S: css`
+    @media (max-width: ${DeviceSize.mobile}) {
       width: 3.6rem;
       height: 3.6rem;
 
       border-radius: 0 4px 4px 0;
 
       transform: scaleX(-1);
-    `,
-    M: css`
-      width: 4rem;
-      height: 4rem;
+    }
+  `,
 
-      border-radius: 0 4px 4px 0;
+  backward: css`
+    width: 4rem;
+    height: 4rem;
 
-      transform: scaleX(-1);
-    `,
-    L: css`
-      width: 4rem;
-      height: 4rem;
+    border-radius: 0 4px 4px 0;
 
-      border-radius: 0 4px 4px 0;
-
-      transform: scaleX(-1);
-    `,
-  },
-  backward: {
-    S: css`
+    @media (max-width: ${DeviceSize.mobile}) {
       width: 3.6rem;
       height: 3.6rem;
 
       border-radius: 0 4px 4px 0;
-    `,
-    M: css`
-      width: 4rem;
-      height: 4rem;
+    }
+  `,
 
-      border-radius: 0 4px 4px 0;
-    `,
-    L: css`
-      width: 4rem;
-      height: 4rem;
+  basic: css`
+    width: 12rem;
 
-      border-radius: 0 4px 4px 0;
-    `,
-  },
-  basic: {
-    S: css`
+    padding: 1.4rem 0;
+    border: none;
+
+    background-color: var(--Main);
+
+    color: var(--White);
+    font-size: 1.6rem;
+
+    @media (max-width: ${DeviceSize.mobile}) {
       width: 13.8rem;
 
       padding: 1.2rem 0;
@@ -128,55 +119,25 @@ const TYPES = {
       background-color: var(--Main);
 
       color: var(--White);
-    `,
-    M: css`
-      width: 12rem;
+    }
+  `,
 
-      padding: 1.4rem 0;
-      border: none;
+  cancel: css`
+    width: 12rem;
 
-      background-color: var(--Main);
+    padding: 1.4rem 0;
 
-      color: var(--White);
-      font-size: 1.6rem;
-    `,
-    L: css`
-      width: 12rem;
+    color: var(--Gray50);
+    font-size: 1.6rem;
 
-      padding: 1.4rem 0;
-      border: none;
-
-      background-color: var(--Main);
-
-      color: var(--White);
-      font-size: 1.6rem;
-    `,
-  },
-  cancel: {
-    S: css`
+    @media (max-width: ${DeviceSize.mobile}) {
       width: 13.8rem;
 
       padding: 1.2rem 0;
 
       color: var(--Gray50);
-    `,
-    M: css`
-      width: 12rem;
-
-      padding: 1.4rem 0;
-
-      color: var(--Gray50);
-      font-size: 1.6rem;
-    `,
-    L: css`
-      width: 12rem;
-
-      padding: 1.4rem 0;
-
-      color: var(--Gray50);
-      font-size: 1.6rem;
-    `,
-  },
+    }
+  `,
 };
 
 export default TYPES;

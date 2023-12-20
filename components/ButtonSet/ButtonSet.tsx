@@ -4,7 +4,6 @@ import ArrowIcon from "@/assets/icons/arrow-forward.svg";
 import TYPES from "./ButtonSetStyles";
 
 interface ButtonProps {
-  size: "S" | "M" | "L";
   isDisabled?: boolean;
   buttonType: keyof typeof TYPES;
 }
@@ -16,35 +15,35 @@ interface ButtonSetProps extends ButtonCommonProps {
   children?: React.ReactNode;
 }
 
-const ButtonSet: React.FC<ButtonSetProps> = ({ type, size, isDisabled, children }) => {
+const ButtonSet: React.FC<ButtonSetProps> = ({ type, isDisabled, children }) => {
   return (
     <ButtonSetContainer type={type}>
       {type === "forwardAndBackward" && (
         <>
-          <Button buttonType="forward" size={size} disabled={isDisabled}>
+          <Button buttonType="forward" disabled={isDisabled}>
             <StyledArrowIcon disabled={isDisabled} />
           </Button>
-          <Button buttonType="backward" size={size} disabled={isDisabled}>
+          <Button buttonType="backward" disabled={isDisabled}>
             <StyledArrowIcon disabled={isDisabled} />
           </Button>
         </>
       )}
       {type === "acceptAndReject" && (
         <>
-          <Button buttonType="accept" size={size} disabled={isDisabled}>
+          <Button buttonType="accept" disabled={isDisabled}>
             수락
           </Button>
-          <Button buttonType="reject" size={size} disabled={isDisabled}>
+          <Button buttonType="reject" disabled={isDisabled}>
             거절
           </Button>
         </>
       )}
       {type === "modalSet" && (
         <>
-          <Button buttonType="cancel" size={size} disabled={isDisabled}>
+          <Button buttonType="cancel" disabled={isDisabled}>
             취소
           </Button>
-          <Button buttonType="basic" size={size} disabled={isDisabled}>
+          <Button buttonType="basic" disabled={isDisabled}>
             {children}
           </Button>
         </>
@@ -77,7 +76,7 @@ const Button = styled.button<ButtonProps>`
 
   font-weight: 500;
 
-  ${({ buttonType, size }) => TYPES[buttonType] && size in TYPES[buttonType] && TYPES[buttonType][size]}
+  ${({ buttonType }) => TYPES[buttonType]}
 `;
 
 const StyledArrowIcon = styled(ArrowIcon)`
