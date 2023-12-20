@@ -10,7 +10,7 @@ function Card({ cardData }: { cardData: getCardsResponse }) {
   return (
     <Wrapper>
       {cardData.imageUrl && <CardImage cardimage={cardData.imageUrl || null} />}
-      <Title>{cardData.title}</Title>
+      <Title imageurl={cardData.imageUrl}>{cardData.title}</Title>
       {cardData.tags[0] && (
         <Tags>
           {cardData.tags.map((tag, idx) => {
@@ -99,12 +99,12 @@ const CardImage = styled.div<{ cardimage: string | null }>`
     margin: 0;
   }
 `;
-const Title = styled.div`
+const Title = styled.div<{ imageurl: string }>`
   font-size: 1.6rem;
   font-weight: 500;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    width: 70%;
+    width: ${(props) => (props.imageurl ? "75%" : "100%")};
     height: 50%;
     float: left;
 
@@ -126,7 +126,7 @@ const Tags = styled.div`
 
   @media (max-width: ${DeviceSize.tablet}) {
     height: 50%;
-
+    align-items: end;
     float: left;
     margin-right: 1.6rem;
   }
@@ -148,7 +148,7 @@ const Date = styled.div`
   @media (max-width: ${DeviceSize.tablet}) {
     width: auto;
     height: 50%;
-
+    align-items: end;
     float: left;
   }
   @media (max-width: ${DeviceSize.mobile}) {

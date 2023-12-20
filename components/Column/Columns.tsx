@@ -45,7 +45,7 @@ function Columns() {
         return <Column key={column.id} title={column.title} columnId={column.id} />;
       })}
       <ButtonWrapper>
-        <Button type="newDashboard" size="L" disabled>
+        <Button type="newDashboard" disabled>
           새로운 컬럼 추가하기
         </Button>
       </ButtonWrapper>
