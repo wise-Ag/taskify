@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import TYPES from "@/components/button/ButtonStyles";
+import TYPES from "@/components/Button/ButtonStyles";
 import AddBoxIcon from "@/assets/icons/add-box.svg";
 import ArrowIcon from "@/assets/icons/arrow-forward.svg";
 import CrownIcon from "@/assets/icons/crown.svg";
@@ -14,12 +14,13 @@ interface ButtonContentProps {
   id?: number;
   color?: string;
   title?: string;
+  createdByMe?: boolean;
 }
 
-const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, id, color, title }) => {
+const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, id, color, title, createdByMe }) => {
   let dashboard;
   if (type === "dashboardList" && id !== undefined) {
-    dashboard = dashboardData.dashboards[0];
+    dashboard = dashboardData.dashboards[id];
   }
 
   switch (type) {
@@ -38,7 +39,7 @@ const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, id, color
           <StyledTitleWrapper>
             {dashboard?.color && <Color color={dashboard.color} />}
             {dashboard?.title && <StyledDashboardTitle>{dashboard.title}</StyledDashboardTitle>}
-            <CrownIcon />
+            {dashboard?.createdByMe && <CrownIcon />}
           </StyledTitleWrapper>
           <ArrowIcon />
         </>
