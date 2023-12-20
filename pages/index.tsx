@@ -1,7 +1,5 @@
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import ModalInput from "@/components/ModalInput/ModalInput";
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
 
 const inter = Inter({ subsets: ["latin"] });
 
