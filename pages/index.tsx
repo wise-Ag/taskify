@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import Head from "next/head";
+import ModalInput from "@/components/ModalInput/ModalInput";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,6 +13,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <ModalInput inputType="댓글" label="댓글"></ModalInput>
+      <ModalInput inputType="제목" label="제목"></ModalInput>
+      <ModalInput inputType="마감일" label="마감일"></ModalInput>
     </>
   );
 }
