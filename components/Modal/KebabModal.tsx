@@ -41,7 +41,7 @@ const KebabListWrapper = styled.ul`
 `;
 
 const KebabList = styled.li`
-  padding: 8px;
+  padding: 0.8rem;
   justify-content: center;
   border-radius: 4px;
   cursor: pointer;
