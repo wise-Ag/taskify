@@ -9,7 +9,7 @@ import dashboardData from "./mockData";
 
 interface ButtonContentProps {
   type: keyof typeof TYPES;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   disabled?: boolean;
   id?: number;
   color?: string;
@@ -17,7 +17,7 @@ interface ButtonContentProps {
   createdByMe?: boolean;
 }
 
-const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, id, color, title, createdByMe }) => {
+const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, disabled, id, color, title, createdByMe }) => {
   let dashboard;
   if (type === "dashboardList" && id !== undefined) {
     dashboard = dashboardData.dashboards[id];
@@ -56,9 +56,9 @@ const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, id, color
   }
 };
 
-const Button: React.FC<ButtonContentProps> = ({ type, children, id }) => {
+const Button: React.FC<ButtonContentProps> = ({ type, children, disabled, id }) => {
   return (
-    <StyledButton type={type}>
+    <StyledButton type={type} disabled={disabled}>
       <ButtonContent type={type} children={children} id={id} />
     </StyledButton>
   );
