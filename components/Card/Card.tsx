@@ -1,10 +1,10 @@
 import CalenderIcon from "@/assets/icons/calender.svg";
-import MockIcon from "@/assets/icons/mockIcon.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 import Tag from "../Chip/Tag";
 import { getCardsResponse } from "../Column/Column";
 import { formatDate } from "@/utils/FormatDate";
+import NoProfileImage from "../NoProfileImage/ProfileImage";
 
 function Card({ cardData }: { cardData: getCardsResponse }) {
   return (
@@ -25,7 +25,15 @@ function Card({ cardData }: { cardData: getCardsResponse }) {
       <Date>
         <CalenderIcon /> {formatDate(cardData.createdAt)}
       </Date>
-      <ProfileImage />
+      <div style={{ position: "absolute", right: "2rem", bottom: "2rem" }}>
+        {cardData.assignee.profileImageUrl ? (
+          <ProfileImage url={cardData.assignee.profileImageUrl} />
+        ) : (
+          <NoProfileImageWrapper>
+            <NoProfileImage />
+          </NoProfileImageWrapper>
+        )}
+      </div>
     </Wrapper>
   );
 }
@@ -151,16 +159,25 @@ const Date = styled.div`
   }
 `;
 
-const ProfileImage = styled(MockIcon)`
-  /* width: 2.4rem;
-  height: 2.4rem; */
+const ProfileImage = styled.div<{ url: string }>`
+  width: 2.7rem;
+  height: 2.7rem;
 
-  position: absolute;
-  bottom: 2rem;
-  right: 2rem;
+  border-radius: 4.4rem;
+
+  background-image: url(${(props) => props.url});
+  background-size: cover;
+`;
+
+const NoProfileImageWrapper = styled.div`
+  width: 2.7rem;
+
+  line-height: 2.7rem;
+  font-size: 1.3rem;
 
   @media (max-width: ${DeviceSize.mobile}) {
-    /* width: 2.2rem;
-    height: 2.2rem; */
+    width: 2.4rem;
+
+    line-height: 2.4rem;
   }
 `;
