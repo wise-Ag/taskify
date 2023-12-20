@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import Tag from "../Chip/Tag";
 
-function ModalInput() {
+function TagInput() {
   const [inputValue, setInputValue] = useState("");
   const [tagValue, setTagValue] = useState<string[]>([]);
 
@@ -61,7 +61,7 @@ function ModalInput() {
   );
 }
 
-export default ModalInput;
+export default TagInput;
 
 const InputBox = styled.div`
   margin: 1rem;
