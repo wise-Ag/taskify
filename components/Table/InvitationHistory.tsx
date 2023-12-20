@@ -13,6 +13,7 @@ interface Invitation {
   };
   invitee: {
     nickname: string;
+    email: string;
     id: number;
   };
   inviteAccepted: boolean;
@@ -35,15 +36,15 @@ function InvitationHistory({ invitations, totalCount, currentPage }: Invitations
           {totalCount} 페이지 중 {currentPage}
         </PageInfo>
         <ButtonInfo>
-          <PageButton type="forwardAndBackward" size="S" isDisabled={true} />
+          <PageButton type="forwardAndBackward" isDisabled={true} />
         </ButtonInfo>
-        <InviteButton type="invite" size="S" children="초대하기" />
+        <InviteButton type="invite" children="초대하기" />
         <EmailList>이메일</EmailList>
       </Header>
       {invitations.map((invitation) => (
         <InvitationItem key={invitation.id}>
-          <Email>{invitation.invitee.nickname}</Email>
-          <Button type="delete" size="S" children="취소" />
+          <Email>{invitation.invitee.email}</Email>
+          <Button type="delete" children="취소" />
         </InvitationItem>
       ))}
     </Container>
