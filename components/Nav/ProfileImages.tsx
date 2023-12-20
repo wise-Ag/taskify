@@ -2,9 +2,16 @@ import styled from "styled-components";
 import { memberData } from "./mockData";
 import Image from "next/image";
 import numberBackground from "@/assets/icons/number-background.svg";
+import { useMediaQuery } from "react-responsive";
 
 function ProfileImages() {
   const { members, totalCount } = memberData;
+  const isPc = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
+  const isTabletorMobile = useMediaQuery({
+    query: "(max-width: 1024px)",
+  });
 
   return (
     <>
@@ -15,9 +22,9 @@ function ProfileImages() {
           ))}
           {totalCount > 4 && (
             <>
-              {/* <EllipseImg src={Ellipse} /> */}
               <NumberBackground src={numberBackground} alt="숫자 배경" />
-              <Number>+{totalCount - 4}</Number>
+              {isPc && <Number>+{totalCount - 4}</Number>}
+              {isTabletorMobile && <Number>+{totalCount - 2}</Number>}
             </>
           )}
         </Contents>
@@ -37,6 +44,16 @@ const Contents = styled.div`
   flex-wrap: wrap;
   justify-content: flex-end;
 
+  @media (max-width: 1024px) {
+    & > :nth-child(n + 3) {
+      display: none;
+    }
+
+    & > :nth-last-child(-n + 2) {
+      display: block;
+    }
+  }
+
   p {
     width: 2rem;
 
@@ -47,12 +64,6 @@ const Contents = styled.div`
 
     z-index: 5;
   }
-  /* @media (max-width: 1199px) {
-    display: none;
-  }
-  @media (max-width: 768px) {
-    padding: 0.8rem 2rem;
-  } */
 `;
 
 const ProfileImg = styled(Image)<{ index: number }>`
@@ -65,6 +76,9 @@ const ProfileImg = styled(Image)<{ index: number }>`
   top: 50%;
   transform: translateY(-50%);
   right: ${({ index }) => `${(index + 1) * 3}rem`};
+
+  border-radius: 100%;
+  border: 2px solid var(--White);
 
   z-index: ${({ index }) => `${3 - index}`};
 `;
