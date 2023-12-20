@@ -1,10 +1,10 @@
-import styled from "styled-components";
+import AddButton from "@/assets/icons/add-box.svg";
+import Crown from "@/assets/icons/crown.svg";
 import LogoButton from "@/components/common/LogoButton";
-import Image from "next/image";
-import addButton from "@/assets/icons/add-box.svg";
-import dashboardData from "./mockData";
-import crown from "@/assets/icons/crown.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
+import Image from "next/image";
+import styled from "styled-components";
+import dashboardData from "./mockData";
 
 interface DashboardProps {
   color: string;
@@ -17,7 +17,7 @@ function Dashboard({ color, title, createdByMe }: DashboardProps) {
     <Container>
       <Color color={color} />
       <DashboardTitle>{title}</DashboardTitle>
-      {createdByMe && <Crown src={crown} alt="왕관" />}
+      {createdByMe && <StyledCrown alt="왕관" />}
     </Container>
   );
 }
@@ -30,7 +30,7 @@ function SideMenu() {
       <LogoButton />
       <HeaderWrapper>
         <Title>Dash Boards</Title>
-        <AddButton src={addButton} alt="추가 버튼" />
+        <AddButton alt="추가 버튼" width={20} height={20} />
       </HeaderWrapper>
       <DashboardList>
         {data.map((dashboard, key) => {
@@ -92,10 +92,10 @@ const Title = styled.div`
   }
 `;
 
-const AddButton = styled(Image)`
-  width: 2rem;
-  height: 2rem;
-`;
+// const AddButton = styled(Image)`
+//   width: 2rem;
+//   height: 2rem;
+// `;
 
 const DashboardList = styled.div`
   margin-top: 3rem;
@@ -163,7 +163,7 @@ const DashboardTitle = styled.div`
   }
 `;
 
-const Crown = styled(Image)`
+const StyledCrown = styled(Crown)`
   width: 1.8rem;
   height: 1.4rem;
 
