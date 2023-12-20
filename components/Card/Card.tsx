@@ -10,7 +10,7 @@ function Card({ cardData }: { cardData: getCardsResponse }) {
   return (
     <Wrapper>
       {cardData.imageUrl && <CardImage cardimage={cardData.imageUrl || null} />}
-      <Title>{cardData.title}</Title>
+      <Title imageUrl={cardData.imageUrl}>{cardData.title}</Title>
       {cardData.tags[0] && (
         <Tags>
           {cardData.tags.map((tag, idx) => {
@@ -91,12 +91,12 @@ const CardImage = styled.div<{ cardimage: string | null }>`
     margin: 0;
   }
 `;
-const Title = styled.div`
+const Title = styled.div<{ imageUrl: string }>`
   font-size: 1.6rem;
   font-weight: 500;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    width: 70%;
+    width: ${(props) => (props.imageUrl ? "75%" : "100%")};
     height: 50%;
     float: left;
 
