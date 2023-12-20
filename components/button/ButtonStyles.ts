@@ -17,7 +17,7 @@ const TYPES = {
     &:disabled {
       border: none;
 
-      background-color: var(--Gray40);
+      background-color: var(--Gray9f);
 
       cursor: not-allowed;
     }
@@ -37,7 +37,7 @@ const TYPES = {
       &:disabled {
         border: none;
 
-        background-color: var(--Gray40);
+        background-color: var(--Gray9f);
 
         cursor: not-allowed;
       }
@@ -118,7 +118,7 @@ const TYPES = {
 
     padding: 2rem 0;
 
-    background-color: var(--Gray10);
+    background-color: var(--Grayfa);
 
     font-size: 1.8rem;
 
@@ -127,7 +127,7 @@ const TYPES = {
 
       padding: 1.6rem 0;
 
-      background-color: var(--Gray10);
+      background-color: var(--Grayfa);
 
       font-size: 1.6rem;
     }

@@ -127,7 +127,7 @@ const TYPES = {
 
     padding: 1.4rem 0;
 
-    color: var(--Gray50);
+    color: var(--Gray78);
     font-size: 1.6rem;
 
     @media (max-width: ${DeviceSize.mobile}) {
@@ -135,7 +135,7 @@ const TYPES = {
 
       padding: 1.2rem 0;
 
-      color: var(--Gray50);
+      color: var(--Gray78);
     }
   `,
 };

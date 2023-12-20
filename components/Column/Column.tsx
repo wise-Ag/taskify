@@ -68,10 +68,10 @@ const Wrapper = styled.div`
   flex-direction: column;
 
   padding: 2rem;
-  border-right: 0.1rem solid var(--Gray30);
+  border-right: 0.1rem solid var(--Grayd9);
 
   @media (max-width: ${DeviceSize.tablet}) {
-    border-bottom: 0.1rem solid var(--Gray30);
+    border-bottom: 0.1rem solid var(--Grayd9);
   }
 `;
 

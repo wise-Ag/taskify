@@ -30,7 +30,7 @@ const ProfileIcon = styled(Image)`
 `;
 
 const Name = styled.div`
-  color: var(--Black20);
+  color: var(--Black33);
   font-size: 1.6rem;
   font-weight: 500;
 

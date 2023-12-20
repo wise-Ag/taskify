@@ -92,7 +92,7 @@ const TableTitle = styled.h3`
   margin-top: 3.2rem;
   margin-bottom: 0.8rem;
 
-  color: var(--Gray40);
+  color: var(--Gray9f);
   font-size: 1.6rem;
   font-weight: 400;
 `;
@@ -104,7 +104,7 @@ const InvitationItem = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  border-bottom: 1px solid var(--Gray20);
+  border-bottom: 1px solid var(--Grayee);
 
   &:last-child {
     border-bottom: 0;
@@ -137,7 +137,7 @@ const MobileTableTitle = styled.h3`
     display: block;
 
     font-size: 1.4rem;
-    color: var(--Gray40);
+    color: var(--Gray9f);
     font-weight: 400;
   }
 `;
@@ -145,7 +145,7 @@ const MobileTableTitle = styled.h3`
 const TableBody = styled.h3`
   width: 33%;
 
-  color: var(--Black20);
+  color: var(--Black33);
   font-size: 1.6rem;
   font-weight: 400;
 

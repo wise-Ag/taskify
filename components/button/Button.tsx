@@ -64,7 +64,7 @@ const Button: React.FC<ButtonContentProps> = ({ type, children, id }) => {
 };
 
 const StyledButton = styled.button<ButtonContentProps>`
-  border: 1px solid var(--Gray30);
+  border: 1px solid var(--Grayd9);
   border-radius: 8px;
 
   display: flex;
@@ -72,7 +72,7 @@ const StyledButton = styled.button<ButtonContentProps>`
   align-items: center;
 
   background-color: var(--White);
-  color: var(--Black20);
+  color: var(--Black33);
 
   font-weight: 500;
 

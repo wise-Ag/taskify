@@ -15,7 +15,7 @@ function Card({ cardData }: { cardData: getCardsResponse }) {
         <Tags>
           {cardData.tags.map((tag, idx) => {
             return (
-              <Tag key={idx} bgColor="--Pink10" textColor="--Pink20">
+              <Tag key={idx} bgColor="--Pinkf7" textColor="--Pinkd5">
                 {tag}
               </Tag>
             );
@@ -133,7 +133,7 @@ const Date = styled.div`
   gap: 0.6rem;
   align-items: center;
 
-  color: var(--Gray50);
+  color: var(--Gray78);
   font-size: 1.2rem;
   font-weight: 500;
 
