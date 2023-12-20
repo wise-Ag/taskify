@@ -1,27 +1,25 @@
+import { useState } from "react";
 import styled from "styled-components";
-import ColorSelector from "@/components/Chip/DashBoardColor";
 import NameInput from "./NameInput";
 import ButtonSet from "../ButtonSet/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
+import DeleteConfirmModal from "./DeleteConfirmModal";
 
-function NewDashBoardModal() {
+function ColumnCreateModal() {
   return (
-    <NewDashBoardModalWrapper>
-      <NewDashBoardTitle>새로운 대시보드</NewDashBoardTitle>
-      <NameInput titleType="대시보드 이름" />
-      <ColorSelectorWrapper>
-        <ColorSelector />
-      </ColorSelectorWrapper>
+    <ColumnCreateModalWrapper>
+      <ColumnCreateTitle>새 컬럼 생성</ColumnCreateTitle>
+      <NameInput titleType="이름" />
       <ButtonWrapper>
         <ButtonSet type="modalSet">{"생성"}</ButtonSet>
       </ButtonWrapper>
-    </NewDashBoardModalWrapper>
+    </ColumnCreateModalWrapper>
   );
 }
 
-export default NewDashBoardModal;
+export default ColumnCreateModal;
 
-const NewDashBoardModalWrapper = styled.div`
+const ColumnCreateModalWrapper = styled.div`
   padding: 3.2rem 2.8rem 2.8rem 2.8rem;
   width: 540px;
   height: 334px;
@@ -37,7 +35,7 @@ const NewDashBoardModalWrapper = styled.div`
   }
 `;
 
-const NewDashBoardTitle = styled.div`
+const ColumnCreateTitle = styled.div`
   font-size: 2.4rem;
   font-weight: 700;
 
@@ -46,8 +44,9 @@ const NewDashBoardTitle = styled.div`
   }
 `;
 
-const ColorSelectorWrapper = styled.div`
+const DeleteWrapper = styled.div`
   margin-top: 2.8rem;
+  cursor: pointer;
 
   @media (max-width: ${DeviceSize.mobile}) {
     margin-top: 2.4rem;

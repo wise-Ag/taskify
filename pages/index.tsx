@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import Head from "next/head";
 import AlertModal from "@/components/Modal/AlertModal";
 import NewDashBoardModal from "@/components/Modal/NewDashBoardModal";
+import ColumnCreateModal from "@/components/Modal/ColumnCreateModal";
+import ColumnManagingModal from "@/components/Modal/ColumnManagingModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +20,8 @@ export default function Home() {
       <KebobModal />
       <AlertModal type="complete" />
       <NewDashBoardModal />
+      <ColumnCreateModal />
+      <ColumnManagingModal />
     </>
   );
 }
