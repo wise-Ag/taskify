@@ -1,4 +1,3 @@
-import SideMenu from "@/components/SideMenu/SideMenu";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 
