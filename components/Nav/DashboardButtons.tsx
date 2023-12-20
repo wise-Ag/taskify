@@ -41,7 +41,7 @@ const StyledButton = styled.button`
   gap: 0.8rem;
 
   border-radius: 0.8rem;
-  border: 1px solid var(--Gray30);
+  border: 1px solid var(--Grayd9);
   background: var(--White);
 
   @media (max-width: ${DeviceSize.mobile}) {
@@ -60,7 +60,7 @@ const Icon = styled(Image)`
 `;
 
 const ButtonType = styled.p`
-  color: var(--Gray50);
+  color: var(--Gray78);
   font-size: 1.6rem;
   font-weight: 500;
 

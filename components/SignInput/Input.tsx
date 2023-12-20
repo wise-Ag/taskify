@@ -18,7 +18,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ label, type, value, ha
   return (
     <InputBox>
       <Label>{label}</Label>
-      <StyledInput ref={ref} type={type} value={value} onChange={onChange} onBlur={onBlur} placeholder={placeholder} />
+      <StyledInput ref={ref} type={type} value={value} onChange={onChange} onBlur={onBlur} placeholder={placeholder} className={hasError ? "error" : ""} />
       {hasError && <Error>{errorText}</Error>}
     </InputBox>
   );
@@ -34,7 +34,7 @@ const InputBox = styled.div`
 `;
 
 const Label = styled.label`
-  color: var(--Black20);
+  color: var(--Black33);
   font-size: 1.6rem;
 `;
 
@@ -49,13 +49,16 @@ const StyledInput = styled.input<{ hasError?: boolean }>`
   gap: 1rem;
 
   border-radius: 0.8rem;
-  /* 왜 안되지..ㅠㅠ */
-  border: 1px solid ${({ hasError }) => (hasError ? "var(--Red)" : "var(--Gray30)")};
+  border: 1px solid var(--Grayd9);
   background: var(--White);
 
   &:focus {
     outline: none;
     border-color: var(--Violet);
+  }
+
+  &.error {
+    border-color: var(--Red);
   }
 `;
 

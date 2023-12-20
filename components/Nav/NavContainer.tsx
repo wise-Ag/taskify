@@ -24,7 +24,6 @@ function NavContainer({ title, $isMyNav = false, createdByMe = false }: NavConta
       </Title>
       <Content $isMyNav={$isMyNav}>
         <DashboardButtons />
-        {/* {$isMyNav ? null : <ProfileImages />} */}
         {$isMyNav || <ProfileImages />}
         <Line />
         <Profile profileImageUrl={profileImageUrl} nickname={nickname} />
@@ -43,8 +42,12 @@ const Wrapper = styled.div<{ $isMyNav: boolean }>`
   align-items: center;
   gap: 4rem;
 
-  border-bottom: 1px solid var(--Gray30);
+  border-bottom: 1px solid var(--Grayd9);
   justify-content: space-between;
+
+  @media (max-width: ${DeviceSize.pc}) {
+    gap: 3rem;
+  }
 
   @media (max-width: ${DeviceSize.tablet}) {
     padding: 1.5rem 4rem;
@@ -58,7 +61,7 @@ const Wrapper = styled.div<{ $isMyNav: boolean }>`
 `;
 
 const Title = styled.div<{ $isMyNav: boolean }>`
-  color: var(--Black20);
+  color: var(--Black33);
   font-size: 2rem;
   font-weight: 700;
 
@@ -66,7 +69,7 @@ const Title = styled.div<{ $isMyNav: boolean }>`
   align-items: center;
   gap: 0.8rem;
 
-  @media (max-width: ${DeviceSize.pc}) {
+  @media (max-width: ${DeviceSize.tablet}) {
     display: ${({ $isMyNav }) => ($isMyNav ? "block" : "none")};
   }
 `;
@@ -83,12 +86,16 @@ const Content = styled.div<{ $isMyNav: boolean }>`
   justify-content: space-between;
   gap: ${({ $isMyNav }) => ($isMyNav ? "3.2rem" : "4rem")};
 
+  @media (max-width: ${DeviceSize.pc}) {
+    gap: 2rem;
+  }
+
   @media (max-width: ${DeviceSize.mobile}) {
     gap: "1.6rem";
   }
 `;
 
 const Line = styled.div`
-  border-left: 1px solid var(--Gray30);
+  border-left: 1px solid var(--Grayd9);
   height: 3.8rem;
 `;

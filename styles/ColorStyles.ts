@@ -1,17 +1,17 @@
 import { css } from "styled-components";
 
 export const BLACK = css`
-  --Black30: #171717;
-  --Black20: #333236;
-  --Black10: #4b4b4b;
+  --Black17: #171717;
+  --Black33: #333236;
+  --Black4b: #4b4b4b;
 `;
 
 export const GRAY = css`
-  --Gray50: #787486;
-  --Gray40: #9fa6b2;
-  --Gray30: #d9d9d9;
-  --Gray20: #eeeeee;
-  --Gray10: #fafafa;
+  --Gray78: #787486;
+  --Gray9f: #9fa6b2;
+  --Grayd9: #d9d9d9;
+  --Grayee: #eeeeee;
+  --Grayfa: #fafafa;
 `;
 
 export const MAIN = css`
@@ -24,7 +24,10 @@ export const MAIN = css`
   --Orange: #ffa500;
   --Blue: #76a5ea;
   --Pink: #e876ea;
+  --Pinkf7: #f7dbf0;
+  --Pinkd5: #d549b6;
 
   // 추가한 main color
   --Main: #3c6255;
+  --MainLight: #faf6f0;
 `;

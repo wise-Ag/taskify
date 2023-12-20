@@ -21,12 +21,12 @@ const Container = styled.div`
   align-items: center;
   gap: 0.1rem;
 
-  background: var(--Gray20);
+  background: var(--Grayee);
   border-radius: 4px;
 `;
 
 const Number = styled.span`
-  color: var(--Gray50);
+  color: var(--Gray78);
   text-align: center;
   font-size: 1.2rem;
 `;
