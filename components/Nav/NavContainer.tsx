@@ -1,11 +1,11 @@
+import Crown from "@/assets/icons/crown.svg";
 import { profileData } from "@/components/Nav/mockData";
 import { DeviceSize } from "@/styles/DeviceSize";
+import Image from "next/image";
 import styled from "styled-components";
 import DashboardButtons from "./DashboardButtons";
 import Profile from "./Profile";
 import ProfileImages from "./ProfileImages";
-import Image from "next/image";
-import crown from "@/assets/icons/crown.svg";
 
 interface NavContainerProps {
   title: string;
@@ -20,7 +20,7 @@ function NavContainer({ title, $isMyNav = false, createdByMe = false }: NavConta
     <Wrapper $isMyNav={$isMyNav}>
       <Title $isMyNav={$isMyNav}>
         {title}
-        {createdByMe && <Crown src={crown} alt="왕관" />}
+        {createdByMe && <Crown alt="왕관" width={20} height={16} />}
       </Title>
       <Content $isMyNav={$isMyNav}>
         <DashboardButtons />
@@ -72,11 +72,6 @@ const Title = styled.div<{ $isMyNav: boolean }>`
   @media (max-width: ${DeviceSize.tablet}) {
     display: ${({ $isMyNav }) => ($isMyNav ? "block" : "none")};
   }
-`;
-
-const Crown = styled(Image)`
-  width: 2rem;
-  height: 1.6rem;
 `;
 
 const Content = styled.div<{ $isMyNav: boolean }>`

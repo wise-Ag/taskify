@@ -1,9 +1,8 @@
+import CheckIcon from "@/assets/icons/check.svg";
+import ColumnName from "@/components/Chip/ColumnName";
 import { SetStateAction } from "jotai";
 import { Dispatch, useState } from "react";
 import styled from "styled-components";
-import checkIcon from "@/assets/icons/check.svg";
-import Image from "next/image";
-import ColumnName from "../Chip/ColumnName";
 
 interface DropDownMenuProps {
   $isOpen: boolean;
@@ -29,7 +28,7 @@ function DropdownList({ $isOpen, setStatus }: DropDownMenuProps) {
         <ColumnWrapper>
           {columnData.map((column) => (
             <ButtonWraper key={column.id}>
-              {selectedId === column.id && <CheckIcon src={checkIcon} alt="Check Icon" />}
+              {selectedId === column.id && <StyledCheckIcon alt="Check Icon" />}
               <Button onClick={() => handleSelected(column.id, column.status)}>
                 <ColumnName status={column.status} />
               </Button>
@@ -70,7 +69,7 @@ const ColumnWrapper = styled.div`
   gap: 1.3rem;
 `;
 
-const CheckIcon = styled(Image)`
+const StyledCheckIcon = styled(CheckIcon)`
   width: 2.2rem;
   height: 2.2rem;
 

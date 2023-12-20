@@ -1,5 +1,5 @@
-import visibilityOff from "@/assets/icons/visibility-off.svg";
-import visibilityOn from "@/assets/icons/visibility-on.svg";
+import VisibilityOff from "@/assets/icons/visibility-off.svg";
+import VisibilityOn from "@/assets/icons/visibility-on.svg";
 import Input, { InputProps } from "@/components/SignInput/Input";
 import Image from "next/image";
 import { forwardRef, useMemo, useState } from "react";
@@ -9,7 +9,7 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(({ label, value, 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const inputType = useMemo(() => (isPasswordVisible ? "text" : "password"), [isPasswordVisible]);
   const ToggleIcon = useMemo(
-    () => <ToggleButton src={isPasswordVisible ? visibilityOff : visibilityOn} alt="눈 아이콘" onClick={() => setIsPasswordVisible(!isPasswordVisible)} />,
+    () => <ToggleButton onClick={() => setIsPasswordVisible(!isPasswordVisible)}>{isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}</ToggleButton>,
     [isPasswordVisible],
   );
 
@@ -31,7 +31,7 @@ const InputContainer = styled.div`
   display: flex;
 `;
 
-const ToggleButton = styled(Image)`
+const ToggleButton = styled.div`
   position: absolute;
   top: 4.2rem;
   right: 1.6rem;

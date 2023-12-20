@@ -1,4 +1,4 @@
-import LogoButton from "@/components/Nav/LogoButton";
+import LogoButton from "@/components/common/LogoButton";
 import SignButton from "@/components/Nav/SignButton";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";

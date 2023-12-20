@@ -1,30 +1,30 @@
 import styled from "styled-components";
 import { memberData } from "./mockData";
-import Image from "next/image";
-import numberBackground from "@/assets/icons/number-background.svg";
-import { useMediaQuery } from "react-responsive";
+// import { useMediaQuery } from "react-responsive";
 
 function ProfileImages() {
   const { members, totalCount } = memberData;
-  const isPc = useMediaQuery({
-    query: "(min-width: 1024px)",
-  });
-  const isTabletorMobile = useMediaQuery({
-    query: "(max-width: 1024px)",
-  });
+  // const isPc = useMediaQuery({
+  //   query: "(min-width: 1024px)",
+  // });
+  // const isTabletorMobile = useMediaQuery({
+  //   query: "(max-width: 1024px)",
+  // });
 
   return (
     <>
       {totalCount > 0 && (
         <Contents>
           {members.slice(0, 4).map((member, index) => (
-            <ProfileImg src={member.profileImageUrl} alt="프로필 이미지" key={index} index={index} />
+            // <ProfileImg src={member.profileImageUrl} alt="프로필 이미지" key={index} index={index} />
+            <ProfileImg image={member.profileImageUrl} key={index} index={index} />
           ))}
           {totalCount > 4 && (
             <>
-              <NumberBackground src={numberBackground} alt="숫자 배경" />
-              {isPc && <Number>+{totalCount - 4}</Number>}
-              {isTabletorMobile && <Number>+{totalCount - 2}</Number>}
+              <NumberBackground />
+              {/* {isPc && <Number>+{totalCount - 4}</Number>}
+              {isTabletorMobile && <Number>+{totalCount - 2}</Number>} */}
+              <Number>+{totalCount - 4}</Number>
             </>
           )}
         </Contents>
@@ -66,7 +66,7 @@ const Contents = styled.div`
   }
 `;
 
-const ProfileImg = styled(Image)<{ index: number }>`
+const ProfileImg = styled.div<{ index: number; image: string }>`
   width: 3.8rem;
   height: 3.8rem;
 
@@ -80,12 +80,23 @@ const ProfileImg = styled(Image)<{ index: number }>`
   border-radius: 100%;
   border: 2px solid var(--White);
 
+  /* background-image: url(${(props) => props.image}); */
+  /* 추후에 데이터 받아오면 위와 같은 형식으로 수정.. */
+  background-image: url("https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+
   z-index: ${({ index }) => `${3 - index}`};
 `;
 
-const NumberBackground = styled(Image)`
+const NumberBackground = styled.div`
   width: 3.8rem;
   height: 3.8rem;
+
+  background-color: #f4d7da;
+
+  border-radius: 100%;
+  border: 2px solid var(--White);
 
   z-index: 5;
 `;
