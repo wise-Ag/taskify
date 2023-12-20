@@ -19,7 +19,7 @@ const Container = styled.div`
   align-items: center;
 
   border-radius: 6px;
-  border: 1px solid var(--Gray30);
+  border: 1px solid var(--Grayd9);
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     padding: 0.7rem 1.2rem;
@@ -34,7 +34,7 @@ const Input = styled.input`
   font-size: 1.6rem;
 
   &::placeholder {
-    color: var(--Gray40);
+    color: var(--Gray9f);
   }
 
   @media screen and (max-width: ${DeviceSize.mobile}) {

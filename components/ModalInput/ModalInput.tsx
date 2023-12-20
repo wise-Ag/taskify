@@ -67,7 +67,7 @@ const Label = styled.label`
   margin-bottom: 1rem;
 
   font-size: 1.6rem;
-  color: var(--Black20);
+  color: var(--Black33);
 
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.4rem;
@@ -80,7 +80,7 @@ const InputArea = styled.div<InputAreaProps>`
 
   padding: ${(props) => (props.inputType !== "댓글" ? "1.4rem" : "1.6rem")};
   gap: 1rem;
-  border: 1px solid var(--Gray30);
+  border: 1px solid var(--Grayd9);
   border-radius: 6px;
 
   position: relative;
@@ -109,26 +109,26 @@ const PositionedButton = styled.div`
 const StyledInput = styled.input`
   border: none;
 
-  color: var(--Gray30);
+  color: var(--Grayd9);
   flex-grow: 1;
 
   &:focus {
     outline: none;
-    color: var(--Black20);
+    color: var(--Black33);
   }
 `;
 
 const StyledTextArea = styled.textarea`
   border: none;
 
-  color: var(--Gray30);
+  color: var(--Grayd9);
 
   flex-grow: 1;
   resize: none;
 
   &:focus {
     outline: none;
-    color: var(--Black20);
+    color: var(--Black33);
   }
 
   @media (max-width: ${DeviceSize.mobile}) {

@@ -42,7 +42,7 @@ const Wrapper = styled.div<{ $isMyNav: boolean }>`
   align-items: center;
   gap: 4rem;
 
-  border-bottom: 1px solid var(--Gray30);
+  border-bottom: 1px solid var(--Grayd9);
   justify-content: space-between;
 
   @media (max-width: ${DeviceSize.pc}) {
@@ -61,7 +61,7 @@ const Wrapper = styled.div<{ $isMyNav: boolean }>`
 `;
 
 const Title = styled.div<{ $isMyNav: boolean }>`
-  color: var(--Black20);
+  color: var(--Black33);
   font-size: 2rem;
   font-weight: 700;
 
@@ -96,6 +96,6 @@ const Content = styled.div<{ $isMyNav: boolean }>`
 `;
 
 const Line = styled.div`
-  border-left: 1px solid var(--Gray30);
+  border-left: 1px solid var(--Grayd9);
   height: 3.8rem;
 `;

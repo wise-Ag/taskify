@@ -68,11 +68,11 @@ const ButtonSetContainer = styled.div<{ type: "forwardAndBackward" | "acceptAndR
 `;
 
 const Button = styled.button<ButtonProps>`
-  border: 1px solid var(--Gray30);
+  border: 1px solid var(--Grayd9);
   border-radius: 8px;
 
   background-color: var(--White);
-  color: var(--Black20);
+  color: var(--Black33);
 
   font-weight: 500;
 
@@ -81,7 +81,7 @@ const Button = styled.button<ButtonProps>`
 
 const StyledArrowIcon = styled(ArrowIcon)`
   path {
-    fill: ${(props) => (props.disabled ? "var(--Gray30)" : "var(--Black20)")};
+    fill: ${(props) => (props.disabled ? "var(--Grayd9)" : "var(--Black33)")};
   }
 `;
 

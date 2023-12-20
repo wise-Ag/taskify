@@ -90,7 +90,7 @@ const Title = styled.h1`
 `;
 
 const PageInfo = styled.h3`
-  color: var(--Black20);
+  color: var(--Black33);
   font-size: 1.4rem;
   font-weight: 400;
 
@@ -120,7 +120,7 @@ const EmailList = styled.h3`
   margin-top: 0.8rem;
   margin-bottom: 1.3rem;
 
-  color: var(--Gray40);
+  color: var(--Gray9f);
   font-size: 1.6rem;
   font-weight: 400;
 
@@ -142,7 +142,7 @@ const InvitationItem = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  border-bottom: 1px solid var(--Gray20);
+  border-bottom: 1px solid var(--Grayee);
 
   &:last-child {
     border-bottom: 0;
@@ -154,7 +154,7 @@ const InvitationItem = styled.div`
 `;
 
 const Email = styled.div`
-  color: var(--Black20);
+  color: var(--Black33);
   font-size: 1.6rem;
   font-weight: 400;
 

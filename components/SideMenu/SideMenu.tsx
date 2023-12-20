@@ -57,7 +57,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   flex-shrink: 0;
 
-  border-right: 1px solid var(--Gray30);
+  border-right: 1px solid var(--Grayd9);
 
   @media (max-width: ${DeviceSize.tablet}) {
     width: 16rem;
@@ -83,7 +83,7 @@ const HeaderWrapper = styled.div`
 `;
 
 const Title = styled.div`
-  color: var(--Gray50);
+  color: var(--Gray78);
   font-size: 1.2rem;
   font-weight: 700;
 
@@ -148,7 +148,7 @@ const Color = styled.div<{ color: string }>`
 const DashboardTitle = styled.div`
   margin-right: 0.6rem;
 
-  color: var(--Gray50);
+  color: var(--Gray78);
   font-size: 1.8rem;
   font-weight: 500;
 

@@ -54,7 +54,7 @@ const DropdownContent = styled.div`
   padding: 1.3rem 0.8rem;
 
   border-radius: 0.6rem;
-  border: 1px solid var(--Gray30);
+  border: 1px solid var(--Grayd9);
   background: var(--White);
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
 

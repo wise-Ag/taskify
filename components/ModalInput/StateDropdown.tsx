@@ -35,7 +35,7 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
-  color: var(--Black20);
+  color: var(--Black33);
   font-size: 1.8rem;
   font-weight: 500;
 `;
@@ -51,7 +51,7 @@ const DropdownBox = styled.div<{ $isOpen: boolean }>`
   align-items: center;
 
   border-radius: 0.6rem;
-  border: 1px solid ${(props) => (props.$isOpen ? "var(--Violet)" : "var(--Gray30)")};
+  border: 1px solid ${(props) => (props.$isOpen ? "var(--Violet)" : "var(--Grayd9)")};
   background: var(--White);
 `;
 
