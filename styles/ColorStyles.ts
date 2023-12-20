@@ -24,6 +24,8 @@ export const MAIN = css`
   --Orange: #ffa500;
   --Blue: #76a5ea;
   --Pink: #e876ea;
+  --Pink10:#F7DBF0;
+  --Pink20:#D549B6;
 
   // 추가한 main color
   --Main: #3c6255;
