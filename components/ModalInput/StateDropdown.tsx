@@ -1,9 +1,8 @@
+import DropdownButton from "@/assets/icons/arrow-drop-down.svg";
+import ColumnName from "@/components/Chip/ColumnName";
 import { useState } from "react";
 import styled from "styled-components";
-import ColumnName from "@/components/Chip/ColumnName";
-import arrowDropdown from "@/assets/icons/arrow-drop-down.svg";
 import DropdownList from "./DropdownList";
-import Image from "next/image";
 
 function Dropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +17,7 @@ function Dropdown() {
       <Title>상태</Title>
       <DropdownBox $isOpen={isOpen}>
         <ColumnName status={status} />
-        <DropdownButton src={arrowDropdown} alt="드롭다운 버튼" onClick={toggleDropdown} />
+        <StyledDropdownButton alt="드롭다운 버튼" onClick={toggleDropdown} />
       </DropdownBox>
       <DropdownList $isOpen={isOpen} setStatus={setStatus} />
     </Wrapper>
@@ -55,7 +54,7 @@ const DropdownBox = styled.div<{ $isOpen: boolean }>`
   background: var(--White);
 `;
 
-const DropdownButton = styled(Image)`
+const StyledDropdownButton = styled(DropdownButton)`
   width: 2.6rem;
   height: 2.6rem;
 

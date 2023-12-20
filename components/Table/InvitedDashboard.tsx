@@ -39,7 +39,7 @@ function InvitedDashboard({ invitations }: InvitationsListProps) {
             <TableBody>{invitation.invitee.nickname}</TableBody>
           </Info>
           <Info>
-            <ButtonSet type="acceptAndReject" size="S" />
+            <ButtonSet type="acceptAndReject" />
           </Info>
         </InvitationItem>
       ))}
