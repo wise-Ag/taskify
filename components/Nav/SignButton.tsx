@@ -23,6 +23,6 @@ const Wrapper = styled.div`
 `;
 
 const Button = styled(Link)`
-  color: var(--Black20);
+  color: var(--Black33);
   font-size: 1.4rem;
 `;

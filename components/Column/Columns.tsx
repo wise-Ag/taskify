@@ -59,7 +59,7 @@ const Wrapper = styled.div`
   height: 100vh;
   height: 100%;
   display: flex;
-  background: var(--Gray10);
+  background: var(--Grayfa);
 
   @media (max-width: ${DeviceSize.tablet}) {
     flex-direction: column;
@@ -78,7 +78,7 @@ const ButtonWrapper = styled.div`
   margin-top: 6.3rem;
   margin-left: 2rem;
 
-  background: var(--Gray10);
+  background: var(--Grayfa);
   z-index: 1;
   @media (max-width: ${DeviceSize.tablet}) {
     position: sticky;

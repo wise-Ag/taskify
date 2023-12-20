@@ -8,7 +8,6 @@ import AddColumn from "@/components/Chip/AddColumn";
 import dashboardData from "./mockData";
 
 interface ButtonContentProps {
-  size: "S" | "M" | "L";
   type: keyof typeof TYPES;
   children: React.ReactNode;
   disabled?: boolean;
@@ -20,7 +19,6 @@ interface ButtonContentProps {
 const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, id, color, title }) => {
   let dashboard;
   if (type === "dashboardList" && id !== undefined) {
-    // dashboard = dashboardData.dashboards.find((d) => d.id === id);
     dashboard = dashboardData.dashboards[0];
   }
 
@@ -57,16 +55,16 @@ const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, id, color
   }
 };
 
-const Button: React.FC<ButtonContentProps> = ({ type, size, children, id, ...props }) => {
+const Button: React.FC<ButtonContentProps> = ({ type, children, id }) => {
   return (
-    <StyledButton type={type} size={size} {...props}>
-      <ButtonContent type={type} size={size} children={children} id={id} />
+    <StyledButton type={type}>
+      <ButtonContent type={type} children={children} id={id} />
     </StyledButton>
   );
 };
 
 const StyledButton = styled.button<ButtonContentProps>`
-  border: 1px solid var(--Gray30);
+  border: 1px solid var(--Grayd9);
   border-radius: 8px;
 
   display: flex;
@@ -74,11 +72,11 @@ const StyledButton = styled.button<ButtonContentProps>`
   align-items: center;
 
   background-color: var(--White);
-  color: var(--Black20);
+  color: var(--Black33);
 
   font-weight: 500;
 
-  ${({ type, size }) => TYPES[type] && size in TYPES[type] && TYPES[type][size]}
+  ${({ type }) => TYPES[type]}
 `;
 
 const StyledAddBoxIcon = styled(AddBoxIcon)`
