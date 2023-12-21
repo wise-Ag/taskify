@@ -58,7 +58,9 @@ export default Columns;
 const Wrapper = styled.div`
   height: 100vh;
   height: 100%;
+
   display: flex;
+
   background: var(--Grayfa);
 
   @media (max-width: ${DeviceSize.tablet}) {
@@ -74,11 +76,13 @@ const Wrapper = styled.div`
 const ButtonWrapper = styled.div`
   width: 100%;
   height: 11rem;
+
   padding-top: 2rem;
   margin-top: 6.3rem;
   margin-left: 2rem;
 
   background: var(--Grayfa);
+
   z-index: 1;
   @media (max-width: ${DeviceSize.tablet}) {
     position: sticky;

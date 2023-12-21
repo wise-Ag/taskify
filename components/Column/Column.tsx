@@ -11,6 +11,7 @@ interface ColumnProps {
   columnId: number;
   title: string;
 }
+
 export interface getCardsResponse {
   assignee: { id: number; nickname: string; profileImageUrl: string | null };
   columnId: number;
@@ -25,6 +26,7 @@ export interface getCardsResponse {
   title: string;
   updatedAt: string;
 }
+
 function Column({ columnId, title }: ColumnProps) {
   const [cards, setCards] = useState<getCardsResponse[]>([]);
 
@@ -62,14 +64,14 @@ function Column({ columnId, title }: ColumnProps) {
 export default Column;
 
 const Wrapper = styled.div`
+  padding: 2rem;
+  border-right: 1px solid var(--Grayd9);
+
   display: flex;
   flex-direction: column;
 
-  padding: 2rem;
-  border-right: 0.1rem solid var(--Grayd9);
-
   @media (max-width: ${DeviceSize.tablet}) {
-    border-bottom: 0.1rem solid var(--Grayd9);
+    border-bottom: 1px solid var(--Grayd9);
   }
 `;
 
