@@ -30,27 +30,27 @@ function TodoModal({ type }: CategoryProps) {
       <ContentContainer>
         {type === "edit" && (
           <ContentWrapper>
-            <NameInput titleType="이름" />
+            <NameInput label="이름" />
           </ContentWrapper>
         )}
         <ContentWrapper>
-          <NameInput titleType="이름" />
+          <NameInput label="이름" />
         </ContentWrapper>
       </ContentContainer>
       <div>
-        <NameInput titleType="이름" />
+        <NameInput label="이름" />
       </div>
       <div>
-        <NameInput titleType="이름" />
+        <NameInput label="이름" />
       </div>
       <div>
-        <NameInput titleType="이름" />
+        <NameInput label="이름" />
       </div>
       <div>
-        <NameInput titleType="이름" />
+        <NameInput label="이름" />
       </div>
       <div>
-        <NameInput titleType="이름" />
+        <NameInput label="이름" />
       </div>
       <ButtonWrapper>
         <ButtonSet type="modalSet">
@@ -64,7 +64,7 @@ function TodoModal({ type }: CategoryProps) {
 
 export default TodoModal;
 
-const TodoModalWrapper = styled.div`
+const TodoModalWrapper = styled.div<{ type: "create" | "edit" }>`
   width: 50.6rem;
   height: 90.7rem;
 
@@ -72,7 +72,7 @@ const TodoModalWrapper = styled.div`
   position: relative;
 
   border-radius: 8px;
-  background: var(--White);
+  background: var(--MainLight);
 
   @media (max-width: ${DeviceSize.mobile}) {
     width: 32.7rem;
@@ -91,6 +91,7 @@ const TodoTitle = styled.div`
 
 const ContentContainer = styled.div`
   width: 100%;
+
   display: flex;
   flex-direction: row;
   gap: 1rem;
@@ -108,7 +109,6 @@ const ButtonWrapper = styled.div`
   position: absolute;
   right: 2.8rem;
   bottom: 2.8rem;
-  border: 1px solid var(--Gray30);
 
   @media (max-width: ${DeviceSize.mobile}) {
     right: 2rem;

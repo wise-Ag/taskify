@@ -1,21 +1,21 @@
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
+import ButtonSet from "@/components/ButtonSet/ButtonSet";
 import NameInput from "./NameInput";
 
-function ColumnCreateModal() {
+function ManageColumnModal() {
   return (
     <Wrapper>
-      <Title>새 컬럼 생성</Title>
+      <Title>컬럼 관리</Title>
       <NameInput label="이름" />
       <ButtonWrapper>
-        <ButtonSet type="modalSet">{"생성"}</ButtonSet>
+        <ButtonSet type="modalSet">{"변경"}</ButtonSet>
       </ButtonWrapper>
     </Wrapper>
   );
 }
 
-export default ColumnCreateModal;
+export default ManageColumnModal;
 
 const Wrapper = styled.div`
   width: 54rem;
@@ -30,9 +30,10 @@ const Wrapper = styled.div`
 
   @media (max-width: ${DeviceSize.mobile}) {
     width: 32.7rem;
-    height: 24.1rem;
 
     padding: 2.8rem 2rem 2.8rem 2rem;
+
+    border-radius: 8px;
   }
 `;
 
@@ -52,5 +53,6 @@ const ButtonWrapper = styled.div`
 
   @media (max-width: ${DeviceSize.mobile}) {
     right: 2rem;
+    bottom: 2.8rem;
   }
 `;
