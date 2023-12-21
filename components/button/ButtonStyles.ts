@@ -6,19 +6,16 @@ const TYPES = {
     width: 52rem;
 
     padding: 1.4rem 0;
+
     border: none;
-
     background-color: var(--Main);
-
     color: var(--White);
     font-size: 1.8rem;
     font-weight: 500;
 
     &:disabled {
       border: none;
-
       background-color: var(--Gray9f);
-
       cursor: not-allowed;
     }
 
@@ -26,19 +23,16 @@ const TYPES = {
       width: 35.1rem;
 
       padding: 1.4rem 0;
+
       border: none;
-
       background-color: var(--Main);
-
       color: var(--White);
       font-size: 1.8rem;
       font-weight: 500;
 
       &:disabled {
         border: none;
-
         background-color: var(--Gray9f);
-
         cursor: not-allowed;
       }
     }
@@ -56,8 +50,8 @@ const TYPES = {
       width: 5.2rem;
 
       padding: 0.7rem 0;
-      border-radius: 4px;
 
+      border-radius: 4px;
       color: var(--Main);
       font-size: 1.2rem;
     }
@@ -66,6 +60,7 @@ const TYPES = {
     width: 35.4rem;
 
     padding: 2.45rem 0;
+
     gap: 1.2rem;
 
     font-size: 1.8rem;
@@ -75,6 +70,7 @@ const TYPES = {
       width: 54.4rem;
 
       padding: 2.45rem 0;
+
       gap: 1.2rem;
 
       font-size: 1.8rem;
@@ -85,6 +81,7 @@ const TYPES = {
       width: 28.4rem;
 
       padding: 2rem 0;
+
       gap: 1.2rem;
 
       font-size: 1.6rem;
@@ -96,12 +93,14 @@ const TYPES = {
     width: 31.4rem;
 
     padding: 0.9rem 0;
+
     border-radius: 6px;
 
     @media (max-width: ${DeviceSize.tablet}) {
       width: 54.4rem;
 
       padding: 0.9rem 0;
+
       border-radius: 6px;
     }
 
@@ -109,6 +108,7 @@ const TYPES = {
       width: 28.4rem;
 
       padding: 0.6rem 0;
+
       border-radius: 6px;
     }
   `,
@@ -119,7 +119,6 @@ const TYPES = {
     padding: 2rem 0;
 
     background-color: var(--Grayfa);
-
     font-size: 1.8rem;
 
     @media (max-width: ${DeviceSize.mobile}) {
@@ -128,7 +127,6 @@ const TYPES = {
       padding: 1.6rem 0;
 
       background-color: var(--Grayfa);
-
       font-size: 1.6rem;
     }
   `,
@@ -136,6 +134,7 @@ const TYPES = {
     width: 33.2rem;
 
     padding: 2.4rem 0;
+
     gap: 1.2rem;
 
     font-size: 1.6rem;
@@ -145,6 +144,7 @@ const TYPES = {
       width: 24.7rem;
 
       padding: 2.3rem 0;
+
       gap: 1.2rem;
 
       font-size: 1.6rem;
@@ -155,6 +155,7 @@ const TYPES = {
       width: 26rem;
 
       padding: 1.9rem 0;
+
       gap: 1.2rem;
 
       font-size: 1.6rem;
@@ -197,20 +198,20 @@ const TYPES = {
     width: 10.5rem;
 
     padding: 0.75rem 0;
+
     gap: 0.8rem;
 
     background-color: var(--Main);
-
     color: var(--White);
 
     @media (max-width: ${DeviceSize.mobile}) {
       width: 8.6rem;
 
       padding: 0.7rem 0;
+
       gap: 0.6rem;
 
       background-color: var(--Main);
-
       color: var(--White);
       font-size: 1.2rem;
     }
@@ -248,7 +249,6 @@ const TYPES = {
     padding: 1.4rem 0;
 
     background-color: var(--Main);
-
     color: var(--White);
 
     @media (max-width: ${DeviceSize.mobile}) {
@@ -257,7 +257,6 @@ const TYPES = {
       padding: 1.2rem 0;
 
       background-color: var(--Main);
-
       color: var(--White);
     }
   `,

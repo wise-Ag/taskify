@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import ArrowIcon from "@/assets/icons/arrow-forward.svg";
-import TYPES from "./ButtonSetStyles";
+import TYPES from "@/components/ButtonSet/ButtonSetStyles";
 
 interface ButtonProps {
   isDisabled?: boolean;
@@ -15,7 +15,7 @@ interface ButtonSetProps extends ButtonCommonProps {
   children?: React.ReactNode;
 }
 
-const ButtonSet: React.FC<ButtonSetProps> = ({ type, isDisabled, children }) => {
+function ButtonSet({ type, isDisabled, children }: ButtonSetProps) {
   return (
     <ButtonSetContainer type={type}>
       {type === "forwardAndBackward" && (
@@ -50,7 +50,7 @@ const ButtonSet: React.FC<ButtonSetProps> = ({ type, isDisabled, children }) => 
       )}
     </ButtonSetContainer>
   );
-};
+}
 
 const ButtonSetContainer = styled.div<{ type: "forwardAndBackward" | "acceptAndReject" | "modalSet" }>`
   display: flex;
@@ -70,10 +70,8 @@ const ButtonSetContainer = styled.div<{ type: "forwardAndBackward" | "acceptAndR
 const Button = styled.button<ButtonProps>`
   border: 1px solid var(--Grayd9);
   border-radius: 8px;
-
   background-color: var(--White);
   color: var(--Black33);
-
   font-weight: 500;
 
   ${({ buttonType }) => TYPES[buttonType]}
