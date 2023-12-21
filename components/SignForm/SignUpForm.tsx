@@ -1,6 +1,6 @@
 import Input from "@/components/SignInput/Input";
 import PasswordInput from "@/components/SignInput/PasswordInput";
-import { ERROR_MESSAGE, PLACEHOLDER } from "@/utils/InputConstant";
+import { ERROR_MESSAGE, PASSWORD_RULES, PLACEHOLDER } from "@/utils/InputConstant";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -38,13 +38,7 @@ function SignUpForm() {
       <Controller
         control={control}
         name="password"
-        rules={{
-          required: ERROR_MESSAGE.passwordRequired,
-          pattern: {
-            value: /^(?=.*[A-Za-z])(?=.*\d).{8,}$/,
-            message: ERROR_MESSAGE.passwordInvalid,
-          },
-        }}
+        rules={PASSWORD_RULES}
         render={({ field, fieldState }) => (
           <PasswordInput label="비밀번호" {...field} placeholder={PLACEHOLDER.signUpPassword} hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
         )}
