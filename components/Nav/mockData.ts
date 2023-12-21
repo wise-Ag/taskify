@@ -1,11 +1,10 @@
-import mockIcon from "@/assets/icons/mockIcon.svg";
 import defaultIcon from "@/assets/icons/default-profile.svg";
 
 const profileData = {
   id: 0,
   email: "hello@naver.com",
   nickname: "배유철",
-  profileImageUrl: mockIcon,
+  profileImageUrl: null,
   createdAt: "2023-12-18T12:40:07.131Z",
   updatedAt: "2023-12-18T12:40:07.131Z",
 };
