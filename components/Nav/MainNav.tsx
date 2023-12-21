@@ -20,6 +20,8 @@ const Wrapper = styled.nav`
 
   padding: 1.6rem 8rem 1.6rem 1.6rem;
 
+  border-bottom: 1px solid var(--Grayd9);
+
   display: flex;
   flex-direction: row;
   align-items: center;
