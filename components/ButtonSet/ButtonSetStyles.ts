@@ -6,22 +6,20 @@ const TYPES = {
     width: 8.4rem;
 
     padding: 0.7rem 0;
+
     border-radius: 4px;
     border: none;
-
     background-color: var(--Main);
-
     color: var(--White);
 
     @media (max-width: ${DeviceSize.tablet}) {
       width: 7.2rem;
 
       padding: 0.6rem 0;
+
       border-radius: 4px;
       border: none;
-
       background-color: var(--Main);
-
       color: var(--White);
     }
 
@@ -29,11 +27,10 @@ const TYPES = {
       width: 10.9rem;
 
       padding: 0.7rem 0;
+
       border-radius: 4px;
       border: none;
-
       background-color: var(--Main);
-
       color: var(--White);
       font-size: 1.2rem;
     }
@@ -43,16 +40,16 @@ const TYPES = {
     width: 8.4rem;
 
     padding: 0.7rem 0;
-    border-radius: 4px;
 
+    border-radius: 4px;
     color: var(--Main);
 
     @media (max-width: ${DeviceSize.tablet}) {
       width: 7.2rem;
 
       padding: 0.6rem 0;
-      border-radius: 4px;
 
+      border-radius: 4px;
       color: var(--Main);
     }
 
@@ -60,8 +57,8 @@ const TYPES = {
       width: 10.9rem;
 
       padding: 0.7rem 0;
-      border-radius: 4px;
 
+      border-radius: 4px;
       color: var(--Main);
       font-size: 1.2rem;
     }
@@ -72,7 +69,6 @@ const TYPES = {
     height: 4rem;
 
     border-radius: 0 4px 4px 0;
-
     transform: scaleX(-1);
 
     @media (max-width: ${DeviceSize.mobile}) {
@@ -80,7 +76,6 @@ const TYPES = {
       height: 3.6rem;
 
       border-radius: 0 4px 4px 0;
-
       transform: scaleX(-1);
     }
   `,
@@ -103,10 +98,9 @@ const TYPES = {
     width: 12rem;
 
     padding: 1.4rem 0;
+
     border: none;
-
     background-color: var(--Main);
-
     color: var(--White);
     font-size: 1.6rem;
 
@@ -114,10 +108,9 @@ const TYPES = {
       width: 13.8rem;
 
       padding: 1.2rem 0;
+
       border: none;
-
       background-color: var(--Main);
-
       color: var(--White);
     }
   `,

@@ -17,7 +17,7 @@ interface ButtonContentProps {
   createdByMe?: boolean;
 }
 
-const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, disabled, id, color, title, createdByMe }) => {
+function ButtonContent({ type, children, id }: ButtonContentProps) {
   let dashboard;
   if (type === "dashboardList" && id !== undefined) {
     dashboard = dashboardData.dashboards[id];
@@ -54,27 +54,25 @@ const ButtonContent: React.FC<ButtonContentProps> = ({ type, children, disabled,
     default:
       return children;
   }
-};
+}
 
-const Button: React.FC<ButtonContentProps> = ({ type, children, disabled, id }) => {
+function Button({ type, children, disabled, id }: ButtonContentProps) {
   return (
     <StyledButton type={type} disabled={disabled}>
       <ButtonContent type={type} children={children} id={id} />
     </StyledButton>
   );
-};
+}
 
 const StyledButton = styled.button<ButtonContentProps>`
-  border: 1px solid var(--Grayd9);
-  border-radius: 8px;
-
   display: flex;
   justify-content: center;
   align-items: center;
 
+  border: 1px solid var(--Grayd9);
+  border-radius: 8px;
   background-color: var(--White);
   color: var(--Black33);
-
   font-weight: 500;
 
   ${({ type }) => TYPES[type]}
@@ -91,7 +89,6 @@ const Color = styled.div<{ color: string }>`
   height: 0.8rem;
 
   border-radius: 100%;
-
   background-color: ${(props) => props.color};
 `;
 
