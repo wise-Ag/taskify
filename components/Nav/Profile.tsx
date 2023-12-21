@@ -56,6 +56,4 @@ const NoProfileImageWrapper = styled.div`
 
   font-size: 1.5rem;
   line-height: 3.8rem;
-
-  border-radius: 100%;
 `;
