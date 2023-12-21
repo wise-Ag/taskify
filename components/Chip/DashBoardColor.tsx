@@ -25,7 +25,7 @@ function DashBoardColor() {
 }
 
 const Container = styled.div`
-  gap: 10px;
+  gap: 1rem;
 
   display: inline-flex;
   justify-content: center;
