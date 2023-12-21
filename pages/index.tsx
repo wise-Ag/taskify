@@ -1,10 +1,3 @@
-import AlertModal from "@/components/Modal/AlertModal";
-import ColumnCreateModal from "@/components/Modal/ColumnCreateModal";
-import DeleteConfirmModal from "@/components/Modal/DeleteConfirmModal";
-import KebabModal from "@/components/Modal/KebabModal";
-import ManageColumnModal from "@/components/Modal/ManageColumnModal";
-import NewDashBoardModal from "@/components/Modal/NewDashBoardModal";
-import TodoModal from "@/components/Modal/TodoModal";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 
@@ -19,13 +12,6 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AlertModal type="incorrect" />
-      <ColumnCreateModal />
-      <DeleteConfirmModal />
-      <KebabModal />
-      <ManageColumnModal />
-      <NewDashBoardModal />
-      <TodoModal type="create" />
     </>
   );
 }

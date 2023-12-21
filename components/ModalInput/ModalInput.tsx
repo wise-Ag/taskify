@@ -101,7 +101,7 @@ function CustomDatePicker() {
 }
 
 const InputBox = styled.div`
-  margin: 1rem;
+  /* margin: 1rem; */
 
   display: flex;
   flex-direction: column;

@@ -1,9 +1,10 @@
 import Button from "@/components/button/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
+import ButtonSet from "@/components/ButtonSet/ButtonSet";
 
 interface AlertProps {
-  type: "incorrect" | "complete" | "duplicate";
+  type: "incorrect" | "complete" | "duplicate" | "delete";
 }
 
 function AlertModal({ type }: AlertProps) {
@@ -13,10 +14,9 @@ function AlertModal({ type }: AlertProps) {
         {type === "incorrect" && "비밀번호가 일치하지 않습니다."}
         {type === "complete" && "가입이 완료되었습니다!"}
         {type === "duplicate" && "이미 사용 중인 이메일입니다."}
+        {type === "delete" && "칼럼의 모든 카드가 삭제됩니다."}
       </Contents>
-      <ButtonWrapper>
-        <Button type="modalConfirm">확인</Button>
-      </ButtonWrapper>
+      <ButtonWrapper>{type === "delete" ? <ButtonSet type="modalSet">삭제</ButtonSet> : <Button type="modalConfirm">확인</Button>}</ButtonWrapper>
     </Wrapper>
   );
 }
@@ -27,7 +27,9 @@ const Wrapper = styled.div`
   width: 54rem;
   height: 25rem;
 
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   border-radius: 8px;
   background: var(--MainLight);
@@ -39,32 +41,28 @@ const Wrapper = styled.div`
 `;
 
 const Contents = styled.div`
-  width: 100%;
+  margin-top: 10.8rem;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  border-radius: 8px;
-
   text-align: center;
-  line-height: 25rem;
   color: var(--Black33);
   font-size: 1.8rem;
   font-weight: 500;
 
   @media (max-width: ${DeviceSize.mobile}) {
+    margin-top: 8.1rem;
+
     font-size: 1.6rem;
-    line-height: 22rem;
   }
 `;
 
 const ButtonWrapper = styled.div`
-  position: absolute;
-  right: 21rem;
-  bottom: 2.8rem;
+  margin-top: 4.5rem;
 
   @media (max-width: ${DeviceSize.mobile}) {
-    right: 9.45rem;
+    margin-top: 5rem;
   }
 `;
