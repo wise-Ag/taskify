@@ -3,7 +3,6 @@ import styled from "styled-components";
 import NameInput from "./NameInput";
 import ButtonSet from "../ButtonSet/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
-import DeleteConfirmModal from "./DeleteConfirmModal";
 
 function ColumnCreateModal() {
   return (

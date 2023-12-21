@@ -3,20 +3,12 @@ import styled from "styled-components";
 import NameInput from "./NameInput";
 import ButtonSet from "../ButtonSet/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
-import DeleteConfirmModal from "./DeleteConfirmModal";
 
 function ColumnManagingModal() {
-  const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState<boolean>(false);
-
-  const handleDeleteClick = () => {
-    setShowDeleteConfirmModal((p) => !p);
-  };
-
   return (
     <ColumnManagingModalWrapper>
       <ColumnManagingTitle>컬럼 관리</ColumnManagingTitle>
       <NameInput titleType="이름" />
-      <DeleteWrapper onClick={handleDeleteClick}>삭제하기</DeleteWrapper>
       <ButtonWrapper>
         <ButtonSet type="modalSet">{"변경"}</ButtonSet>
       </ButtonWrapper>
