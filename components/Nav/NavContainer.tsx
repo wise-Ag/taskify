@@ -22,7 +22,7 @@ function NavContainer({ title, $isMyNav = false, createdByMe = false }: NavConta
         {createdByMe && <Crown alt="왕관" width={20} height={16} />}
       </Title>
       <Content $isMyNav={$isMyNav}>
-        <DashboardButtons />
+        {$isMyNav || <DashboardButtons />}
         {$isMyNav || <ProfileImages />}
         <Line />
         <Profile profileImageUrl={profileImageUrl} nickname={nickname} />
