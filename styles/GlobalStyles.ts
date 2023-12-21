@@ -15,7 +15,7 @@ const GlobalStyles = createGlobalStyle`
 
   html {
     font-size: 62.5%;
-    background-color: var(--Pinkf7);
+    background-color: #ffffff;
     word-break: keep-all;
   }
 
