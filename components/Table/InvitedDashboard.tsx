@@ -19,14 +19,16 @@ interface InvitationsListProps {
 }
 
 function InvitedDashboard({ invitations }: InvitationsListProps) {
+  const tableTitles = ["이름", "초대자", "수락 여부"];
+
   return (
     <Container>
       <Title>초대받은 대시보드</Title>
       <SearchInput />
       <Header>
-        <TableTitle>이름</TableTitle>
-        <TableTitle>초대자</TableTitle>
-        <TableTitle>수락 여부</TableTitle>
+        {tableTitles.map((title) => (
+          <TableTitle key={title}>{title}</TableTitle>
+        ))}
       </Header>
       {invitations.map((invitation) => (
         <InvitationItem key={invitation.id}>
