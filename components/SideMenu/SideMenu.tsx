@@ -2,7 +2,6 @@ import AddButton from "@/assets/icons/add-box.svg";
 import Crown from "@/assets/icons/crown.svg";
 import LogoButton from "@/components/common/LogoButton";
 import { DeviceSize } from "@/styles/DeviceSize";
-import Image from "next/image";
 import styled from "styled-components";
 import dashboardData from "./mockData";
 
@@ -34,11 +33,7 @@ function SideMenu() {
       </HeaderWrapper>
       <DashboardList>
         {data.map((dashboard, key) => {
-          return (
-            <div key={key}>
-              <Dashboard color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} />
-            </div>
-          );
+          return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} />;
         })}
       </DashboardList>
     </Wrapper>
@@ -91,11 +86,6 @@ const Title = styled.div`
     display: none;
   }
 `;
-
-// const AddButton = styled(Image)`
-//   width: 2rem;
-//   height: 2rem;
-// `;
 
 const DashboardList = styled.div`
   margin-top: 3rem;
