@@ -27,7 +27,7 @@ const AlertModalWrapper = styled.div`
   position: relative;
   width: 54rem;
   height: 25rem;
-  border-radius: 0.8rem;
+  border-radius: 8px;
   background: var(--White);
   position: relative;
 

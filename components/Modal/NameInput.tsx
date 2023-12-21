@@ -28,7 +28,7 @@ const NameType = styled.div`
 `;
 
 const NameInputBox = styled.input`
-  width: 48.4rem;
+  width: 100%;
   height: 4.8rem;
 
   outline-color: var(--Grayd9);
@@ -48,7 +48,7 @@ const NameInputBox = styled.input`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
-    width: 28.7rem;
+    width: 100%;
     height: 4.2rem;
 
     border-radius: 8px;

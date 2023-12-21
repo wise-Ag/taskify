@@ -5,6 +5,7 @@ import AlertModal from "@/components/Modal/AlertModal";
 import NewDashBoardModal from "@/components/Modal/NewDashBoardModal";
 import ColumnCreateModal from "@/components/Modal/ColumnCreateModal";
 import ColumnManagingModal from "@/components/Modal/ColumnManagingModal";
+import TodoModal from "@/components/Modal/TodoModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function Home() {
       <NewDashBoardModal />
       <ColumnCreateModal />
       <ColumnManagingModal />
+      <TodoModal type="edit" />
     </>
   );
 }
