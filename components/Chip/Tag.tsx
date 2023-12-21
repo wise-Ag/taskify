@@ -16,14 +16,15 @@ function Tag({ bgColor, textColor, children }: TagProps & { children: React.Reac
 
 const Container = styled.span<TagProps>`
   padding: 0.4rem 0.6rem;
+  gap: 1rem;
+  border-radius: 4px;
 
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
 
-  border-radius: 4px;
   background: ${(props) => `var(${props.bgColor})`};
+
   color: ${(props) => `var(${props.textColor})`};
   text-align: center;
   font-size: 1.2rem;

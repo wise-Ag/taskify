@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import ButtonSet from "@/components/ButtonSet/ButtonSet";
-import Button from "@/components/button/Button";
+import Button from "@/components/Button/Button";
 
 interface Invitation {
   id: number;
@@ -55,8 +55,8 @@ const Container = styled.div`
   width: 62rem;
 
   padding: 2.5rem;
-
   border-radius: 8px;
+
   background: var(--White);
 
   @media screen and (max-width: ${DeviceSize.tablet}) {
@@ -71,10 +71,11 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
+  gap: 1.6rem;
+
   display: grid;
   align-items: center;
   grid-template-columns: 1fr auto auto auto;
-  gap: 1.6rem;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     row-gap: 1.2rem;
@@ -138,12 +139,11 @@ const EmailList = styled.h3`
 
 const InvitationItem = styled.div`
   padding: 1.6rem 0;
+  border-bottom: 1px solid var(--Grayee);
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  border-bottom: 1px solid var(--Grayee);
 
   &:last-child {
     border-bottom: 0;

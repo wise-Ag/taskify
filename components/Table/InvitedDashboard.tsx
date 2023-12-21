@@ -51,8 +51,8 @@ const Container = styled.div`
   width: 102rem;
 
   padding: 3rem;
-
   border-radius: 8px;
+
   background: var(--White);
 
   @media screen and (max-width: ${DeviceSize.tablet}) {
@@ -99,12 +99,11 @@ const TableTitle = styled.h3`
 
 const InvitationItem = styled.div`
   padding: 1.6rem 0;
+  border-bottom: 1px solid var(--Grayee);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  border-bottom: 1px solid var(--Grayee);
 
   &:last-child {
     border-bottom: 0;

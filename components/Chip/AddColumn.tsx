@@ -5,7 +5,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 function AddColumn() {
   return (
     <Container>
-      <AddFillo alt="add" width={16} height={16} />
+      <StyledAddFillo alt="add" width={16} height={16} />
     </Container>
   );
 }
@@ -15,13 +15,13 @@ const Container = styled.div`
   height: 2.2rem;
 
   padding: 0.3rem;
+  border-radius: 4px;
 
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
 
-  border-radius: 4px;
   background: var(--MainLight);
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
@@ -29,6 +29,12 @@ const Container = styled.div`
     height: 2rem;
 
     padding: 0.27rem;
+  }
+`;
+
+const StyledAddFillo = styled(AddFillo)`
+  path {
+    fill: var(--Main);
   }
 `;
 
