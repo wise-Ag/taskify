@@ -1,19 +1,18 @@
-import Image from "next/image";
-import styled from "styled-components";
-import addBox from "@/assets/icons/add-box.svg";
-import settings from "@/assets/icons/settings.svg";
+import AddBox from "@/assets/icons/add-box.svg";
+import Settings from "@/assets/icons/settings.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
+import styled from "styled-components";
 
-interface ButtonProps {
-  src: string;
-  type: string;
+interface IconButtonProps {
+  icon: React.ReactNode;
+  label: string;
 }
 
-function Button({ src, type }: ButtonProps) {
+function IconButton({ icon, label }: IconButtonProps) {
   return (
     <StyledButton>
-      <Icon src={src} alt="버튼 아이콘" />
-      <ButtonType>{type}</ButtonType>
+      <StyledIcon>{icon}</StyledIcon>
+      <ButtonType>{label}</ButtonType>
     </StyledButton>
   );
 }
@@ -21,8 +20,8 @@ function Button({ src, type }: ButtonProps) {
 function DashboardButtons() {
   return (
     <Wrapper>
-      <Button src={settings} type="관리" />
-      <Button src={addBox} type="초대하기" />
+      <IconButton icon={<Settings />} label="관리" />
+      <IconButton icon={<AddBox />} label="초대하기" />
     </Wrapper>
   );
 }
@@ -50,7 +49,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const Icon = styled(Image)`
+const StyledIcon = styled.div`
   width: 2rem;
   height: 2rem;
 

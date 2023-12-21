@@ -1,4 +1,4 @@
-import LogoButton from "@/components/Nav/LogoButton";
+import LogoButton from "@/components/common/LogoButton";
 import SignButton from "@/components/Nav/SignButton";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
@@ -19,6 +19,8 @@ const Wrapper = styled.nav`
   height: 7rem;
 
   padding: 1.6rem 8rem 1.6rem 1.6rem;
+
+  border-bottom: 1px solid var(--Grayd9);
 
   display: flex;
   flex-direction: row;

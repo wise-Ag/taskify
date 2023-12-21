@@ -1,6 +1,5 @@
-import Image from "next/image";
-import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
+import styled from "styled-components";
 
 interface ProfileProps {
   profileImageUrl: string;
@@ -10,7 +9,7 @@ interface ProfileProps {
 function Profile({ profileImageUrl, nickname }: ProfileProps) {
   return (
     <Wrapper>
-      <ProfileIcon src={profileImageUrl} alt="프로필 아이콘" />
+      <ProfileIcon image={profileImageUrl} />
       <Name>{nickname}</Name>
     </Wrapper>
   );
@@ -24,9 +23,17 @@ const Wrapper = styled.div`
   gap: 1.2rem;
 `;
 
-const ProfileIcon = styled(Image)`
+const ProfileIcon = styled.div<{ image: string }>`
   width: 3.8rem;
   height: 3.8rem;
+
+  border-radius: 100%;
+
+  /* background-image: url(${(props) => props.image}); */
+  /* 추후에 데이터 받아오면 위와 같은 형식으로 수정.. */
+  background-image: url("https://www.fitpetmall.com/wp-content/uploads/2023/09/shutterstock_2205178589-1-1.png");
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const Name = styled.div`
