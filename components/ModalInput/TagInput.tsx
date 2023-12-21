@@ -1,7 +1,27 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useCallback } from "react";
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import Tag from "../Chip/Tag";
+
+interface TagsProps {
+  handleOnClick: (event: React.MouseEvent) => void;
+  tagValue: string[];
+}
+const Tags = React.memo(({ handleOnClick, tagValue }: TagsProps) => {
+  return (
+    <TagArea>
+      {tagValue.map((tag) => {
+        return (
+          <div key={tag} style={{ cursor: "pointer" }} onClick={handleOnClick}>
+            <Tag bgColor="--Pinkf7" textColor="--Pinkd5">
+              {tag}
+            </Tag>
+          </div>
+        );
+      })}
+    </TagArea>
+  );
+});
 
 function TagInput() {
   const [inputValue, setInputValue] = useState("");
@@ -11,6 +31,13 @@ function TagInput() {
     setInputValue(e.target.value);
   };
 
+  const handleDeleteTag = useCallback(
+    (event: React.MouseEvent) => {
+      setTagValue((prev) => prev.filter((v) => v !== event?.target?.textContent));
+    },
+    [tagValue],
+  );
+
   const handlePressEnter = (event: React.KeyboardEvent) => {
     if (event.key !== "Enter") return;
     if (event.nativeEvent.isComposing) return;
@@ -19,36 +46,12 @@ function TagInput() {
     setInputValue(() => "");
   };
 
-  const handleDeleteTag = (event: React.MouseEvent) => {
-    setTagValue((prev) => prev.filter((v) => v !== event?.target?.textContent));
-  };
-
-  const setTag = () => {
-    return (
-      <TagArea>
-        {tagValue.map((tag) => {
-          return (
-            <div style={{ cursor: "pointer" }} onClick={handleDeleteTag}>
-              <Tag key={tag} bgColor="--Pinkf7" textColor="--Pinkd5">
-                {tag}
-              </Tag>
-            </div>
-          );
-        })}
-      </TagArea>
-    );
-  };
-
-  const renderInput = () => {
-    return <StyledInput type="text" value={inputValue} onChange={handleInputChange} placeholder={"입력 후 Enter"} onKeyDown={handlePressEnter} />;
-  };
-
   return (
     <InputBox>
       <Label>태그</Label>
       <InputArea>
-        {setTag()}
-        {renderInput()}
+        {tagValue && <Tags handleOnClick={handleDeleteTag} tagValue={tagValue} />}
+        <StyledInput type="text" value={inputValue} onChange={handleInputChange} placeholder={"입력 후 Enter"} onKeyDown={handlePressEnter} />
       </InputArea>
     </InputBox>
   );
