@@ -50,9 +50,7 @@ function Column({ columnId, title }: ColumnProps) {
     <Wrapper>
       <ColumnHeader title={title} columnId={columnId} count={cards.length} />
       <Container>
-        <Button type="plus" size="L" disabled>
-          +
-        </Button>
+        <Button type="plus" disabled />
         {cards.map((card) => {
           return <Card key={card.id} cardData={card} />;
         })}
