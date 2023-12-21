@@ -13,6 +13,7 @@ function TagInput() {
 
   const handlePressEnter = (event: KeyboardEvent) => {
     if (event.key !== "Enter") return;
+    if (event.nativeEvent.isComposing) return;
     if (!inputValue) return;
     if (tagValue.filter((v) => v == inputValue).length === 0) setTagValue((prev) => [...prev, inputValue]);
     setInputValue(() => "");
