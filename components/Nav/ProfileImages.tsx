@@ -66,7 +66,7 @@ const ProfileImg = styled.div<{ index: number; image: string }>`
   right: ${({ index }) => `${(index + 1) * 3}rem`};
 
   border-radius: 100%;
-  border: 0.2rem solid var(--White);
+  border: 2px solid var(--White);
 
   background-image: url(${(props) => props.image});
   background-size: cover;
@@ -100,7 +100,7 @@ const NumberBackground = styled.div`
   background-color: #f4d7da;
 
   border-radius: 100%;
-  border: 0.2rem solid var(--White);
+  border: 2px solid var(--White);
 
   z-index: 5;
 `;

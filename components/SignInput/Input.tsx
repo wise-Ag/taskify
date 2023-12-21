@@ -49,7 +49,7 @@ const StyledInput = styled.input<{ hasError?: boolean }>`
   gap: 1rem;
 
   border-radius: 0.8rem;
-  border: 0.1rem solid var(--Grayd9);
+  border: 1px solid var(--Grayd9);
   background: var(--White);
 
   &:focus {

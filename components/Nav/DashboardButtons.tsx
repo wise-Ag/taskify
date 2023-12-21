@@ -40,7 +40,7 @@ const StyledButton = styled.button`
   gap: 0.8rem;
 
   border-radius: 0.8rem;
-  border: 0.1rem solid var(--Grayd9);
+  border: 1px solid var(--Grayd9);
   background: var(--White);
 
   @media (max-width: ${DeviceSize.mobile}) {

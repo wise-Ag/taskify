@@ -35,7 +35,7 @@ export default NavContainer;
 
 const Wrapper = styled.div<{ $isMyNav: boolean }>`
   padding: 2.3rem 8rem 2.3rem 34rem;
-  border-bottom: 0.1rem solid var(--Grayd9);
+  border-bottom: 1px solid var(--Grayd9);
 
   display: flex;
   flex-direction: row;
@@ -88,6 +88,6 @@ const Content = styled.div<{ $isMyNav: boolean }>`
 `;
 
 const Line = styled.div`
-  border-left: 0.1rem solid var(--Grayd9);
+  border-left: 1px solid var(--Grayd9);
   height: 3.8rem;
 `;
