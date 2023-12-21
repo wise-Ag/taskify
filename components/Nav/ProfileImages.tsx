@@ -1,31 +1,23 @@
 import styled from "styled-components";
 import { memberData } from "./mockData";
-// import { useMediaQuery } from "react-responsive";
+import { DeviceSize } from "@/styles/DeviceSize";
 
 function ProfileImages() {
   const { members, totalCount } = memberData;
-  // const isPc = useMediaQuery({
-  //   query: "(min-width: 1024px)",
-  // });
-  // const isTabletorMobile = useMediaQuery({
-  //   query: "(max-width: 1024px)",
-  // });
 
   return (
     <>
       {totalCount > 0 && (
         <Contents>
           {members.slice(0, 4).map((member, index) => (
-            // <ProfileImg src={member.profileImageUrl} alt="프로필 이미지" key={index} index={index} />
             <ProfileImg image={member.profileImageUrl} key={index} index={index} />
           ))}
           {totalCount > 4 && (
-            <>
+            <Profiles>
               <NumberBackground />
-              {/* {isPc && <Number>+{totalCount - 4}</Number>}
-              {isTabletorMobile && <Number>+{totalCount - 2}</Number>} */}
-              <Number>+{totalCount - 4}</Number>
-            </>
+              <NumberPc>+{totalCount - 4}</NumberPc>
+              <NumberTabletOrMobile>+{totalCount - 2}</NumberTabletOrMobile>
+            </Profiles>
           )}
         </Contents>
       )}
@@ -49,20 +41,9 @@ const Contents = styled.div`
       display: none;
     }
 
-    & > :nth-last-child(-n + 2) {
+    & > :nth-last-child(-n + 1) {
       display: block;
     }
-  }
-
-  p {
-    width: 2rem;
-
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 1rem;
-
-    z-index: 5;
   }
 `;
 
@@ -89,6 +70,24 @@ const ProfileImg = styled.div<{ index: number; image: string }>`
   z-index: ${({ index }) => `${3 - index}`};
 `;
 
+const Profiles = styled.div`
+  > p {
+    width: 2rem;
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1rem;
+
+    color: #d25b68;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 500;
+
+    z-index: 5;
+  }
+`;
+
 const NumberBackground = styled.div`
   width: 3.8rem;
   height: 3.8rem;
@@ -101,9 +100,16 @@ const NumberBackground = styled.div`
   z-index: 5;
 `;
 
-const Number = styled.p`
-  color: #d25b68;
-  text-align: center;
-  font-size: 1.6rem;
-  font-weight: 500;
+const NumberPc = styled.p`
+  @media (max-width: ${DeviceSize.tablet}) {
+    display: none;
+  }
+`;
+
+const NumberTabletOrMobile = styled.p`
+  display: none;
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    display: block;
+  }
 `;
