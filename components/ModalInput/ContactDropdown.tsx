@@ -95,13 +95,12 @@ const InputContainer = styled.div`
   width: 100%;
   height: 100%;
 
-  border-radius: 6px;
-  border: 1px solid var(--Grayd9);
-
   display: flex;
   align-items: center;
   position: relative;
 
+  border-radius: 6px;
+  border: 1px solid var(--Grayd9);
   background: var(--White);
 `;
 
@@ -109,11 +108,11 @@ const SelectProfileIcon = styled.img`
   width: 2.4rem;
   height: 2.4rem;
 
-  border-radius: 50%;
-
   position: absolute;
   left: 1.6rem;
   top: 50%;
+
+  border-radius: 50%;
 
   transform: translateY(-50%);
   object-fit: cover;
@@ -124,13 +123,13 @@ const Input = styled.input`
   height: 100%;
 
   padding: 1.4rem 1.6rem;
-  border-radius: 6px;
-  border: 1px solid var(--Grayd9);
 
   display: flex;
   align-items: center;
   gap: 1rem;
 
+  border-radius: 6px;
+  border: 1px solid var(--Grayd9);
   background: var(--White);
 
   &:focus {
@@ -149,13 +148,12 @@ const ArrowDownIcon = styled(DropdownIcon)`
 `;
 
 const List = styled.ul`
-  border-radius: 6px;
-  border: 1px solid var(--Grayd9);
-
   color: var(--Black33);
   font-size: 1.4rem;
   font-weight: 400;
 
+  border-radius: 6px;
+  border: 1px solid var(--Grayd9);
   background: var(--White);
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
 `;
@@ -181,6 +179,7 @@ const ProfileIcon = styled.img`
   height: 2.4rem;
 
   margin-right: 1rem;
+
   border-radius: 50%;
 
   object-fit: cover;

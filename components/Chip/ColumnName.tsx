@@ -17,12 +17,12 @@ function ColumnName({ status }: ColumnNameProps) {
 
 const Container = styled.div`
   padding: 0.4rem 0.8rem;
-  gap: 0.6rem;
-  border-radius: 11px;
 
   display: inline-flex;
   align-items: center;
+  gap: 0.6rem;
 
+  border-radius: 11px;
   background: var(--MainLight);
 `;
 

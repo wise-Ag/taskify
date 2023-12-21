@@ -15,13 +15,13 @@ const Container = styled.div`
   height: 2.2rem;
 
   padding: 0.3rem;
-  border-radius: 4px;
 
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
 
+  border-radius: 4px;
   background: var(--MainLight);
 
   @media screen and (max-width: ${DeviceSize.mobile}) {

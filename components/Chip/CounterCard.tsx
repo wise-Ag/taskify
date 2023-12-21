@@ -14,14 +14,14 @@ function CounterCard({ number }: CounterCardProps) {
 
 const Container = styled.div`
   padding: 0.3rem 0.6rem;
-  gap: 0.1rem;
-  border-radius: 4px;
 
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 0.1rem;
 
+  border-radius: 4px;
   background: var(--Grayee);
 `;
 

@@ -36,13 +36,12 @@ const ColorCircle = styled.div<ColorCircleProps>`
   width: 3rem;
   height: 3rem;
 
-  border-radius: 50%;
-
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
 
+  border-radius: 50%;
   background-color: ${(props) => `var(${props.color})`};
 
   cursor: pointer;

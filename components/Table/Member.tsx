@@ -50,8 +50,8 @@ const Container = styled.div`
   width: 62rem;
 
   padding: 2.5rem;
-  border-radius: 8px;
 
+  border-radius: 8px;
   background: var(--White);
 
   @media screen and (max-width: ${DeviceSize.tablet}) {
@@ -141,6 +141,7 @@ const Profile = styled.img`
   height: 3.8rem;
 
   margin-right: 1.2rem;
+
   border-radius: 50%;
 
   object-fit: cover;
