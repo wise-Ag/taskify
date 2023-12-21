@@ -1,10 +1,10 @@
 import CalenderIcon from "@/assets/icons/calender.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import Tag from "../Chip/Tag";
-import { getCardsResponse } from "../Column/Column";
+import Tag from "@/components/Chip/Tag";
+import { getCardsResponse } from "@/components/Column/Column";
 import { formatDate } from "@/utils/FormatDate";
-import NoProfileImage from "../NoProfileImage/ProfileImage";
+import NoProfileImage from "@/components/NoProfileImage/ProfileImage";
 
 function Card({ cardData }: { cardData: getCardsResponse }) {
   return (

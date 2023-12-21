@@ -2,9 +2,9 @@ import instance from "@/api/axios";
 import Card from "@/components/Card/Card";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import ColumnHeader from "./ColumnHeader";
-import { MOCK_DATA } from "./Columns";
-import Button from "../button/Button";
+import ColumnHeader from "@/components/Column/ColumnHeader";
+import { MOCK_DATA } from "@/components/Column/Columns";
+import Button from "@/components/button/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
 
 interface ColumnProps {

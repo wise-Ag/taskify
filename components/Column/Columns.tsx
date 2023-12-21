@@ -3,7 +3,7 @@ import Column from "@/components/Column/Column";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import Button from "../button/Button";
+import Button from "@/components/button/Button";
 
 interface Column {
   createdAt: string;
@@ -84,6 +84,7 @@ const ButtonWrapper = styled.div`
   background: var(--Grayfa);
 
   z-index: 1;
+
   @media (max-width: ${DeviceSize.tablet}) {
     position: sticky;
     bottom: 0;
