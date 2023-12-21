@@ -11,7 +11,7 @@ function TagInput() {
     setInputValue(e.target.value);
   };
 
-  const handlePressEnter = (event: KeyboardEvent) => {
+  const handlePressEnter = (event: React.KeyboardEvent) => {
     if (event.key !== "Enter") return;
     if (event.nativeEvent.isComposing) return;
     if (!inputValue) return;
@@ -19,7 +19,7 @@ function TagInput() {
     setInputValue(() => "");
   };
 
-  const handleDeleteTag = (event: Event) => {
+  const handleDeleteTag = (event: React.MouseEvent) => {
     setTagValue((prev) => prev.filter((v) => v !== event?.target?.textContent));
   };
 
@@ -28,7 +28,7 @@ function TagInput() {
       <TagArea>
         {tagValue.map((tag) => {
           return (
-            <div style={{ cursor: "pointer" }} onClick={handleDeleteTag as unknown as React.MouseEventHandler<HTMLDivElement>}>
+            <div style={{ cursor: "pointer" }} onClick={handleDeleteTag}>
               <Tag key={tag} bgColor="--Pinkf7" textColor="--Pinkd5">
                 {tag}
               </Tag>
@@ -40,15 +40,7 @@ function TagInput() {
   };
 
   const renderInput = () => {
-    return (
-      <StyledInput
-        type="text"
-        value={inputValue}
-        onChange={handleInputChange}
-        placeholder={"입력 후 Enter"}
-        onKeyDown={handlePressEnter as unknown as React.KeyboardEventHandler<HTMLInputElement>}
-      />
-    );
+    return <StyledInput type="text" value={inputValue} onChange={handleInputChange} placeholder={"입력 후 Enter"} onKeyDown={handlePressEnter} />;
   };
 
   return (
