@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ColumnHeader from "@/components/Column/ColumnHeader";
 import { MOCK_DATA } from "@/components/Column/Columns";
-import Button from "@/components/Button/Button";
+import Button from "@/components/button/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
 
 interface ColumnProps {

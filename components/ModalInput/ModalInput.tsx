@@ -1,4 +1,4 @@
-import Button from "@/components/Button/Button";
+import Button from "@/components/button/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { ko } from "date-fns/locale";
 import React, { ChangeEvent, forwardRef, useState } from "react";

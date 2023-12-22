@@ -2,7 +2,7 @@ import AddBoxIcon from "@/assets/icons/add-box.svg";
 import ArrowIcon from "@/assets/icons/arrow-forward.svg";
 import CrownIcon from "@/assets/icons/crown.svg";
 import AddColumn from "@/components/Chip/AddColumn";
-import TYPES from "@/components/Button/ButtonStyles";
+import TYPES from "@/components/button/ButtonStyles";
 import { ReactNode } from "react";
 import styled from "styled-components";
 import dashboardData from "./mockData";

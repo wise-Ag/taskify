@@ -1,5 +1,5 @@
 import ButtonSet from "@/components/ButtonSet/ButtonSet";
-import Button from "@/components/Button/Button";
+import Button from "@/components/button/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 
