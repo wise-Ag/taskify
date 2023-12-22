@@ -1,15 +1,22 @@
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
+import NoProfileImage from "../NoProfileImage/ProfileImage";
 
 interface ProfileProps {
-  profileImageUrl: string;
+  profileImageUrl: string | null;
   nickname: string;
 }
 
 function Profile({ profileImageUrl, nickname }: ProfileProps) {
   return (
     <Wrapper>
-      <ProfileIcon image={profileImageUrl} />
+      {profileImageUrl ? (
+        <ProfileIcon image={profileImageUrl} />
+      ) : (
+        <NoProfileImageWrapper>
+          <NoProfileImage />
+        </NoProfileImageWrapper>
+      )}
       <Name>{nickname}</Name>
     </Wrapper>
   );
@@ -29,9 +36,7 @@ const ProfileIcon = styled.div<{ image: string }>`
 
   border-radius: 100%;
 
-  /* background-image: url(${(props) => props.image}); */
-  /* 추후에 데이터 받아오면 위와 같은 형식으로 수정.. */
-  background-image: url("https://www.fitpetmall.com/wp-content/uploads/2023/09/shutterstock_2205178589-1-1.png");
+  background-image: url(${(props) => props.image});
   background-size: cover;
   background-repeat: no-repeat;
 `;
@@ -44,4 +49,11 @@ const Name = styled.div`
   @media (max-width: ${DeviceSize.mobile}) {
     display: none;
   }
+`;
+
+const NoProfileImageWrapper = styled.div`
+  width: 3.8rem;
+
+  font-size: 1.5rem;
+  line-height: 3.8rem;
 `;

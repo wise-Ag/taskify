@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { memberData } from "./mockData";
 import { DeviceSize } from "@/styles/DeviceSize";
+import NoProfileImage from "../NoProfileImage/ProfileImage";
 
 function ProfileImages() {
   const { members, totalCount } = memberData;
@@ -9,9 +10,15 @@ function ProfileImages() {
     <>
       {totalCount > 0 && (
         <Contents>
-          {members.slice(0, 4).map((member, index) => (
-            <ProfileImg image={member.profileImageUrl} key={index} index={index} />
-          ))}
+          {members.slice(0, 4).map((member, index) =>
+            member.profileImageUrl ? (
+              <ProfileImg key={member.id} index={index} image={member.profileImageUrl} />
+            ) : (
+              <NoProfileImageWrapper index={index}>
+                <NoProfileImage />
+              </NoProfileImageWrapper>
+            ),
+          )}
           {totalCount > 4 && (
             <Profiles>
               <NumberBackground />
@@ -36,7 +43,7 @@ const Contents = styled.div`
   flex-wrap: wrap;
   justify-content: flex-end;
 
-  @media (max-width: 1024px) {
+  @media (max-width: ${DeviceSize.tablet}) {
     & > :nth-child(n + 3) {
       display: none;
     }
@@ -61,9 +68,7 @@ const ProfileImg = styled.div<{ index: number; image: string }>`
   border-radius: 100%;
   border: 2px solid var(--White);
 
-  /* background-image: url(${(props) => props.image}); */
-  /* 추후에 데이터 받아오면 위와 같은 형식으로 수정.. */
-  background-image: url("https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg");
+  background-image: url(${(props) => props.image});
   background-size: cover;
   background-repeat: no-repeat;
 
@@ -112,4 +117,20 @@ const NumberTabletOrMobile = styled.p`
   @media (max-width: ${DeviceSize.tablet}) {
     display: block;
   }
+`;
+
+const NoProfileImageWrapper = styled.div<{ index: number }>`
+  width: 3.8rem;
+
+  line-height: 3.8rem;
+
+  padding: 0;
+
+  font-size: 1.5rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: ${({ index }) => `${(index + 1) * 3}rem`};
+
+  z-index: ${({ index }) => `${3 - index}`};
 `;
