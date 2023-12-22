@@ -3,14 +3,14 @@ import SignButton from "@/components/Nav/SignButton";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 
-function MainNav() {
+const MainNav = () => {
   return (
     <Wrapper>
       <LogoButton />
       <SignButton />
     </Wrapper>
   );
-}
+};
 
 export default MainNav;
 

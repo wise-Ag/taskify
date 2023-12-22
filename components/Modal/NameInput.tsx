@@ -5,14 +5,14 @@ interface NameModalProps {
   label: "이름" | "대시보드 이름";
 }
 
-function NameInput({ label }: NameModalProps) {
+const NameInput = ({ label }: NameModalProps) => {
   return (
     <Wrapper>
       <NameType>{label}</NameType>
       <NameInputBox placeholder="이름을 입력하세요"></NameInputBox>
     </Wrapper>
   );
-}
+};
 
 export default NameInput;
 

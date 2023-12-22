@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 
-function KebabModal() {
+const KebabModal = () => {
   return (
     <Wrapper>
       <KebabListWrapper>
@@ -10,7 +10,7 @@ function KebabModal() {
       </KebabListWrapper>
     </Wrapper>
   );
-}
+};
 
 export default KebabModal;
 

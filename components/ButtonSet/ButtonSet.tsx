@@ -1,7 +1,7 @@
-import React from "react";
-import styled, { css } from "styled-components";
 import ArrowIcon from "@/assets/icons/arrow-forward.svg";
 import TYPES from "@/components/ButtonSet/ButtonSetStyles";
+import { ReactNode } from "react";
+import styled, { css } from "styled-components";
 
 interface ButtonProps {
   isDisabled?: boolean;
@@ -12,10 +12,10 @@ type ButtonCommonProps = Omit<ButtonProps, "$buttonType">;
 
 interface ButtonSetProps extends ButtonCommonProps {
   type: "forwardAndBackward" | "acceptAndReject" | "modalSet";
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
-function ButtonSet({ type, isDisabled, children }: ButtonSetProps) {
+const ButtonSet = ({ type, isDisabled, children }: ButtonSetProps) => {
   return (
     <ButtonSetContainer type={type}>
       {type === "forwardAndBackward" && (
@@ -50,7 +50,9 @@ function ButtonSet({ type, isDisabled, children }: ButtonSetProps) {
       )}
     </ButtonSetContainer>
   );
-}
+};
+
+export default ButtonSet;
 
 const ButtonSetContainer = styled.div<{ type: "forwardAndBackward" | "acceptAndReject" | "modalSet" }>`
   display: flex;
@@ -82,5 +84,3 @@ const StyledArrowIcon = styled(ArrowIcon)`
     fill: ${(props) => (props.disabled ? "var(--Grayd9)" : "var(--Black33)")};
   }
 `;
-
-export default ButtonSet;

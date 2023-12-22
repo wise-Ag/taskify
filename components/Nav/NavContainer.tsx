@@ -2,9 +2,9 @@ import Crown from "@/assets/icons/crown.svg";
 import { profileData } from "@/components/Nav/mockData";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import DashboardButtons from "./DashboardButtons";
-import Profile from "./Profile";
-import ProfileImages from "./ProfileImages";
+import DashboardButtons from "@/components/Nav/DashboardButtons";
+import Profile from "@/components/Nav/Profile";
+import ProfileImages from "@/components/Nav/ProfileImages";
 
 interface NavContainerProps {
   title: string;
@@ -12,7 +12,7 @@ interface NavContainerProps {
   createdByMe?: boolean;
 }
 
-function NavContainer({ title, $isMyNav = false, createdByMe = false }: NavContainerProps) {
+const NavContainer = ({ title, $isMyNav = false, createdByMe = false }: NavContainerProps) => {
   const { nickname, profileImageUrl } = profileData;
 
   return (
@@ -29,7 +29,7 @@ function NavContainer({ title, $isMyNav = false, createdByMe = false }: NavConta
       </Content>
     </Wrapper>
   );
-}
+};
 
 export default NavContainer;
 

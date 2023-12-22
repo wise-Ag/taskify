@@ -1,8 +1,8 @@
+import ButtonSet from "@/components/ButtonSet/ButtonSet";
+import ColorSelector from "@/components/Chip/DashBoardColor";
+import NameInput from "@/components/Modal/NameInput";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
-import NameInput from "@/components/Modal/NameInput";
-import ColorSelector from "@/components/Chip/DashBoardColor";
 
 interface ModalProps {
   title: "새 컬럼 생성" | "컬럼 관리" | "새로운 대시보드";
@@ -10,7 +10,7 @@ interface ModalProps {
   buttonType: "생성" | "변경";
 }
 
-function ModalContainer({ title, label, buttonType }: ModalProps) {
+const ModalContainer = ({ title, label, buttonType }: ModalProps) => {
   return (
     <Wrapper>
       <Title>{title}</Title>
@@ -25,7 +25,7 @@ function ModalContainer({ title, label, buttonType }: ModalProps) {
       </ButtonWrapper>
     </Wrapper>
   );
-}
+};
 
 export default ModalContainer;
 

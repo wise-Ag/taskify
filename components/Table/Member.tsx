@@ -20,7 +20,7 @@ interface MembersListProps {
   currentPage: number;
 }
 
-function MembersList({ members, totalCount, currentPage }: MembersListProps) {
+const MembersList = ({ members, totalCount, currentPage }: MembersListProps) => {
   return (
     <Container>
       <Header>
@@ -44,7 +44,9 @@ function MembersList({ members, totalCount, currentPage }: MembersListProps) {
       ))}
     </Container>
   );
-}
+};
+
+export default MembersList;
 
 const Container = styled.div`
   width: 62rem;
@@ -163,5 +165,3 @@ const Name = styled.div`
     font-size: 1.4rem;
   }
 `;
-
-export default MembersList;

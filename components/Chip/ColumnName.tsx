@@ -1,19 +1,21 @@
-import styled from "styled-components";
 import CircleIcon from "@/assets/icons/circle.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
+import styled from "styled-components";
 
 interface ColumnNameProps {
   status: string;
 }
 
-function ColumnName({ status }: ColumnNameProps) {
+const ColumnName = ({ status }: ColumnNameProps) => {
   return (
     <Container>
       <CircleIcon alt="circle" width={6} height={6} />
       <Text>{status}</Text>
     </Container>
   );
-}
+};
+
+export default ColumnName;
 
 const Container = styled.div`
   padding: 0.4rem 0.8rem;
@@ -35,5 +37,3 @@ const Text = styled.span`
     font-size: 1rem;
   }
 `;
-
-export default ColumnName;

@@ -1,13 +1,13 @@
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import NoProfileImage from "../NoProfileImage/ProfileImage";
+import NoProfileImage from "@/components/NoProfileImage/ProfileImage";
 
 interface ProfileProps {
   profileImageUrl: string | null;
   nickname: string;
 }
 
-function Profile({ profileImageUrl, nickname }: ProfileProps) {
+const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
   return (
     <Wrapper>
       {profileImageUrl ? (
@@ -20,7 +20,7 @@ function Profile({ profileImageUrl, nickname }: ProfileProps) {
       <Name>{nickname}</Name>
     </Wrapper>
   );
-}
+};
 
 export default Profile;
 

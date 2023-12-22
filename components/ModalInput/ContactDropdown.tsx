@@ -18,7 +18,7 @@ interface ContactDropdownProps {
   members: Member[];
 }
 
-function ContactDropdown({ members }: ContactDropdownProps) {
+const ContactDropdown = ({ members }: ContactDropdownProps) => {
   const [filter, setFilter] = useState("");
   const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
@@ -72,7 +72,7 @@ function ContactDropdown({ members }: ContactDropdownProps) {
       </Container>
     </>
   );
-}
+};
 
 export default ContactDropdown;
 

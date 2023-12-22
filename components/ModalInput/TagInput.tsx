@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, useCallback } from "react";
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
-import Tag from "../Chip/Tag";
+import Tag from "@/components/Chip/Tag";
 
 interface TagsProps {
   handleOnClick: (event: React.MouseEvent) => void;
@@ -13,7 +13,7 @@ const Tags = React.memo(({ handleOnClick, tagValue }: TagsProps) => {
       {tagValue.map((tag) => {
         return (
           <div key={tag} style={{ cursor: "pointer" }} onClick={handleOnClick}>
-            <Tag bgColor="--Pinkf7" textColor="--Pinkd5">
+            <Tag $bgColor="--Pinkf7" $textColor="--Pinkd5">
               {tag}
             </Tag>
           </div>
@@ -23,7 +23,7 @@ const Tags = React.memo(({ handleOnClick, tagValue }: TagsProps) => {
   );
 });
 
-function TagInput() {
+const TagInput = () => {
   const [inputValue, setInputValue] = useState("");
   const [tagValue, setTagValue] = useState<string[]>([]);
 
@@ -55,7 +55,7 @@ function TagInput() {
       </InputArea>
     </InputBox>
   );
-}
+};
 
 export default TagInput;
 

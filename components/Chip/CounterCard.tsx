@@ -4,13 +4,15 @@ interface CounterCardProps {
   number: number;
 }
 
-function CounterCard({ number }: CounterCardProps) {
+const CounterCard = ({ number }: CounterCardProps) => {
   return (
     <Container>
       <Number>{number}</Number>
     </Container>
   );
-}
+};
+
+export default CounterCard;
 
 const Container = styled.div`
   padding: 0.3rem 0.6rem;
@@ -30,5 +32,3 @@ const Number = styled.span`
   text-align: center;
   font-size: 1.2rem;
 `;
-
-export default CounterCard;

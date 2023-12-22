@@ -1,13 +1,13 @@
-import Button from "@/components/button/Button";
+import ButtonSet from "@/components/ButtonSet/ButtonSet";
+import Button from "@/components/Button/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
 
 interface AlertProps {
   type: "incorrect" | "complete" | "duplicate" | "delete";
 }
 
-function AlertModal({ type }: AlertProps) {
+const AlertModal = ({ type }: AlertProps) => {
   return (
     <Wrapper>
       <Contents>
@@ -19,7 +19,7 @@ function AlertModal({ type }: AlertProps) {
       <ButtonWrapper>{type === "delete" ? <ButtonSet type="modalSet">삭제</ButtonSet> : <Button type="modalConfirm">확인</Button>}</ButtonWrapper>
     </Wrapper>
   );
-}
+};
 
 export default AlertModal;
 

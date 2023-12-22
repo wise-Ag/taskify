@@ -1,7 +1,7 @@
-import NavContainer from "./NavContainer";
+import NavContainer from "@/components/Nav/NavContainer";
 
-function SettingNav() {
+const SettingNav = () => {
   return <NavContainer title="계정관리" $isMyNav={true} />;
-}
+};
 
 export default SettingNav;

@@ -9,7 +9,7 @@ interface DropDownMenuProps {
   setStatus: Dispatch<SetStateAction<string>>;
 }
 
-function DropdownList({ $isOpen, setStatus }: DropDownMenuProps) {
+const DropdownList = ({ $isOpen, setStatus }: DropDownMenuProps) => {
   const columnData = [
     { id: 0, status: "To Do" },
     { id: 1, status: "On Progress" },
@@ -38,7 +38,7 @@ function DropdownList({ $isOpen, setStatus }: DropDownMenuProps) {
       </DropdownContent>
     </Wrapper>
   );
-}
+};
 
 export default DropdownList;
 

@@ -1,10 +1,10 @@
-import NavContainer from "./NavContainer";
+import NavContainer from "@/components/Nav/NavContainer";
 import { dashboardData } from "./mockData";
 
-function DashboardNav() {
+const DashboardNav = () => {
   const { title, createdByMe } = dashboardData;
 
   return <NavContainer title={title} createdByMe={createdByMe} />;
-}
+};
 
 export default DashboardNav;

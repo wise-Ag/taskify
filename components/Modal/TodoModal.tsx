@@ -1,15 +1,15 @@
-import { DeviceSize } from "@/styles/DeviceSize";
-import styled from "styled-components";
 import ButtonSet from "@/components/ButtonSet/ButtonSet";
 import ModalInput from "@/components/ModalInput/ModalInput";
 import Dropdown from "@/components/ModalInput/StateDropdown";
 import TagInput from "@/components/ModalInput/TagInput";
+import { DeviceSize } from "@/styles/DeviceSize";
+import styled from "styled-components";
 
 interface CategoryProps {
   type: "create" | "edit";
 }
 
-function TodoModal({ type }: CategoryProps) {
+const TodoModal = ({ type }: CategoryProps) => {
   return (
     <Wrapper>
       <TodoTitle>할 일 {type === "create" ? "생성" : "수정"}</TodoTitle>
@@ -18,8 +18,8 @@ function TodoModal({ type }: CategoryProps) {
         {/* <ContactDropdown members={}/> */}
         <Dropdown /> {/* ContactDropdown 쓰는 법 몰라서 임의로 넣은 컴포넌트입니다 */}
       </ContentContainer>
-      <ModalInput inputType="댓글" label="설명" />
-      <ModalInput inputType="마감일" label="마감일" />
+      <ModalInput $inputType="댓글" label="설명" />
+      <ModalInput $inputType="마감일" label="마감일" />
       <TagInput />
       <ButtonWrapper>
         <ButtonSet type="modalSet">
@@ -29,7 +29,7 @@ function TodoModal({ type }: CategoryProps) {
       </ButtonWrapper>
     </Wrapper>
   );
-}
+};
 
 export default TodoModal;
 

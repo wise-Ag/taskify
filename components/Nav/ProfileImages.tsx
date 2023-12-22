@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { memberData } from "./mockData";
 import { DeviceSize } from "@/styles/DeviceSize";
-import NoProfileImage from "../NoProfileImage/ProfileImage";
+import NoProfileImage from "@/components/NoProfileImage/ProfileImage";
 
-function ProfileImages() {
+const ProfileImages = () => {
   const { members, totalCount } = memberData;
 
   return (
@@ -30,7 +30,7 @@ function ProfileImages() {
       )}
     </>
   );
-}
+};
 
 export default ProfileImages;
 

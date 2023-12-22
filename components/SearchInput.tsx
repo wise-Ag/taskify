@@ -11,6 +11,8 @@ const SearchInput = () => {
   );
 };
 
+export default SearchInput;
+
 const Container = styled.div`
   padding: 0.8rem 1.6rem;
 
@@ -41,5 +43,3 @@ const Input = styled.input`
     font-size: 1.4rem;
   }
 `;
-
-export default SearchInput;

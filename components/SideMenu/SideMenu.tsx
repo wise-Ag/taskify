@@ -11,7 +11,7 @@ interface DashboardProps {
   createdByMe?: boolean;
 }
 
-function Dashboard({ color, title, createdByMe }: DashboardProps) {
+const Dashboard = ({ color, title, createdByMe }: DashboardProps) => {
   return (
     <Container>
       <Color color={color} />
@@ -19,9 +19,9 @@ function Dashboard({ color, title, createdByMe }: DashboardProps) {
       {createdByMe && <StyledCrown alt="왕관" />}
     </Container>
   );
-}
+};
 
-function SideMenu() {
+const SideMenu = () => {
   const data = dashboardData.dashboards;
 
   return (
@@ -38,7 +38,7 @@ function SideMenu() {
       </DashboardList>
     </Wrapper>
   );
-}
+};
 
 export default SideMenu;
 

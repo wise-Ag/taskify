@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
 // 나머지 에러는 페이지 만들때 수정!?
-function SignUpForm() {
+const SignUpForm = () => {
   const { control, handleSubmit, watch, setError } = useForm({
     defaultValues: { email: "", nickname: "", password: "", confirmPassword: "" },
     mode: "onBlur",
@@ -63,7 +63,7 @@ function SignUpForm() {
       />
     </StyledForm>
   );
-}
+};
 
 export default SignUpForm;
 

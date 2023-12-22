@@ -27,7 +27,7 @@ interface InvitationsListProps {
   currentPage: number;
 }
 
-function InvitationHistory({ invitations, totalCount, currentPage }: InvitationsListProps) {
+const InvitationHistory = ({ invitations, totalCount, currentPage }: InvitationsListProps) => {
   return (
     <Container>
       <Header>
@@ -49,7 +49,9 @@ function InvitationHistory({ invitations, totalCount, currentPage }: Invitations
       ))}
     </Container>
   );
-}
+};
+
+export default InvitationHistory;
 
 const Container = styled.div`
   width: 62rem;
@@ -163,5 +165,3 @@ const Email = styled.div`
     font-size: 1.4rem;
   }
 `;
-
-export default InvitationHistory;

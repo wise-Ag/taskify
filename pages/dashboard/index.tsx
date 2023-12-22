@@ -1,11 +1,11 @@
 import Columns from "@/components/Column/Columns";
 
-function DashBoardPage() {
+const DashBoardPage = () => {
   return (
     <div>
       <Columns />
     </div>
   );
-}
+};
 
 export default DashBoardPage;

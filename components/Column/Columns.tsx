@@ -1,9 +1,9 @@
 import instance from "@/api/axios";
 import Column from "@/components/Column/Column";
+import Button from "@/components/Button/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import Button from "@/components/button/Button";
 
 interface Column {
   createdAt: string;
@@ -18,7 +18,7 @@ export const MOCK_DATA = {
   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDI5MDQ2NjQsImlzcyI6InNwLXRhc2tpZnkifQ.SLkTowJTOC6iZwTDiO4ZyLwIx6CQWQt4B86YqlMegNc",
 };
 
-function Columns() {
+const Columns = () => {
   const [columns, setColumns] = useState<Column[]>([]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ function Columns() {
       </ButtonWrapper>
     </Wrapper>
   );
-}
+};
 
 export default Columns;
 

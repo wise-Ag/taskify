@@ -1,7 +1,7 @@
 import CircleIcon from "@/assets/icons/blue-circle.svg";
 import SettingIcon from "@/assets/icons/settings.svg";
-import styled from "styled-components";
 import CounterCard from "@/components/Chip/CounterCard";
+import styled from "styled-components";
 
 interface ColumnHeaderProps {
   title: string;
@@ -9,7 +9,7 @@ interface ColumnHeaderProps {
   count: number;
 }
 
-function ColumnHeader({ title, count }: ColumnHeaderProps) {
+const ColumnHeader = ({ title, count }: ColumnHeaderProps) => {
   return (
     <Wrapper>
       <Content>
@@ -20,7 +20,7 @@ function ColumnHeader({ title, count }: ColumnHeaderProps) {
       <SettingIcon style={{ cursor: "pointer" }} />
     </Wrapper>
   );
-}
+};
 
 export default ColumnHeader;
 

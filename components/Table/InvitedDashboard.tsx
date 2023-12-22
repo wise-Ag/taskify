@@ -18,7 +18,7 @@ interface InvitationsListProps {
   invitations: Invitation[];
 }
 
-function InvitedDashboard({ invitations }: InvitationsListProps) {
+const InvitedDashboard = ({ invitations }: InvitationsListProps) => {
   const tableTitles = ["이름", "초대자", "수락 여부"];
 
   return (
@@ -47,7 +47,9 @@ function InvitedDashboard({ invitations }: InvitationsListProps) {
       ))}
     </Container>
   );
-}
+};
+
+export default InvitedDashboard;
 
 const Container = styled.div`
   width: 102rem;
@@ -155,5 +157,3 @@ const TableBody = styled.h3`
     font-size: 1.4rem;
   }
 `;
-
-export default InvitedDashboard;

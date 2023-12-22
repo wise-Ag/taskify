@@ -4,14 +4,14 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import Link from "next/link";
 import styled from "styled-components";
 
-function LogoButton() {
+const LogoButton = () => {
   return (
     <Link href="/">
       <StyledLargeLogo alt="로고 이미지" />
       <StyledSmallLogo alt="로고 이미지" />
     </Link>
   );
-}
+};
 
 export default LogoButton;
 

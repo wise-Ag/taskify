@@ -71,7 +71,7 @@ const ModalInput = forwardRef<
 
 export default ModalInput;
 
-function CustomDatePicker() {
+const CustomDatePicker = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
 
   return (
@@ -98,7 +98,7 @@ function CustomDatePicker() {
       />
     </DatePickerWrapper>
   );
-}
+};
 
 const InputBox = styled.div`
   display: flex;

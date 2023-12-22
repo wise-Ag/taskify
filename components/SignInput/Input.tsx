@@ -12,8 +12,6 @@ export interface InputProps {
   onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
-// 화살표 함수 말고 function으로 어떻게 해야할 지 모르겠음ㅠㅠ
-// ref를 쓰지 않으면 에러가 뜸..! 왜지!? 추후에 알아보기..
 const Input = forwardRef<HTMLInputElement, InputProps>(({ label, type, value, hasError = false, errorText, onChange, onBlur, placeholder }, ref) => {
   return (
     <InputBox>

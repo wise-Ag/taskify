@@ -1,18 +1,19 @@
-import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { ReactNode } from "react";
+import styled from "styled-components";
 
 interface TagProps {
-  bgColor: string;
-  textColor: string;
+  $bgColor: string;
+  $textColor: string;
 }
 
-function Tag({ bgColor, textColor, children }: TagProps & { children: React.ReactNode }) {
+const Tag = ({ $bgColor, $textColor, children }: TagProps & { children: ReactNode }) => {
   return (
-    <Container bgColor={bgColor} textColor={textColor}>
+    <Container $bgColor={$bgColor} $textColor={$textColor}>
       {children}
     </Container>
   );
-}
+};
 
 const Container = styled.span<TagProps>`
   padding: 0.4rem 0.6rem;
@@ -23,9 +24,9 @@ const Container = styled.span<TagProps>`
   gap: 1rem;
 
   border-radius: 4px;
-  background: ${(props) => `var(${props.bgColor})`};
+  background: ${(props) => `var(${props.$bgColor})`};
 
-  color: ${(props) => `var(${props.textColor})`};
+  color: ${(props) => `var(${props.$textColor})`};
   text-align: center;
   font-size: 1.2rem;
 

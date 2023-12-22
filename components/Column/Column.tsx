@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ColumnHeader from "@/components/Column/ColumnHeader";
 import { MOCK_DATA } from "@/components/Column/Columns";
-import Button from "@/components/button/Button";
+import Button from "@/components/Button/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
 
 interface ColumnProps {
@@ -27,7 +27,7 @@ export interface getCardsResponse {
   updatedAt: string;
 }
 
-function Column({ columnId, title }: ColumnProps) {
+const Column = ({ columnId, title }: ColumnProps) => {
   const [cards, setCards] = useState<getCardsResponse[]>([]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ function Column({ columnId, title }: ColumnProps) {
       </Container>
     </Wrapper>
   );
-}
+};
 
 export default Column;
 

@@ -1,8 +1,8 @@
-import styled from "styled-components";
 import CheckIcon from "@/assets/icons/check.svg";
+import { selectedColorAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { selectedColorAtom } from "@/states/atoms";
+import styled from "styled-components";
 
 interface ColorCircleProps {
   color: string;
@@ -10,7 +10,7 @@ interface ColorCircleProps {
   onClick: () => void;
 }
 
-function DashBoardColor() {
+const DashBoardColor = () => {
   const [selectedColor, setSelectedColor] = useAtom(selectedColorAtom);
 
   const colors = ["--Green", "--Purple", "--Orange", "--Blue", "--Pink"];
@@ -22,7 +22,9 @@ function DashBoardColor() {
       ))}
     </Container>
   );
-}
+};
+
+export default DashBoardColor;
 
 const Container = styled.div`
   gap: 1rem;
@@ -64,5 +66,3 @@ const ColorCircle = styled.div<ColorCircleProps>`
     height: 2.8rem;
   }
 `;
-
-export default DashBoardColor;

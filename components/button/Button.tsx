@@ -1,15 +1,15 @@
-import React from "react";
-import styled from "styled-components";
-import TYPES from "@/components/button/ButtonStyles";
 import AddBoxIcon from "@/assets/icons/add-box.svg";
 import ArrowIcon from "@/assets/icons/arrow-forward.svg";
 import CrownIcon from "@/assets/icons/crown.svg";
 import AddColumn from "@/components/Chip/AddColumn";
+import TYPES from "@/components/Button/ButtonStyles";
+import { ReactNode } from "react";
+import styled from "styled-components";
 import dashboardData from "./mockData";
 
 interface ButtonContentProps {
   type: keyof typeof TYPES;
-  children?: React.ReactNode;
+  children?: ReactNode;
   disabled?: boolean;
   id?: number;
   color?: string;
@@ -17,8 +17,9 @@ interface ButtonContentProps {
   createdByMe?: boolean;
 }
 
-function ButtonContent({ type, children, id }: ButtonContentProps) {
+const ButtonContent = ({ type, children, id }: ButtonContentProps) => {
   let dashboard;
+
   if (type === "dashboardList" && id !== undefined) {
     dashboard = dashboardData.dashboards[id];
   }
@@ -54,15 +55,17 @@ function ButtonContent({ type, children, id }: ButtonContentProps) {
     default:
       return children;
   }
-}
+};
 
-function Button({ type, children, disabled, id }: ButtonContentProps) {
+const Button = ({ type, children, disabled, id }: ButtonContentProps) => {
   return (
     <StyledButton type={type} disabled={disabled}>
       <ButtonContent type={type} children={children} id={id} />
     </StyledButton>
   );
-}
+};
+
+export default Button;
 
 const StyledButton = styled.button<ButtonContentProps>`
   display: flex;
@@ -100,5 +103,3 @@ const StyledTitleWrapper = styled.div`
 const StyledDashboardTitle = styled.span`
   margin: 0 0.8rem 0 1.6rem;
 `;
-
-export default Button;

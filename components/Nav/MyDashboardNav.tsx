@@ -1,7 +1,7 @@
-import NavContainer from "./NavContainer";
+import NavContainer from "@/components/Nav/NavContainer";
 
-function MyDashboardNav() {
+const MyDashboardNav = () => {
   return <NavContainer title="내 대시보드" $isMyNav />;
-}
+};
 
 export default MyDashboardNav;

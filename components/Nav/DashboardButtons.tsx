@@ -8,23 +8,23 @@ interface IconButtonProps {
   label: string;
 }
 
-function IconButton({ icon, label }: IconButtonProps) {
+const IconButton = ({ icon, label }: IconButtonProps) => {
   return (
     <StyledButton>
       <StyledIcon>{icon}</StyledIcon>
       <ButtonType>{label}</ButtonType>
     </StyledButton>
   );
-}
+};
 
-function DashboardButtons() {
+const DashboardButtons = () => {
   return (
     <Wrapper>
       <IconButton icon={<Settings />} label="관리" />
       <IconButton icon={<AddBox />} label="초대하기" />
     </Wrapper>
   );
-}
+};
 
 export default DashboardButtons;
 

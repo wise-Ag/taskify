@@ -1,12 +1,12 @@
 import CalenderIcon from "@/assets/icons/calender.svg";
-import { DeviceSize } from "@/styles/DeviceSize";
-import styled from "styled-components";
 import Tag from "@/components/Chip/Tag";
 import { getCardsResponse } from "@/components/Column/Column";
-import { formatDate } from "@/utils/FormatDate";
 import NoProfileImage from "@/components/NoProfileImage/ProfileImage";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { formatDate } from "@/utils/FormatDate";
+import styled from "styled-components";
 
-function Card({ cardData }: { cardData: getCardsResponse }) {
+const Card = ({ cardData }: { cardData: getCardsResponse }) => {
   return (
     <Wrapper>
       {cardData.imageUrl && <CardImage cardimage={cardData.imageUrl || null} />}
@@ -15,7 +15,7 @@ function Card({ cardData }: { cardData: getCardsResponse }) {
         <Tags>
           {cardData.tags.map((tag, idx) => {
             return (
-              <Tag key={idx} bgColor="--Pinkf7" textColor="--Pinkd5">
+              <Tag key={idx} $bgColor="--Pinkf7" $textColor="--Pinkd5">
                 {tag}
               </Tag>
             );
@@ -36,7 +36,8 @@ function Card({ cardData }: { cardData: getCardsResponse }) {
       </div>
     </Wrapper>
   );
-}
+};
+
 export default Card;
 
 const Wrapper = styled.div`

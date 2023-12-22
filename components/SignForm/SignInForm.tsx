@@ -4,7 +4,7 @@ import { EMAIL_RULES, ERROR_MESSAGE, PASSWORD_RULES, PLACEHOLDER } from "@/utils
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
-function SignInForm() {
+const SignInForm = () => {
   const { control, handleSubmit, watch, setError } = useForm({
     defaultValues: { email: "", password: "" },
     mode: "onBlur",
@@ -30,7 +30,7 @@ function SignInForm() {
       />
     </StyledForm>
   );
-}
+};
 
 export default SignInForm;
 

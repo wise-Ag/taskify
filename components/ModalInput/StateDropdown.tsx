@@ -4,7 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import DropdownList from "./DropdownList";
 
-function Dropdown() {
+const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState("To Do");
 
@@ -22,7 +22,7 @@ function Dropdown() {
       <DropdownList $isOpen={isOpen} setStatus={setStatus} />
     </Wrapper>
   );
-}
+};
 
 export default Dropdown;
 
@@ -50,7 +50,7 @@ const DropdownBox = styled.div<{ $isOpen: boolean }>`
   align-items: center;
 
   border-radius: 0.6rem;
-  border: 1px solid ${(props) => (props.$isOpen ? "var(--Violet)" : "var(--Grayd9)")};
+  border: 1px solid ${(props) => (props.$isOpen ? "var(--Main)" : "var(--Grayd9)")};
   background: var(--White);
 `;
 
