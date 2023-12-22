@@ -24,6 +24,7 @@ const Container = styled.span<TagProps>`
 
   border-radius: 4px;
   background: ${(props) => `var(${props.bgColor})`};
+
   color: ${(props) => `var(${props.textColor})`};
   text-align: center;
   font-size: 1.2rem;

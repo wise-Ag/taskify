@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import ButtonSet from "@/components/ButtonSet/ButtonSet";
-import Button from "@/components/button/Button";
+import Button from "@/components/Button/Button";
 
 interface Member {
   id: number;
@@ -115,12 +115,11 @@ const NameList = styled.h3`
 
 const MemberItem = styled.div`
   padding: 1.6rem 0;
+  border-bottom: 1px solid var(--Grayee);
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  border-bottom: 1px solid var(--Grayee);
 
   &:last-child {
     border-bottom: 0;
@@ -144,6 +143,7 @@ const Profile = styled.img`
   margin-right: 1.2rem;
 
   border-radius: 50%;
+
   object-fit: cover;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {

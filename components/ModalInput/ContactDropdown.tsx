@@ -111,9 +111,10 @@ const SelectProfileIcon = styled.img`
   position: absolute;
   left: 1.6rem;
   top: 50%;
-  transform: translateY(-50%);
 
   border-radius: 50%;
+
+  transform: translateY(-50%);
   object-fit: cover;
 `;
 
@@ -141,26 +142,29 @@ const ArrowDownIcon = styled(DropdownIcon)`
   position: absolute;
   top: 50%;
   right: 1.6rem;
+
   transform: translateY(-50%);
   pointer-events: none;
 `;
 
 const List = styled.ul`
+  color: var(--Black33);
+  font-size: 1.4rem;
+  font-weight: 400;
+
   border-radius: 6px;
   border: 1px solid var(--Grayd9);
   background: var(--White);
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
-  color: var(--Black33);
-  font-size: 1.4rem;
-  font-weight: 400;
 `;
 
 const ListItem = styled.li`
-  display: flex;
-  align-items: center;
   height: 4.5rem;
+
   padding: 0.5rem 1rem;
 
+  display: flex;
+  align-items: center;
   position: relative;
 
   cursor: pointer;
@@ -174,9 +178,11 @@ const ProfileIcon = styled.img`
   width: 2.4rem;
   height: 2.4rem;
 
-  border-radius: 50%;
-  object-fit: cover;
   margin-right: 1rem;
+
+  border-radius: 50%;
+
+  object-fit: cover;
 `;
 
 const CheckIconStyled = styled(CheckIcon)`
@@ -185,6 +191,7 @@ const CheckIconStyled = styled(CheckIcon)`
   position: absolute;
   right: 1rem;
   top: 50%;
+
   transform: translateY(-50%);
 
   ${ListItem}:hover & {

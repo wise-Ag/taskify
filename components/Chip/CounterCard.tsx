@@ -21,8 +21,8 @@ const Container = styled.div`
   align-items: center;
   gap: 0.1rem;
 
-  background: var(--Grayee);
   border-radius: 4px;
+  background: var(--Grayee);
 `;
 
 const Number = styled.span`
