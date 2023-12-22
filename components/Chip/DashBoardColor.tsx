@@ -10,7 +10,7 @@ interface ColorCircleProps {
   onClick: () => void;
 }
 
-function ColorSelector() {
+function DashBoardColor() {
   const [selectedColor, setSelectedColor] = useAtom(selectedColorAtom);
 
   const colors = ["--Green", "--Purple", "--Orange", "--Blue", "--Pink"];
@@ -25,10 +25,11 @@ function ColorSelector() {
 }
 
 const Container = styled.div`
+  gap: 1rem;
+
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
 `;
 
 const ColorCircle = styled.div<ColorCircleProps>`
@@ -42,6 +43,7 @@ const ColorCircle = styled.div<ColorCircleProps>`
 
   border-radius: 50%;
   background-color: ${(props) => `var(${props.color})`};
+
   cursor: pointer;
 
   &:after {
@@ -51,9 +53,10 @@ const ColorCircle = styled.div<ColorCircleProps>`
     display: ${(props) => (props.selected ? "block" : "none")};
     position: absolute;
 
-    content: "";
     background-image: url(${CheckIcon.src});
     background-size: cover;
+
+    content: "";
   }
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
@@ -62,4 +65,4 @@ const ColorCircle = styled.div<ColorCircleProps>`
   }
 `;
 
-export default ColorSelector;
+export default DashBoardColor;

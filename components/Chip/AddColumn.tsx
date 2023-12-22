@@ -5,7 +5,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 function AddColumn() {
   return (
     <Container>
-      <AddFillo alt="add" width={16} height={16} />
+      <StyledAddFillo alt="add" width={16} height={16} />
     </Container>
   );
 }
@@ -29,6 +29,12 @@ const Container = styled.div`
     height: 2rem;
 
     padding: 0.27rem;
+  }
+`;
+
+const StyledAddFillo = styled(AddFillo)`
+  path {
+    fill: var(--Main);
   }
 `;
 

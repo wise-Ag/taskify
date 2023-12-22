@@ -1,7 +1,6 @@
 import Crown from "@/assets/icons/crown.svg";
 import { profileData } from "@/components/Nav/mockData";
 import { DeviceSize } from "@/styles/DeviceSize";
-import Image from "next/image";
 import styled from "styled-components";
 import DashboardButtons from "./DashboardButtons";
 import Profile from "./Profile";
@@ -23,7 +22,7 @@ function NavContainer({ title, $isMyNav = false, createdByMe = false }: NavConta
         {createdByMe && <Crown alt="왕관" width={20} height={16} />}
       </Title>
       <Content $isMyNav={$isMyNav}>
-        <DashboardButtons />
+        {$isMyNav || <DashboardButtons />}
         {$isMyNav || <ProfileImages />}
         <Line />
         <Profile profileImageUrl={profileImageUrl} nickname={nickname} />
@@ -36,14 +35,13 @@ export default NavContainer;
 
 const Wrapper = styled.div<{ $isMyNav: boolean }>`
   padding: 2.3rem 8rem 2.3rem 34rem;
+  border-bottom: 1px solid var(--Grayd9);
 
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   gap: 4rem;
-
-  border-bottom: 1px solid var(--Grayd9);
-  justify-content: space-between;
 
   @media (max-width: ${DeviceSize.pc}) {
     gap: 3rem;
@@ -76,7 +74,6 @@ const Title = styled.div<{ $isMyNav: boolean }>`
 
 const Content = styled.div<{ $isMyNav: boolean }>`
   display: flex;
-
   align-items: center;
   justify-content: space-between;
   gap: ${({ $isMyNav }) => ($isMyNav ? "3.2rem" : "4rem")};

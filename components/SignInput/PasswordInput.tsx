@@ -1,7 +1,6 @@
 import VisibilityOff from "@/assets/icons/visibility-off.svg";
 import VisibilityOn from "@/assets/icons/visibility-on.svg";
 import Input, { InputProps } from "@/components/SignInput/Input";
-import Image from "next/image";
 import { forwardRef, useMemo, useState } from "react";
 import styled from "styled-components";
 

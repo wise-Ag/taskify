@@ -23,11 +23,11 @@ const Container = styled.div`
   gap: 0.6rem;
 
   border-radius: 11px;
-  background: var(--Violet8);
+  background: var(--MainLight);
 `;
 
 const Text = styled.span`
-  color: var(--Violet);
+  color: var(--Main);
   text-align: center;
   font-size: 1.2rem;
 
