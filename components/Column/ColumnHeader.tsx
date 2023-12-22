@@ -1,6 +1,5 @@
 import CircleIcon from "@/assets/icons/blue-circle.svg";
 import SettingIcon from "@/assets/icons/settings.svg";
-import Image from "next/image";
 import styled from "styled-components";
 import CounterCard from "@/components/Chip/CounterCard";
 
@@ -9,7 +8,8 @@ interface ColumnHeaderProps {
   columnId: number;
   count: number;
 }
-function ColumnHeader({ title, columnId, count }: ColumnHeaderProps) {
+
+function ColumnHeader({ title, count }: ColumnHeaderProps) {
   return (
     <Wrapper>
       <Content>
@@ -25,15 +25,16 @@ function ColumnHeader({ title, columnId, count }: ColumnHeaderProps) {
 export default ColumnHeader;
 
 const Wrapper = styled.div`
+  margin-bottom: 2rem;
+
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
 `;
 
 const Content = styled.div`
   display: flex;
-  gap: 1.2rem;
   align-items: center;
+  gap: 1.2rem;
 `;
 
 const Title = styled.div`

@@ -1,10 +1,10 @@
 import CalenderIcon from "@/assets/icons/calender.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import Tag from "../Chip/Tag";
-import { getCardsResponse } from "../Column/Column";
+import Tag from "@/components/Chip/Tag";
+import { getCardsResponse } from "@/components/Column/Column";
 import { formatDate } from "@/utils/FormatDate";
-import NoProfileImage from "../NoProfileImage/ProfileImage";
+import NoProfileImage from "@/components/NoProfileImage/ProfileImage";
 
 function Card({ cardData }: { cardData: getCardsResponse }) {
   return (
@@ -42,6 +42,10 @@ export default Card;
 const Wrapper = styled.div`
   width: 31.4rem;
 
+  padding: 2rem;
+  border-radius: 6px;
+  border: 1px solid var(--Grey30, #d9d9d9);
+
   position: relative;
   display: flex;
   flex-direction: column;
@@ -50,10 +54,6 @@ const Wrapper = styled.div`
   justify-content: center;
 
   background-color: white;
-  border-radius: 0.6rem;
-  border: 0.1rem solid var(--Grey30, #d9d9d9);
-
-  padding: 2rem;
 
   cursor: pointer;
 
@@ -78,8 +78,9 @@ const CardImage = styled.div<{ cardimage: string | null }>`
   width: 27.4rem;
   height: 16rem;
 
+  border-radius: 6px;
+
   background-image: url(${(props) => props.cardimage || ""});
-  border-radius: 0.6rem;
   background-size: cover;
   background-repeat: no-repeat;
 
@@ -99,6 +100,7 @@ const CardImage = styled.div<{ cardimage: string | null }>`
     margin: 0;
   }
 `;
+
 const Title = styled.div<{ imageurl: string }>`
   font-size: 1.6rem;
   font-weight: 500;
@@ -126,9 +128,11 @@ const Tags = styled.div`
 
   @media (max-width: ${DeviceSize.tablet}) {
     height: 50%;
+
+    margin-right: 1.6rem;
+
     align-items: end;
     float: left;
-    margin-right: 1.6rem;
   }
   @media (max-width: ${DeviceSize.mobile}) {
     width: 100%;
@@ -142,12 +146,14 @@ const Date = styled.div`
   align-items: center;
 
   color: var(--Gray78);
+
   font-size: 1.2rem;
   font-weight: 500;
 
   @media (max-width: ${DeviceSize.tablet}) {
     width: auto;
     height: 50%;
+
     align-items: end;
     float: left;
   }
