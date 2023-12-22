@@ -8,21 +8,21 @@ import styled from "styled-components";
 
 interface ModalInputProps {
   label: string;
-  inputType: "댓글" | "제목" | "마감일";
+  $inputType: "댓글" | "제목" | "마감일";
 }
 
 interface InputAreaProps {
-  inputType: "댓글" | "제목" | "마감일";
+  $inputType: "댓글" | "제목" | "마감일";
 }
 
 interface LabelProps {
-  inputType: "댓글" | "제목" | "마감일";
+  $inputType: "댓글" | "제목" | "마감일";
 }
 
 const ModalInput = forwardRef<
   HTMLInputElement | HTMLTextAreaElement, // ref의 타입
   ModalInputProps // props의 타입
->(({ label, inputType }, ref) => {
+>(({ label, $inputType }, ref) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -30,7 +30,7 @@ const ModalInput = forwardRef<
   };
 
   const renderInput = () => {
-    switch (inputType) {
+    switch ($inputType) {
       case "댓글":
         return (
           <>
@@ -59,12 +59,12 @@ const ModalInput = forwardRef<
 
   return (
     <InputBox>
-      <Label inputType={inputType}>
+      <Label $inputType={$inputType}>
         {label}
-        {inputType === "제목" && <RequiredIndicator>*</RequiredIndicator>}
+        {$inputType === "제목" && <RequiredIndicator>*</RequiredIndicator>}
       </Label>
 
-      <InputArea inputType={inputType}>{renderInput()}</InputArea>
+      <InputArea $inputType={$inputType}>{renderInput()}</InputArea>
     </InputBox>
   );
 });
@@ -101,8 +101,6 @@ function CustomDatePicker() {
 }
 
 const InputBox = styled.div`
-  /* margin: 1rem; */
-
   display: flex;
   flex-direction: column;
 `;
@@ -110,7 +108,7 @@ const InputBox = styled.div`
 const Label = styled.label<LabelProps>`
   margin-bottom: 1rem;
 
-  font-size: ${(props) => (props.inputType === "댓글" ? "1.6rem" : "1.8rem")};
+  font-size: ${(props) => (props.$inputType === "댓글" ? "1.6rem" : "1.8rem")};
   color: var(--Black33);
 
   @media (max-width: ${DeviceSize.mobile}) {
@@ -119,10 +117,9 @@ const Label = styled.label<LabelProps>`
 `;
 
 const InputArea = styled.div<InputAreaProps>`
-  width: ${(props) => (props.inputType !== "댓글" ? "34rem" : "45rem")};
-  height: ${(props) => (props.inputType !== "댓글" ? "4.8rem" : "11rem")};
+  height: ${(props) => (props.$inputType !== "댓글" ? "4.8rem" : "11rem")};
 
-  padding: ${(props) => (props.inputType !== "댓글" ? "1.4rem" : "1.6rem")};
+  padding: ${(props) => (props.$inputType !== "댓글" ? "1.4rem" : "1.6rem")};
   gap: 1rem;
   border: 1px solid var(--Grayd9);
   border-radius: 6px;
@@ -132,25 +129,24 @@ const InputArea = styled.div<InputAreaProps>`
   align-items: flex-start;
 
   &:focus-within {
-    border-color: ${(props) => (props.inputType === "댓글" ? "var(--Main)" : "var(--Grayd9)")};
+    border-color: ${(props) => (props.$inputType === "댓글" ? "var(--Main)" : "var(--Grayd9)")};
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
-    width: ${(props) => (props.inputType === "댓글" ? "28.7rem" : "34rem")};
-    height: ${(props) => (props.inputType === "댓글" ? "7rem" : "4.8rem")};
+    height: ${(props) => (props.$inputType === "댓글" ? "7rem" : "4.8rem")};
 
-    padding: ${(props) => (props.inputType === "댓글" ? "1.2rem" : "1.4rem")};
-    gap: ${(props) => (props.inputType === "댓글" ? "0.8rem" : "1rem")};
+    padding: ${(props) => (props.$inputType === "댓글" ? "1.2rem" : "1.4rem")};
+    gap: ${(props) => (props.$inputType === "댓글" ? "0.8rem" : "1rem")};
   }
 `;
 
 const StyledTextArea = styled.textarea`
   border: none;
 
-  color: var(--Gray9f);
-
   flex-grow: 1;
   resize: none;
+
+  color: var(--Gray9f);
 
   &:focus {
     outline: none;
@@ -183,7 +179,6 @@ const DatePickerWrapper = styled.div`
 const StyledDatePicker = styled(DatePicker)`
   border: none;
 
-  background-color: transparent;
   color: var(--Gray9f);
 
   &:focus {
@@ -195,8 +190,9 @@ const StyledDatePicker = styled(DatePicker)`
 const StyledInput = styled.input`
   border: none;
 
-  color: var(--Gray9f);
   flex-grow: 1;
+
+  color: var(--Gray9f);
 
   &:focus {
     outline: none;

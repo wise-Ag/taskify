@@ -5,10 +5,10 @@ import TYPES from "@/components/ButtonSet/ButtonSetStyles";
 
 interface ButtonProps {
   isDisabled?: boolean;
-  buttonType: keyof typeof TYPES;
+  $buttonType: keyof typeof TYPES;
 }
 
-type ButtonCommonProps = Omit<ButtonProps, "buttonType">;
+type ButtonCommonProps = Omit<ButtonProps, "$buttonType">;
 
 interface ButtonSetProps extends ButtonCommonProps {
   type: "forwardAndBackward" | "acceptAndReject" | "modalSet";
@@ -20,30 +20,30 @@ function ButtonSet({ type, isDisabled, children }: ButtonSetProps) {
     <ButtonSetContainer type={type}>
       {type === "forwardAndBackward" && (
         <>
-          <Button buttonType="forward" disabled={isDisabled}>
+          <Button $buttonType="forward" disabled={isDisabled}>
             <StyledArrowIcon disabled={isDisabled} />
           </Button>
-          <Button buttonType="backward" disabled={isDisabled}>
+          <Button $buttonType="backward" disabled={isDisabled}>
             <StyledArrowIcon disabled={isDisabled} />
           </Button>
         </>
       )}
       {type === "acceptAndReject" && (
         <>
-          <Button buttonType="accept" disabled={isDisabled}>
+          <Button $buttonType="accept" disabled={isDisabled}>
             수락
           </Button>
-          <Button buttonType="reject" disabled={isDisabled}>
+          <Button $buttonType="reject" disabled={isDisabled}>
             거절
           </Button>
         </>
       )}
       {type === "modalSet" && (
         <>
-          <Button buttonType="cancel" disabled={isDisabled}>
+          <Button $buttonType="cancel" disabled={isDisabled}>
             취소
           </Button>
-          <Button buttonType="basic" disabled={isDisabled}>
+          <Button $buttonType="basic" disabled={isDisabled}>
             {children}
           </Button>
         </>
@@ -74,7 +74,7 @@ const Button = styled.button<ButtonProps>`
   color: var(--Black33);
   font-weight: 500;
 
-  ${({ buttonType }) => TYPES[buttonType]}
+  ${({ $buttonType }) => TYPES[$buttonType]}
 `;
 
 const StyledArrowIcon = styled(ArrowIcon)`
