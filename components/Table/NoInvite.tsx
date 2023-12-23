@@ -1,13 +1,13 @@
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import NoInviteIcon from "@/assets/icons/unsubscribe-envelope.svg";
+import NoInviteIcon from "@/assets/icons/unsubscribe-envelop.png";
 
 const InvitedDashboard = () => {
   return (
     <Container>
       <Title>초대받은 대시보드</Title>
       <Wrapper>
-        <StyledIcon />
+        <NoInviteImg />
         <Message>아직 초대받은 대시보드가 없어요</Message>
       </Wrapper>
     </Container>
@@ -57,7 +57,9 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const StyledIcon = styled(NoInviteIcon)`
+const NoInviteImg = styled.img.attrs({
+  src: NoInviteIcon.src,
+})`
   width: 10rem;
   height: 10rem;
 
