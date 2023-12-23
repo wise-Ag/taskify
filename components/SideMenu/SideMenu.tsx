@@ -15,7 +15,7 @@ interface DashboardProps {
   closePopup?: () => void;
 }
 
-const Dashboard = ({ color, title, createdByMe, closePopup }: DashboardProps) => {
+const Dashboard = ({ color, title, createdByMe }: DashboardProps) => {
   return (
     // 질 동작하는지 확인하기 위해 임의로 설정한 경로
     <Container href={"/dashboard"}>
@@ -46,7 +46,7 @@ const SideMenu = () => {
         <Popup>
           <DashboardList>
             {data.map((dashboard, key) => {
-              return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} closePopup={closePopup} />;
+              return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} />;
             })}
           </DashboardList>
         </Popup>
