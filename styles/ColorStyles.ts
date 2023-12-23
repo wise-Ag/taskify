@@ -31,4 +31,5 @@ export const MAIN = css`
   --Main: #3c6255;
   --MainLight: #faf6f0;
   --MainBG: #eef2e6;
+  --MainHover: #dce6d1;
 `;

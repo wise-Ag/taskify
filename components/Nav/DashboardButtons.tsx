@@ -26,7 +26,7 @@ const StyledButton = styled.button`
 
   border-radius: 0.8rem;
   border: 1px solid var(--Grayd9);
-  background: var(--White);
+  background: var(--MainBG);
 
   @media (max-width: ${DeviceSize.mobile}) {
     height: 3rem;

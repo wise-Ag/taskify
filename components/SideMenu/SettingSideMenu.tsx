@@ -1,17 +1,17 @@
+import LogoButton from "@/components/common/LogoButton";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import LogoButton from "@/components/common/LogoButton";
-import Link from "next/link";
 
 const SettingSideMenu = () => {
   return (
     <Wrapper>
-      <LogoButton />
-      <LinkContainer>
-        {/* 페이지만들 때 수정 예정 */}
-        <StyledLink href={"/"}>프로필 설정</StyledLink>
-        <StyledLink href={"/"}>비밀번호 변경</StyledLink>
-      </LinkContainer>
+      <LogoButtonContainer>
+        <LogoButton />
+      </LogoButtonContainer>
+      <ButtonContainer>
+        <Button>프로필 설정</Button>
+        <Button>비밀번호 변경</Button>
+      </ButtonContainer>
     </Wrapper>
   );
 };
@@ -24,12 +24,17 @@ const Wrapper = styled.div`
 
   padding: 2rem 1.2rem;
 
+  position: absolute;
+  top: 0;
+
   display: flex;
   flex-direction: column;
-  align-items: center;
-  flex-shrink: 0;
 
   border-right: 1px solid var(--Grayd9);
+
+  background-color: var(--MainBG);
+
+  z-index: 3;
 
   @media (max-width: ${DeviceSize.tablet}) {
     width: 16rem;
@@ -37,36 +42,70 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
-    width: 6.7rem;
-    height: 185.9rem;
+    width: 100%;
+    height: 5rem;
+
+    padding: 0;
+
+    border-bottom: 1px solid var(--Grayd9);
+
+    flex-direction: row;
+
+    top: 6.5rem;
   }
 `;
 
-const LinkContainer = styled.div`
+const LogoButtonContainer = styled.div`
+  @media (max-width: ${DeviceSize.mobile}) {
+    display: none;
+  }
+`;
+
+const ButtonContainer = styled.div`
   width: 100%;
 
-  margin-top: 3rem;
+  margin-top: 6rem;
   margin-left: 1.2rem;
 
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 3rem;
 
+  @media (max-width: ${DeviceSize.tablet}) {
+    margin-top: 4rem;
+  }
+
   @media (max-width: ${DeviceSize.mobile}) {
-    margin-left: 0;
+    margin: 0;
+    padding-left: 6.6rem;
+
+    flex-direction: row;
+    align-items: center;
 
     text-align: center;
   }
 `;
 
-const StyledLink = styled(Link)`
-  font-size: 1.6rem;
+const Button = styled.button`
+  font-size: 1.8rem;
 
   &:focus {
+    font-weight: 700;
     color: var(--Main);
   }
 
+  @media (max-width: ${DeviceSize.tablet}) {
+    font-size: 1.6rem;
+  }
+
   @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1.4rem;
+    height: 5rem;
+    font-size: 1.5rem;
+
+    &:focus {
+      border-bottom: 2px solid var(--Main);
+      color: var(--Main);
+    }
   }
 `;

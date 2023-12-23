@@ -72,12 +72,19 @@ const Wrapper = styled.div`
 
   padding: 2rem 1.2rem;
 
+  border-right: 1px solid var(--Grayd9);
+
+  position: absolute;
+  top: 0;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
 
-  border-right: 1px solid var(--Grayd9);
+  background-color: var(--MainBG);
+
+  z-index: 3;
 
   @media (max-width: ${DeviceSize.tablet}) {
     width: 16rem;
@@ -153,7 +160,7 @@ const Container = styled(Link)`
   border-radius: 0.4rem;
 
   &:hover {
-    background-color: var(--MainBG);
+    background-color: var(--MainHover);
   }
 
   @media (max-width: ${DeviceSize.tablet}) {
@@ -251,6 +258,10 @@ const Popup = styled.div`
 
     ${Container} {
       justify-content: flex-start;
+
+      &:hover {
+        background-color: var(--MainBG);
+      }
     }
 
     ${Color} {
