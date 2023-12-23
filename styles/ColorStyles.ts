@@ -30,4 +30,5 @@ export const MAIN = css`
   // 추가한 main color
   --Main: #3c6255;
   --MainLight: #faf6f0;
+  --MainBG: #eef2e6;
 `;

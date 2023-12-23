@@ -20,11 +20,11 @@ const ProfileImages = () => {
             ),
           )}
           {totalCount > 4 && (
-            <Profiles>
+            <NumberWrapper>
               <NumberBackground />
               <NumberPc>+{totalCount - 4}</NumberPc>
               <NumberTabletOrMobile>+{totalCount - 2}</NumberTabletOrMobile>
-            </Profiles>
+            </NumberWrapper>
           )}
         </Contents>
       )}
@@ -44,6 +44,8 @@ const Contents = styled.div`
   justify-content: flex-end;
 
   @media (max-width: ${DeviceSize.tablet}) {
+    width: 9.8rem;
+
     & > :nth-child(n + 3) {
       display: none;
     }
@@ -51,6 +53,10 @@ const Contents = styled.div`
     & > :nth-last-child(-n + 1) {
       display: block;
     }
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 8.2rem;
   }
 `;
 
@@ -73,9 +79,37 @@ const ProfileImg = styled.div<{ index: number; image: string }>`
   background-repeat: no-repeat;
 
   z-index: ${({ index }) => `${3 - index}`};
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
 `;
 
-const Profiles = styled.div`
+const NoProfileImageWrapper = styled.div<{ index: number }>`
+  line-height: 3.8rem;
+
+  padding: 0;
+
+  font-size: 1.5rem;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: ${({ index }) => `${(index + 1) * 3}rem`};
+
+  z-index: ${({ index }) => `${3 - index}`};
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.4rem;
+    line-height: 3.4rem;
+
+    right: ${({ index }) => `${(index + 1) * 2.4}rem`};
+  }
+`;
+
+const NumberWrapper = styled.div`
+  z-index: 5;
+
   > p {
     width: 2rem;
 
@@ -89,7 +123,11 @@ const Profiles = styled.div`
     font-size: 1.6rem;
     font-weight: 500;
 
-    z-index: 5;
+    @media (max-width: ${DeviceSize.mobile}) {
+      right: 0.8rem;
+
+      font-size: 1.4rem;
+    }
   }
 `;
 
@@ -102,7 +140,10 @@ const NumberBackground = styled.div`
   border-radius: 100%;
   border: 2px solid var(--White);
 
-  z-index: 5;
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
 `;
 
 const NumberPc = styled.p`
@@ -117,20 +158,4 @@ const NumberTabletOrMobile = styled.p`
   @media (max-width: ${DeviceSize.tablet}) {
     display: block;
   }
-`;
-
-const NoProfileImageWrapper = styled.div<{ index: number }>`
-  width: 3.8rem;
-
-  line-height: 3.8rem;
-
-  padding: 0;
-
-  font-size: 1.5rem;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: ${({ index }) => `${(index + 1) * 3}rem`};
-
-  z-index: ${({ index }) => `${3 - index}`};
 `;

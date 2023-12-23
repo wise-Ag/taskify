@@ -39,6 +39,21 @@ const ProfileIcon = styled.div<{ image: string }>`
   background-image: url(${(props) => props.image});
   background-size: cover;
   background-repeat: no-repeat;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+`;
+
+const NoProfileImageWrapper = styled.div`
+  font-size: 1.6rem;
+  line-height: 3.8rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.4rem;
+    line-height: 3.4rem;
+  }
 `;
 
 const Name = styled.div`
@@ -49,11 +64,4 @@ const Name = styled.div`
   @media (max-width: ${DeviceSize.mobile}) {
     display: none;
   }
-`;
-
-const NoProfileImageWrapper = styled.div`
-  width: 3.8rem;
-
-  font-size: 1.5rem;
-  line-height: 3.8rem;
 `;
