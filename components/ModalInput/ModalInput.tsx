@@ -8,15 +8,11 @@ import styled from "styled-components";
 
 interface ModalInputProps {
   label: string;
-  $inputType: "댓글" | "제목" | "마감일";
+  $inputType: "댓글" | "제목" | "마감일" | "설명";
 }
 
 interface InputAreaProps {
-  $inputType: "댓글" | "제목" | "마감일";
-}
-
-interface LabelProps {
-  $inputType: "댓글" | "제목" | "마감일";
+  $inputType: "댓글" | "제목" | "마감일" | "설명";
 }
 
 const ModalInput = forwardRef<
@@ -32,18 +28,36 @@ const ModalInput = forwardRef<
   const renderInput = () => {
     switch ($inputType) {
       case "댓글":
+      case "설명":
         return (
           <>
-            <StyledTextArea ref={ref as React.Ref<HTMLTextAreaElement>} value={inputValue} onChange={handleInputChange} placeholder={"댓글 작성하기"} />
-            <PositionedButton>
-              <Button type="modalInput">입력</Button>
-            </PositionedButton>
+            <StyledTextArea
+              ref={ref as React.Ref<HTMLTextAreaElement>}
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder={$inputType === "댓글" ? "댓글 작성하기" : "설명을 입력해 주세요"}
+              $inputType={$inputType}
+              required={$inputType === "설명"}
+            />
+            {$inputType === "댓글" && (
+              <PositionedButton>
+                <Button type="modalInput">입력</Button>
+              </PositionedButton>
+            )}
           </>
         );
       case "제목":
         return (
           <>
-            <StyledInput ref={ref as React.Ref<HTMLInputElement>} type="text" value={inputValue} onChange={handleInputChange} placeholder={"제목을 입력해 주세요"} required />
+            <StyledInput
+              ref={ref as React.Ref<HTMLInputElement>}
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder={"제목을 입력해 주세요"}
+              $inputType={$inputType}
+              required
+            />
           </>
         );
       case "마감일":
@@ -61,7 +75,7 @@ const ModalInput = forwardRef<
     <InputBox>
       <Label $inputType={$inputType}>
         {label}
-        {$inputType === "제목" && <RequiredIndicator>*</RequiredIndicator>}
+        {$inputType === "제목" || $inputType === "설명" ? <RequiredIndicator>*</RequiredIndicator> : null}
       </Label>
 
       <InputArea $inputType={$inputType}>{renderInput()}</InputArea>
@@ -105,21 +119,21 @@ const InputBox = styled.div`
   flex-direction: column;
 `;
 
-const Label = styled.label<LabelProps>`
+const Label = styled.label<InputAreaProps>`
   margin-bottom: 1rem;
 
   font-size: ${(props) => (props.$inputType === "댓글" ? "1.6rem" : "1.8rem")};
   color: var(--Black33);
 
   @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1.4rem;
+    font-size: ${(props) => (props.$inputType === "댓글" ? "1.4rem" : "1.6rem")};
   }
 `;
 
 const InputArea = styled.div<InputAreaProps>`
-  height: ${(props) => (props.$inputType !== "댓글" ? "4.8rem" : "11rem")};
+  height: ${(props) => (props.$inputType === "댓글" || props.$inputType === "설명" ? "11rem" : "4.8rem")};
 
-  padding: ${(props) => (props.$inputType !== "댓글" ? "1.4rem" : "1.6rem")};
+  padding: ${(props) => (props.$inputType === "댓글" || props.$inputType === "설명" ? "1.6rem" : "1.4rem")};
   gap: 1rem;
   border: 1px solid var(--Grayd9);
   border-radius: 6px;
@@ -133,19 +147,20 @@ const InputArea = styled.div<InputAreaProps>`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
-    height: ${(props) => (props.$inputType === "댓글" ? "7rem" : "4.8rem")};
+    height: ${(props) => (props.$inputType === "댓글" || props.$inputType === "설명" ? "7rem" : "4.8rem")};
 
-    padding: ${(props) => (props.$inputType === "댓글" ? "1.2rem" : "1.4rem")};
-    gap: ${(props) => (props.$inputType === "댓글" ? "0.8rem" : "1rem")};
+    padding: ${(props) => (props.$inputType === "댓글" || props.$inputType === "설명" ? "1.2rem" : "1.4rem")};
+    gap: ${(props) => (props.$inputType === "댓글" || props.$inputType === "설명" ? "0.8rem" : "1rem")};
   }
 `;
 
-const StyledTextArea = styled.textarea`
+const StyledTextArea = styled.textarea<InputAreaProps>`
   border: none;
 
   flex-grow: 1;
   resize: none;
 
+  font-size: ${(props) => (props.$inputType === "댓글" ? "1.4rem" : "1.6rem")};
   color: var(--Gray9f);
 
   &:focus {
@@ -154,7 +169,7 @@ const StyledTextArea = styled.textarea`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1.2rem;
+    font-size: ${(props) => (props.$inputType === "댓글" ? "1.2rem" : "1.4rem")};
   }
 `;
 
@@ -168,7 +183,6 @@ const RequiredIndicator = styled.span`
   margin-left: 0.3rem;
 
   color: var(--Main);
-  font-size: 1.8rem;
 `;
 
 const DatePickerWrapper = styled.div`
@@ -187,15 +201,21 @@ const StyledDatePicker = styled(DatePicker)`
   }
 `;
 
-const StyledInput = styled.input`
+const StyledInput = styled.input<InputAreaProps>`
   border: none;
 
   flex-grow: 1;
 
+  font-size: 1.6rem;
   color: var(--Gray9f);
 
   &:focus {
     outline: none;
+
     color: var(--Black33);
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.4rem;
   }
 `;
