@@ -3,8 +3,11 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import Logo from "@/assets/icons/large-logo.svg";
 import People from "@/assets/icons/people.svg";
 import Button from "@/components/button/Button";
-import Lading1 from "@/assets/icons/landing1.svg";
-import Lading2 from "@/assets/icons/landing2.svg";
+import Landing1 from "@/assets/images/landing1.svg";
+import Landing2 from "@/assets/images/landing2.svg";
+import Landing3 from "@/assets/images/landing3.svg";
+import Landing4 from "@/assets/images/landing4.svg";
+import Landing5 from "@/assets/images/landing5.svg";
 
 function MainSection() {
   return (
@@ -29,6 +32,35 @@ function MainSection() {
         <LadingImage2 />
       </Box>
       <Text3>생산성을 높이는 다양한 설정 ⚡</Text3>
+      <Setting>
+        <SettingBox>
+          <Background>
+            <StyledLanding3 />
+          </Background>
+          <Bottom>
+            <BottomText>대시보드 설정</BottomText>
+            <BottomDescription>대시보드 사진과 이름을 변경할 수 있어요</BottomDescription>
+          </Bottom>
+        </SettingBox>
+        <SettingBox>
+          <Background>
+            <StyledLanding4 />
+          </Background>
+          <Bottom>
+            <BottomText>대시보드 설정</BottomText>
+            <BottomDescription>대시보드 사진과 이름을 변경할 수 있어요</BottomDescription>
+          </Bottom>
+        </SettingBox>
+        <SettingBox>
+          <Background>
+            <StyledLanding5 />
+          </Background>
+          <Bottom>
+            <BottomText>대시보드 설정</BottomText>
+            <BottomDescription>대시보드 사진과 이름을 변경할 수 있어요</BottomDescription>
+          </Bottom>
+        </SettingBox>
+      </Setting>
     </Container>
   );
 }
@@ -125,7 +157,7 @@ const Text1 = styled.h3`
   font-weight: 700;
 `;
 
-const LadingImage1 = styled(Lading1)`
+const LadingImage1 = styled(Landing1)`
   position: absolute;
   right: 0;
   bottom: 0;
@@ -141,12 +173,121 @@ const Text2 = styled(Text1)`
   left: 64.4rem;
 `;
 
-const LadingImage2 = styled(Lading2)`
+const LadingImage2 = styled(Landing2)`
   position: absolute;
   top: 9.8rem;
   left: 10.8rem;
 `;
 
-const Text3 = styled(Text1)`
+const Text3 = styled.h3`
+  margin-bottom: 3.2rem;
+
+  color: var(--White);
   font-size: 2.8rem;
+  font-weight: 700;
+  text-align: center; //태블릿 모바일에서만, pc에서는 전체 div 위드주기
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    font-size: 2.2rem;
+  }
+`;
+
+const Setting = styled.div`
+  @media screen and (min-width: ${DeviceSize.pc}) {
+    display: flex;
+    justify-content: center;
+    gap: 3.3rem;
+  }
+`;
+const SettingBox = styled.div`
+  @media screen and (min-width: ${DeviceSize.tablet}) {
+  }
+`;
+
+const Background = styled.div`
+  width: 37.8rem;
+  height: 26rem;
+
+  position: relative;
+
+  border-radius: 8px 8px 0px 0px;
+
+  background: var(--Black4b);
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    width: 34.3rem;
+    height: 23.5rem;
+  }
+`;
+
+const commonStyles = `
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const StyledLanding3 = styled(Landing3)`
+  ${commonStyles}
+`;
+
+const StyledLanding4 = styled(Landing4)`
+  ${commonStyles}
+`;
+
+const StyledLanding5 = styled(Landing5)`
+  ${commonStyles}
+`;
+
+const Bottom = styled.div`
+  width: 37.8rem;
+  height: 12.4rem;
+
+  position: relative;
+
+  border-radius: 0px 0px 8px 8px;
+
+  background: var(--Black17);
+
+  @media screen and (max-width: ${DeviceSize.pc}) {
+    margin-bottom: 4.8rem;
+  }
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    width: 34.3rem;
+    height: 11.2rem;
+
+    margin-bottom: 4rem;
+  }
+`;
+
+const BottomText = styled.h3`
+  position: absolute;
+  top: 3.3rem;
+  left: 3.2rem;
+
+  color: var(--White);
+  font-size: 1.8rem;
+  font-weight: 700;
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    position: absolute;
+    top: 2.7rem;
+    left: 3.2rem;
+  }
+`;
+
+const BottomDescription = styled(BottomText)`
+  position: absolute;
+  top: 7.2rem;
+  left: 3.2rem;
+
+  font-size: 1.6rem;
+  font-weight: 500;
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    position: absolute;
+    top: 6.6rem;
+    left: 3.2rem;
+  }
 `;
