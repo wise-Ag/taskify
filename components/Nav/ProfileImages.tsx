@@ -1,18 +1,35 @@
+import { useState, MouseEvent, useEffect } from "react";
 import styled from "styled-components";
 import { memberData } from "./mockData";
 import { DeviceSize } from "@/styles/DeviceSize";
 import NoProfileImage from "@/components/NoProfileImage/ProfileImage";
+import MemberListDropdown from "@/components/Nav/MemberListDropdown";
 
 const ProfileImages = () => {
   const { members, totalCount } = memberData;
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+  const toggleDropdown = (event: MouseEvent) => {
+    event.stopPropagation();
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
+  useEffect(() => {
+    const closeMenu = () => {
+      if (isDropdownVisible) setIsDropdownVisible(false);
+    };
+
+    document.addEventListener("click", closeMenu);
+    return () => document.removeEventListener("click", closeMenu);
+  }, [isDropdownVisible]);
 
   return (
-    <>
+    <Container>
       {totalCount > 0 && (
         <Contents>
           {members.slice(0, 4).map((member, index) =>
             member.profileImageUrl ? (
-              <ProfileImg key={member.id} index={index} image={member.profileImageUrl} />
+              <ProfileImg key={member.id} index={index} image={member.profileImageUrl} onClick={toggleDropdown} />
             ) : (
               <NoProfileImageWrapper index={index}>
                 <NoProfileImage />
@@ -20,19 +37,22 @@ const ProfileImages = () => {
             ),
           )}
           {totalCount > 4 && (
-            <Profiles>
+            <NumberWrapper onClick={toggleDropdown}>
               <NumberBackground />
               <NumberPc>+{totalCount - 4}</NumberPc>
               <NumberTabletOrMobile>+{totalCount - 2}</NumberTabletOrMobile>
-            </Profiles>
+            </NumberWrapper>
           )}
         </Contents>
       )}
-    </>
+      {isDropdownVisible && <MemberListDropdown members={members} />}
+    </Container>
   );
 };
 
 export default ProfileImages;
+
+const Container = styled.div``;
 
 const Contents = styled.div`
   width: 15.8rem;
@@ -72,10 +92,12 @@ const ProfileImg = styled.div<{ index: number; image: string }>`
   background-size: cover;
   background-repeat: no-repeat;
 
+  cursor: pointer;
+
   z-index: ${({ index }) => `${3 - index}`};
 `;
 
-const Profiles = styled.div`
+const NumberWrapper = styled.div`
   > p {
     width: 2rem;
 
@@ -88,6 +110,8 @@ const Profiles = styled.div`
     text-align: center;
     font-size: 1.6rem;
     font-weight: 500;
+
+    cursor: pointer;
 
     z-index: 5;
   }
