@@ -77,7 +77,6 @@ const ModalInput = forwardRef<
         {label}
         {$inputType === "제목" || $inputType === "설명" ? <RequiredIndicator>*</RequiredIndicator> : null}
       </Label>
-
       <InputArea $inputType={$inputType}>{renderInput()}</InputArea>
     </InputBox>
   );

@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
+import { DeviceSize } from "@/styles/DeviceSize";
 import AddIcon from "@/assets/icons/add-fillo.svg";
 import EditIcon from "@/assets/icons/edit.svg";
 
@@ -16,21 +17,40 @@ const ImageUploadInput = () => {
   };
 
   return (
-    <ImageInputWrapper previewUrl={previewUrl}>
-      {!previewUrl && (
-        <IconWrapper>
-          <StyledAddIcon />
-        </IconWrapper>
-      )}
-      <ImageInput type="file" accept="image/*" onChange={handleImageChange} />
-      <HoverOverlay>
-        <StyledEditIcon />
-      </HoverOverlay>
-    </ImageInputWrapper>
+    <InputBox>
+      <Label>이미지</Label>
+      <ImageInputWrapper previewUrl={previewUrl}>
+        {!previewUrl && (
+          <IconWrapper>
+            <StyledAddIcon />
+          </IconWrapper>
+        )}
+        <ImageInput type="file" accept="image/*" onChange={handleImageChange} />
+        <HoverOverlay>
+          <StyledEditIcon />
+        </HoverOverlay>
+      </ImageInputWrapper>
+    </InputBox>
   );
 };
 
 export default ImageUploadInput;
+
+const InputBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.label`
+  margin-bottom: 1rem;
+
+  font-size: 1.8rem;
+  color: var(--Black33);
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.6rem;
+  }
+`;
 
 const ImageInput = styled.input`
   width: 100%;
