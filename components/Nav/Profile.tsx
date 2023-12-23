@@ -1,6 +1,10 @@
+import { useState, useEffect, MouseEvent } from "react";
+import { useRouter } from "next/router";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { FaHome, FaUserCog, FaSignOutAlt } from "react-icons/fa";
 import styled from "styled-components";
 import NoProfileImage from "@/components/NoProfileImage/ProfileImage";
+import ArrowIcon from "@/assets/icons/arrow-drop-down.svg";
 
 interface ProfileProps {
   profileImageUrl: string | null;
@@ -8,8 +12,31 @@ interface ProfileProps {
 }
 
 const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
+  const [isKebabMenuVisible, setKebabMenuVisible] = useState(false);
+  const router = useRouter();
+
+  const toggleKebabMenu = (event: MouseEvent) => {
+    event.stopPropagation();
+    setKebabMenuVisible(!isKebabMenuVisible);
+  };
+
+  // 페이지의 어느 곳을 클릭해도 메뉴가 닫히도록 함
+  useEffect(() => {
+    const closeMenu = () => {
+      if (isKebabMenuVisible) setKebabMenuVisible(false);
+    };
+
+    document.addEventListener("click", closeMenu);
+    return () => document.removeEventListener("click", closeMenu);
+  }, [isKebabMenuVisible]);
+
+  const navigateTo = (path: string) => {
+    router.push(path);
+    setKebabMenuVisible(false); // 메뉴를 닫고 페이지를 이동
+  };
+
   return (
-    <Wrapper>
+    <Wrapper onClick={toggleKebabMenu}>
       {profileImageUrl ? (
         <ProfileIcon image={profileImageUrl} />
       ) : (
@@ -18,6 +45,29 @@ const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
         </NoProfileImageWrapper>
       )}
       <Name>{nickname}</Name>
+      <ArrowIcon onClick={toggleKebabMenu} />
+      {isKebabMenuVisible && (
+        <DropdownMenu>
+          <MenuItem onClick={() => navigateTo("/mydashboard")}>
+            <ItemContent>
+              <FaHome />
+              <span>홈</span>
+            </ItemContent>
+          </MenuItem>
+          <MenuItem onClick={() => navigateTo("/mypage")}>
+            <ItemContent>
+              <FaUserCog />
+              <span>계정 관리</span>
+            </ItemContent>
+          </MenuItem>
+          <MenuItem onClick={() => navigateTo("/")}>
+            <ItemContent>
+              <FaSignOutAlt />
+              <span>로그아웃</span>
+            </ItemContent>
+          </MenuItem>
+        </DropdownMenu>
+      )}
     </Wrapper>
   );
 };
@@ -25,9 +75,13 @@ const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
 export default Profile;
 
 const Wrapper = styled.div`
+  position: relative;
+
   display: flex;
   align-items: center;
   gap: 1.2rem;
+
+  cursor: pointer;
 `;
 
 const ProfileIcon = styled.div<{ image: string }>`
@@ -56,4 +110,53 @@ const NoProfileImageWrapper = styled.div`
 
   font-size: 1.5rem;
   line-height: 3.8rem;
+`;
+
+const DropdownMenu = styled.div`
+  width: 21rem;
+
+  border: 1px solid var(--Grayd9);
+  border-radius: 16px;
+
+  position: absolute;
+  top: 130%;
+  right: 0;
+
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+
+  background: var(--white-white_FFFFFF, #fff);
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+
+  z-index: 1000;
+`;
+
+const MenuItem = styled.div`
+  padding: 1.8rem;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  color: var(--black-black_333236, #333236);
+  font-size: 1.6rem;
+  font-weight: 400;
+
+  cursor: pointer;
+
+  &:hover {
+    border-radius: 16px;
+
+    background-color: #eef2e6;
+
+    box-shadow: 0 0 0 6px white inset;
+  }
+`;
+
+const ItemContent = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 `;
