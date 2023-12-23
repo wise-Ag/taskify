@@ -1,10 +1,14 @@
 import React, { useState, ChangeEvent } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import AddIcon from "@/assets/icons/add-fillo.svg";
 import EditIcon from "@/assets/icons/edit.svg";
 
-const ImageUploadInput = () => {
+interface ImageUploadInputProps {
+  type: "modal" | "account";
+}
+
+const ImageUploadInput = ({ type, className }: ImageUploadInputProps & { className?: string }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -18,8 +22,8 @@ const ImageUploadInput = () => {
 
   return (
     <InputBox>
-      <Label>이미지</Label>
-      <ImageInputWrapper previewUrl={previewUrl}>
+      {type === "modal" && <Label>이미지</Label>}
+      <ImageInputWrapper className={className} previewUrl={previewUrl} type={type}>
         {!previewUrl && (
           <IconWrapper>
             <StyledAddIcon />
@@ -94,12 +98,11 @@ const StyledEditIcon = styled(EditIcon)`
   height: 2.8rem;
 `;
 
-const ImageInputWrapper = styled.div<{ previewUrl: string | null }>`
+const ImageInputWrapper = styled.div<{ previewUrl: string | null; type: "modal" | "account" }>`
   width: 7.6rem;
   height: 7.6rem;
 
   border-radius: 6px;
-
   position: relative;
 
   display: flex;
@@ -112,6 +115,13 @@ const ImageInputWrapper = styled.div<{ previewUrl: string | null }>`
   background-position: center;
 
   cursor: pointer;
+
+  ${(props) =>
+    props.type === "account" &&
+    css`
+      width: 100%;
+      height: 100%;
+    `}
 
   &:hover ${HoverOverlay} {
     display: ${(props) => (props.previewUrl ? "flex" : "none")};
