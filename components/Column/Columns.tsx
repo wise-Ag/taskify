@@ -2,8 +2,9 @@ import instance from "@/api/axios";
 import Column from "@/components/Column/Column";
 import Button from "@/components/button/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import styled from "styled-components";
+import TaskModal from "../Modal/TaskModal";
 
 interface Column {
   createdAt: string;
@@ -20,6 +21,10 @@ export const MOCK_DATA = {
 
 const Columns = () => {
   const [columns, setColumns] = useState<Column[]>([]);
+  const [isClicked, setIsClicked] = useState(false);
+  const showModal = () => {
+    setIsClicked((prev) => !prev);
+  };
 
   useEffect(() => {
     const getColumns = async () => {
@@ -41,14 +46,15 @@ const Columns = () => {
 
   return (
     <Wrapper>
-      {columns.map((column) => {
-        return <Column key={column.id} title={column.title} columnId={column.id} />;
-      })}
+      {columns.map((column) => (
+        <Column key={column.id} title={column.title} columnId={column.id} />
+      ))}
       <ButtonWrapper>
-        <Button type="newDashboard" disabled>
-          새로운 컬럼 추가하기
-        </Button>
+        {/* <Button type="newDashboard" disabled> */}
+        <button onClick={showModal}>새로운 컬럼 추가하기</button>
+        {/* </Button> */}
       </ButtonWrapper>
+      {isClicked && <TaskModal />}
     </Wrapper>
   );
 };
