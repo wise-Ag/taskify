@@ -23,7 +23,7 @@ const ImageUploadInput = ({ type, className }: ImageUploadInputProps & { classNa
   return (
     <InputBox>
       {type === "modal" && <Label>이미지</Label>}
-      <ImageInputWrapper className={className} previewUrl={previewUrl} type={type}>
+      <ImageInputWrapper className={className} $previewUrl={previewUrl} type={type}>
         {!previewUrl && (
           <IconWrapper>
             <StyledAddIcon />
@@ -98,7 +98,7 @@ const StyledEditIcon = styled(EditIcon)`
   height: 2.8rem;
 `;
 
-const ImageInputWrapper = styled.div<{ previewUrl: string | null; type: "modal" | "account" }>`
+const ImageInputWrapper = styled.div<{ $previewUrl: string | null; type: "modal" | "account" }>`
   width: 7.6rem;
   height: 7.6rem;
 
@@ -124,6 +124,6 @@ const ImageInputWrapper = styled.div<{ previewUrl: string | null; type: "modal" 
     `}
 
   &:hover ${HoverOverlay} {
-    display: ${(props) => (props.previewUrl ? "flex" : "none")};
+    display: ${(props) => (props.$previewUrl ? "flex" : "none")};
   }
 `;

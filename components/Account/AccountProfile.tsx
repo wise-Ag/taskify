@@ -20,8 +20,8 @@ const AccountProfile = () => {
         <StyledImageUploadInput type="account" />
         <InputWrapper>
           {/* 이메일, 닉네임 인풋 컴포넌트 사이즈 조정 필요 */}
-          <Input label="이메일" value={""} placeholder={"/* 유저 이메일 정보 */"} onChange={handleEmailChange} />
-          <Input label="닉네임" value={""} placeholder={"/* 유저 닉네임 정보 */"} onChange={handleNicknameChange} />
+          <StyledInput label="이메일" value={""} placeholder={"/* 유저 이메일 정보 */"} onChange={handleEmailChange} />
+          <StyledInput label="닉네임" value={""} placeholder={"/* 유저 닉네임 정보 */"} onChange={handleNicknameChange} />
         </InputWrapper>
       </Wrapper>
       <SaveButton>저장</SaveButton>
@@ -41,8 +41,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: lightgray;
-  /* 영역 검토 완료 후 white로 변경 */
+  background-color: var(--White);
 
   @media (max-width: ${DeviceSize.mobile}) {
     margin: 2rem 1.2rem;
@@ -61,6 +60,10 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 1.6rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    flex-direction: column;
+  }
 `;
 
 const StyledImageUploadInput = styled(ImageUploadInput)`
@@ -72,6 +75,18 @@ const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+`;
+
+const StyledInput = styled(Input)`
+  width: 36.6rem;
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    width: 29rem;
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 24.4rem;
+  }
 `;
 
 const SaveButton = styled.button`

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import ImageUploadInput from "@/components/ModalInput/ImageUploadInput";
 import PasswordInput from "@/components/SignInput/PasswordInput";
 
-const AccountProfile = () => {
+const AccountPassword = () => {
   const handleCurrentPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("현재 비밀번호:", event.target.value);
   };
@@ -21,16 +21,16 @@ const AccountProfile = () => {
     <Container>
       <Title>비밀번호 변경</Title>
       <InputWrapper>
-        <PasswordInput label="비밀번호" value={""} placeholder={"현재 비밀번호 입력"} onChange={handleCurrentPassword} />
-        <PasswordInput label="비밀번호" value={""} placeholder={"새 비밀번호 입력"} onChange={handleNewPassword} />
-        <PasswordInput label="비밀번호 확인" value={""} placeholder={"새 비밀번호 확인"} onChange={handleNewPasswordCheck} />
+        <StyledPasswordInput label="비밀번호" value={""} placeholder={"현재 비밀번호 입력"} onChange={handleCurrentPassword} />
+        <StyledPasswordInput label="비밀번호" value={""} placeholder={"새 비밀번호 입력"} onChange={handleNewPassword} />
+        <StyledPasswordInput label="비밀번호 확인" value={""} placeholder={"새 비밀번호 확인"} onChange={handleNewPasswordCheck} />
       </InputWrapper>
       <SaveButton>변경</SaveButton>
     </Container>
   );
 };
 
-export default AccountProfile;
+export default AccountPassword;
 
 const Container = styled.div`
   max-width: 62rem;
@@ -42,8 +42,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: lightgray;
-  /* 영역 검토 완료 후 white로 변경 */
+  background-color: var(--MainLight);
 
   @media (max-width: ${DeviceSize.mobile}) {
     margin: 2rem 1.2rem;
@@ -58,21 +57,22 @@ const Title = styled.p`
   color: var(--Black);
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 1.6rem;
-`;
-
-const StyledImageUploadInput = styled(ImageUploadInput)`
-  width: 18.2rem;
-  height: 18.2rem;
-`;
-
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+`;
+
+const StyledPasswordInput = styled(PasswordInput)`
+  width: 56.4rem;
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    width: 48.8rem;
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 24.4rem;
+  }
 `;
 
 const SaveButton = styled.button`
