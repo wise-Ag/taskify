@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useCallback } from "react";
+import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import Tag from "@/components/Chip/Tag";
@@ -7,7 +7,8 @@ interface TagsProps {
   handleOnClick: (event: React.MouseEvent) => void;
   tagValue: string[];
 }
-const Tags = React.memo(({ handleOnClick, tagValue }: TagsProps) => {
+
+const Tags = ({ handleOnClick, tagValue }: TagsProps) => {
   return (
     <TagArea>
       {tagValue.map((tag) => {
@@ -21,7 +22,7 @@ const Tags = React.memo(({ handleOnClick, tagValue }: TagsProps) => {
       })}
     </TagArea>
   );
-});
+};
 
 const TagInput = () => {
   const [inputValue, setInputValue] = useState("");
@@ -31,14 +32,11 @@ const TagInput = () => {
     setInputValue(e.target.value);
   };
 
-  const handleDeleteTag = useCallback(
-    (event: React.MouseEvent) => {
-      const target = event.target as HTMLElement; // HTMLElement로 타입 단언
-      const tagText = target.textContent; // 이제 textContent 사용 가능
-      setTagValue((prev) => prev.filter((v) => v !== tagText));
-    },
-    [tagValue],
-  );
+  const handleDeleteTag = (event: React.MouseEvent) => {
+    const target = event.target as HTMLElement; // HTMLElement로 타입 단언
+    const tagText = target.textContent; // 이제 textContent 사용 가능
+    setTagValue((prev) => prev.filter((v) => v !== tagText));
+  };
 
   const handlePressEnter = (event: React.KeyboardEvent) => {
     if (event.key !== "Enter") return;
