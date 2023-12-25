@@ -15,7 +15,7 @@ interface Column {
 }
 export const MOCK_DATA = {
   dashboardId: 5,
-  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDI5MDQ2NjQsImlzcyI6InNwLXRhc2tpZnkifQ.SLkTowJTOC6iZwTDiO4ZyLwIx6CQWQt4B86YqlMegNc",
+  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1MTU1OTIsImlzcyI6InNwLXRhc2tpZnkifQ.WXLHBnKbOg00qIuVgOb-FSlCuq2dzqRLOP1OUy2VQjc",
 };
 
 const Columns = () => {
