@@ -17,13 +17,7 @@ interface ButtonContentProps {
   createdByMe?: boolean;
 }
 
-const ButtonContent = ({ type, children, id }: ButtonContentProps) => {
-  let dashboard;
-
-  if (type === "dashboardList" && id !== undefined) {
-    dashboard = dashboardData.dashboards[id];
-  }
-
+const ButtonContent = ({ type, children, id, title, color, createdByMe }: ButtonContentProps) => {
   switch (type) {
     case "addNewColumn":
     case "plus":
@@ -38,9 +32,9 @@ const ButtonContent = ({ type, children, id }: ButtonContentProps) => {
       return (
         <>
           <StyledTitleWrapper>
-            {dashboard?.color && <Color color={dashboard.color} />}
-            {dashboard?.title && <StyledDashboardTitle>{dashboard.title}</StyledDashboardTitle>}
-            {dashboard?.createdByMe && <CrownIcon />}
+            {color && <Color color={color} />}
+            {title && <StyledDashboardTitle>{title}</StyledDashboardTitle>}
+            {createdByMe && <CrownIcon />}
           </StyledTitleWrapper>
           <ArrowIcon />
         </>
@@ -57,10 +51,10 @@ const ButtonContent = ({ type, children, id }: ButtonContentProps) => {
   }
 };
 
-const Button = ({ type, children, disabled, id }: ButtonContentProps) => {
+const Button = ({ type, children, disabled, id, title, color, createdByMe }: ButtonContentProps) => {
   return (
     <StyledButton type={type} disabled={disabled}>
-      <ButtonContent type={type} children={children} id={id} />
+      <ButtonContent type={type} children={children} id={id} title={title} color={color} createdByMe={createdByMe} />
     </StyledButton>
   );
 };
