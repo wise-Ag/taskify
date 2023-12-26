@@ -27,6 +27,8 @@ const Wrapper = styled.nav`
   align-items: center;
   justify-content: space-between;
 
+  background-color: var(--MainBG);
+
   @media (max-width: ${DeviceSize.tablet}) {
     padding: 1.6rem 4rem 1.6rem 1.6rem;
   }
