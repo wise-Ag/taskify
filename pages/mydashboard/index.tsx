@@ -1,6 +1,7 @@
 import MyDashboardList from "@/components/MyDashboardList";
 import MyDashboardNav from "@/components/Nav/MyDashboardNav";
 import SideMenu from "@/components/SideMenu/SideMenu";
+import InvitedDashboard from "@/components/Table/NoInvite";
 import { styled } from "styled-components";
 
 const MyDashboard = () => {
@@ -12,6 +13,7 @@ const MyDashboard = () => {
       </SideMenuWrapper>
       <Container>
         <MyDashboardList />
+        <InvitedDashboard />
       </Container>
     </>
   );
