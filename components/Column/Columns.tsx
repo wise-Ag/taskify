@@ -22,9 +22,6 @@ export const MOCK_DATA = {
 const Columns = () => {
   const [columns, setColumns] = useState<Column[]>([]);
   const [isClicked, setIsClicked] = useState(false);
-  const showModal = () => {
-    setIsClicked((prev) => !prev);
-  };
 
   useEffect(() => {
     const getColumns = async () => {
@@ -54,10 +51,6 @@ const Columns = () => {
           <button>새로운 컬럼 추가하기</button>
         </Button>
       </ButtonWrapper>
-      <button onClick={showModal}>
-        모달버튼모달버튼모달버튼
-        {isClicked && <TaskModal />}
-      </button>
     </Wrapper>
   );
 };

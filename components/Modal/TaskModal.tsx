@@ -163,7 +163,6 @@ const Wrapper = styled.div`
 
   border-radius: 8px;
   background: var(--White);
-  border: 1px solid red;
 
   @media (max-width: ${DeviceSize.mobile}) {
     width: 32.7rem;
@@ -385,7 +384,6 @@ const CommentItem = styled.div`
 
   padding: 0.8rem;
   margin-bottom: 0.8rem;
-  border: 1px solid #ccc;
 
   font-size: 1.4rem;
 
