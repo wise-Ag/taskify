@@ -93,6 +93,21 @@ const ProfileIcon = styled.div<{ image: string }>`
   background-image: url(${(props) => props.image});
   background-size: cover;
   background-repeat: no-repeat;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 3.4rem;
+    height: 3.4rem;
+  }
+`;
+
+const NoProfileImageWrapper = styled.div`
+  font-size: 1.6rem;
+  line-height: 3.8rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.4rem;
+    line-height: 3.4rem;
+  }
 `;
 
 const Name = styled.div`

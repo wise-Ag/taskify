@@ -6,14 +6,27 @@ import styled from "styled-components";
 
 const LogoButton = () => {
   return (
-    <Link href="/">
+    <StyledLink href="/">
       <StyledLargeLogo alt="로고 이미지" />
       <StyledSmallLogo alt="로고 이미지" />
-    </Link>
+    </StyledLink>
   );
 };
 
 export default LogoButton;
+
+const StyledLink = styled(Link)`
+  width: 100%;
+  margin-left: 1.2rem;
+
+  display: flex;
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    margin-left: 0;
+
+    justify-content: center;
+  }
+`;
 
 const StyledLargeLogo = styled(LargeLogo)`
   width: 12.1rem;

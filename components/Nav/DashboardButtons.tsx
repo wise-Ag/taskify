@@ -1,32 +1,17 @@
-import AddBox from "@/assets/icons/add-box.svg";
 import Settings from "@/assets/icons/settings.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 
-interface IconButtonProps {
-  icon: React.ReactNode;
-  label: string;
-}
-
-const IconButton = ({ icon, label }: IconButtonProps) => {
+const SettingButton = () => {
   return (
     <StyledButton>
-      <StyledIcon>{icon}</StyledIcon>
-      <ButtonType>{label}</ButtonType>
+      <StyledIcon />
+      <ButtonType>관리</ButtonType>
     </StyledButton>
   );
 };
 
-const DashboardButtons = () => {
-  return (
-    <Wrapper>
-      <IconButton icon={<Settings />} label="관리" />
-      <IconButton icon={<AddBox />} label="초대하기" />
-    </Wrapper>
-  );
-};
-
-export default DashboardButtons;
+export default SettingButton;
 
 const StyledButton = styled.button`
   height: 4rem;
@@ -41,7 +26,7 @@ const StyledButton = styled.button`
 
   border-radius: 0.8rem;
   border: 1px solid var(--Grayd9);
-  background: var(--White);
+  background: var(--MainBG);
 
   @media (max-width: ${DeviceSize.mobile}) {
     height: 3rem;
@@ -49,7 +34,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const StyledIcon = styled.div`
+const StyledIcon = styled(Settings)`
   width: 2rem;
   height: 2rem;
 
@@ -65,14 +50,5 @@ const ButtonType = styled.p`
 
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.2em;
-  }
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  gap: 1.6rem;
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    gap: 0.6rem;
   }
 `;
