@@ -1,8 +1,8 @@
 import React from "react";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import ImageUploadInput from "@/components/ModalInput/ImageUploadInput";
-import PasswordInput from "@/components/SignInput/PasswordInput";
+import ImageUploadInput from "@/components/Modal/ModalInput/ImageUploadInput";
+import PasswordInput from "@/components/Sign/SignInput/PasswordInput";
 
 const AccountPassword = () => {
   const handleCurrentPassword = (event: React.ChangeEvent<HTMLInputElement>) => {

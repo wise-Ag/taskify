@@ -1,22 +1,22 @@
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
-import Button from "@/components/button/Button";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import Button from "@/components/common/Buttons/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 
 interface AlertProps {
-  type: "incorrect" | "complete" | "duplicate" | "delete";
+  type: "complete" | "delete" | "confirm" | "cancel";
 }
 
 const AlertModal = ({ type }: AlertProps) => {
   return (
     <Wrapper>
       <Contents>
-        {type === "incorrect" && "비밀번호가 일치하지 않습니다."}
         {type === "complete" && "가입이 완료되었습니다!"}
-        {type === "duplicate" && "이미 사용 중인 이메일입니다."}
         {type === "delete" && "칼럼의 모든 카드가 삭제됩니다."}
+        {type === "confirm" && "정말 삭제하시겠습니까?"}
+        {type === "cancel" && "요청이 취소됩니다."}
       </Contents>
-      <ButtonWrapper>{type === "delete" ? <ButtonSet type="modalSet">삭제</ButtonSet> : <Button type="modalConfirm">확인</Button>}</ButtonWrapper>
+      <ButtonWrapper>{type === "delete" || type === "confirm" ? <ButtonSet type="modalSet">삭제</ButtonSet> : <Button type="modalConfirm">확인</Button>}</ButtonWrapper>
     </Wrapper>
   );
 };

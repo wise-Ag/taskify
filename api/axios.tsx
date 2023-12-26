@@ -1,7 +1,8 @@
 import axios from "axios";
+import { BASE_URL } from "./config";
 
 const instance = axios.create({
-  baseURL: "https://sp-taskify-api.vercel.app/1-08",
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
     Authorization:
@@ -10,3 +11,19 @@ const instance = axios.create({
 });
 
 export default instance;
+
+// export const getRecipientsId = () => axios.get(${DOMAIN_TEAM}/recipients/${id}/);
+// try {
+//   const data = await getRecipientsId()
+// } catch {
+//  // 에러 처리
+// }
+
+// 쓸 때
+// const test =  async () => {
+//   try {
+//     const data = await getRecipientsId()
+//   } catch {
+//    // 에러 처리
+//   }
+//   }
