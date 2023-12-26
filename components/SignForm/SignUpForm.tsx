@@ -1,6 +1,6 @@
 import Input from "@/components/SignInput/Input";
 import PasswordInput from "@/components/SignInput/PasswordInput";
-import { ERROR_MESSAGE, PASSWORD_RULES, PLACEHOLDER } from "@/utils/InputConstant";
+import { ERROR_MESSAGE, NICKNAME_RULES, SIGNUP_PASSWORD_RULES, PLACEHOLDER } from "@/constants/InputConstant";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -27,10 +27,7 @@ const SignUpForm = () => {
       <Controller
         control={control}
         name="nickname"
-        rules={{
-          required: ERROR_MESSAGE.nicknameRequired,
-          maxLength: { value: 10, message: ERROR_MESSAGE.nicknameInvalid },
-        }}
+        rules={NICKNAME_RULES}
         render={({ field, fieldState }) => (
           <Input label="닉네임" {...field} placeholder={PLACEHOLDER.nickname} hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
         )}
@@ -38,7 +35,7 @@ const SignUpForm = () => {
       <Controller
         control={control}
         name="password"
-        rules={PASSWORD_RULES}
+        rules={SIGNUP_PASSWORD_RULES}
         render={({ field, fieldState }) => (
           <PasswordInput label="비밀번호" {...field} placeholder={PLACEHOLDER.signUpPassword} hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
         )}
@@ -47,11 +44,11 @@ const SignUpForm = () => {
         control={control}
         name="confirmPassword"
         rules={{
-          required: ERROR_MESSAGE.passwordRequired,
+          required: ERROR_MESSAGE.confirmPasswordRequired,
           validate: {
             isMatch: (value) => {
               if (value !== watch("password")) {
-                return ERROR_MESSAGE.passwordCheck;
+                return ERROR_MESSAGE.confirmPasswordCheck;
               }
               return true;
             },

@@ -73,7 +73,7 @@ const memberData = {
   totalCount: 6,
 };
 
-const dashboardData = {
+const MydashboardData = {
   id: 0,
   title: "비브리지",
   color: "string",
@@ -83,4 +83,14 @@ const dashboardData = {
   userId: 0,
 };
 
-export { profileData, memberData, dashboardData };
+const NotMydashboardData = {
+  id: 0,
+  title: "3분기 계획",
+  color: "string",
+  createdAt: "2023-12-18T16:54:55.261Z",
+  updatedAt: "2023-12-18T16:54:55.261Z",
+  createdByMe: false,
+  userId: 0,
+};
+
+export { profileData, memberData, MydashboardData, NotMydashboardData };
