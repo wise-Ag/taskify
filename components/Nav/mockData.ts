@@ -2,7 +2,7 @@ const profileData = {
   id: 0,
   email: "hello@naver.com",
   nickname: "배유철",
-  profileImageUrl: null,
+  profileImageUrl: "https://phinf.pstatic.net/contact/20220825_253/1661385964853G7XN3_JPEG/KakaoTalk_20220825_090521205.jpg?type=s160",
   createdAt: "2023-12-18T12:40:07.131Z",
   updatedAt: "2023-12-18T12:40:07.131Z",
 };
@@ -14,7 +14,7 @@ const memberData = {
       userId: 0,
       email: "string",
       nickname: "배유철",
-      profileImageUrl: null,
+      profileImageUrl: "https://phinf.pstatic.net/contact/20220825_253/1661385964853G7XN3_JPEG/KakaoTalk_20220825_090521205.jpg?type=s160",
       createdAt: "2023-12-18T14:57:36.664Z",
       updatedAt: "2023-12-18T14:57:36.664Z",
       isOwner: true,
@@ -24,7 +24,7 @@ const memberData = {
       userId: 1,
       email: "string",
       nickname: "김나은",
-      profileImageUrl: null,
+      profileImageUrl: "https://phinf.pstatic.net/contact/20220825_253/1661385964853G7XN3_JPEG/KakaoTalk_20220825_090521205.jpg?type=s160",
       createdAt: "2023-12-18T14:57:36.664Z",
       updatedAt: "2023-12-18T14:57:36.664Z",
       isOwner: false,
@@ -34,7 +34,7 @@ const memberData = {
       userId: 2,
       email: "string",
       nickname: "주소희",
-      profileImageUrl: null,
+      profileImageUrl: "https://phinf.pstatic.net/contact/20220825_253/1661385964853G7XN3_JPEG/KakaoTalk_20220825_090521205.jpg?type=s160",
       createdAt: "2023-12-18T14:57:36.664Z",
       updatedAt: "2023-12-18T14:57:36.664Z",
       isOwner: false,
@@ -44,7 +44,7 @@ const memberData = {
       userId: 3,
       email: "string",
       nickname: "손지은",
-      profileImageUrl: null,
+      profileImageUrl: "https://phinf.pstatic.net/contact/20220825_253/1661385964853G7XN3_JPEG/KakaoTalk_20220825_090521205.jpg?type=s160",
       createdAt: "2023-12-18T14:57:36.664Z",
       updatedAt: "2023-12-18T14:57:36.664Z",
       isOwner: false,
@@ -54,7 +54,7 @@ const memberData = {
       userId: 4,
       email: "string",
       nickname: "신혜윤",
-      profileImageUrl: null,
+      profileImageUrl: "https://phinf.pstatic.net/contact/20220825_253/1661385964853G7XN3_JPEG/KakaoTalk_20220825_090521205.jpg?type=s160",
       createdAt: "2023-12-18T14:57:36.664Z",
       updatedAt: "2023-12-18T14:57:36.664Z",
       isOwner: false,
@@ -64,7 +64,7 @@ const memberData = {
       userId: 5,
       email: "string",
       nickname: "이슬",
-      profileImageUrl: null,
+      profileImageUrl: "https://phinf.pstatic.net/contact/20220825_253/1661385964853G7XN3_JPEG/KakaoTalk_20220825_090521205.jpg?type=s160",
       createdAt: "2023-12-18T14:57:36.664Z",
       updatedAt: "2023-12-18T14:57:36.664Z",
       isOwner: false,
@@ -73,7 +73,7 @@ const memberData = {
   totalCount: 6,
 };
 
-const dashboardData = {
+const MydashboardData = {
   id: 0,
   title: "비브리지",
   color: "string",
@@ -83,4 +83,14 @@ const dashboardData = {
   userId: 0,
 };
 
-export { profileData, memberData, dashboardData };
+const NotMydashboardData = {
+  id: 0,
+  title: "3분기 계획",
+  color: "string",
+  createdAt: "2023-12-18T16:54:55.261Z",
+  updatedAt: "2023-12-18T16:54:55.261Z",
+  createdByMe: false,
+  userId: 0,
+};
+
+export { profileData, memberData, MydashboardData, NotMydashboardData };

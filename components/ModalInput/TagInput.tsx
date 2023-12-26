@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import Tag from "@/components/Chip/Tag";
