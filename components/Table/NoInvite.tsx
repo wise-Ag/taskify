@@ -20,8 +20,6 @@ const Container = styled.div`
   max-width: 102rem;
   height: 40rem;
 
-  margin: 4rem auto auto 4rem;
-  padding: 3.2rem 2.8rem;
   border-radius: 8px;
 
   display: flex;
