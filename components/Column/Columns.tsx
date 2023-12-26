@@ -50,11 +50,14 @@ const Columns = () => {
         <Column key={column.id} title={column.title} columnId={column.id} />
       ))}
       <ButtonWrapper>
-        {/* <Button type="newDashboard" disabled> */}
-        <button onClick={showModal}>새로운 컬럼 추가하기</button>
-        {/* </Button> */}
+        <Button type="newDashboard" disabled>
+          <button>새로운 컬럼 추가하기</button>
+        </Button>
       </ButtonWrapper>
-      {isClicked && <TaskModal />}
+      <button onClick={showModal}>
+        모달버튼모달버튼모달버튼
+        {isClicked && <TaskModal />}
+      </button>
     </Wrapper>
   );
 };
