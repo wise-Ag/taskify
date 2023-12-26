@@ -1,5 +1,5 @@
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
-import ColorSelector from "@/components/Chip/DashBoardColor";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import ColorSelector from "@/components/common/Chip/DashBoardColor";
 import NameInput from "@/components/Modal/NameInput";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";

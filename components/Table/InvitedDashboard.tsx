@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
-import SearchInput from "@/components/SearchInput";
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
 
 interface Invitation {
   id: number;
@@ -24,7 +23,6 @@ const InvitedDashboard = ({ invitations }: InvitationsListProps) => {
   return (
     <Container>
       <Title>초대받은 대시보드</Title>
-      <SearchInput />
       <Header>
         {tableTitles.map((title) => (
           <TableTitle key={title}>{title}</TableTitle>
@@ -55,8 +53,8 @@ const Container = styled.div`
   width: 102rem;
 
   padding: 3rem;
-
   border-radius: 8px;
+
   background: var(--White);
 
   @media screen and (max-width: ${DeviceSize.tablet}) {
@@ -93,9 +91,6 @@ const Header = styled.div`
 const TableTitle = styled.h3`
   width: 33%;
 
-  margin-top: 3.2rem;
-  margin-bottom: 0.8rem;
-
   color: var(--Gray9f);
   font-size: 1.6rem;
   font-weight: 400;
@@ -103,12 +98,11 @@ const TableTitle = styled.h3`
 
 const InvitationItem = styled.div`
   padding: 1.6rem 0;
+  border-bottom: 1px solid var(--Grayee);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  border-bottom: 1px solid var(--Grayee);
 
   &:last-child {
     border-bottom: 0;
@@ -129,6 +123,8 @@ const Info = styled.div`
   margin-top: 1rem;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
+    width: 100%;
+
     display: flex;
     justify-content: space-between;
   }
@@ -138,6 +134,8 @@ const MobileTableTitle = styled.h3`
   display: none;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
+    width: 30%;
+
     display: block;
 
     font-size: 1.4rem;
@@ -147,13 +145,13 @@ const MobileTableTitle = styled.h3`
 `;
 
 const TableBody = styled.h3`
-  width: 33%;
-
   color: var(--Black33);
   font-size: 1.6rem;
   font-weight: 400;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
+    width: 70%;
+
     font-size: 1.4rem;
   }
 `;

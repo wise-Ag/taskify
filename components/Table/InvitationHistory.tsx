@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
-import Button from "@/components/button/Button";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import Button from "@/components/common/Buttons/Button";
 
 interface Invitation {
   id: number;
@@ -30,17 +30,19 @@ interface InvitationsListProps {
 const InvitationHistory = ({ invitations, totalCount, currentPage }: InvitationsListProps) => {
   return (
     <Container>
-      <Header>
+      <Section1>
         <Title>초대 내역</Title>
+        <Button type="invite" children="초대하기" />
+      </Section1>
+      <Section2>
+        <EmailList>이메일</EmailList>
         <PageInfo>
           {totalCount} 페이지 중 {currentPage}
         </PageInfo>
         <ButtonInfo>
           <PageButton type="forwardAndBackward" isDisabled={true} />
         </ButtonInfo>
-        <InviteButton type="invite" children="초대하기" />
-        <EmailList>이메일</EmailList>
-      </Header>
+      </Section2>
       {invitations.map((invitation) => (
         <InvitationItem key={invitation.id}>
           <Email>{invitation.invitee.email}</Email>
@@ -72,15 +74,15 @@ const Container = styled.div`
   }
 `;
 
-const Header = styled.div`
-  display: grid;
+const Section1 = styled.div`
+  margin-bottom: 2.5rem;
+
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  grid-template-columns: 1fr auto auto auto;
-  gap: 1.6rem;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
-    row-gap: 1.2rem;
-    column-gap: 0;
+    margin-bottom: 2rem;
   }
 `;
 
@@ -92,17 +94,44 @@ const Title = styled.h1`
   }
 `;
 
+const Section2 = styled.div`
+  margin-bottom: 0.9rem;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    margin-bottom: 0.8rem;
+  }
+`;
+
+const EmailList = styled.h3`
+  color: var(--Gray9f);
+  font-size: 1.6rem;
+  font-weight: 400;
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.4rem;
+  }
+`;
+
 const PageInfo = styled.h3`
+  margin-left: auto;
+  margin-right: 2rem;
+
   color: var(--Black33);
   font-size: 1.4rem;
   font-weight: 400;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
+    margin-right: 1rem;
+
     font-size: 1.2rem;
   }
 `;
 
-const ButtonInfo = styled.h3`
+const ButtonInfo = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
@@ -113,39 +142,13 @@ const PageButton = styled(ButtonSet)`
   }
 `;
 
-const InviteButton = styled(Button)`
-  @media screen and (max-width: ${DeviceSize.mobile}) {
-    grid-column: 3;
-  }
-`;
-
-const EmailList = styled.h3`
-  margin-top: 0.8rem;
-  margin-bottom: 1.3rem;
-
-  color: var(--Gray9f);
-  font-size: 1.6rem;
-  font-weight: 400;
-
-  @media screen and (max-width: ${DeviceSize.mobile}) {
-    margin-top: 0;
-    margin-bottom: 0;
-
-    grid-column: 1;
-    grid-row: 2;
-
-    font-size: 1.4rem;
-  }
-`;
-
 const InvitationItem = styled.div`
   padding: 1.6rem 0;
+  border-bottom: 1px solid var(--Grayee);
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  border-bottom: 1px solid var(--Grayee);
 
   &:last-child {
     border-bottom: 0;
