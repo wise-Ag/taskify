@@ -1,6 +1,6 @@
 import Input from "@/components/SignInput/Input";
 import PasswordInput from "@/components/SignInput/PasswordInput";
-import { EMAIL_RULES, ERROR_MESSAGE, PASSWORD_RULES, PLACEHOLDER } from "@/utils/InputConstant";
+import { EMAIL_RULES, SIGNIN_PASSWORD_RULES, PLACEHOLDER } from "@/constants/InputConstant";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -23,7 +23,7 @@ const SignInForm = () => {
       <Controller
         control={control}
         name="password"
-        rules={PASSWORD_RULES}
+        rules={SIGNIN_PASSWORD_RULES}
         render={({ field, fieldState }) => (
           <PasswordInput label="비밀번호" {...field} placeholder={PLACEHOLDER.password} hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
         )}

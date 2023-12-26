@@ -33,7 +33,9 @@ const TagInput = () => {
 
   const handleDeleteTag = useCallback(
     (event: React.MouseEvent) => {
-      setTagValue((prev) => prev.filter((v) => v !== event?.target?.textContent));
+      const target = event.target as HTMLElement; // HTMLElement로 타입 단언
+      const tagText = target.textContent; // 이제 textContent 사용 가능
+      setTagValue((prev) => prev.filter((v) => v !== tagText));
     },
     [tagValue],
   );
@@ -51,7 +53,7 @@ const TagInput = () => {
       <Label>태그</Label>
       <InputArea>
         {tagValue && <Tags handleOnClick={handleDeleteTag} tagValue={tagValue} />}
-        <StyledInput type="text" value={inputValue} onChange={handleInputChange} placeholder={"입력 후 Enter"} onKeyDown={handlePressEnter} />
+        <StyledInput type="text" value={inputValue} onChange={handleInputChange} placeholder={tagValue.length === 0 ? "입력 후 Enter" : ""} onKeyDown={handlePressEnter} />
       </InputArea>
     </InputBox>
   );
@@ -60,8 +62,6 @@ const TagInput = () => {
 export default TagInput;
 
 const InputBox = styled.div`
-  margin: 1rem;
-
   display: flex;
   flex-direction: column;
 `;
@@ -69,20 +69,18 @@ const InputBox = styled.div`
 const Label = styled.label`
   margin-bottom: 1rem;
 
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: var(--Black33);
 
   @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
 `;
 
 const InputArea = styled.div`
-  width: 34rem;
   height: 4.8rem;
 
   padding: 1.4rem;
-  gap: 1rem;
   border: 1px solid var(--Grayd9);
   border-radius: 6px;
 
@@ -90,16 +88,10 @@ const InputArea = styled.div`
   display: flex;
   align-items: flex-start;
 
-  &:focus-within {
-    border-color: var(--Main);
-  }
-
   @media (max-width: ${DeviceSize.mobile}) {
-    width: 34rem;
     height: 4.8rem;
 
     padding: 1.4rem;
-    gap: 1rem;
   }
 `;
 
@@ -108,12 +100,19 @@ const StyledInput = styled.input`
 
   border: none;
 
-  color: var(--Grayd9);
   flex-grow: 1;
+
+  font-size: 1.6rem;
+  color: var(--Grayd9);
 
   &:focus {
     outline: none;
+
     color: var(--Black33);
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.4rem;
   }
 `;
 
