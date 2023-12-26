@@ -1,6 +1,6 @@
 import MyDashboardList from "@/components/MyDashboardList";
-// import MyDashboardNav from "@/components/Nav/MyDashboardNav";
-import SideMenu from "@/components/SideMenu/SideMenu";
+import MyDashboardNav from "@/components/common/Nav/MyDashboardNav";
+import SideMenu from "@/components/common/SideMenu/SideMenu";
 import InvitedDashboard from "@/components/Table/InvitedDashboard";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { styled } from "styled-components";
@@ -8,7 +8,7 @@ import { styled } from "styled-components";
 const MyDashboard = () => {
   return (
     <>
-      {/* <MyDashboardNav /> */}
+      <MyDashboardNav />
       <SideMenuWrapper>
         <SideMenu />
       </SideMenuWrapper>

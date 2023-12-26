@@ -1,11 +1,10 @@
-import instance from "@/api/axios";
+import { getDashboardList } from "@/api/dashboards/getDashboardList";
+import Button from "@/components/common/Buttons/Button";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import ButtonSet from "./ButtonSet/ButtonSet";
-import { MOCK_DATA } from "./Column/Columns";
-import Button from "./button/Button";
 
 export interface Dashboards {
   id: number;
@@ -24,22 +23,22 @@ const MyDashboardList = () => {
   const [totalPageCount, setTotalPageCount] = useState(1);
 
   useEffect(() => {
-    const getDashboardList = async () => {
-      const res = await instance.get("/dashboards", {
-        params: { navigationMethod: "pagination", page: currentPage, size: PAGE_SIZE },
-        headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzUwMTMsImlzcyI6InNwLXRhc2tpZnkifQ.tt5oPAJ6av4leXf3pT-KW4vNarSQZhjcHA62HfXQjio`,
-        },
+    const loadDashboardList = async () => {
+      const res = await getDashboardList({
+        size: PAGE_SIZE,
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
+        navigationMethod: "pagination",
+        page: currentPage,
       });
 
-      const resDashboards = res.data.dashboards;
-      const totalCount = res.data.totalCount;
+      const resDashboards = res?.dashboards;
+      const totalCount = res?.totalCount;
 
       setDashboards(() => [...resDashboards]);
       setTotalPageCount(Math.ceil(totalCount / PAGE_SIZE));
     };
-
-    getDashboardList();
+    loadDashboardList();
   }, [currentPage]);
   return (
     <Wrapper>
