@@ -1,4 +1,5 @@
-import { useState, useEffect, MouseEvent } from "react";
+import { useEffect, MouseEvent, useRef } from "react";
+import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { FaHome, FaUserCog, FaSignOutAlt } from "react-icons/fa";
@@ -6,6 +7,7 @@ import styled from "styled-components";
 import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import ArrowIcon from "@/assets/icons/arrow-drop-down.svg";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { activeDropdownAtom } from "@/states/atoms";
 
 interface ProfileProps {
   profileImageUrl: string | null;
@@ -13,31 +15,35 @@ interface ProfileProps {
 }
 
 const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
-  const [isKebabMenuVisible, setKebabMenuVisible] = useState(false);
   const router = useRouter();
+  const [activeDropdown, setActiveDropdown] = useAtom(activeDropdownAtom);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleKebabMenu = (event: MouseEvent) => {
     event.stopPropagation();
-    setKebabMenuVisible(!isKebabMenuVisible);
+    setActiveDropdown(activeDropdown === "profile" ? null : "profile");
   };
 
-  // 페이지의 어느 곳을 클릭해도 메뉴가 닫히도록 함
   useEffect(() => {
-    const closeMenu = () => {
-      if (isKebabMenuVisible) setKebabMenuVisible(false);
+    const closeMenu = (event: Event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
     };
 
     document.addEventListener("click", closeMenu);
-    return () => document.removeEventListener("click", closeMenu);
-  }, [isKebabMenuVisible]);
+    return () => {
+      document.removeEventListener("click", closeMenu);
+    };
+  }, []);
 
   const navigateTo = (path: string) => {
     router.push(path);
-    setKebabMenuVisible(false); // 메뉴를 닫고 페이지를 이동
+    setActiveDropdown(null);
   };
 
   return (
-    <Wrapper onClick={toggleKebabMenu}>
+    <Wrapper onClick={toggleKebabMenu} ref={dropdownRef}>
       {profileImageUrl ? (
         <ProfileIcon image={profileImageUrl} />
       ) : (
@@ -46,8 +52,8 @@ const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
         </NoProfileImageWrapper>
       )}
       <Name>{nickname}</Name>
-      <ArrowIcon onClick={toggleKebabMenu} />
-      {isKebabMenuVisible && (
+      <StyledArrowIcon active={activeDropdown === "profile"} onClick={toggleKebabMenu} />
+      {activeDropdown === "profile" && (
         <DropdownMenu>
           <MenuItem onClick={() => navigateTo("/mydashboard")}>
             <ItemContent>
@@ -165,4 +171,8 @@ const ItemContent = styled.span`
   display: flex;
   align-items: center;
   gap: 0.8rem;
+`;
+
+const StyledArrowIcon = styled(ArrowIcon)`
+  transform: ${({ active }) => (active ? "scaleY(-1)" : "none")};
 `;
