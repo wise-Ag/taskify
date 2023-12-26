@@ -1,12 +1,12 @@
-import Kebab from "@/assets/icons/kebab.svg";
 import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
+import Kebab from "@/assets/icons/kebab.svg";
+import ModalInput from "@/components/Modal/ModalInput/ModalInput";
+import ColumnName from "@/components/common/Chip/ColumnName";
+import Tag from "@/components/common/Chip/Tag";
 import { DeviceSize } from "@/styles/DeviceSize";
-import styled from "styled-components";
-import ModalInput from "@/components/ModalInput/ModalInput";
-import Tag from "@/components/Chip/Tag";
-import ColumnName from "@/components/Chip/ColumnName";
 import { formatUpdatedAt } from "@/utils/FormatDate";
+import styled from "styled-components";
 
 interface Comment {
   id: number;
