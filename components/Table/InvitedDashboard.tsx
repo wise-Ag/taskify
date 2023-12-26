@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
-import NoInvitation from "./NoInvite";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
 
 interface Invitation {
   id: number;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import MainLogo from "@/assets/icons/main-logo.svg";
-import Button from "@/components/Button/Button";
-import SignInForm from "@/components/SignForm/SignInForm";
+import Button from "@/components/common/Buttons/Button";
+import SignInForm from "@/components/Sign/SignForm/SignInForm";
 
 const SignInPage = () => {
   return (
