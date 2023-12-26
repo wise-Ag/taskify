@@ -28,7 +28,7 @@ const MyDashboardList = () => {
       const res = await instance.get("/dashboards", {
         params: { navigationMethod: "pagination", page: currentPage, size: PAGE_SIZE },
         headers: {
-          Authorization: `Bearer ${MOCK_DATA.token}`,
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzUwMTMsImlzcyI6InNwLXRhc2tpZnkifQ.tt5oPAJ6av4leXf3pT-KW4vNarSQZhjcHA62HfXQjio`,
         },
       });
 
@@ -45,13 +45,14 @@ const MyDashboardList = () => {
     <Wrapper>
       <Container>
         <Button type="newDashboard">새로운 대시보드</Button>
-        {dashboards.map((v) => {
-          return (
-            <Link key={v.id} href={`/dashboards/${v.id}`}>
-              <Button type="dashboardList" title={v.title} color={v.color} id={v.id} createdByMe={v.createdByMe} />;{/* </div> */}
-            </Link>
-          );
-        })}
+        {dashboards &&
+          dashboards.map((v) => {
+            return (
+              <Link key={v.id} href={`/dashboards/${v.id}`}>
+                <Button type="dashboardList" title={v.title} color={v.color} id={v.id} createdByMe={v.createdByMe} />;{/* </div> */}
+              </Link>
+            );
+          })}
       </Container>
       <PageContent>
         {totalPageCount} 페이지 중 {currentPage} <ButtonSet type="forwardAndBackward" />

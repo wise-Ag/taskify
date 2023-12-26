@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import ButtonSet from "@/components/ButtonSet/ButtonSet";
+import NoInvitation from "./NoInvite";
 
 interface Invitation {
   id: number;
@@ -21,29 +22,35 @@ const InvitedDashboard = ({ invitations }: InvitationsListProps) => {
   const tableTitles = ["이름", "초대자", "수락 여부"];
 
   return (
-    <Container>
-      <Title>초대받은 대시보드</Title>
-      <Header>
-        {tableTitles.map((title) => (
-          <TableTitle key={title}>{title}</TableTitle>
-        ))}
-      </Header>
-      {invitations.map((invitation) => (
-        <InvitationItem key={invitation.id}>
-          <Info>
-            <MobileTableTitle>이름</MobileTableTitle>
-            <TableBody>{invitation.dashboard.title}</TableBody>
-          </Info>
-          <Info>
-            <MobileTableTitle>초대자</MobileTableTitle>
-            <TableBody>{invitation.invitee.nickname}</TableBody>
-          </Info>
-          <Info>
-            <ButtonSet type="acceptAndReject" />
-          </Info>
-        </InvitationItem>
-      ))}
-    </Container>
+    <>
+      {invitations ? (
+        <Container>
+          <Title>초대받은 대시보드</Title>
+          <Header>
+            {tableTitles.map((title) => (
+              <TableTitle key={title}>{title}</TableTitle>
+            ))}
+          </Header>
+          {invitations.map((invitation) => (
+            <InvitationItem key={invitation.id}>
+              <Info>
+                <MobileTableTitle>이름</MobileTableTitle>
+                <TableBody>{invitation.dashboard.title}</TableBody>
+              </Info>
+              <Info>
+                <MobileTableTitle>초대자</MobileTableTitle>
+                <TableBody>{invitation.invitee.nickname}</TableBody>
+              </Info>
+              <Info>
+                <ButtonSet type="acceptAndReject" />
+              </Info>
+            </InvitationItem>
+          ))}
+        </Container>
+      ) : (
+        <NoInvitation />
+      )}
+    </>
   );
 };
 

@@ -1,13 +1,14 @@
 import MyDashboardList from "@/components/MyDashboardList";
-import MyDashboardNav from "@/components/Nav/MyDashboardNav";
+// import MyDashboardNav from "@/components/Nav/MyDashboardNav";
 import SideMenu from "@/components/SideMenu/SideMenu";
-import InvitedDashboard from "@/components/Table/NoInvite";
+import InvitedDashboard from "@/components/Table/InvitedDashboard";
+import { DeviceSize } from "@/styles/DeviceSize";
 import { styled } from "styled-components";
 
 const MyDashboard = () => {
   return (
     <>
-      <MyDashboardNav />
+      {/* <MyDashboardNav /> */}
       <SideMenuWrapper>
         <SideMenu />
       </SideMenuWrapper>
@@ -27,7 +28,23 @@ const SideMenuWrapper = styled.div`
 `;
 
 const Container = styled.div`
-  margin-left: 30rem;
+  height: 100%;
+  min-height: 100vh;
 
+  display: flex;
+  flex-direction: column;
+  gap: 4.4rem;
+
+  margin-left: 30rem;
   padding: 4rem;
+
+  background-color: var(--MainLight);
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    margin-left: 16rem;
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    margin-left: 6.7rem;
+  }
 `;
