@@ -3,9 +3,9 @@ import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import ModalInput from "../ModalInput/ModalInput";
-import Tag from "../Chip/Tag";
-import ColumnName from "../Chip/ColumnName";
+import ModalInput from "@/components/ModalInput/ModalInput";
+import Tag from "@/components/Chip/Tag";
+import ColumnName from "@/components/Chip/ColumnName";
 import { formatUpdatedAt } from "@/utils/FormatDate";
 
 interface Comment {
