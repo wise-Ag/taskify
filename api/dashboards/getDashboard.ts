@@ -7,7 +7,7 @@ interface getDashboardProps {
 }
 
 export const getDashboard = async ({
-  dashboardId = "193",
+  dashboardId = "217",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
 }: getDashboardProps) => {
   try {

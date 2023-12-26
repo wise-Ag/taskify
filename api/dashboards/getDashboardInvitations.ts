@@ -9,13 +9,13 @@ interface getDashboardInvitationsProps {
 }
 
 export const getDashboardInvitations = async ({
-  dashboardId = "198",
+  dashboardId = "217",
   size = 5,
   page,
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzQ1NTAsImlzcyI6InNwLXRhc2tpZnkifQ.DEJkd2VERk0YaMWoRJzQ3cEdw8I7v_P3fpyqAaGeKK8",
+  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
 }: getDashboardInvitationsProps) => {
   try {
-    const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_INVITATION("198"), {
+    const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_INVITATION("217"), {
       params: {
         dashboardId,
         size,

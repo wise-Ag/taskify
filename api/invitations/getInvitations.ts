@@ -24,7 +24,7 @@ export const getInvitations = async ({
       },
     });
     console.log(res.data);
-    if (res.status === 200) return res.data.data;
+    if (res.status === 200) return res.data;
   } catch (error: any) {
     console.log(error.response.data.message);
   }

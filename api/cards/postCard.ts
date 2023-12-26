@@ -7,7 +7,7 @@ export const postCards = async ({
   token: string;
 }) => {
   try {
-    const res = await instance.post(
+    const res = await instance.post<any>(
       ENDPOINTS.CARDS.POST,
       {
         assigneeUserId: 13,
@@ -27,6 +27,6 @@ export const postCards = async ({
     console.log(res.data);
     if (res.status === 200) return res.data;
   } catch (error: any) {
-    console.log(error.response.data.message);
+    console.error(error.response.data.message);
   }
 };
