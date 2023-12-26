@@ -1,7 +1,7 @@
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
-import ModalInput from "@/components/ModalInput/ModalInput";
-import Dropdown from "@/components/ModalInput/StateDropdown";
-import TagInput from "@/components/ModalInput/TagInput";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import ModalInput from "@/components/Modal/ModalInput/ModalInput";
+import Dropdown from "@/components/Modal/ModalInput/StateDropdown";
+import TagInput from "@/components/Modal/ModalInput/TagInput";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
-import ButtonSet from "@/components/ButtonSet/ButtonSet";
-import Button from "@/components/button/Button";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import Button from "@/components/common/Buttons/Button";
 
 interface Member {
   id: number;

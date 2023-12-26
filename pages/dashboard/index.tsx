@@ -1,4 +1,4 @@
-import Columns from "@/components/Column/Columns";
+import Columns from "@/components/Dashboard/Column/Columns";
 
 const DashBoardPage = () => {
   return (
