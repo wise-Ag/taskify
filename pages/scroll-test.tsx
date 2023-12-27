@@ -64,7 +64,7 @@ const Column = () => {
         {cards.map((card) => {
           return <Card key={card.id} cardData={card} />;
         })}
-        <div style={{ width: "1rem" }} ref={targetRef} />
+        <div ref={targetRef} />
       </Container>
     </Wrapper>
   );
