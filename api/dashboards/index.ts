@@ -87,15 +87,7 @@ export const getDashboardInvitations = async ({
   }
 };
 
-interface getDashboardListProps {
-  navigationMethod: string;
-  cursorId?: number;
-  page?: number;
-  size?: number;
-  token: string;
-}
-
-export const getDashboardList = async ({ navigationMethod, size = 5, cursorId, token }: getDashboardListProps) => {
+export const getDashboardList = async ({ navigationMethod, size = 5, cursorId, token }: GetDashboardListProps) => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_LIST, {
       params: {
