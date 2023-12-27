@@ -35,18 +35,13 @@ export default AccountPassword;
 const Container = styled.div`
   max-width: 62rem;
 
-  margin: 2.5rem 2rem;
   padding: 3.2rem 2.8rem;
   border-radius: 8px;
 
   display: flex;
   flex-direction: column;
 
-  background-color: var(--MainLight);
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    margin: 2rem 1.2rem;
-  }
+  background-color: var(--White);
 `;
 
 const Title = styled.p`

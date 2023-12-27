@@ -25,6 +25,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ label, type, value, ha
 export default Input;
 
 const InputBox = styled.div`
+  width: 100%;
+
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
@@ -37,7 +39,7 @@ const Label = styled.label`
 `;
 
 const StyledInput = styled.input<{ hasError?: boolean }>`
-  width: 52rem;
+  width: 100%;
   height: 5rem;
 
   padding: 1.5rem 1.6rem;
