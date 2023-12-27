@@ -29,10 +29,6 @@ const TaskModal: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  if (!isModalOpen) {
-    return null;
-  }
-
   useEffect(() => {
     const loadCardData = async () => {
       const data = await getCard({

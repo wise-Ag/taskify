@@ -15,72 +15,80 @@ interface InputAreaProps {
   $inputType: "댓글" | "제목" | "마감일" | "설명";
 }
 
-const ModalInput = forwardRef<
-  HTMLInputElement | HTMLTextAreaElement, // ref의 타입
-  ModalInputProps // props의 타입
->(({ label, $inputType }, ref) => {
-  const [inputValue, setInputValue] = useState("");
+const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInputProps & { onSubmitComment?: (comment: string) => void }>(
+  ({ label, $inputType, onSubmitComment }, ref) => {
+    const [inputValue, setInputValue] = useState("");
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
-  };
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setInputValue(e.target.value);
+    };
 
-  const renderInput = () => {
-    switch ($inputType) {
-      case "댓글":
-      case "설명":
-        return (
-          <>
-            <StyledTextArea
-              ref={ref as React.Ref<HTMLTextAreaElement>}
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder={$inputType === "댓글" ? "댓글 작성하기" : "설명을 입력해 주세요"}
-              $inputType={$inputType}
-              required={$inputType === "설명"}
-            />
-            {$inputType === "댓글" && (
-              <PositionedButton>
-                <Button type="modalInput">입력</Button>
-              </PositionedButton>
-            )}
-          </>
-        );
-      case "제목":
-        return (
-          <>
-            <StyledInput
-              ref={ref as React.Ref<HTMLInputElement>}
-              type="text"
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder={"제목을 입력해 주세요"}
-              $inputType={$inputType}
-              required
-            />
-          </>
-        );
-      case "마감일":
-        return (
-          <>
-            <CustomDatePicker />
-          </>
-        );
-      default:
-        return null;
-    }
-  };
+    const handleCommentSubmit = () => {
+      if (onSubmitComment) {
+        onSubmitComment(inputValue);
+        setInputValue("");
+      }
+    };
 
-  return (
-    <InputBox>
-      <Label $inputType={$inputType}>
-        {label}
-        {$inputType === "제목" || $inputType === "설명" ? <RequiredIndicator>*</RequiredIndicator> : null}
-      </Label>
-      <InputArea $inputType={$inputType}>{renderInput()}</InputArea>
-    </InputBox>
-  );
-});
+    const renderInput = () => {
+      switch ($inputType) {
+        case "댓글":
+        case "설명":
+          return (
+            <>
+              <StyledTextArea
+                ref={ref as React.Ref<HTMLTextAreaElement>}
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder={$inputType === "댓글" ? "댓글 작성하기" : "설명을 입력해 주세요"}
+                $inputType={$inputType}
+                required={$inputType === "설명"}
+              />
+              {$inputType === "댓글" && (
+                <PositionedButton>
+                  <Button type="modalInput" onClick={handleCommentSubmit} disabled={!inputValue.trim()}>
+                    입력
+                  </Button>
+                </PositionedButton>
+              )}
+            </>
+          );
+        case "제목":
+          return (
+            <>
+              <StyledInput
+                ref={ref as React.Ref<HTMLInputElement>}
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder={"제목을 입력해 주세요"}
+                $inputType={$inputType}
+                required
+              />
+            </>
+          );
+        case "마감일":
+          return (
+            <>
+              <CustomDatePicker />
+            </>
+          );
+        default:
+          return null;
+      }
+    };
+
+    return (
+      <InputBox>
+        <Label $inputType={$inputType}>
+          {label}
+          {$inputType === "제목" || $inputType === "설명" ? <RequiredIndicator>*</RequiredIndicator> : null}
+        </Label>
+        <InputArea $inputType={$inputType}>{renderInput()}</InputArea>
+      </InputBox>
+    );
+  },
+);
 
 export default ModalInput;
 
