@@ -1,4 +1,4 @@
-import { getDashboardList } from "@/api/dashboards/getDashboardList";
+import { getDashboardList } from "@/api/dashboards";
 import Button from "@/components/common/Buttons/Button";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";

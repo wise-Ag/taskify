@@ -87,15 +87,11 @@ export const getDashboardInvitations = async ({
   }
 };
 
-export const getDashboardList = async ({
-  size = 20,
-  cursorId,
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: GetDashboardListProps): Promise<GetDashboardListData | null> => {
+export const getDashboardList = async ({ navigationMethod, size = 5, cursorId, token }: GetDashboardListProps) => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_LIST, {
       params: {
-        navigationMethod: "infiniteScroll",
+        navigationMethod,
         size,
         cursorId,
       },
