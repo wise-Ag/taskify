@@ -1,8 +1,8 @@
-import styled from "styled-components";
 import MainLogo from "@/assets/icons/main-logo.svg";
-import Button from "@/components/common/Buttons/Button";
 import SignInForm from "@/components/Sign/SignForm/SignInForm";
+import Button from "@/components/common/Buttons/Button";
 import Link from "next/link";
+import styled from "styled-components";
 
 const SignInPage = () => {
   return (
@@ -29,7 +29,7 @@ export default SignInPage;
 
 const Container = styled.div`
   padding-top: 18rem;
-  padding-bottom: 18rem;
+  padding-bottom: 22rem;
 
   display: flex;
   flex-direction: column;
