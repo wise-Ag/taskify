@@ -1,36 +1,43 @@
-import { useState, MouseEvent, useEffect } from "react";
+import { useState, MouseEvent, useEffect, useRef } from "react";
+import { useAtom } from "jotai";
 import styled from "styled-components";
 import { memberData } from "./mockData";
 import { DeviceSize } from "@/styles/DeviceSize";
 import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import MemberListDropdown from "@/components/common/Nav/MemberListDropdown";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { activeDropdownAtom } from "@/states/atoms";
 
 const ProfileImages = () => {
   const { members, totalCount } = memberData;
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useAtom(activeDropdownAtom);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = (event: MouseEvent) => {
     event.stopPropagation();
-    setIsDropdownVisible(!isDropdownVisible);
+    setActiveDropdown(activeDropdown === "profileImages" ? null : "profileImages");
   };
 
   useEffect(() => {
-    const closeMenu = () => {
-      if (isDropdownVisible) setIsDropdownVisible(false);
+    const closeMenu = (event: Event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
     };
 
     document.addEventListener("click", closeMenu);
-    return () => document.removeEventListener("click", closeMenu);
-  }, [isDropdownVisible]);
+    return () => {
+      document.removeEventListener("click", closeMenu);
+    };
+  });
 
   return (
-    <Container>
+    <Container ref={dropdownRef}>
       {totalCount > 0 && (
         <Contents>
           {members.slice(0, 4).map((member, index) =>
             member.profileImageUrl ? (
-              <ProfileImg key={member.id} index={index} image={member.profileImageUrl} onClick={toggleDropdown} />
+              <ProfileImg key={member.id} index={index} image={member.profileImageUrl} />
             ) : (
               <NoProfileImageWrapper index={index}>
                 <NoProfileImage />
@@ -46,7 +53,7 @@ const ProfileImages = () => {
           )}
         </Contents>
       )}
-      {isDropdownVisible && <MemberListDropdown members={members} />}
+      {activeDropdown === "profileImages" && <MemberListDropdown members={members} />}
     </Container>
   );
 };
@@ -98,8 +105,6 @@ const ProfileImg = styled.div<{ index: number; image: string }>`
   background-image: url(${(props) => props.image});
   background-size: cover;
   background-repeat: no-repeat;
-
-  cursor: pointer;
 
   z-index: ${({ index }) => `${3 - index}`};
 

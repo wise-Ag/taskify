@@ -35,6 +35,7 @@ const Dropdown = styled.div`
   width: 16rem;
 
   border: 1px solid var(--Grayd9);
+  border-radius: 16px;
 
   position: absolute;
   top: 8%;
@@ -50,16 +51,19 @@ const Item = styled.div`
   align-items: center;
   justify-content: space-between;
 
+  background-color: var(--MainBG);
+
   color: var(--Black33);
   font-size: 1.6rem;
   font-weight: 400;
 
-  &:nth-child(odd) {
-    background-color: #f5f5f5;
+  &:first-child {
+    border-radius: 15px 15px 0 0;
   }
 
   &:last-child {
     border-bottom: 0;
+    border-radius: 0 0 15px 15px;
   }
 `;
 

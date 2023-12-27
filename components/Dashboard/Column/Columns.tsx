@@ -2,8 +2,8 @@ import instance from "@/api/axios";
 import Column from "@/components/Dashboard/Column/Column";
 import Button from "@/components/common/Buttons/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useEffect, useState } from "react";
+import { Z_INDEX } from "@/styles/ZindexStyles";
 import styled from "styled-components";
 
 interface Column {
@@ -16,11 +16,12 @@ interface Column {
 }
 export const MOCK_DATA = {
   dashboardId: 5,
-  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDI5MDQ2NjQsImlzcyI6InNwLXRhc2tpZnkifQ.SLkTowJTOC6iZwTDiO4ZyLwIx6CQWQt4B86YqlMegNc",
+  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1MTU1OTIsImlzcyI6InNwLXRhc2tpZnkifQ.WXLHBnKbOg00qIuVgOb-FSlCuq2dzqRLOP1OUy2VQjc",
 };
 
 const Columns = () => {
   const [columns, setColumns] = useState<Column[]>([]);
+  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     const getColumns = async () => {
@@ -42,12 +43,12 @@ const Columns = () => {
 
   return (
     <Wrapper>
-      {columns.map((column) => {
-        return <Column key={column.id} title={column.title} columnId={column.id} />;
-      })}
+      {columns.map((column) => (
+        <Column key={column.id} title={column.title} columnId={column.id} />
+      ))}
       <ButtonWrapper>
         <Button type="newDashboard" disabled>
-          새로운 컬럼 추가하기
+          <button>새로운 컬럼 추가하기</button>
         </Button>
       </ButtonWrapper>
     </Wrapper>
