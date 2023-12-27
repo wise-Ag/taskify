@@ -34,4 +34,8 @@ const SignInForm = () => {
 
 export default SignInForm;
 
-const StyledForm = styled.form``;
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+`;
