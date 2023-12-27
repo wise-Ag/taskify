@@ -29,6 +29,7 @@ export interface GetInvitationProps {
 }
 
 export interface PutInvitationsProps {
-  invitationId: string;
+  invitationId: number;
   token: string;
+  inviteAccepted: boolean;
 }

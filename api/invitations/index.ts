@@ -19,15 +19,12 @@ export const getInvitations = async ({ title, size, cursorId, token }: GetInvita
   }
 };
 
-export const putInvitations = async ({
-  invitationId = "117",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzUwMTMsImlzcyI6InNwLXRhc2tpZnkifQ.tt5oPAJ6av4leXf3pT-KW4vNarSQZhjcHA62HfXQjio",
-}: PutInvitationsProps): Promise<Invitation | null> => {
+export const putInvitations = async ({ invitationId, token, inviteAccepted }: PutInvitationsProps): Promise<Invitation | null> => {
   try {
     const res = await instance.put(
       ENDPOINTS.INVITATIONS.PUT(invitationId),
       {
-        inviteAccepted: true,
+        inviteAccepted,
       },
       {
         headers: {
