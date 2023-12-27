@@ -9,4 +9,5 @@ export const Z_INDEX = {
   SideMenu_Wrapper: 3,
   SideMenu_Popup: 999,
   Column_ButtonWrapper: 1,
+  TaskModal_StyledKebabModal: 1000,
 };
