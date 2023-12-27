@@ -7,7 +7,7 @@ export interface Comment {
   author: {
     id: number;
     nickname: string;
-    profileImageUrl: boolean;
+    profileImageUrl: string;
   };
 }
 

@@ -1,3 +1,7 @@
+import { Card } from "@/api/cards/cards.types";
+import { getCard } from "@/api/cards/index";
+import { Comment } from "@/api/comments/comments.types";
+import { getComments } from "@/api/comments/index";
 import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
 import Kebab from "@/assets/icons/kebab.svg";
@@ -8,27 +12,75 @@ import Tag from "@/components/common/Chip/Tag";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { formatUpdatedAt } from "@/utils/FormatDate";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { COMMENT_MOCK_DATA, MOCK_DATA } from "./mockData";
 
 const TaskModal: React.FC = () => {
   const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [cardData, setCardData] = useState<Card | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
 
   const handleKebabClick = () => {
     setIsKebabModalOpen(!isKebabModalOpen);
   };
 
+  const handleCloseClick = () => {
+    setIsModalOpen(false);
+  };
+
+  if (!isModalOpen) {
+    return null;
+  }
+
+  useEffect(() => {
+    const loadCardData = async () => {
+      const data = await getCard({
+        cardId: "77",
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
+      });
+      if (data) {
+        setCardData(data);
+      }
+    };
+
+    const loadComments = async () => {
+      try {
+        const commentsData = await getComments({
+          cardId: 4,
+          size: 5,
+          cursorId: undefined,
+          token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
+        });
+
+        if (commentsData) {
+          setComments(commentsData.comments);
+        }
+      } catch (error) {
+        console.error("Error loading comments:", error);
+      }
+    };
+
+    loadCardData();
+    loadComments();
+  }, []);
+
+  if (!cardData || comments.length === 0) {
+    return <div>Loading...</div>; // 데이터 로딩 중 또는 데이터가 없는 경우 처리
+  }
+
   return (
     <Wrapper>
       <TitleWrapper>
-        <Title>{MOCK_DATA.title}</Title>
+        <Title>{cardData.title}</Title>
         <IconContainer>
           <KebabIconContainer>
             <Kebab alt="kebab" width={28} height={28} onClick={handleKebabClick} />
             {isKebabModalOpen && <StyledKebabModal />}
           </KebabIconContainer>
-          <Close alt="close" width={28} height={28} />
+          <Close alt="close" width={28} height={28} onClick={handleCloseClick} />
         </IconContainer>
       </TitleWrapper>
       <ContactDeadLineWrapper>
@@ -36,11 +88,11 @@ const TaskModal: React.FC = () => {
         <DeadLine>마감일</DeadLine>
         <ContactName>
           <ProfileImageWrapper>
-            <img src={MOCK_DATA.assignee.profileImageUrl} alt="Profile Image" />
+            <img src={cardData.assignee.profileImageUrl} alt="Profile Image" />
           </ProfileImageWrapper>
-          {MOCK_DATA.assignee.nickname}
+          {cardData.assignee.nickname}
         </ContactName>
-        <DeadLineDate>{MOCK_DATA.dueDate}</DeadLineDate>
+        <DeadLineDate>{cardData.dueDate}</DeadLineDate>
       </ContactDeadLineWrapper>
       <CategoryWrapper>
         <ColumnName status="To do" />
@@ -48,18 +100,18 @@ const TaskModal: React.FC = () => {
           <Division alt="category-division" width={10} height={20} />
         </DivisionWrapper>
         <Tags>
-          {MOCK_DATA.tags.map((tag, idx) => (
+          {cardData.tags.map((tag, idx) => (
             <Tag key={idx} $bgColor="--Pinkf7" $textColor="--Pinkd5">
               {tag}
             </Tag>
           ))}
         </Tags>
       </CategoryWrapper>
-      <Description>{MOCK_DATA.description}</Description>
-      <Image src={MOCK_DATA.imageUrl} alt="Task Image" />
+      <Description>{cardData.description}</Description>
+      <Image src={cardData.imageUrl} alt="Task Image" />
       <ModalInput label="댓글" $inputType="댓글" />
       <CommentWrapper>
-        {COMMENT_MOCK_DATA.comments.map((comment) => (
+        {comments.map((comment) => (
           <CommentItem key={comment.id}>
             <LeftWrapper>
               <img src={comment.author.profileImageUrl} alt="nickname" />
