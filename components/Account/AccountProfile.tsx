@@ -19,7 +19,6 @@ const AccountProfile = () => {
       <Wrapper>
         <StyledImageUploadInput type="account" />
         <InputWrapper>
-          {/* 이메일, 닉네임 인풋 컴포넌트 사이즈 조정 필요 */}
           <StyledInput label="이메일" value={""} placeholder={"/* 유저 이메일 정보 */"} onChange={handleEmailChange} />
           <StyledInput label="닉네임" value={""} placeholder={"/* 유저 닉네임 정보 */"} onChange={handleNicknameChange} />
         </InputWrapper>
@@ -34,7 +33,6 @@ export default AccountProfile;
 const Container = styled.div`
   max-width: 62rem;
 
-  margin: 2.5rem 2rem;
   padding: 3.2rem 2.8rem;
   border-radius: 8px;
 
@@ -42,10 +40,6 @@ const Container = styled.div`
   flex-direction: column;
 
   background-color: var(--White);
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    margin: 2rem 1.2rem;
-  }
 `;
 
 const Title = styled.p`
@@ -72,6 +66,8 @@ const StyledImageUploadInput = styled(ImageUploadInput)`
 `;
 
 const InputWrapper = styled.div`
+  width: 36.6rem;
+
   display: flex;
   flex-direction: column;
   gap: 2rem;

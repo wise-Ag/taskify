@@ -42,7 +42,7 @@ const Text = styled.p`
   color: var(--Black33);
   font-size: 1.6rem;
   font-weight: 500;
-
+  
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.4rem;
   }

@@ -35,7 +35,9 @@ const SignInForm = () => {
 export default SignInForm;
 
 const StyledForm = styled.form`
+  width: 52rem;
+
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  row-gap: 1.6rem;
 `;
