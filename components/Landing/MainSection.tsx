@@ -54,7 +54,7 @@ const Text1 = styled.span`
 
   text-align: center;
 
-  color: var(--White);
+  color: var(--Black33);
   font-size: 7.6rem;
   font-weight: 700;
 
@@ -86,7 +86,7 @@ const Text2 = styled.span`
 const Description = styled.span`
   margin-bottom: 6.6rem;
 
-  color: var(--Main);
+  color: var(--Black33);
   font-size: 1.8rem;
   font-weight: 400;
 

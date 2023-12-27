@@ -2,7 +2,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 import NoInviteIcon from "@/assets/icons/unsubscribe-envelop.png";
 
-const InvitedDashboard = () => {
+const NoInvitation = () => {
   return (
     <Container>
       <Title>초대받은 대시보드</Title>
@@ -14,13 +14,12 @@ const InvitedDashboard = () => {
   );
 };
 
-export default InvitedDashboard;
+export default NoInvitation;
 
 const Container = styled.div`
   max-width: 102rem;
   height: 40rem;
 
-  margin: 4rem auto auto 4rem;
   padding: 3.2rem 2.8rem;
   border-radius: 8px;
 
