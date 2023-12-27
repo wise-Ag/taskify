@@ -34,6 +34,8 @@ const NavContainer = ({ title, $isDashboard = false, createdByMe = false }: NavC
 export default NavContainer;
 
 const Wrapper = styled.div`
+  height: 7rem;
+
   padding: 2.3rem 8rem 2.3rem 34rem;
   border-bottom: 1px solid var(--Grayd9);
 
@@ -54,6 +56,8 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
+    height: 6rem;
+
     padding: 1.3rem 1.2rem 1.3rem 9.1rem;
   }
 `;
