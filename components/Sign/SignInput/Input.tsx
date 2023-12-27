@@ -54,7 +54,7 @@ const StyledInput = styled.input<{ hasError?: boolean }>`
 
   &:focus {
     outline: none;
-    border-color: var(--Violet);
+    border-color: var(--Main);
   }
 
   &.error {

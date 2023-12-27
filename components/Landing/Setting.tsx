@@ -94,7 +94,7 @@ const TextSection = styled.div`
 
   border-radius: 0px 0px 8px 8px;
 
-  background: var(--Black17);
+  background: var(--Black33);
 
   @media screen and (max-width: 1240px) {
     margin-bottom: 4.8rem;
