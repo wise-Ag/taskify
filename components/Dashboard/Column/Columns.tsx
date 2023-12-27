@@ -15,7 +15,7 @@ interface Column {
   updatedAt: string;
 }
 export const MOCK_DATA = {
-  dashboardId: 5,
+  dashboardId: 217,
   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1MTU1OTIsImlzcyI6InNwLXRhc2tpZnkifQ.WXLHBnKbOg00qIuVgOb-FSlCuq2dzqRLOP1OUy2VQjc",
 };
 
@@ -48,7 +48,7 @@ const Columns = () => {
       ))}
       <ButtonWrapper>
         <Button type="newDashboard" disabled>
-          <button>새로운 컬럼 추가하기</button>
+          새로운 컬럼 추가하기
         </Button>
       </ButtonWrapper>
     </Wrapper>
@@ -59,18 +59,21 @@ export default Columns;
 
 const Wrapper = styled.div`
   height: 100vh;
-  height: 100%;
+  margin-left: 30rem;
 
   display: flex;
 
   background: var(--Grayfa);
 
   @media (max-width: ${DeviceSize.tablet}) {
+    margin-left: 16rem;
+
     flex-direction: column;
     width: auto;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
+    margin-left: 6.7rem;
     flex-direction: column;
   }
 `;

@@ -70,6 +70,7 @@ export default SideMenu;
 const Wrapper = styled.div`
   width: 30rem;
   height: 155rem;
+  /* height: 100vh; */
 
   padding: 2rem 1.2rem;
 
