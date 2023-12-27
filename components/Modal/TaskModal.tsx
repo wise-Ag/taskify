@@ -176,7 +176,6 @@ const IconContainer = styled.div`
 
 const KebabIconContainer = styled.div`
   position: relative;
-  display: flex;
   align-items: center;
   gap: 2.4rem;
 `;
