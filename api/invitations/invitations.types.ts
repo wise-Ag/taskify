@@ -12,17 +12,17 @@ export interface Invitation {
     nickname: string;
   };
   inviteAccepted: boolean;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface GetInvitationsData {
-  Invitations: Invitation[];
+  invitations: Invitation[];
   cursorId: number | null;
 }
 
 export interface GetInvitationProps {
-  title: string;
+  title?: string;
   size?: number;
   cursorId?: number;
   token: string;
