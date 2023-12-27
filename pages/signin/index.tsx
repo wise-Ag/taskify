@@ -1,12 +1,15 @@
-import styled from "styled-components";
 import MainLogo from "@/assets/icons/main-logo.svg";
-import Button from "@/components/common/Buttons/Button";
 import SignInForm from "@/components/Sign/SignForm/SignInForm";
+import Button from "@/components/common/Buttons/Button";
+import Link from "next/link";
+import styled from "styled-components";
 
 const SignInPage = () => {
   return (
     <Container>
-      <MainLogo />
+      <Link href="/">
+        <MainLogo />
+      </Link>
       <Greeting>오늘도 만나서 반가워요!</Greeting>
       <SignInForm />
       <ButtonWrapper>
@@ -14,7 +17,9 @@ const SignInPage = () => {
       </ButtonWrapper>
       <CheckMembership>
         {"회원이 아니신가요? "}
-        <GoToSignUp>회원가입하기</GoToSignUp>
+        <Link href="/signup">
+          <GoToSignUp>회원가입하기</GoToSignUp>
+        </Link>
       </CheckMembership>
     </Container>
   );
@@ -23,12 +28,15 @@ const SignInPage = () => {
 export default SignInPage;
 
 const Container = styled.div`
-  margin-top: 22.3rem;
+  padding-top: 18rem;
+  padding-bottom: 22rem;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  background-color: var(--MainLight);
 `;
 
 const Greeting = styled.p`

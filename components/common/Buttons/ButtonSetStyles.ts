@@ -69,14 +69,12 @@ const TYPES = {
     height: 4rem;
 
     border-radius: 0 4px 4px 0;
-    transform: scaleX(-1);
 
     @media (max-width: ${DeviceSize.mobile}) {
       width: 3.6rem;
       height: 3.6rem;
 
       border-radius: 0 4px 4px 0;
-      transform: scaleX(-1);
     }
   `,
 
@@ -85,6 +83,8 @@ const TYPES = {
     height: 4rem;
 
     border-radius: 0 4px 4px 0;
+
+    transform: scaleX(-1);
 
     @media (max-width: ${DeviceSize.mobile}) {
       width: 3.6rem;

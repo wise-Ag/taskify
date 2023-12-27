@@ -1,19 +1,8 @@
 import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
+import { DeleteMembersProps, GetMembersProps, MemberData } from "@/api/members/members.types";
 
-interface getMembersProps {
-  dashboardId?: number;
-  size?: number;
-  page?: number;
-  token?: string;
-}
-
-export const getMembers = async ({
-  dashboardId = 5,
-  size = 5,
-  page,
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
-}: getMembersProps) => {
+export const getMembers = async ({ dashboardId, size = 5, page, token }: GetMembersProps): Promise<MemberData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.MEMBERS.GET, {
       params: {
@@ -25,28 +14,23 @@ export const getMembers = async ({
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.status === 200) return res.data.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
-
-interface deleteMembersProps {
-  memberId: string;
-  token?: string;
-}
 
 export const deleteMembers = async ({
   memberId = "241",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
-}: deleteMembersProps) => {
+}: DeleteMembersProps) => {
   try {
     const res = await instance.delete(ENDPOINTS.MEMBERS.DELETE(memberId), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    // if (res.status === 200) return res.data.data;
   } catch (error: any) {
     console.error(error.response.data.message);
   }

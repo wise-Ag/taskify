@@ -6,6 +6,8 @@ import styled, { css } from "styled-components";
 interface ButtonProps {
   isDisabled?: boolean;
   $buttonType: keyof typeof TYPES;
+  onClickForward?: () => void;
+  onClickBackward?: () => void;
 }
 
 type ButtonCommonProps = Omit<ButtonProps, "$buttonType">;
@@ -15,15 +17,15 @@ interface ButtonSetProps extends ButtonCommonProps {
   children?: ReactNode;
 }
 
-const ButtonSet = ({ type, isDisabled, children }: ButtonSetProps) => {
+const ButtonSet = ({ type, isDisabled, children, onClickForward, onClickBackward }: ButtonSetProps) => {
   return (
     <ButtonSetContainer type={type}>
       {type === "forwardAndBackward" && (
         <>
-          <Button $buttonType="forward" disabled={isDisabled}>
+          <Button $buttonType="backward" disabled={isDisabled} onClick={onClickBackward}>
             <StyledArrowIcon disabled={isDisabled} />
           </Button>
-          <Button $buttonType="backward" disabled={isDisabled}>
+          <Button $buttonType="forward" disabled={isDisabled} onClick={onClickForward}>
             <StyledArrowIcon disabled={isDisabled} />
           </Button>
         </>
@@ -76,7 +78,9 @@ const Button = styled.button<ButtonProps>`
   color: var(--Black33);
   font-weight: 500;
 
-  ${({ $buttonType }) => TYPES[$buttonType]}
+  ${({ $buttonType }) => TYPES[$buttonType]};
+
+  ${(props) => props.disabled && "cursor: default"};
 `;
 
 const StyledArrowIcon = styled(ArrowIcon)`

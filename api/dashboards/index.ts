@@ -1,59 +1,53 @@
 import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
-
-interface deleteDashboardProps {
-  dashboardId?: string;
-  token?: string;
-}
+import {
+  Dashboard,
+  GetDashboardListData,
+  DeleteDashboardProps,
+  DeleteDashboardInvitationsProps,
+  GetDashboardProps,
+  GetDashboardInvitationsProps,
+  GetDashboardListProps,
+  PutDashboardProps,
+  PostDashboardInvitationsProps,
+} from "@/api/dashboards/dashboards.types";
+import { Invitation } from "@/api/invitations/invitations.types";
 
 export const deleteDashboard = async ({
   dashboardId = "193",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: deleteDashboardProps) => {
+}: DeleteDashboardProps) => {
   try {
     const res = await instance.delete(ENDPOINTS.DASHBOARDS.DELETE(dashboardId), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.status === 200) return res.data.data;
   } catch (error: any) {
     console.error(error.response.data.message);
   }
 };
 
-interface deleteDashboardInvitationsProps {
-  dashboardId: string;
-  invitationId: string;
-  token?: string;
-}
-
 export const deleteDashboardInvitations = async ({
   dashboardId = "198",
   invitationId = "38",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzQ3MzEsImlzcyI6InNwLXRhc2tpZnkifQ.S8Lvf7DmFuMC3gMvNt1eJylk5oW0hFxHhbXAcQTDP2E",
-}: deleteDashboardInvitationsProps) => {
+}: DeleteDashboardInvitationsProps) => {
   try {
     const res = await instance.delete(ENDPOINTS.DASHBOARDS.DELETE_INVITATION(dashboardId, invitationId), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.status === 200) return res.data.data;
   } catch (error: any) {
     console.error(error.response.data.message);
   }
 };
 
-interface getDashboardProps {
-  dashboardId: string;
-  token?: string;
-}
-
 export const getDashboard = async ({
   dashboardId = "193",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: getDashboardProps) => {
+}: GetDashboardProps): Promise<Dashboard | null> => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET(dashboardId), {
       params: {
@@ -63,25 +57,19 @@ export const getDashboard = async ({
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.status === 200) return res.data.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
-
-interface getDashboardInvitationsProps {
-  dashboardId: string;
-  page?: number;
-  size?: number;
-  token?: string;
-}
 
 export const getDashboardInvitations = async ({
   dashboardId = "198",
   size = 5,
   page,
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzQ1NTAsImlzcyI6InNwLXRhc2tpZnkifQ.DEJkd2VERk0YaMWoRJzQ3cEdw8I7v_P3fpyqAaGeKK8",
-}: getDashboardInvitationsProps) => {
+}: GetDashboardInvitationsProps) => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_INVITATION("198"), {
       params: {
@@ -93,29 +81,17 @@ export const getDashboardInvitations = async ({
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.status === 200) return res.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
   }
 };
 
-interface getDashboardListProps {
-  navigationMethod: string;
-  cursorId?: number;
-  page?: number;
-  size?: number;
-  token?: string;
-}
-
-export const getDashboardList = async ({
-  size = 20,
-  cursorId,
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: getDashboardListProps) => {
+export const getDashboardList = async ({ navigationMethod, size = 5, cursorId, token }: GetDashboardListProps) => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_LIST, {
       params: {
-        navigationMethod: "infiniteScroll",
+        navigationMethod,
         size,
         cursorId,
       },
@@ -123,9 +99,10 @@ export const getDashboardList = async ({
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.status === 200) return res.data.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
 
@@ -133,7 +110,7 @@ export const postDashboard = async ({
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
 }: {
   token: string;
-}) => {
+}): Promise<Dashboard | null> => {
   try {
     const res = await instance.post(
       ENDPOINTS.DASHBOARDS.POST,
@@ -147,21 +124,17 @@ export const postDashboard = async ({
         },
       },
     );
-    if (res.status === 200) return res.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
-
-interface postDashboardInvitationsProps {
-  dashboardId: string;
-  token?: string;
-}
 
 export const postDashboardInvitations = async ({
   dashboardId = "198",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: postDashboardInvitationsProps) => {
+}: PostDashboardInvitationsProps): Promise<Invitation | null> => {
   try {
     const res = await instance.post(
       ENDPOINTS.DASHBOARDS.POST_INVITATION(dashboardId),
@@ -174,20 +147,17 @@ export const postDashboardInvitations = async ({
         },
       },
     );
-    if (res.status === 200) return res.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
 
-interface putDashboardProps {
-  dashboardId: string;
-  token?: string;
-}
 export const putDashboard = async ({
   dashboardId = "193",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: putDashboardProps) => {
+}: PutDashboardProps): Promise<Dashboard | null> => {
   try {
     const res = await instance.put(
       ENDPOINTS.DASHBOARDS.PUT(dashboardId),
@@ -201,8 +171,9 @@ export const putDashboard = async ({
         },
       },
     );
-    if (res.status === 200) return res.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };

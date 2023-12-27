@@ -23,8 +23,6 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(({ label, value, 
 export default PasswordInput;
 
 const InputContainer = styled.div`
-  width: 52rem;
-
   position: relative;
 
   display: flex;

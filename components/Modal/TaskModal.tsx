@@ -1,101 +1,34 @@
-import Kebab from "@/assets/icons/kebab.svg";
 import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
+import Kebab from "@/assets/icons/kebab.svg";
+import KebabModal from "@/components/Modal/KebabModal";
+import ModalInput from "@/components/Modal/ModalInput/ModalInput";
+import ColumnName from "@/components/common/Chip/ColumnName";
+import Tag from "@/components/common/Chip/Tag";
 import { DeviceSize } from "@/styles/DeviceSize";
-import styled from "styled-components";
-import ModalInput from "@/components/ModalInput/ModalInput";
-import Tag from "@/components/Chip/Tag";
-import ColumnName from "@/components/Chip/ColumnName";
+import { Z_INDEX } from "@/styles/ZindexStyles";
 import { formatUpdatedAt } from "@/utils/FormatDate";
+import React, { useState } from "react";
+import styled from "styled-components";
+import { COMMENT_MOCK_DATA, MOCK_DATA } from "./mockData";
 
-interface Comment {
-  id: number;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  cardId: number;
-  author: {
-    profileImageUrl: string;
-    nickname: string;
-    id: number;
+const TaskModal: React.FC = () => {
+  const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
+
+  const handleKebabClick = () => {
+    setIsKebabModalOpen(!isKebabModalOpen);
   };
-}
 
-interface CommentData {
-  comments: Comment[];
-  cursorId: number;
-}
-
-const MOCK_DATA = {
-  id: 3,
-  title: "오늘할일정하기",
-  description:
-    "이 편지는 영국에서 최초로 시작되어 일년에 한바퀴를 돌면서 받는 사람에게 행운을 주었고 지금은 당신에게로 옮겨진 이 편지는 4일 안에 당신 곁을 떠나야 합니다. 이 편지를 포함해서 7통을 행운이 필요한 사람에게 보내 주셔야 합니다. 복사를 해도 좋습니다. 혹 미신이라 하실지 모르지만 사실입니다. WCH이라는 사람은 어쩌구저쩌구",
-  tags: ["일상", "필수", "프론트", "상"],
-  dueDate: "2023.12.20. 17:00",
-  assignee: {
-    profileImageUrl:
-      "https://mblogthumb-phinf.pstatic.net/MjAxODEwMTFfMTAy/MDAxNTM5MjI1OTcxNDc0.5Ww2lzCMKDp4TiuZ-V1sPYWJW2xg3rKPylziQ59iXWEg.GreYoty0qMT_4n_UkUkPGVVH8mJjv0tGl_YLI9eLpvYg.PNG.pola0216/%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD%EF%BF%BD_22.png?type=w800",
-    nickname: "멋쟁이토마토",
-    id: 1,
-  },
-  imageUrl: "https://i.pinimg.com/564x/46/cb/8b/46cb8b3ea03237da9c847baaf9e0ec43.jpg",
-  teamId: "1-08",
-  columnId: 3,
-  createdAt: "2023-12-23T12:37:14.500Z",
-  updatedAt: "2023-12-23T12:37:14.500Z",
-};
-
-const COMMENT_MOCK_DATA: CommentData = {
-  cursorId: 123,
-  comments: [
-    {
-      id: 1,
-      content: "첫 번째 댓글",
-      createdAt: "2023-12-25T10:30:00Z",
-      updatedAt: "2023-12-25T10:35:00Z",
-      cardId: 123.45,
-      author: {
-        profileImageUrl: "https://t1.daumcdn.net/cfile/tistory/99867C335C780BEE26",
-        nickname: "User1",
-        id: 101,
-      },
-    },
-    {
-      id: 2,
-      content: "두 번째 댓글",
-      createdAt: "2023-12-25T11:15:00Z",
-      updatedAt: "2023-12-25T11:20:00Z",
-      cardId: 123.45,
-      author: {
-        profileImageUrl: "https://i.pinimg.com/236x/f2/cb/db/f2cbdb972f8d68b0cd66dac681af6e9f.jpg",
-        nickname: "User2",
-        id: 102,
-      },
-    },
-    {
-      id: 3,
-      content: "세 번째 댓글 으아아아아아아아아아",
-      createdAt: "2023-12-25T12:00:00Z",
-      updatedAt: "2023-12-25T12:05:00Z",
-      cardId: 123.45,
-      author: {
-        profileImageUrl: "https://image.cine21.com/resize/cine21/still/2005/1027/M0020038_wallace_gromit_24[S800,800].jpg",
-        nickname: "User3",
-        id: 103,
-      },
-    },
-  ],
-};
-
-const TaskModal = () => {
   return (
     <Wrapper>
       <TitleWrapper>
         <Title>{MOCK_DATA.title}</Title>
         <IconContainer>
-          <Kebab alt="kebab" width={28} height={28} />
-          <Close alt="kebab" width={28} height={28} />
+          <KebabIconContainer>
+            <Kebab alt="kebab" width={28} height={28} onClick={handleKebabClick} />
+            {isKebabModalOpen && <StyledKebabModal />}
+          </KebabIconContainer>
+          <Close alt="close" width={28} height={28} />
         </IconContainer>
       </TitleWrapper>
       <ContactDeadLineWrapper>
@@ -115,13 +48,11 @@ const TaskModal = () => {
           <Division alt="category-division" width={10} height={20} />
         </DivisionWrapper>
         <Tags>
-          {MOCK_DATA.tags.map((tag, idx) => {
-            return (
-              <Tag key={idx} $bgColor="--Pinkf7" $textColor="--Pinkd5">
-                {tag}
-              </Tag>
-            );
-          })}
+          {MOCK_DATA.tags.map((tag, idx) => (
+            <Tag key={idx} $bgColor="--Pinkf7" $textColor="--Pinkd5">
+              {tag}
+            </Tag>
+          ))}
         </Tags>
       </CategoryWrapper>
       <Description>{MOCK_DATA.description}</Description>
@@ -193,6 +124,20 @@ const IconContainer = styled.div`
   display: flex;
 
   gap: 2.4rem;
+`;
+
+const KebabIconContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+`;
+
+const StyledKebabModal = styled(KebabModal)`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: ${Z_INDEX.TaskModal_StyledKebabModal};
 `;
 
 const ContactDeadLineWrapper = styled.div`

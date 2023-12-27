@@ -1,15 +1,11 @@
 import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
-
-interface deleteCommentsProps {
-  commentId?: string;
-  token?: string;
-}
+import { DeleteCommentsProps, GetCommentsData, GetCommentsProps, PutCommentsProps } from "@/api/comments/comments.types";
 
 export const deleteComments = async ({
   commentId = "98",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: deleteCommentsProps) => {
+}: DeleteCommentsProps) => {
   try {
     const res = await instance.delete(ENDPOINTS.COMMENT.DELETE(commentId), {
       headers: {
@@ -21,19 +17,12 @@ export const deleteComments = async ({
   }
 };
 
-interface getCommentsProps {
-  cardId?: number;
-  size?: number;
-  cursorId?: number;
-  token?: string;
-}
-
 export const getComments = async ({
   cardId = 4,
   size = 5,
   cursorId,
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: getCommentsProps) => {
+}: GetCommentsProps): Promise<GetCommentsData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.COMMENT.GET, {
       params: {
@@ -45,9 +34,10 @@ export const getComments = async ({
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.status === 200) return res.data.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
 
@@ -55,7 +45,7 @@ export const postComments = async ({
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
 }: {
   token: string;
-}) => {
+}): Promise<Comment | null> => {
   try {
     const res = await instance.post(
       ENDPOINTS.COMMENT.POST,
@@ -71,21 +61,17 @@ export const postComments = async ({
         },
       },
     );
-    if (res.status === 200) return res.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
-
-interface putCommentsProps {
-  commentId: string;
-  token: string;
-}
 
 export const putComments = async ({
   commentId = "98",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: putCommentsProps) => {
+}: PutCommentsProps): Promise<Comment | null> => {
   try {
     const res = await instance.put(
       ENDPOINTS.COMMENT.PUT(commentId),
@@ -98,8 +84,9 @@ export const putComments = async ({
         },
       },
     );
-    if (res.status === 200) return res.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };

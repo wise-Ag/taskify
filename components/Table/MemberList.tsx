@@ -2,8 +2,10 @@ import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import Button from "@/components/common/Buttons/Button";
+import { useEffect, useState } from "react";
+import { getMembers } from "@/api/members/getMembers";
 
-interface Member {
+type Member = {
   id: number;
   userId: number;
   email: string;
@@ -12,28 +14,58 @@ interface Member {
   createdAt: string;
   updatedAt: string;
   isOwner: boolean;
-}
+};
 
-interface MembersListProps {
-  members: Member[];
-  totalCount: number;
-  currentPage: number;
-}
+// interface MembersListProps {
+//   members: Member[];
+//   totalCount: number;
+//   currentPage: number;
+// }
 
-const MembersList = ({ members, totalCount, currentPage }: MembersListProps) => {
+const MembersList = () => {
+  const [members, setMembers] = useState<Member[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  let totalPageNum = Math.floor(totalCount / 5) + 1; // 5개만 보여준다고 가정
+
+  const fetchData = async () => {
+    const { members, totalCount } = await getMembers({
+      dashboardId: 217,
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
+    });
+
+    setMembers(members);
+    setTotalCount(totalCount);
+  };
+
+  const handlePageChange = (increment: number) => {
+    setCurrentPage((prevPage) => prevPage + increment);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <Container>
       <Header>
         <Title>구성원</Title>
         <PageInfo>
           <PageText>
-            {totalCount} 페이지 중 {currentPage}
+            {totalPageNum} 페이지 중 {currentPage}
           </PageText>
-          <ButtonSet type="forwardAndBackward" isDisabled={true}></ButtonSet>
+          <ButtonSet
+            type="forwardAndBackward"
+            /*Set isDisabled to true if totalPageNum is 1 */
+            isDisabled={totalPageNum === 1}
+            onClickForward={() => handlePageChange(1)}
+            onClickBackward={() => handlePageChange(-1)}
+          />
         </PageInfo>
       </Header>
       <NameList>이름</NameList>
-      {members.map((member) => (
+      {members.map((member: Member) => (
         <MemberItem key={member.id}>
           <MemberInfo>
             <Profile src={member.profileImageUrl} alt={member.nickname} />
@@ -51,7 +83,11 @@ export default MembersList;
 const Container = styled.div`
   width: 62rem;
 
-  padding: 2.5rem;
+  padding: 2.6rem 2.8rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   border-radius: 8px;
   background: var(--White);
@@ -63,11 +99,13 @@ const Container = styled.div`
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 28.4rem;
 
-    padding: 2rem;
+    padding: 2.2rem 2rem;
   }
 `;
 
 const Header = styled.div`
+  width: 100%;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -103,6 +141,8 @@ const PageText = styled.h3`
 `;
 
 const NameList = styled.h3`
+  width: 100%;
+
   margin-top: 3.2rem;
   margin-bottom: 0.8rem;
 
@@ -116,7 +156,9 @@ const NameList = styled.h3`
 `;
 
 const MemberItem = styled.div`
-  padding: 1.6rem 0;
+  width: 62rem;
+
+  padding: 1.6rem 2.8rem;
   border-bottom: 1px solid var(--Grayee);
 
   display: flex;
@@ -124,11 +166,18 @@ const MemberItem = styled.div`
   align-items: center;
 
   &:last-child {
+    padding-bottom: 0;
     border-bottom: 0;
   }
 
+  @media (max-width: ${DeviceSize.tablet}) {
+    width: 54.4rem;
+  }
+
   @media screen and (max-width: ${DeviceSize.mobile}) {
-    padding: 1.2rem 0;
+    width: 28.4rem;
+
+    padding: 1.2rem 2rem;
   }
 `;
 
