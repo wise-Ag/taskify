@@ -29,7 +29,7 @@ export interface GetCardProps {
 
 export interface GetCardListProps {
   size?: number;
-  cursorId?: number;
+  cursorId: number | null;
   columnId: number;
   token?: string;
 }
