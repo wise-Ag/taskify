@@ -1,10 +1,9 @@
-import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import Dropdown from "@/components/Modal/ModalInput/StateDropdown";
 import TagInput from "@/components/Modal/ModalInput/TagInput";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import TaskModal from "./TaskModal";
 
 interface CategoryProps {
   type: "create" | "edit";
