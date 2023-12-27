@@ -1,21 +1,23 @@
 import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
+import { User } from "@/api/auth/auth.types";
 
-export const postLogin = async () => {
+export const postLogin = async (): Promise<User | null> => {
   try {
     const res = await instance.post(ENDPOINTS.AUTH.POST, {
       email: "jieun@codeit.com",
-      password: "123asdf",
+      password: "asdf1234",
     });
 
-    if (res.status === 200) return res.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
 
 export const putPassword = async ({
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
+  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM2NTI4ODEsImlzcyI6InNwLXRhc2tpZnkifQ.kD4JWHt6x3p9NctoNJKgPN7DZYnyMWGWlL9iSvMM6VA",
 }: {
   token: string;
 }) => {
@@ -33,7 +35,7 @@ export const putPassword = async ({
       },
     );
 
-    if (res.status === 200) return res.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
   }

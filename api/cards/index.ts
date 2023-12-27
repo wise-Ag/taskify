@@ -1,40 +1,30 @@
 import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
-
-interface getCardProps {
-  cardId?: string;
-  token?: string;
-}
+import { GetCardProps, GetCardListProps, PutCardProps, DeleteCardProps, Card, GetCardListData } from "@/api/cards/cards.types";
 
 export const getCard = async ({
   cardId = "77",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: getCardProps) => {
+}: GetCardProps): Promise<Card | null> => {
   try {
     const res = await instance.get(ENDPOINTS.CARDS.GET_CARD(cardId), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.status === 200) return res.data.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
-
-interface getCardListProps {
-  size?: number;
-  cursorId?: number;
-  columnId: number;
-  token?: string;
-}
 
 export const getCardList = async ({
   size = 5,
   cursorId = 5,
   columnId = 16,
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: getCardListProps) => {
+}: GetCardListProps): Promise<GetCardListData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.CARDS.GET_LIST, {
       params: {
@@ -46,9 +36,10 @@ export const getCardList = async ({
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.status === 200) return res.data.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
 
@@ -56,7 +47,7 @@ export const postCards = async ({
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
 }: {
   token: string;
-}) => {
+}): Promise<Card | null> => {
   try {
     const res = await instance.post(
       ENDPOINTS.CARDS.POST,
@@ -75,24 +66,22 @@ export const postCards = async ({
         },
       },
     );
-    if (res.status === 200) return res.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
 
-interface putCardProps {
-  cardId: string;
-  token: string;
-}
 export const putCard = async ({
   cardId = "77",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: putCardProps) => {
+}: PutCardProps): Promise<Card | null> => {
   try {
     const res = await instance.put(
       ENDPOINTS.CARDS.PUT(cardId),
       {
+        columnId: 623,
         assigneeUserId: 13,
         title: "not happy",
         description: "TEST 다시 해보기",
@@ -105,28 +94,23 @@ export const putCard = async ({
         },
       },
     );
-    if (res.status === 200) return res.data;
+    return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
-
-interface deleteCardProps {
-  cardId?: string;
-  token?: string;
-}
 
 export const deleteCard = async ({
   cardId = "77",
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: deleteCardProps) => {
+}: DeleteCardProps) => {
   try {
     const res = await instance.delete(ENDPOINTS.CARDS.DELETE(cardId), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res.status === 200) return res.data.data;
   } catch (error: any) {
     console.log(error.response.data.message);
   }
