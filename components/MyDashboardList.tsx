@@ -48,7 +48,8 @@ const MyDashboardList = () => {
           dashboards.map((v) => {
             return (
               <Link key={v.id} href={`/dashboards/${v.id}`}>
-                <Button type="dashboardList" title={v.title} color={v.color} id={v.id} createdByMe={v.createdByMe} />;{/* </div> */}
+                <Button type="dashboardList" title={v.title} color={v.color} id={v.id} createdByMe={v.createdByMe} />
+                {/* </div> */}
               </Link>
             );
           })}

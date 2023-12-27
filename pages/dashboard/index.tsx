@@ -2,23 +2,25 @@ import { styled } from "styled-components";
 import Columns from "@/components/Dashboard/Column/Columns";
 
 import SideMenu from "@/components/common/SideMenu/SideMenu";
-import DashboardNav from "@/components/common/Nav/DashboradNav";
+import DashboardNav from "@/components/common/Nav/DashboardNav";
 
 const DashBoardPage = () => {
   return (
-    <div>
+    <>
       <DashboardNav />
-      <Columns />
-      {/* <SideMenuWrapper> */}
       <SideMenu />
-      {/* </SideMenuWrapper> */}
-    </div>
+      <ColumnWrapper>
+        <Columns />
+      </ColumnWrapper>
+    </>
   );
 };
 
 export default DashBoardPage;
 
-const SideMenuWrapper = styled.div`
-  /* position: fixed; */
-  top: 0;
+const ColumnWrapper = styled.div`
+  width: 100%;
+  overflow: scroll;
+
+  background-color: var(--Grayfa);
 `;

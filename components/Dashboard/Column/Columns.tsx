@@ -63,7 +63,7 @@ const Wrapper = styled.div`
 
   display: flex;
 
-  background: var(--Grayfa);
+  /* background: var(--Grayfa); */
 
   @media (max-width: ${DeviceSize.tablet}) {
     margin-left: 16rem;
