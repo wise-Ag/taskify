@@ -13,7 +13,7 @@ const ColumnHeader = ({ title, count }: ColumnHeaderProps) => {
   return (
     <Wrapper>
       <Content>
-        <CircleIcon />
+        <StyledCircleIcon alt="circle" width={6} height={6} />
         <Title>{title}</Title>
         <CounterCard number={count} />
       </Content>
@@ -40,4 +40,10 @@ const Content = styled.div`
 const Title = styled.div`
   font-size: 1.8rem;
   font-weight: 700;
+`;
+
+const StyledCircleIcon = styled(CircleIcon)`
+  circle {
+    fill: var(--Main);
+  }
 `;
