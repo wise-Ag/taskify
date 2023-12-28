@@ -20,8 +20,8 @@ export interface Invitation {
 }
 
 export interface GetInvitationsData {
-  invitations: Invitation[];
   cursorId: number | null;
+  invitations: Invitation[];
 }
 
 export interface GetInvitationProps {

@@ -5,15 +5,15 @@ export interface Comment {
   updatedAt: string;
   cardId: number;
   author: {
-    id: number;
-    nickname: string;
     profileImageUrl: boolean;
+    nickname: string;
+    id: number;
   };
 }
 
 export interface GetCommentsData {
-  comments: Comment[];
   curdorId: number | null;
+  comments: Comment[];
 }
 
 export interface DeleteCommentsProps {

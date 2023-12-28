@@ -7,6 +7,8 @@ export const getInvitations = async ({ title, size, cursorId, token }: GetInvita
     const res = await instance.get(ENDPOINTS.INVITATIONS.GET, {
       params: {
         size,
+        cursorId,
+        title,
       },
       headers: {
         Authorization: `Bearer ${token}`,

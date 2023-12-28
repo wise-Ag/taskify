@@ -11,14 +11,14 @@ export interface Dashboard {
 }
 
 export interface GetDashboardListData {
-  dashboards: Dashboard[];
-  totalCount: number;
   cursorId: number | null;
+  totalCount: number;
+  dashboards: Dashboard[];
 }
 
 export interface GetDashboardInvitationsData {
-  invitations: Invitation[];
   totalCount: number;
+  invitations: Invitation[];
 }
 
 export interface DeleteDashboardProps {

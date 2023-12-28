@@ -1,7 +1,7 @@
 import LogoButton from "@/components/common/Buttons/LogoButton";
+import Profile from "@/components/common/Nav/Profile";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import Profile from "./Profile";
 import { profileData } from "./mockData";
 
 const SettingNav = () => {
