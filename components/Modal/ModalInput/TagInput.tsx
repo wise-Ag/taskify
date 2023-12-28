@@ -1,7 +1,7 @@
-import { useState, ChangeEvent } from "react";
-import styled from "styled-components";
-import { DeviceSize } from "@/styles/DeviceSize";
 import Tag from "@/components/common/Chip/Tag";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { ChangeEvent, useState } from "react";
+import styled from "styled-components";
 
 interface TagsProps {
   handleOnClick: (event: React.MouseEvent) => void;
@@ -85,6 +85,8 @@ const InputArea = styled.div`
   position: relative;
   display: flex;
   align-items: flex-start;
+
+  background-color: var(--White);
 
   @media (max-width: ${DeviceSize.mobile}) {
     height: 4.8rem;
