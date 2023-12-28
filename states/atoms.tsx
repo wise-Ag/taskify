@@ -6,4 +6,4 @@ export const selectedColorAtom = atom("");
 export const activeDropdownAtom = atom<string | null>(null);
 
 // 탭 변화를 위한 아톰
-export const selectedTabAtom = atom("profile");
+// export const selectedTabAtom = atom("profile");

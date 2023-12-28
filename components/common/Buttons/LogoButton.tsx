@@ -29,9 +29,6 @@ const StyledLink = styled(Link)`
 `;
 
 const StyledLargeLogo = styled(LargeLogo)`
-  width: 12.1rem;
-  height: 3.9rem;
-
   @media (max-width: ${DeviceSize.mobile}) {
     display: none;
   }
@@ -42,8 +39,5 @@ const StyledSmallLogo = styled(SmallLogo)`
 
   @media (max-width: ${DeviceSize.mobile}) {
     display: inline;
-
-    width: 2.4rem;
-    height: 2.7rem;
   }
 `;

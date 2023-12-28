@@ -27,6 +27,7 @@ export const ERROR_MESSAGE = {
   nicknameInvalid: "10자 이하로 작성해 주세요.",
 
   currentPasswordRequired: "현재 비밀번호를 입력해 주세요.",
+  currentPasswordDifferent: "현재 비밀번호와 다릅니다. 다시 입력해주세요.",
   newPasswordRequired: "새 비밀번호를 입력해 주세요.",
   confirmNewPasswordRequired: "새 비밀번호 확인을 입력해 주세요.",
 };

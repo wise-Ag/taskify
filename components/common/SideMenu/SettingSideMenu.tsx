@@ -1,14 +1,17 @@
 import LogoButton from "@/components/common/Buttons/LogoButton";
-import { selectedTabAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
 import Link from "next/link";
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
-const SettingSideMenu = () => {
-  const [selectedTab, setSelectedTab] = useAtom(selectedTabAtom);
+interface SettingSideMenuProps {
+  selectedTab: string;
+  setSelectedTab: Dispatch<SetStateAction<string>>;
+}
 
+const SettingSideMenu = ({ selectedTab, setSelectedTab }: SettingSideMenuProps) => {
   return (
     <Wrapper>
       <LogoButtonContainer>

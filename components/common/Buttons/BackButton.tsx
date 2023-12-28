@@ -15,6 +15,8 @@ const BackButton = ({ href }: { href: string }) => {
 export default BackButton;
 
 const Wrapper = styled(Link)`
+  width: 8rem;
+
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -42,7 +44,7 @@ const Text = styled.p`
   color: var(--Black33);
   font-size: 1.6rem;
   font-weight: 500;
-  
+
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.4rem;
   }

@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <GlobalStyles />
       <Head>
-        <title>Taskify</title>
+        <title>WITH PLAN</title>
         <link rel="icon" href="/logo.svg" />
       </Head>
       <Component {...pageProps} />

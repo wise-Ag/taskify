@@ -28,7 +28,7 @@ const SignUpForm = () => {
         onSubmit={handleSubmit(async (data) => {
           const res = await postUsers({ email: data.email, password: data.password, nickname: data.nickname });
           if (res !== null) {
-            openModalFunc();
+            return openModalFunc();
           }
           setError("email", { message: ERROR_MESSAGE.emailDuplicate });
         })}
@@ -84,7 +84,7 @@ const SignUpForm = () => {
       </StyledForm>
       {isModalOpen && (
         <ModalWrapper>
-          <AlertModal type="complete" onClick={handleCloseModal} />
+          <AlertModal type="signupComplete" onClick={handleCloseModal} />
         </ModalWrapper>
       )}
     </>

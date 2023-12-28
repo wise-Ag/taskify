@@ -57,11 +57,7 @@ export const postUsers = async ({ email, nickname, password }: PostUsersProps): 
   }
 };
 
-export const putUsers = async ({
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
-}: {
-  token: string;
-}): Promise<UserData | null> => {
+export const putUsers = async ({ token }: { token: string | null }): Promise<UserData | null> => {
   try {
     const res = await instance.put(
       ENDPOINTS.USERS.PUT,
