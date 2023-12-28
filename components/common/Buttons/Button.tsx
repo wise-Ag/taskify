@@ -5,7 +5,6 @@ import AddColumn from "@/components/common/Chip/AddColumn";
 import TYPES from "@/components/common/Buttons/ButtonStyles";
 import { ReactNode } from "react";
 import styled from "styled-components";
-import dashboardData from "./mockData";
 
 interface ButtonContentProps {
   type: keyof typeof TYPES;

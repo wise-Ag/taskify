@@ -1,51 +1,39 @@
-import styled from "styled-components";
-import { DeviceSize } from "@/styles/DeviceSize";
-import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { getMembers } from "@/api/members";
+import { Member } from "@/api/members/members.types";
 import Button from "@/components/common/Buttons/Button";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { usePagination } from "@/hooks/usePagination";
+import { DeviceSize } from "@/styles/DeviceSize";
 import { useEffect, useState } from "react";
-import { getMembers } from "@/api/members/getMembers";
+import styled from "styled-components";
 
-type Member = {
-  id: number;
-  userId: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string;
-  createdAt: string;
-  updatedAt: string;
-  isOwner: boolean;
-};
-
-// interface MembersListProps {
-//   members: Member[];
-//   totalCount: number;
-//   currentPage: number;
-// }
+const PAGE_SIZE = 4; // 임의로 추가
 
 const MembersList = () => {
   const [members, setMembers] = useState<Member[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  let totalPageNum = Math.floor(totalCount / 5) + 1; // 5개만 보여준다고 가정
+  const [totalPageNum, setTotalPageNum] = useState(1);
+  const { handlePageChange, currentPage } = usePagination(totalPageNum);
 
   const fetchData = async () => {
-    const { members, totalCount } = await getMembers({
+    const result = await getMembers({
       dashboardId: 217,
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM2NjUxNTAsImlzcyI6InNwLXRhc2tpZnkifQ.4XSplk_xKaSQ-CTt2m99I70IKie4Mb2G5a-UmD_bPmk",
+      size: PAGE_SIZE,
+      page: currentPage,
     });
 
-    setMembers(members);
-    setTotalCount(totalCount);
-  };
-
-  const handlePageChange = (increment: number) => {
-    setCurrentPage((prevPage) => prevPage + increment);
+    if (result !== null) {
+      const { members, totalCount } = result;
+      setMembers(members);
+      setTotalCount(totalCount);
+      setTotalPageNum(Math.ceil(totalCount / PAGE_SIZE)); // 페이지 수 업데이트
+    }
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   return (
     <Container>
@@ -57,15 +45,15 @@ const MembersList = () => {
           </PageText>
           <ButtonSet
             type="forwardAndBackward"
-            /*Set isDisabled to true if totalPageNum is 1 */
+            // 페이지수가 1이면 button disabled로 설정
             isDisabled={totalPageNum === 1}
-            onClickForward={() => handlePageChange(1)}
-            onClickBackward={() => handlePageChange(-1)}
+            onClickRight={() => handlePageChange(1)}
+            onClickLeft={() => handlePageChange(-1)}
           />
         </PageInfo>
       </Header>
-      <NameList>이름</NameList>
-      {members.map((member: Member) => (
+      <NameList>{totalCount === 0 ? "멤버가 없습니다" : "이름"}</NameList>
+      {members.map((member) => (
         <MemberItem key={member.id}>
           <MemberInfo>
             <Profile src={member.profileImageUrl} alt={member.nickname} />

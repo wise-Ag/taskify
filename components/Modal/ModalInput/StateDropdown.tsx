@@ -2,7 +2,7 @@ import DropdownButton from "@/assets/icons/arrow-drop-down.svg";
 import ColumnName from "@/components/common/Chip/ColumnName";
 import { useState } from "react";
 import styled from "styled-components";
-import DropdownList from "./DropdownList";
+import DropdownList from "@/components/Modal/ModalInput/DropdownList";
 
 const Dropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
