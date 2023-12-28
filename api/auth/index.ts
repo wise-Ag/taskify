@@ -1,12 +1,12 @@
 import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
-import { User } from "@/api/auth/auth.types";
+import { User, PostLoginProps } from "@/api/auth/auth.types";
 
-export const postLogin = async (): Promise<User | null> => {
+export const postLogin = async ({ email, password }: PostLoginProps): Promise<User | null> => {
   try {
     const res = await instance.post(ENDPOINTS.AUTH.POST, {
-      email: "jieun@codeit.com",
-      password: "asdf1234",
+      email,
+      password,
     });
 
     return res.data;

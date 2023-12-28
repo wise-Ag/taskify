@@ -11,10 +11,14 @@
     "prettier": "prettier --write /**/*.{ts,tsx}"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/x-date-pickers": "^6.18.6",
     "@svgr/webpack": "^8.1.0",
     "@types/styled-components": "^5.1.34",
     "axios": "^1.6.2",
     "babel-plugin-styled-components": "^2.1.4",
+    "dayjs": "^1.11.10",
     "jotai": "^2.6.0",
     "next": "14.0.4",
     "react": "^18",
