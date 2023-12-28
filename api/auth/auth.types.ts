@@ -9,3 +9,8 @@ export interface User {
   };
   accessToken: string;
 }
+
+export interface PostLoginProps {
+  email: string;
+  password: string;
+}
