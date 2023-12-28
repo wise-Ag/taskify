@@ -4,6 +4,7 @@ import {
   Dashboard,
   DeleteDashboardInvitationsProps,
   DeleteDashboardProps,
+  GetDashboardInvitationsData,
   GetDashboardInvitationsProps,
   GetDashboardListData,
   GetDashboardListProps,
@@ -69,7 +70,7 @@ export const getDashboardInvitations = async ({
   size = 5,
   page,
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzQ1NTAsImlzcyI6InNwLXRhc2tpZnkifQ.DEJkd2VERk0YaMWoRJzQ3cEdw8I7v_P3fpyqAaGeKK8",
-}: GetDashboardInvitationsProps): Promise<Invitation | null> => {
+}: GetDashboardInvitationsProps): Promise<GetDashboardInvitationsData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_INVITATION(dashboardId), {
       params: {
