@@ -5,11 +5,8 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import "react-toastify/dist/ReactToastify.css";
 
 function ToastModal() {
-  const openToast = () => toast("변경이 완료되었습니다.");
-
   return (
     <div>
-      <button onClick={openToast}>테스트버튼</button>
       <StyledContainer position="bottom-center" limit={1} closeButton={true} autoClose={4000} hideProgressBar />
     </div>
   );

@@ -5,6 +5,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { useEffect, useState } from "react";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 
 interface Column {
   createdAt: string;
