@@ -5,41 +5,26 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { useEffect, useState } from "react";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import styled from "styled-components";
-import { toast } from "react-toastify";
-
-interface Column {
-  createdAt: string;
-  dashboardId: number;
-  id: number;
-  teamId: string;
-  title: string;
-  updatedAt: string;
-}
-export const MOCK_DATA = {
-  dashboardId: 217,
-  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1MTU1OTIsImlzcyI6InNwLXRhc2tpZnkifQ.WXLHBnKbOg00qIuVgOb-FSlCuq2dzqRLOP1OUy2VQjc",
-};
+import { getColumns } from "@/api/columns";
+import { Columns as ColumnsData } from "@/api/columns/columns.types";
 
 const Columns = () => {
-  const [columns, setColumns] = useState<Column[]>([]);
+  const [columns, setColumns] = useState<ColumnsData[]>([]);
   const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
-    const getColumns = async () => {
-      const res = await instance.get("/columns", {
-        params: {
-          dashboardId: MOCK_DATA.dashboardId,
-        },
-        headers: {
-          Authorization: `Bearer ${MOCK_DATA.token}`,
-        },
+    const loadColumnsData = async () => {
+      const res = await getColumns({
+        dashboardId: 399,
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjE2LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQxODYxLCJpc3MiOiJzcC10YXNraWZ5In0.onJAVE-0l39MjS77mTbfnS6UMU5bWMkVgBKlA-rs03U",
       });
-      const columns = res.data.data;
+      const columns = res?.data;
       setColumns(() => {
         return [...columns];
       });
     };
-    getColumns();
+    loadColumnsData();
   }, []);
 
   return (

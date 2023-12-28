@@ -10,7 +10,6 @@ export interface Card {
     id: number;
   };
   imageUrl: string;
-  teamId: string;
   columnId: number;
   createdAt: string;
   updatedAt: string;
