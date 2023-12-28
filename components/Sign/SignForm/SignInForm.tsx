@@ -12,8 +12,8 @@ const SignInForm = () => {
     defaultValues: { email: "", password: "" },
     mode: "onBlur",
   });
-
   const router = useRouter();
+  
   return (
     <StyledForm
       onSubmit={handleSubmit(async (data) => {
