@@ -1,6 +1,5 @@
 import MainLogo from "@/assets/icons/main-logo.svg";
 import SignInForm from "@/components/Sign/SignForm/SignInForm";
-import Button from "@/components/common/Buttons/Button";
 import Link from "next/link";
 import styled from "styled-components";
 
@@ -12,9 +11,6 @@ const SignInPage = () => {
       </Link>
       <Greeting>오늘도 만나서 반가워요!</Greeting>
       <SignInForm />
-      <ButtonWrapper>
-        <Button type="login">로그인</Button>
-      </ButtonWrapper>
       <CheckMembership>
         {"회원이 아니신가요? "}
         <Link href="/signup">
@@ -46,11 +42,6 @@ const Greeting = styled.p`
   font-size: 2rem;
   font-weight: 500;
   color: var(--Black33);
-`;
-
-const ButtonWrapper = styled.div`
-  margin-top: 2rem;
-  margin-bottom: 2.4rem;
 `;
 
 const CheckMembership = styled.p`

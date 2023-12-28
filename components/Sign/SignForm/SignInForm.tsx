@@ -1,17 +1,32 @@
+import { postLogin } from "@/api/auth";
 import Input from "@/components/Sign/SignInput/Input";
 import PasswordInput from "@/components/Sign/SignInput/PasswordInput";
-import { EMAIL_RULES, SIGNIN_PASSWORD_RULES, PLACEHOLDER } from "@/constants/InputConstant";
+import Button from "@/components/common/Buttons/Button";
+import { EMAIL_RULES, ERROR_MESSAGE, PLACEHOLDER, SIGNIN_PASSWORD_RULES } from "@/constants/InputConstant";
+import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
 const SignInForm = () => {
-  const { control, handleSubmit, watch, setError } = useForm({
+  const { control, handleSubmit, setError } = useForm({
     defaultValues: { email: "", password: "" },
     mode: "onBlur",
   });
-
+  const router = useRouter();
+  
   return (
-    <StyledForm>
+    <StyledForm
+      onSubmit={handleSubmit(async (data) => {
+        const res = await postLogin({ email: data.email, password: data.password });
+        if (res !== null) {
+          localStorage.setItem("accessToken", res.accessToken);
+          router.push("/mydashboard");
+          return;
+        }
+        setError("email", { message: ERROR_MESSAGE.emailCheck });
+        setError("password", { message: ERROR_MESSAGE.passwordCheck });
+      })}
+    >
       <Controller
         control={control}
         name="email"
@@ -28,6 +43,9 @@ const SignInForm = () => {
           <PasswordInput label="비밀번호" {...field} placeholder={PLACEHOLDER.password} hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
         )}
       />
+      <ButtonWrapper>
+        <Button type="login">로그인</Button>
+      </ButtonWrapper>
     </StyledForm>
   );
 };
@@ -40,4 +58,8 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   row-gap: 1.6rem;
+`;
+const ButtonWrapper = styled.div`
+  margin-top: 2rem;
+  margin-bottom: 2.4rem;
 `;
