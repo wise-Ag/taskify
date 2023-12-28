@@ -3,12 +3,14 @@ import Columns from "@/components/Dashboard/Column/Columns";
 
 import SideMenu from "@/components/common/SideMenu/SideMenu";
 import DashboardNav from "@/components/common/Nav/DashboardNav";
+import ToastModal from "@/components/Modal/ToastModal";
 
 const DashBoardPage = () => {
   return (
     <>
       <DashboardNav />
-      <SideMenu />
+      <ToastModal />
+      {/* <SideMenu /> */}
       <ColumnWrapper>
         <Columns />
       </ColumnWrapper>
