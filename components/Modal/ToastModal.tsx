@@ -16,10 +16,10 @@ export default ToastModal;
 
 const StyledContainer = styled(ToastContainer)`
   &&&.Toastify__toast-container {
-    width: 300px;
+    width: 30rem;
 
     @media (max-width: ${DeviceSize.mobile}) {
-      width: 200px;
+      width: 20rem;
     }
   }
 
