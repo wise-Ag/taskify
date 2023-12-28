@@ -1,31 +1,75 @@
-import React from "react";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import ImageUploadInput from "@/components/Modal/ModalInput/ImageUploadInput";
 import PasswordInput from "@/components/Sign/SignInput/PasswordInput";
+import { Controller, useForm } from "react-hook-form";
+import { CURRENT_PASSWORD_RULES, ERROR_MESSAGE, NEW_PASSWORD_RULES, PLACEHOLDER } from "@/constants/InputConstant";
 
 const AccountPassword = () => {
-  const handleCurrentPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("현재 비밀번호:", event.target.value);
-  };
-
-  const handleNewPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("새 비밀번호:", event.target.value);
-  };
-
-  const handleNewPasswordCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("비밀번호 확인:", event.target.value);
-  };
+  const { control, handleSubmit, watch, setError } = useForm({
+    defaultValues: { currentPassword: "", newPassword: "", confirmNewPassword: "" },
+    mode: "onBlur",
+  });
 
   return (
     <Container>
       <Title>비밀번호 변경</Title>
-      <InputWrapper>
-        <StyledPasswordInput label="비밀번호" value={""} placeholder={"현재 비밀번호 입력"} onChange={handleCurrentPassword} />
-        <StyledPasswordInput label="비밀번호" value={""} placeholder={"새 비밀번호 입력"} onChange={handleNewPassword} />
-        <StyledPasswordInput label="비밀번호 확인" value={""} placeholder={"새 비밀번호 확인"} onChange={handleNewPasswordCheck} />
-      </InputWrapper>
-      <SaveButton>변경</SaveButton>
+      <StyledForm>
+        <InputWrapper>
+          <Controller
+            control={control}
+            name="currentPassword"
+            rules={CURRENT_PASSWORD_RULES}
+            render={({ field, fieldState }) => (
+              <StyledPasswordInput
+                label="현재 비밀번호"
+                {...field}
+                placeholder={PLACEHOLDER.currentPassword}
+                hasError={Boolean(fieldState.error)}
+                errorText={fieldState.error?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="newPassword"
+            rules={NEW_PASSWORD_RULES}
+            render={({ field, fieldState }) => (
+              <StyledPasswordInput
+                label="새 비밀번호"
+                {...field}
+                placeholder={PLACEHOLDER.newPassword}
+                hasError={Boolean(fieldState.error)}
+                errorText={fieldState.error?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="confirmNewPassword"
+            rules={{
+              required: ERROR_MESSAGE.confirmNewPasswordRequired,
+              validate: {
+                isMatch: (value) => {
+                  if (value !== watch("newPassword")) {
+                    return ERROR_MESSAGE.confirmPasswordCheck;
+                  }
+                  return true;
+                },
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <StyledPasswordInput
+                label="새 비밀번호 확인"
+                {...field}
+                placeholder={PLACEHOLDER.confirmNewPassword}
+                hasError={Boolean(fieldState.error)}
+                errorText={fieldState.error?.message}
+              />
+            )}
+          />
+        </InputWrapper>
+        <SaveButton>변경</SaveButton>
+      </StyledForm>
     </Container>
   );
 };
@@ -52,7 +96,16 @@ const Title = styled.p`
   color: var(--Black);
 `;
 
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2.4rem;
+`;
+
 const InputWrapper = styled.div`
+  width: 100%;
+
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -74,7 +127,6 @@ const SaveButton = styled.button`
   width: 8.4rem;
   height: 3.2rem;
 
-  margin: 2.4rem 0 -0.4rem auto;
   border-radius: 4px;
 
   background-color: var(--Main);

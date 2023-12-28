@@ -2,7 +2,7 @@ import { ChangeEventHandler, FocusEventHandler, HTMLInputTypeAttribute, forwardR
 import styled from "styled-components";
 
 export interface InputProps {
-  label: "이메일" | "비밀번호" | "비밀번호 확인" | "닉네임";
+  label: string;
   type?: HTMLInputTypeAttribute;
   value: string;
   hasError?: boolean;

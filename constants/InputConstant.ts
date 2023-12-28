@@ -4,6 +4,9 @@ export const PLACEHOLDER = {
   nickname: "닉네임을 입력해 주세요.",
   signUpPassword: "영문, 숫자를 조합해 8자 이상 입력해 주세요.",
   confirmPassword: "비밀번호를 한 번 더 입력해 주세요.",
+  currentPassword: "현재 비밀번호 입력",
+  newPassword: "새 비밀번호 입력",
+  confirmNewPassword: "새 비밀번호 확인",
 };
 
 export const ERROR_MESSAGE = {
@@ -21,6 +24,10 @@ export const ERROR_MESSAGE = {
 
   nicknameRequired: "닉네임을 입력해 주세요.",
   nicknameInvalid: "10자 이하로 작성해 주세요.",
+
+  currentPasswordRequired: "현재 비밀번호를 입력해 주세요.",
+  newPasswordRequired: "새 비밀번호를 입력해 주세요.",
+  confirmNewPasswordRequired: "새 비밀번호 확인을 입력해 주세요.",
 };
 
 export const EMAIL_RULES = {
@@ -47,4 +54,20 @@ export const SIGNUP_PASSWORD_RULES = {
 export const NICKNAME_RULES = {
   required: ERROR_MESSAGE.nicknameRequired,
   maxLength: { value: 10, message: ERROR_MESSAGE.nicknameInvalid },
+};
+
+export const CURRENT_PASSWORD_RULES = {
+  required: ERROR_MESSAGE.currentPasswordRequired,
+  pattern: {
+    value: /^(?=.*[A-Za-z])(?=.*\d).{8,}$/,
+    message: ERROR_MESSAGE.signinPasswordInvalid,
+  },
+};
+
+export const NEW_PASSWORD_RULES = {
+  required: ERROR_MESSAGE.newPasswordRequired,
+  pattern: {
+    value: /^(?=.*[A-Za-z])(?=.*\d).{8,}$/,
+    message: ERROR_MESSAGE.signupPasswordInvalid,
+  },
 };
