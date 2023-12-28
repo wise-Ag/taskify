@@ -2,6 +2,9 @@ import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import NoInvitation from "@/components/Table/NoInvite";
+import { useEffect, useState } from "react";
+import { getInvitations } from "@/api/invitations";
+import { putInvitations } from "@/api/invitations";
 
 interface Invitation {
   id: number;
@@ -14,16 +17,40 @@ interface Invitation {
   updatedAt: string;
 }
 
-interface InvitationsListProps {
-  invitations: Invitation[];
-}
+const PAGE_SIZE = 5;
 
-const InvitedDashboard = ({ invitations }: InvitationsListProps) => {
+const InvitedDashboard = () => {
   const tableTitles = ["이름", "초대자", "수락 여부"];
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+
+  const fetchData = async () => {
+    const data = await getInvitations({
+      size: PAGE_SIZE,
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNjc1NzE2LCJpc3MiOiJzcC10YXNraWZ5In0.J60KP7YBw6JWhFDqk4u3Pm5g9KSCr0UrTt4GAelAvhI",
+    });
+    if (data && data.invitations) {
+      setInvitations(data.invitations);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleInvitationResponse = async (invitationId: number, accept: boolean) => {
+    const updatedInvitation = await putInvitations({
+      invitationId,
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNjc1NzE2LCJpc3MiOiJzcC10YXNraWZ5In0.J60KP7YBw6JWhFDqk4u3Pm5g9KSCr0UrTt4GAelAvhI",
+      inviteAccepted: accept,
+    });
+    if (updatedInvitation) {
+      fetchData();
+    }
+  };
 
   return (
     <>
-      {invitations ? (
+      {invitations.length > 0 ? (
         <Container>
           <Title>초대받은 대시보드</Title>
           <Header>
@@ -42,7 +69,11 @@ const InvitedDashboard = ({ invitations }: InvitationsListProps) => {
                 <TableBody>{invitation.invitee.nickname}</TableBody>
               </Info>
               <Info>
-                <ButtonSet type="acceptAndReject" />
+                <ButtonSet
+                  type="acceptAndReject"
+                  onClickLeft={() => handleInvitationResponse(invitation.id, true)}
+                  onClickRight={() => handleInvitationResponse(invitation.id, false)}
+                />
               </Info>
             </InvitationItem>
           ))}

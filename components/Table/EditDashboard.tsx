@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import DashBoardColor from "../common/Chip/DashBoardColor";
+import DashBoardColor from "@/components/common/Chip/DashBoardColor";
 import { DeviceSize } from "@/styles/DeviceSize";
 
 const EditDashboard = () => {

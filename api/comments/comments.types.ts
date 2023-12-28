@@ -12,8 +12,8 @@ export interface Comment {
 }
 
 export interface GetCommentsData {
-  comments: Comment[];
   curdorId: number | null;
+  comments: Comment[];
 }
 
 export interface DeleteCommentsProps {

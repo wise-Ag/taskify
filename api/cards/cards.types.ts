@@ -17,9 +17,9 @@ export interface Card {
 }
 
 export interface GetCardListData {
-  cards: Card[];
   totalCount: number;
   cursorId: number | null;
+  cards: Card[];
 }
 
 export interface GetCardProps {
@@ -29,7 +29,7 @@ export interface GetCardProps {
 
 export interface GetCardListProps {
   size?: number;
-  cursorId?: number;
+  cursorId: number | null;
   columnId: number;
   token?: string;
 }
