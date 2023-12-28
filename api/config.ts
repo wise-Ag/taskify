@@ -42,7 +42,7 @@ export const ENDPOINTS = {
 
   INVITATIONS: {
     GET: `/invitations`,
-    PUT: (invitationId: string) => `/invitations/${invitationId}`,
+    PUT: (invitationId: number) => `/invitations/${invitationId}`,
   },
 
   MEMBERS: {

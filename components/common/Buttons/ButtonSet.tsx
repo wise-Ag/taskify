@@ -6,9 +6,8 @@ import styled, { css } from "styled-components";
 interface ButtonProps {
   isDisabled?: boolean;
   $buttonType: keyof typeof TYPES;
-  onClickForward?: () => void;
-  onClickBackward?: () => void;
-  onClickCancel?: () => void;
+  onClickLeft?: () => void;
+  onClickRight?: () => void;
 }
 
 type ButtonCommonProps = Omit<ButtonProps, "$buttonType">;
@@ -18,35 +17,35 @@ interface ButtonSetProps extends ButtonCommonProps {
   children?: ReactNode;
 }
 
-const ButtonSet = ({ type, isDisabled, children, onClickForward, onClickBackward, onClickCancel }: ButtonSetProps) => {
+const ButtonSet = ({ type, isDisabled, children, onClickLeft, onClickRight }: ButtonSetProps) => {
   return (
     <ButtonSetContainer type={type}>
       {type === "forwardAndBackward" && (
         <>
-          <Button $buttonType="backward" disabled={isDisabled} onClick={onClickBackward}>
+          <Button $buttonType="backward" disabled={isDisabled} onClick={onClickLeft}>
             <StyledArrowIcon disabled={isDisabled} />
           </Button>
-          <Button $buttonType="forward" disabled={isDisabled} onClick={onClickForward}>
+          <Button $buttonType="forward" disabled={isDisabled} onClick={onClickRight}>
             <StyledArrowIcon disabled={isDisabled} />
           </Button>
         </>
       )}
       {type === "acceptAndReject" && (
         <>
-          <Button $buttonType="accept" disabled={isDisabled}>
+          <Button $buttonType="accept" disabled={isDisabled} onClick={onClickLeft}>
             수락
           </Button>
-          <Button $buttonType="reject" disabled={isDisabled}>
+          <Button $buttonType="reject" disabled={isDisabled} onClick={onClickRight}>
             거절
           </Button>
         </>
       )}
       {type === "modalSet" && (
         <>
-          <Button $buttonType="cancel" disabled={isDisabled} onClick={onClickCancel}>
+          <Button $buttonType="cancel" disabled={isDisabled} onClick={onClickLeft}>
             취소
           </Button>
-          <Button $buttonType="basic" disabled={isDisabled}>
+          <Button $buttonType="basic" disabled={isDisabled} onClick={onClickRight}>
             {children}
           </Button>
         </>
