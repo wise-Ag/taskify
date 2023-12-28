@@ -5,7 +5,7 @@ export interface Comment {
   updatedAt: string;
   cardId: number;
   author: {
-    profileImageUrl: boolean;
+    profileImageUrl: string;
     nickname: string;
     id: number;
   };
