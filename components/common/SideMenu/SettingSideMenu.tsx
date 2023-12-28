@@ -1,29 +1,29 @@
 import LogoButton from "@/components/common/Buttons/LogoButton";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
-import { useAtom } from "jotai";
-import Link from "next/link";
-import { Dispatch, SetStateAction } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
-interface SettingSideMenuProps {
-  selectedTab: string;
-  setSelectedTab: Dispatch<SetStateAction<string>>;
-}
+const SettingSideMenu = () => {
+  const router = useRouter();
+  const { tab } = router.query;
 
-const SettingSideMenu = ({ selectedTab, setSelectedTab }: SettingSideMenuProps) => {
+  const handleClick = (query: string) => {
+    router.push(`/mypage?tab=${query}`);
+  };
+
   return (
     <Wrapper>
       <LogoButtonContainer>
         <LogoButton />
       </LogoButtonContainer>
       <ButtonContainer>
-        <StyledLink $selectedTab={selectedTab} onClick={() => setSelectedTab("profile")} href={{ pathname: "/mypage", query: { tab: "profile" } }}>
+        <StyledButton onClick={() => handleClick("profile")} selected={tab === "profile"}>
           프로필 설정
-        </StyledLink>
-        <StyledLink onClick={() => setSelectedTab("password")} href={{ pathname: "/mypage", query: { tab: "password" } }}>
+        </StyledButton>
+        <StyledButton onClick={() => handleClick("password")} selected={tab === "password"}>
           비밀번호 변경
-        </StyledLink>
+        </StyledButton>
       </ButtonContainer>
     </Wrapper>
   );
@@ -100,13 +100,17 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const StyledLink = styled(Link)<{ $selectedTab: string }>`
+const StyledButton = styled.button<{ selected?: boolean }>`
   display: flex;
 
   font-size: 1.8rem;
 
-  font-weight: ${({ $selectedTab }) => ($selectedTab === "profile" ? 700 : "normal")};
-  color: ${({ $selectedTab }) => ($selectedTab === "profile" ? "var(--Main)" : "inherit")};
+  ${({ selected }) =>
+    selected &&
+    `
+    font-weight: 700;
+    color: var(--Main);
+  `}
 
   &:focus {
     font-weight: 700;
@@ -122,13 +126,16 @@ const StyledLink = styled(Link)<{ $selectedTab: string }>`
 
     align-items: center;
 
-    border-bottom: ${({ $selectedTab }) => ($selectedTab === "profile" ? "2px solid var(--Main)" : "none")};
-
     font-size: 1.5rem;
+
+    ${({ selected }) =>
+      selected &&
+      `
+    border-bottom: 2px solid var(--Main);
+  `}
 
     &:focus {
       border-bottom: 2px solid var(--Main);
-      color: var(--Main);
     }
   }
 `;

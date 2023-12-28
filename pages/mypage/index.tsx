@@ -5,23 +5,20 @@ import SettingNav from "@/components/common/Nav/SettingNav";
 import SettingSideMenu from "@/components/common/SideMenu/SettingSideMenu";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import styled from "styled-components";
 
 const Mypage = () => {
-  const [selectedTab, setSelectedTab] = useState("profile");
-
   const router = useRouter();
-  const { boardId } = router.query;
+  const { boardId, tab } = router.query;
 
   return (
     <Wrapper>
       <SettingNav />
-      <SettingSideMenu selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+      <SettingSideMenu />
       <Container>
         <BackButton href={`/board/${boardId}`} /> {/* 추후 경로 수정 예정 */}
-        {selectedTab === "profile" && <AccountProfile />}
-        {selectedTab === "password" && <AccountPassword />}
+        {tab === "profile" && <AccountProfile />}
+        {tab === "password" && <AccountPassword />}
       </Container>
     </Wrapper>
   );
