@@ -1,59 +1,39 @@
-import styled from "styled-components";
-import { DeviceSize } from "@/styles/DeviceSize";
-import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { getDashboardInvitations } from "@/api/dashboards";
+import { Invitation } from "@/api/invitations/invitations.types";
 import Button from "@/components/common/Buttons/Button";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { usePagination } from "@/hooks/usePagination";
+import { DeviceSize } from "@/styles/DeviceSize";
 import { useEffect, useState } from "react";
-import { getInvitations } from "@/api/invitations/getInvitations";
-import { getDashboardInvitations } from "@/api/dashboards/getDashboardInvitations";
+import styled from "styled-components";
 
-type Invitation = {
-  id: number;
-  inviterUserId: number;
-  teamId: string;
-  dashboard: {
-    title: string;
-    id: number;
-  };
-  invitee: {
-    nickname: string;
-    email: string;
-    id: number;
-  };
-  inviteAccepted: boolean;
-  createdAt: string;
-  updatedAt: string;
-};
-
-// interface InvitationsListProps {
-//   invitations: Invitation[];
-//   totalCount: number;
-//   currentPage: number;
-// }
+const PAGE_SIZE = 5; // 임의로 추가
 
 const InvitationHistory = () => {
-  const [invitations, setInvitations] = useState([]);
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  let totalPageNum = Math.floor(totalCount / 5) + 1; // 5개만 보여준다고 가정
+  const [totalPageNum, setTotalPageNum] = useState(1);
+  const { handlePageChange, currentPage } = usePagination(totalPageNum);
 
   const fetchData = async () => {
-    const { invitations, totalCount } = await getDashboardInvitations({
+    const result = await getDashboardInvitations({
       dashboardId: "217",
-      // token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1ODY3NzAsImlzcyI6InNwLXRhc2tpZnkifQ.gQpRpLmwfbMt3pbCJvyw6KkqnhsMOQDWEXFCpGtQoz0",
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM2NjkxMzIsImlzcyI6InNwLXRhc2tpZnkifQ.LeUg_4YGwaXk9IZTAhi21uz_oqbByLOdrN3qXTyvVEc",
+      size: PAGE_SIZE,
+      page: currentPage,
     });
 
-    setInvitations(invitations);
-    setTotalCount(totalCount);
-  };
-
-  const handlePageChange = (increment: number) => {
-    setCurrentPage((prevPage) => prevPage + increment);
+    if (result !== null) {
+      const { invitations, totalCount } = result;
+      setInvitations(invitations);
+      setTotalCount(totalCount);
+      setTotalPageNum(Math.ceil(totalCount / PAGE_SIZE)); // 페이지 수 업데이트
+    }
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [currentPage]);
 
   return (
     <Container>
@@ -61,21 +41,29 @@ const InvitationHistory = () => {
         <Title>초대 내역</Title>
         <Button type="invite" children="초대하기" />
       </Section1>
+
       <Section2>
-        <EmailList>이메일</EmailList>
-        <PageInfo>
-          {totalPageNum} 페이지 중 {currentPage}
-        </PageInfo>
-        <ButtonInfo>
-          <PageButton
-            type="forwardAndBackward"
-            /*Set isDisabled to true if totalPageNum is 1 */
-            isDisabled={totalPageNum === 1}
-            onClickForward={() => handlePageChange(1)}
-            onClickBackward={() => handlePageChange(-1)}
-          />
-        </ButtonInfo>
+        {totalCount === 0 ? (
+          "초대 내역이 존재하지 않습니다."
+        ) : (
+          <>
+            <EmailList>이메일</EmailList>
+            <PageInfo>
+              {totalPageNum} 페이지 중 {currentPage}
+            </PageInfo>
+            <ButtonInfo>
+              <PageButton
+                type="forwardAndBackward"
+                // 페이지수가 1이면 button disabled로 설정
+                isDisabled={totalPageNum === 1}
+                onClickRight={() => handlePageChange(1)}
+                onClickLeft={() => handlePageChange(-1)}
+              />
+            </ButtonInfo>
+          </>
+        )}
       </Section2>
+
       {invitations.map((invitation: Invitation) => (
         <InvitationItem key={invitation.id}>
           <Email>{invitation.invitee.email}</Email>
@@ -142,8 +130,14 @@ const Section2 = styled.div`
   justify-content: flex-start;
   align-items: center;
 
+  color: var(--Gray9f);
+  font-size: 1.6rem;
+  font-weight: 400;
+
   @media screen and (max-width: ${DeviceSize.mobile}) {
     margin-bottom: 0.8rem;
+
+    font-size: 1.4rem;
   }
 `;
 

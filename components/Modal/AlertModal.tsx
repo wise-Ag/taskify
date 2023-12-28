@@ -5,9 +5,10 @@ import styled from "styled-components";
 
 interface AlertProps {
   type: "complete" | "delete" | "confirm" | "cancel";
+  onClick?: () => void;
 }
 
-const AlertModal = ({ type }: AlertProps) => {
+const AlertModal = ({ type, onClick }: AlertProps) => {
   return (
     <Wrapper>
       <Contents>
@@ -16,7 +17,15 @@ const AlertModal = ({ type }: AlertProps) => {
         {type === "confirm" && "정말 삭제하시겠습니까?"}
         {type === "cancel" && "요청이 취소됩니다."}
       </Contents>
-      <ButtonWrapper>{type === "delete" || type === "confirm" ? <ButtonSet type="modalSet">삭제</ButtonSet> : <Button type="modalConfirm">확인</Button>}</ButtonWrapper>
+      <ButtonWrapper>
+        {type === "delete" || type === "confirm" ? (
+          <ButtonSet type="modalSet">삭제</ButtonSet>
+        ) : (
+          <Button onClick={onClick} type="modalConfirm">
+            확인
+          </Button>
+        )}
+      </ButtonWrapper>
     </Wrapper>
   );
 };

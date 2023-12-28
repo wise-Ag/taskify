@@ -1,3 +1,7 @@
+import { Card } from "@/api/cards/cards.types";
+import { getCard } from "@/api/cards/index";
+import { Comment } from "@/api/comments/comments.types";
+import { deleteComments, getComments, putComments } from "@/api/comments/index";
 import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
 import Kebab from "@/assets/icons/kebab.svg";
@@ -8,27 +12,106 @@ import Tag from "@/components/common/Chip/Tag";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { formatUpdatedAt } from "@/utils/FormatDate";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { COMMENT_MOCK_DATA, MOCK_DATA } from "./mockData";
 
 const TaskModal: React.FC = () => {
   const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [cardData, setCardData] = useState<Card | null>(null);
+  const [commentsData, setCommentsData] = useState<Comment[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [newCommentContent, setNewCommentContent] = useState("");
 
   const handleKebabClick = () => {
     setIsKebabModalOpen(!isKebabModalOpen);
   };
 
+  const handleCloseClick = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleEditClick = (commentId: number, currentContent: string) => {
+    setIsEditing(true);
+    setEditingCommentId(commentId);
+    setNewCommentContent(currentContent);
+  };
+
+  const handleDeleteClick = async (commentId: number) => {
+    await deleteComments({ commentId, token: "YOUR_TOKEN" });
+    await commentsData;
+  };
+
+  const handleKeyDown = async (event: React.KeyboardEvent, commentId: number) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      await handleUpdateComment(commentId);
+    }
+  };
+
+  const handleUpdateComment = async (commentId: number) => {
+    if (commentId) {
+      await putComments({
+        commentId: commentId,
+        token: "YOUR_TOKEN",
+        content: newCommentContent,
+      });
+      setIsEditing(false);
+      setEditingCommentId(null);
+      setNewCommentContent("");
+      await commentsData;
+    }
+  };
+
+  useEffect(() => {
+    const loadCardData = async () => {
+      const data = await getCard({
+        cardId: "159",
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc",
+      });
+      if (data) {
+        setCardData(data);
+      }
+    };
+
+    const loadCommentsData = async () => {
+      try {
+        const commentsData = await getComments({
+          cardId: 159,
+          size: 10,
+          cursorId: undefined,
+          token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc",
+        });
+
+        if (commentsData) {
+          setCommentsData(commentsData.comments);
+        }
+      } catch (error) {
+        console.error("Error loading comments:", error);
+      }
+    };
+
+    loadCardData();
+    loadCommentsData();
+  }, []);
+
+  if (!cardData || commentsData.length === 0) {
+    return <div>Loading...</div>; // 데이터 로딩 중 또는 데이터가 없는 경우 처리
+  }
+
   return (
     <Wrapper>
       <TitleWrapper>
-        <Title>{MOCK_DATA.title}</Title>
+        <Title>{cardData.title}</Title>
         <IconContainer>
           <KebabIconContainer>
             <Kebab alt="kebab" width={28} height={28} onClick={handleKebabClick} />
             {isKebabModalOpen && <StyledKebabModal />}
           </KebabIconContainer>
-          <Close alt="close" width={28} height={28} />
+          <Close alt="close" width={28} height={28} onClick={handleCloseClick} />
         </IconContainer>
       </TitleWrapper>
       <ContactDeadLineWrapper>
@@ -36,11 +119,11 @@ const TaskModal: React.FC = () => {
         <DeadLine>마감일</DeadLine>
         <ContactName>
           <ProfileImageWrapper>
-            <img src={MOCK_DATA.assignee.profileImageUrl} alt="Profile Image" />
+            <img src={cardData.assignee.profileImageUrl} alt="Profile Image" />
           </ProfileImageWrapper>
-          {MOCK_DATA.assignee.nickname}
+          {cardData.assignee.nickname}
         </ContactName>
-        <DeadLineDate>{MOCK_DATA.dueDate}</DeadLineDate>
+        <DeadLineDate>{cardData.dueDate}</DeadLineDate>
       </ContactDeadLineWrapper>
       <CategoryWrapper>
         <ColumnName status="To do" />
@@ -48,18 +131,18 @@ const TaskModal: React.FC = () => {
           <Division alt="category-division" width={10} height={20} />
         </DivisionWrapper>
         <Tags>
-          {MOCK_DATA.tags.map((tag, idx) => (
+          {cardData.tags.map((tag, idx) => (
             <Tag key={idx} $bgColor="--Pinkf7" $textColor="--Pinkd5">
               {tag}
             </Tag>
           ))}
         </Tags>
       </CategoryWrapper>
-      <Description>{MOCK_DATA.description}</Description>
-      <Image src={MOCK_DATA.imageUrl} alt="Task Image" />
+      <Description>{cardData.description}</Description>
+      <Image src={cardData.imageUrl} alt="Task Image" />
       <ModalInput label="댓글" $inputType="댓글" />
       <CommentWrapper>
-        {COMMENT_MOCK_DATA.comments.map((comment) => (
+        {commentsData.map((comment) => (
           <CommentItem key={comment.id}>
             <LeftWrapper>
               <img src={comment.author.profileImageUrl} alt="nickname" />
@@ -69,10 +152,14 @@ const TaskModal: React.FC = () => {
                 {comment.author.nickname}
                 <CommentDate>{formatUpdatedAt(comment.updatedAt)}</CommentDate>
               </InfoWrapper>
-              <CommentContent>{comment.content}</CommentContent>
+              {isEditing && editingCommentId === comment.id ? (
+                <input type="text" value={newCommentContent} onChange={(e) => setNewCommentContent(e.target.value)} onKeyDown={(e) => handleKeyDown(e, comment.id)} />
+              ) : (
+                <CommentContent>{comment.content}</CommentContent>
+              )}
               <FunctionWrapper>
-                <Edit>수정</Edit>
-                <Delete>삭제</Delete>
+                <Edit onClick={() => handleEditClick(comment.id, comment.content)}>수정</Edit>
+                <Delete onClick={() => handleDeleteClick(comment.id)}>삭제</Delete>
               </FunctionWrapper>
             </RightWrapper>
           </CommentItem>
@@ -128,7 +215,6 @@ const IconContainer = styled.div`
 
 const KebabIconContainer = styled.div`
   position: relative;
-  display: flex;
   align-items: center;
   gap: 2.4rem;
 `;

@@ -1,6 +1,6 @@
-import Head from "next/head";
-import MainNav from "@/components/common/Nav/MainNav";
 import MainSection from "@/components/Landing/MainSection";
+import MainNav from "@/components/common/Nav/MainNav";
+import Head from "next/head";
 
 export default function Home() {
   return (

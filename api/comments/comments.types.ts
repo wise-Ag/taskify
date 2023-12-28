@@ -7,17 +7,17 @@ export interface Comment {
   author: {
     id: number;
     nickname: string;
-    profileImageUrl: boolean;
+    profileImageUrl: string;
   };
 }
 
 export interface GetCommentsData {
-  comments: Comment[];
   curdorId: number | null;
+  comments: Comment[];
 }
 
 export interface DeleteCommentsProps {
-  commentId: string;
+  commentId: number;
   token: string;
 }
 
@@ -29,6 +29,7 @@ export interface GetCommentsProps {
 }
 
 export interface PutCommentsProps {
-  commentId: string;
+  commentId: number;
   token: string;
+  content: string;
 }

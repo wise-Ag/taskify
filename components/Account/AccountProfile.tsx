@@ -1,8 +1,8 @@
 import React from "react";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import ImageUploadInput from "../Modal/ModalInput/ImageUploadInput";
-import Input from "../Sign/SignInput/Input";
+import ImageUploadInput from "@/components/Modal/ModalInput/ImageUploadInput";
+import Input from "@/components/Sign/SignInput/Input";
 
 const AccountProfile = () => {
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {

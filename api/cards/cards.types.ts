@@ -11,15 +11,15 @@ export interface Card {
   };
   imageUrl: string;
   teamId: string;
-  columnId: string;
+  columnId: number;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface GetCardListData {
-  cards: Card[];
   totalCount: number;
   cursorId: number | null;
+  cards: Card[];
 }
 
 export interface GetCardProps {

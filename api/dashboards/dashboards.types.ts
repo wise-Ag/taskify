@@ -6,19 +6,19 @@ export interface Dashboard {
   color: string;
   createdAt: string;
   updatedAt: string;
-  userId: number;
   createdByMe: boolean;
+  userId: number;
 }
 
 export interface GetDashboardListData {
-  dashboards: Dashboard[];
-  totalCount: number;
   cursorId: number | null;
+  totalCount: number;
+  dashboards: Dashboard[];
 }
 
 export interface GetDashboardInvitationsData {
-  invitations: Invitation[];
   totalCount: number;
+  invitations: Invitation[];
 }
 
 export interface DeleteDashboardProps {
