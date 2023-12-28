@@ -15,6 +15,7 @@ interface ButtonContentProps {
   color?: string;
   title?: string;
   createdByMe?: boolean;
+  onClick?: () => void;
 }
 
 const ButtonContent = ({ type, children, id, title, color, createdByMe }: ButtonContentProps) => {
@@ -51,9 +52,9 @@ const ButtonContent = ({ type, children, id, title, color, createdByMe }: Button
   }
 };
 
-const Button = ({ type, children, disabled, id, title, color, createdByMe }: ButtonContentProps) => {
+const Button = ({ type, children, disabled, id, title, color, createdByMe, onClick }: ButtonContentProps) => {
   return (
-    <StyledButton type={type} disabled={disabled}>
+    <StyledButton type={type} disabled={disabled} onClick={onClick}>
       <ButtonContent type={type} children={children} id={id} title={title} color={color} createdByMe={createdByMe} />
     </StyledButton>
   );

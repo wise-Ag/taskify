@@ -5,6 +5,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
+import ModalContainer from "@/components/Modal/ModalContainer";
 
 export interface Dashboards {
   id: number;
@@ -21,6 +22,15 @@ const MyDashboardList = () => {
   const [dashboards, setDashboards] = useState<Dashboards[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPageCount, setTotalPageCount] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     const loadDashboardList = async () => {
@@ -43,7 +53,9 @@ const MyDashboardList = () => {
   return (
     <Wrapper>
       <Container>
-        <Button type="newDashboard">새로운 대시보드</Button>
+        <Button type="newDashboard" onClick={handleOpenModal}>
+          새로운 대시보드
+        </Button>
         {dashboards &&
           dashboards.map((v) => {
             return (
@@ -57,6 +69,11 @@ const MyDashboardList = () => {
       <PageContent>
         {totalPageCount} 페이지 중 {currentPage} <ButtonSet type="forwardAndBackward" />
       </PageContent>
+      {isModalOpen && (
+        <ModalBackdrop>
+          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={handleCloseModal} />
+        </ModalBackdrop>
+      )}
     </Wrapper>
   );
 };
@@ -96,4 +113,17 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 1.2rem;
   align-items: end;
+`;
+
+const ModalBackdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
 `;
