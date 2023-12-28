@@ -15,7 +15,7 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(({ label, value, 
   return (
     <InputContainer>
       <Input ref={ref} label={label} type={inputType} value={value} hasError={hasError} errorText={errorText} onChange={onChange} onBlur={onBlur} placeholder={placeholder} />
-      <ToggleButton onClick={toggleButton}>{isPasswordVisible ? <VisibilityOff /> : <VisibilityOn />}</ToggleButton>
+      <ToggleButton onClick={toggleButton}>{isPasswordVisible ? <VisibilityOn /> : <VisibilityOff />}</ToggleButton>
     </InputContainer>
   );
 });

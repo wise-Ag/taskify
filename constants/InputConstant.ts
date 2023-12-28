@@ -13,6 +13,7 @@ export const ERROR_MESSAGE = {
   emailRequired: "이메일을 입력해 주세요.",
   emailInvalid: "이메일 형식으로 작성해 주세요.",
   emailCheck: "이메일을 확인해 주세요.",
+  emailDuplicate: "이미 사용중인 이메일입니다.",
 
   passwordRequired: "비밀번호를 입력해 주세요.",
   signinPasswordInvalid: "8자 이상 입력해 주세요.",

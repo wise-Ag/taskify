@@ -15,3 +15,9 @@ export interface PostProfileImageProps {
   image: string;
   token?: string;
 }
+
+export interface PostUsersProps {
+  email: string;
+  nickname: string;
+  password: string;
+}

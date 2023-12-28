@@ -14,9 +14,6 @@ const SignUpPage = () => {
       <SignUpFormWrapper>
         <SignUpForm />
       </SignUpFormWrapper>
-      <ButtonWrapper>
-        <Button type="login">가입하기</Button>
-      </ButtonWrapper>
       <CheckMembership>
         {"이미 가입하셨나요? "}
         <Link href="/signin">
@@ -52,11 +49,6 @@ const Greeting = styled.p`
 
 const SignUpFormWrapper = styled.div`
   display: flex;
-`;
-
-const ButtonWrapper = styled.div`
-  margin-top: 2rem;
-  margin-bottom: 2.4rem;
 `;
 
 const CheckMembership = styled.p`
