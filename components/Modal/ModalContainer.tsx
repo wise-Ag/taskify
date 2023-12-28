@@ -8,9 +8,10 @@ interface ModalProps {
   title: "새 컬럼 생성" | "컬럼 관리" | "새로운 대시보드";
   label: "이름" | "대시보드 이름";
   buttonType: "생성" | "변경";
+  onClose?: () => void;
 }
 
-const ModalContainer = ({ title, label, buttonType }: ModalProps) => {
+const ModalContainer = ({ title, label, buttonType, onClose }: ModalProps) => {
   return (
     <Wrapper>
       <Title>{title}</Title>
@@ -21,7 +22,9 @@ const ModalContainer = ({ title, label, buttonType }: ModalProps) => {
         </ColorSelectorWrapper>
       )}
       <ButtonWrapper>
-        <ButtonSet type="modalSet">{buttonType}</ButtonSet>
+        <ButtonSet type="modalSet" onClickCancel={onClose}>
+          {buttonType}
+        </ButtonSet>
       </ButtonWrapper>
     </Wrapper>
   );

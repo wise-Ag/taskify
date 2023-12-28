@@ -8,6 +8,7 @@ interface ButtonProps {
   $buttonType: keyof typeof TYPES;
   onClickForward?: () => void;
   onClickBackward?: () => void;
+  onClickCancel?: () => void;
 }
 
 type ButtonCommonProps = Omit<ButtonProps, "$buttonType">;
@@ -17,7 +18,7 @@ interface ButtonSetProps extends ButtonCommonProps {
   children?: ReactNode;
 }
 
-const ButtonSet = ({ type, isDisabled, children, onClickForward, onClickBackward }: ButtonSetProps) => {
+const ButtonSet = ({ type, isDisabled, children, onClickForward, onClickBackward, onClickCancel }: ButtonSetProps) => {
   return (
     <ButtonSetContainer type={type}>
       {type === "forwardAndBackward" && (
@@ -42,7 +43,7 @@ const ButtonSet = ({ type, isDisabled, children, onClickForward, onClickBackward
       )}
       {type === "modalSet" && (
         <>
-          <Button $buttonType="cancel" disabled={isDisabled}>
+          <Button $buttonType="cancel" disabled={isDisabled} onClick={onClickCancel}>
             취소
           </Button>
           <Button $buttonType="basic" disabled={isDisabled}>
