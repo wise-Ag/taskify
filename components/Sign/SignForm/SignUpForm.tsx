@@ -16,7 +16,6 @@ const SignUpForm = () => {
     defaultValues: { email: "", nickname: "", password: "", confirmPassword: "" },
     mode: "onBlur",
   });
-
   const router = useRouter();
 
   const handleCloseModal = () => {
