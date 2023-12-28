@@ -19,6 +19,7 @@ export interface Dashboards {
   updatedAt: string;
   createdByMe: boolean;
 }
+
 const PAGE_SIZE = 30;
 
 const MyDashboardList = () => {
