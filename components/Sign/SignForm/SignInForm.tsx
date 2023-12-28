@@ -2,7 +2,7 @@ import { postLogin } from "@/api/auth";
 import Input from "@/components/Sign/SignInput/Input";
 import PasswordInput from "@/components/Sign/SignInput/PasswordInput";
 import Button from "@/components/common/Buttons/Button";
-import { EMAIL_RULES, PLACEHOLDER, SIGNIN_PASSWORD_RULES } from "@/constants/InputConstant";
+import { EMAIL_RULES, ERROR_MESSAGE, PLACEHOLDER, SIGNIN_PASSWORD_RULES } from "@/constants/InputConstant";
 import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -23,8 +23,8 @@ const SignInForm = () => {
           router.push("/mydashboard");
           return;
         }
-        setError("email", { message: "이메일을 확인해주세요." });
-        setError("password", { message: "비밀번호를 확인해주세요." });
+        setError("email", { message: ERROR_MESSAGE.emailCheck });
+        setError("password", { message: ERROR_MESSAGE.passwordCheck });
       })}
     >
       <Controller
