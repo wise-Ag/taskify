@@ -224,23 +224,14 @@ const TYPES = {
 
     color: var(--Main);
     font-size: 1.2rem;
+    font-weight: 500;
 
     @media (max-width: ${DeviceSize.tablet}) {
       width: 7.8rem;
-
-      padding: 0.9rem 0;
-
-      color: var(--Main);
-      font-size: 1.2rem;
     }
 
     @media (max-width: ${DeviceSize.mobile}) {
       width: 8.4rem;
-
-      padding: 0.9rem 0;
-
-      color: var(--Main);
-      font-size: 1.2rem;
     }
   `,
   modalConfirm: css`
