@@ -1,6 +1,6 @@
 import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
-import { UserData, PostImageData, PostProfileImageProps } from "@/api/users/users.types";
+import { UserData, PostImageData, PostProfileImageProps, PostUsersProps } from "@/api/users/users.types";
 
 export const getUsers = async ({
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
@@ -43,25 +43,13 @@ export const postProfileImage = async ({
   }
 };
 
-export const postUsers = async ({
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
-}: {
-  token: string;
-}): Promise<UserData | null> => {
+export const postUsers = async ({ email, nickname, password }: PostUsersProps): Promise<UserData | null> => {
   try {
-    const res = await instance.post(
-      ENDPOINTS.USERS.POST,
-      {
-        email: "test@gmail.com",
-        nickname: "메롱이",
-        password: "#123ffffff",
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    const res = await instance.post(ENDPOINTS.USERS.POST, {
+      email,
+      nickname,
+      password,
+    });
     return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);

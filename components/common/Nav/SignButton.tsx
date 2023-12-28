@@ -5,7 +5,7 @@ import styled from "styled-components";
 const SignButton = () => {
   return (
     <Wrapper>
-      <Button href="/login">로그인</Button>
+      <Button href="/signin">로그인</Button>
       <Button href="/signup">회원가입</Button>
     </Wrapper>
   );
