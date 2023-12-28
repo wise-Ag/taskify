@@ -1,4 +1,5 @@
 export interface User {
+  accessToken: string;
   user: {
     id: number;
     email: string;
@@ -7,7 +8,6 @@ export interface User {
     createdAt: string;
     updatedAt: string;
   };
-  accessToken: string;
 }
 
 export interface PostLoginProps {

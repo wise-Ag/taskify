@@ -4,7 +4,6 @@ import Dropdown from "@/components/Modal/ModalInput/StateDropdown";
 import TagInput from "@/components/Modal/ModalInput/TagInput";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import TaskModal from "./TaskModal";
 
 interface CategoryProps {
   type: "create" | "edit";

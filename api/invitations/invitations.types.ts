@@ -1,7 +1,10 @@
 export interface Invitation {
   id: number;
-  inviterUserId: number;
-  teamId: string;
+  inviter: {
+    nickname: string;
+    email: string;
+    id: number;
+  };
   dashboard: {
     id: number;
     title: string;
@@ -17,8 +20,8 @@ export interface Invitation {
 }
 
 export interface GetInvitationsData {
-  invitations: Invitation[];
   cursorId: number | null;
+  invitations: Invitation[];
 }
 
 export interface GetInvitationProps {

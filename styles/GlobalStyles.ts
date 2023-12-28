@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { BLACK, GRAY, MAIN } from "./ColorStyles";
+import { BLACK, GRAY, MAIN } from "@/styles/ColorStyles";
 
 const GlobalStyles = createGlobalStyle`
   :root {
