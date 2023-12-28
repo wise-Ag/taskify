@@ -6,7 +6,7 @@ import styled from "styled-components";
 const MainNav = () => {
   return (
     <Wrapper>
-      <LogoButton />
+      <LogoButton isMainNav />
       <SignButton />
     </Wrapper>
   );

@@ -4,9 +4,9 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import Link from "next/link";
 import styled from "styled-components";
 
-const LogoButton = () => {
+const LogoButton = ({ isMainNav }: { isMainNav?: boolean }) => {
   return (
-    <StyledLink href="/">
+    <StyledLink href="/" $isMainNav={isMainNav}>
       <StyledLargeLogo alt="로고 이미지" />
       <StyledSmallLogo alt="로고 이미지" />
     </StyledLink>
@@ -15,7 +15,7 @@ const LogoButton = () => {
 
 export default LogoButton;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(Link)<{ $isMainNav?: boolean }>`
   width: 100%;
   margin-left: 1.2rem;
 
@@ -24,7 +24,8 @@ const StyledLink = styled(Link)`
   @media (max-width: ${DeviceSize.tablet}) {
     margin-left: 0;
 
-    justify-content: center;
+    /* justify-content: center; */
+    justify-content: ${(props) => (props.$isMainNav ? "flex-start" : "center")};
   }
 `;
 
