@@ -17,7 +17,7 @@ export interface GetCommentsData {
 }
 
 export interface DeleteCommentsProps {
-  commentId: string;
+  commentId: number;
   token: string;
 }
 
@@ -29,6 +29,7 @@ export interface GetCommentsProps {
 }
 
 export interface PutCommentsProps {
-  commentId: string;
+  commentId: number;
   token: string;
+  content: string;
 }

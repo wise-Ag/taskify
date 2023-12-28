@@ -1,7 +1,7 @@
 import { Card } from "@/api/cards/cards.types";
 import { getCard } from "@/api/cards/index";
 import { Comment } from "@/api/comments/comments.types";
-import { getComments } from "@/api/comments/index";
+import { deleteComments, getComments, putComments } from "@/api/comments/index";
 import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
 import Kebab from "@/assets/icons/kebab.svg";
@@ -12,14 +12,17 @@ import Tag from "@/components/common/Chip/Tag";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { formatUpdatedAt } from "@/utils/FormatDate";
-import React, { useEffect, useState } from "react";
+import React, { ReactEventHandler, useEffect, useState } from "react";
 import styled from "styled-components";
 
 const TaskModal: React.FC = () => {
   const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [cardData, setCardData] = useState<Card | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentsData, setCommentsData] = useState<Comment[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [newCommentContent, setNewCommentContent] = useState("");
 
   const handleKebabClick = () => {
     setIsKebabModalOpen(!isKebabModalOpen);
@@ -29,30 +32,62 @@ const TaskModal: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const handleEditClick = (commentId: number, currentContent: string) => {
+    setIsEditing(true);
+    setEditingCommentId(commentId);
+    setNewCommentContent(currentContent);
+  };
+
+  const handleDeleteClick = async (commentId: number) => {
+    await deleteComments({ commentId, token: "YOUR_TOKEN" });
+    await commentsData;
+  };
+
+  const handleKeyDown = async (event: React.KeyboardEvent, commentId: number) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      await handleUpdateComment(commentId);
+    }
+  };
+
+  const handleUpdateComment = async (commentId: number) => {
+    if (commentId) {
+      await putComments({
+        commentId: commentId,
+        token: "YOUR_TOKEN",
+        content: newCommentContent,
+      });
+      setIsEditing(false);
+      setEditingCommentId(null);
+      setNewCommentContent("");
+      await commentsData;
+    }
+  };
+
   useEffect(() => {
     const loadCardData = async () => {
       const data = await getCard({
-        cardId: "77",
+        cardId: "159",
         token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc",
       });
       if (data) {
         setCardData(data);
       }
     };
 
-    const loadComments = async () => {
+    const loadCommentsData = async () => {
       try {
         const commentsData = await getComments({
-          cardId: 4,
-          size: 5,
+          cardId: 159,
+          size: 10,
           cursorId: undefined,
           token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc",
         });
 
         if (commentsData) {
-          setComments(commentsData.comments);
+          setCommentsData(commentsData.comments);
         }
       } catch (error) {
         console.error("Error loading comments:", error);
@@ -60,10 +95,10 @@ const TaskModal: React.FC = () => {
     };
 
     loadCardData();
-    loadComments();
+    loadCommentsData();
   }, []);
 
-  if (!cardData || comments.length === 0) {
+  if (!cardData || commentsData.length === 0) {
     return <div>Loading...</div>; // 데이터 로딩 중 또는 데이터가 없는 경우 처리
   }
 
@@ -107,7 +142,7 @@ const TaskModal: React.FC = () => {
       <Image src={cardData.imageUrl} alt="Task Image" />
       <ModalInput label="댓글" $inputType="댓글" />
       <CommentWrapper>
-        {comments.map((comment) => (
+        {commentsData.map((comment) => (
           <CommentItem key={comment.id}>
             <LeftWrapper>
               <img src={comment.author.profileImageUrl} alt="nickname" />
@@ -117,10 +152,14 @@ const TaskModal: React.FC = () => {
                 {comment.author.nickname}
                 <CommentDate>{formatUpdatedAt(comment.updatedAt)}</CommentDate>
               </InfoWrapper>
-              <CommentContent>{comment.content}</CommentContent>
+              {isEditing && editingCommentId === comment.id ? (
+                <input type="text" value={newCommentContent} onChange={(e) => setNewCommentContent(e.target.value)} onKeyDown={(e) => handleKeyDown(e, comment.id)} />
+              ) : (
+                <CommentContent>{comment.content}</CommentContent>
+              )}
               <FunctionWrapper>
-                <Edit>수정</Edit>
-                <Delete>삭제</Delete>
+                <Edit onClick={() => handleEditClick(comment.id, comment.content)}>수정</Edit>
+                <Delete onClick={() => handleDeleteClick(comment.id)}>삭제</Delete>
               </FunctionWrapper>
             </RightWrapper>
           </CommentItem>
