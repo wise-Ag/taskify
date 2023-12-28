@@ -15,6 +15,7 @@ const KebabModal = () => {
 export default KebabModal;
 
 const Wrapper = styled.div`
+  position: absolute;
   width: 9.3rem;
   height: 8.2rem;
 
