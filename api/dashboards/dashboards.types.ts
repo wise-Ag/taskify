@@ -6,8 +6,8 @@ export interface Dashboard {
   color: string;
   createdAt: string;
   updatedAt: string;
-  userId: number;
   createdByMe: boolean;
+  userId: number;
 }
 
 export interface GetDashboardListData {

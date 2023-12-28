@@ -2,14 +2,15 @@ import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
 import {
   Dashboard,
-  GetDashboardListData,
-  DeleteDashboardProps,
   DeleteDashboardInvitationsProps,
-  GetDashboardProps,
+  DeleteDashboardProps,
+  GetDashboardInvitationsData,
   GetDashboardInvitationsProps,
+  GetDashboardListData,
   GetDashboardListProps,
-  PutDashboardProps,
+  GetDashboardProps,
   PostDashboardInvitationsProps,
+  PutDashboardProps,
 } from "@/api/dashboards/dashboards.types";
 import { Invitation } from "@/api/invitations/invitations.types";
 
@@ -69,9 +70,9 @@ export const getDashboardInvitations = async ({
   size = 5,
   page,
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzQ1NTAsImlzcyI6InNwLXRhc2tpZnkifQ.DEJkd2VERk0YaMWoRJzQ3cEdw8I7v_P3fpyqAaGeKK8",
-}: GetDashboardInvitationsProps) => {
+}: GetDashboardInvitationsProps): Promise<GetDashboardInvitationsData | null> => {
   try {
-    const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_INVITATION("198"), {
+    const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_INVITATION(dashboardId), {
       params: {
         dashboardId,
         size,
@@ -84,10 +85,11 @@ export const getDashboardInvitations = async ({
     return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
+    return null;
   }
 };
 
-export const getDashboardList = async ({ navigationMethod, size = 5, cursorId, token }: GetDashboardListProps) => {
+export const getDashboardList = async ({ navigationMethod, size = 5, cursorId, token }: GetDashboardListProps): Promise<GetDashboardListData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_LIST, {
       params: {
