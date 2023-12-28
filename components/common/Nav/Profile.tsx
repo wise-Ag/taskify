@@ -52,7 +52,7 @@ const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
         </NoProfileImageWrapper>
       )}
       <Name>{nickname}</Name>
-      <StyledArrowIcon active={activeDropdown === "profile"} onClick={toggleKebabMenu} />
+      <StyledArrowIcon active={activeDropdown === "profile" ? "true" : undefined} onClick={toggleKebabMenu} />
       {activeDropdown === "profile" && (
         <DropdownMenu>
           <MenuItem onClick={() => navigateTo("/mydashboard")}>
