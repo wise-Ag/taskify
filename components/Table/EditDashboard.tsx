@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import React, { useState } from "react";
-import DashBoardColor from "../common/Chip/DashBoardColor";
+import DashBoardColor from "@/components/common/Chip/DashBoardColor";
 import { DeviceSize } from "@/styles/DeviceSize";
-import ToastModal from "../Modal/ToastModal";
+import ToastModal from "@/components/Modal/ToastModal";
 import { toast } from "react-toastify";
 
 const EditDashboard = () => {
