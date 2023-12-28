@@ -3,7 +3,9 @@ import AccountProfile from "@/components/Account/AccountProfile";
 import BackButton from "@/components/common/Buttons/BackButton";
 import SettingNav from "@/components/common/Nav/SettingNav";
 import SettingSideMenu from "@/components/common/SideMenu/SettingSideMenu";
+import { selectedTabAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom, useAtomValue } from "jotai";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
@@ -11,14 +13,16 @@ const Mypage = () => {
   const router = useRouter();
   const { boardId } = router.query;
 
+  const selectedTab = useAtomValue(selectedTabAtom);
+
   return (
     <Wrapper>
       <SettingNav />
       <SettingSideMenu />
       <Container>
         <BackButton href={`/board/${boardId}`} /> {/* 추후 경로 수정 예정 */}
-        <AccountProfile />
-        <AccountPassword />
+        {selectedTab === "profile" && <AccountProfile />}
+        {selectedTab === "password" && <AccountPassword />}
       </Container>
     </Wrapper>
   );
@@ -42,6 +46,7 @@ const Container = styled.div`
 
   @media (max-width: ${DeviceSize.tablet}) {
     margin-left: 18rem;
+    margin-right: 2rem;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {

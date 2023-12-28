@@ -1,17 +1,26 @@
 import LogoButton from "@/components/common/Buttons/LogoButton";
+import { selectedTabAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useAtom } from "jotai";
+import Link from "next/link";
 import styled from "styled-components";
 
 const SettingSideMenu = () => {
+  const [selectedTab, setSelectedTab] = useAtom(selectedTabAtom);
+
   return (
     <Wrapper>
       <LogoButtonContainer>
         <LogoButton />
       </LogoButtonContainer>
       <ButtonContainer>
-        <Button>프로필 설정</Button>
-        <Button>비밀번호 변경</Button>
+        <StyledLink $selectedTab={selectedTab} onClick={() => setSelectedTab("profile")} href={{ pathname: "/mypage", query: { tab: "profile" } }}>
+          프로필 설정
+        </StyledLink>
+        <StyledLink onClick={() => setSelectedTab("password")} href={{ pathname: "/mypage", query: { tab: "password" } }}>
+          비밀번호 변경
+        </StyledLink>
       </ButtonContainer>
     </Wrapper>
   );
@@ -88,8 +97,13 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const Button = styled.button`
+const StyledLink = styled(Link)<{ $selectedTab: string }>`
+  display: flex;
+
   font-size: 1.8rem;
+
+  font-weight: ${({ $selectedTab }) => ($selectedTab === "profile" ? 700 : "normal")};
+  color: ${({ $selectedTab }) => ($selectedTab === "profile" ? "var(--Main)" : "inherit")};
 
   &:focus {
     font-weight: 700;
@@ -102,6 +116,11 @@ const Button = styled.button`
 
   @media (max-width: ${DeviceSize.mobile}) {
     height: 5rem;
+
+    align-items: center;
+
+    border-bottom: ${({ $selectedTab }) => ($selectedTab === "profile" ? "2px solid var(--Main)" : "none")};
+
     font-size: 1.5rem;
 
     &:focus {
