@@ -2,11 +2,8 @@ import LogoButton from "@/components/common/Buttons/LogoButton";
 import Profile from "@/components/common/Nav/Profile";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import { profileData } from "./mockData";
 
 const SettingNav = () => {
-  const { nickname, profileImageUrl } = profileData;
-
   return (
     <Wrapper>
       <LogoButtonContainer>
@@ -16,7 +13,7 @@ const SettingNav = () => {
         <Title>계정관리</Title>
         <Content>
           <Line />
-          <Profile profileImageUrl={profileImageUrl} nickname={nickname} />
+          <Profile />
         </Content>
       </ContentContainer>
     </Wrapper>
