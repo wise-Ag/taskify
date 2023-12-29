@@ -34,7 +34,7 @@ export interface DeleteDashboardInvitationsProps {
 
 export interface GetDashboardProps {
   dashboardId: string;
-  token: string;
+  token: string | null;
 }
 
 export interface GetDashboardInvitationsProps {

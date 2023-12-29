@@ -1,10 +1,18 @@
 import Settings from "@/assets/icons/settings.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
 const SettingButton = () => {
+  const router = useRouter();
+  const { boardid } = router.query;
+
   return (
-    <StyledButton>
+    <StyledButton
+      onClick={() => {
+        router.push(`/dashboard/${boardid}/edit`);
+      }}
+    >
       <StyledIcon />
       <ButtonType>관리</ButtonType>
     </StyledButton>
