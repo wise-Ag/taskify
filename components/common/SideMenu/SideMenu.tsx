@@ -11,6 +11,9 @@ import { getDashboardList } from "@/api/dashboards";
 import { useAtom } from "jotai";
 import { invitationsAtom } from "@/states/atoms";
 import { Dashboard } from "@/api/dashboards/dashboards.types";
+import { useModal } from "@/hooks/useModal";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
+import ModalContainer from "@/components/Modal/ModalContainer";
 
 interface DashboardProps {
   boardId: number;
@@ -35,6 +38,7 @@ const SideMenu = () => {
   const [cursorId, setCursorId] = useState(1);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [invitations] = useAtom(invitationsAtom); // 초대 목록!!
+  const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
 
   const togglePopup = () => {
     setIsPopupVisible((prev) => !prev);
@@ -43,6 +47,8 @@ const SideMenu = () => {
   const closePopup = () => {
     setIsPopupVisible(false);
   };
+
+  const handleModalClose = () => {};
 
   useEffect(() => {
     const loadDashboardList = async () => {
@@ -79,13 +85,25 @@ const SideMenu = () => {
       )}
       <HeaderWrapper>
         <Title>Dash Boards</Title>
-        <StyledAddButton alt="추가 버튼" width={20} height={20} />
+        <StyledAddButton
+          alt="추가 버튼"
+          width={20}
+          height={20}
+          onClick={() => {
+            openModalFunc();
+          }}
+        />
       </HeaderWrapper>
       <DashboardList>
         {dashboards.map((dashboard, key) => {
           return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
         })}
       </DashboardList>
+      {isModalOpen && (
+        <ModalWrapper>
+          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} />
+        </ModalWrapper>
+      )}
     </Wrapper>
   );
 };
