@@ -41,7 +41,7 @@ const SideMenu = () => {
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const wrapperRef = useRef(null);
 
-  const handleClickOutside = (event) => {
+  const handleClickOutside = (event: { target: string }) => {
     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
       setIsPopupVisible(false);
     }
@@ -115,7 +115,6 @@ export default SideMenu;
 const Wrapper = styled.div`
   width: 30rem;
   height: 155rem;
-  /* height: 100vh; */
 
   padding: 2rem 1.2rem;
 
