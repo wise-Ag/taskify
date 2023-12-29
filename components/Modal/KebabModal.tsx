@@ -3,6 +3,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { useState } from "react";
 import TodoModal from "@/components/Modal/TodoModal";
 import AlertModal from "@/components/Modal/AlertModal";
+import { Z_INDEX } from "@/styles/ZindexStyles";
 
 const KebabModal = () => {
   const [editModal, setEditModal] = useState(false);
@@ -47,6 +48,8 @@ const Wrapper = styled.div`
 
   background: var(--MainLight);
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+
+  z-index: ${Z_INDEX.KebabModal_Wrapper};
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 8.6rem;
