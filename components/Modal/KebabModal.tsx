@@ -1,12 +1,29 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useState } from "react";
+import TodoModal from "@/components/Modal/TodoModal";
+import AlertModal from "@/components/Modal/AlertModal";
 
 const KebabModal = () => {
+  const [editModal, setEditModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleEdit = () => {
+    setEditModal((prev) => !prev);
+  };
+
+  const handleDelete = () => {
+    setDeleteModal((prev) => !prev);
+  };
+
   return (
     <Wrapper>
       <KebabListWrapper>
-        <KebabList>수정하기</KebabList>
-        <KebabList>삭제하기</KebabList>
+        <KebabList onClick={handleEdit}>수정하기</KebabList>
+        {editModal && <TodoModal type="edit" />}
+        <KebabList onClick={handleDelete}>삭제하기</KebabList>
+        {deleteModal && <AlertModal type="delete" />}
       </KebabListWrapper>
     </Wrapper>
   );
