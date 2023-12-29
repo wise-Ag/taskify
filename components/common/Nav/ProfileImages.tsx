@@ -1,17 +1,22 @@
 import { useState, MouseEvent, useEffect, useRef } from "react";
 import { useAtom } from "jotai";
 import styled from "styled-components";
-import { memberData } from "./mockData";
 import { DeviceSize } from "@/styles/DeviceSize";
 import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import MemberListDropdown from "@/components/common/Nav/MemberListDropdown";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { activeDropdownAtom } from "@/states/atoms";
+import { getMembers } from "@/api/members";
+import { useRouter } from "next/router";
+import { Member } from "@/api/members/members.types";
 
 const ProfileImages = () => {
-  const { members, totalCount } = memberData;
+  const [members, setMembers] = useState<Member[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [activeDropdown, setActiveDropdown] = useAtom(activeDropdownAtom);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const { boardid } = router.query;
 
   const toggleDropdown = (event: MouseEvent) => {
     event.stopPropagation();
@@ -31,6 +36,19 @@ const ProfileImages = () => {
     };
   });
 
+  useEffect(() => {
+    if (!boardid) return;
+    const loadMembersData = async () => {
+      const res = await getMembers({ dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
+      if (res !== null) {
+        setMembers(() => [...res.members]);
+        setTotalCount(res.totalCount);
+      }
+    };
+
+    loadMembersData();
+  }, [boardid]);
+
   return (
     <Container ref={dropdownRef}>
       {totalCount > 0 && (
@@ -40,7 +58,7 @@ const ProfileImages = () => {
               <ProfileImg key={member.id} index={index} image={member.profileImageUrl} />
             ) : (
               <NoProfileImageWrapper index={index}>
-                <NoProfileImage />
+                <NoProfileImage id={member.id} nickname={member.nickname} isBorder={true} />
               </NoProfileImageWrapper>
             ),
           )}
@@ -115,7 +133,8 @@ const ProfileImg = styled.div<{ index: number; image: string }>`
 `;
 
 const NoProfileImageWrapper = styled.div<{ index: number }>`
-  line-height: 3.8rem;
+  width: 3.8rem;
+  line-height: 3.4rem;
 
   padding: 0;
 
@@ -129,7 +148,8 @@ const NoProfileImageWrapper = styled.div<{ index: number }>`
 
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.4rem;
-    line-height: 3.4rem;
+    width: 3.4rem;
+    line-height: 3rem;
 
     right: ${({ index }) => `${(index + 1) * 2.4}rem`};
   }

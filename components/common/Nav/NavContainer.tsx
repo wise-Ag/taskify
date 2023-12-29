@@ -2,7 +2,6 @@ import Crown from "@/assets/icons/crown.svg";
 import SettingButton from "@/components/common/Nav/DashboardButtons";
 import Profile from "@/components/common/Nav/Profile";
 import ProfileImages from "@/components/common/Nav/ProfileImages";
-import { profileData } from "@/components/common/Nav/mockData";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 
@@ -13,8 +12,6 @@ interface NavContainerProps {
 }
 
 const NavContainer = ({ title, $isDashboard = false, createdByMe = false }: NavContainerProps) => {
-  const { nickname, profileImageUrl } = profileData;
-
   return (
     <Wrapper>
       <Title>
@@ -25,7 +22,7 @@ const NavContainer = ({ title, $isDashboard = false, createdByMe = false }: NavC
         {createdByMe && <SettingButton />}
         {$isDashboard && <ProfileImages />}
         <Line />
-        <Profile profileImageUrl={profileImageUrl} nickname={nickname} />
+        <Profile />
       </Content>
     </Wrapper>
   );
