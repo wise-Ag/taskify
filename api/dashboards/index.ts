@@ -89,7 +89,7 @@ export const getDashboardInvitations = async ({
   }
 };
 
-export const getDashboardList = async ({ navigationMethod, size = 5, cursorId, token }: GetDashboardListProps): Promise<GetDashboardListData | null> => {
+export const getDashboardList = async ({ navigationMethod, size, cursorId, token }: GetDashboardListProps): Promise<GetDashboardListData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_LIST, {
       params: {
