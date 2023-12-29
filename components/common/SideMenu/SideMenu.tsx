@@ -4,7 +4,7 @@ import LogoButton from "@/components/common/Buttons/LogoButton";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 import ArrowButton from "@/assets/icons/arrow-forward.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { getDashboardList } from "@/api/dashboards";
@@ -39,16 +39,17 @@ const SideMenu = () => {
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [invitations] = useAtom(invitationsAtom); // 초대 목록!!
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const wrapperRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      setIsPopupVisible(false);
+    }
+  };
 
   const togglePopup = () => {
     setIsPopupVisible((prev) => !prev);
   };
-
-  const closePopup = () => {
-    setIsPopupVisible(false);
-  };
-
-  const handleModalClose = () => {};
 
   useEffect(() => {
     const loadDashboardList = async () => {
@@ -63,15 +64,16 @@ const SideMenu = () => {
     loadDashboardList();
   }, [invitations]);
 
-  // useEffect(() => {
-  //   document.addEventListener("click", closePopup);
-  //   return () => {
-  //     document.removeEventListener("click", closePopup);
-  //   };
-  // });
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
 
   return (
-    <Wrapper>
+    <Wrapper ref={wrapperRef}>
       <LogoButton />
       <StyledArrowButton onClick={togglePopup} $isPopupVisible={isPopupVisible} />
       {isPopupVisible && (
