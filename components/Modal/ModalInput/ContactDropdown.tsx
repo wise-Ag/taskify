@@ -191,8 +191,9 @@ const CheckIconStyled = styled(CheckIcon)`
   position: absolute;
   right: 1rem;
   top: 50%;
-
   transform: translateY(-50%);
+
+  color: var(--Gray78);
 
   ${ListItem}:hover & {
     display: block;

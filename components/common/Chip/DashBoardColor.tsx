@@ -18,7 +18,7 @@ const DashBoardColor = () => {
     <Container>
       {colors.map((colorVar) => (
         <ColorCircle key={colorVar} color={colorVar} selected={selectedColor === `var(${colorVar})`} onClick={() => setSelectedColor(`var(${colorVar})`)}>
-          {selectedColor === `var(${colorVar})` && <CheckIcon />}
+          {selectedColor === `var(${colorVar})` && <StyledCheckIcon />}
         </ColorCircle>
       ))}
     </Container>
@@ -53,4 +53,8 @@ const ColorCircle = styled.div<ColorCircleProps>`
     width: 2.8rem;
     height: 2.8rem;
   }
+`;
+
+const StyledCheckIcon = styled(CheckIcon)`
+  color: var(--White);
 `;
