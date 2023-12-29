@@ -2,6 +2,8 @@ import CircleIcon from "@/assets/icons/blue-circle.svg";
 import SettingIcon from "@/assets/icons/settings.svg";
 import CounterCard from "@/components/common/Chip/CounterCard";
 import styled from "styled-components";
+import KebabModal from "@/components/Modal/KebabModal";
+import { useState } from "react";
 
 interface ColumnHeaderProps {
   title: string;
@@ -10,6 +12,12 @@ interface ColumnHeaderProps {
 }
 
 const ColumnHeader = ({ title, count }: ColumnHeaderProps) => {
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleClick = () => {
+    setIsClicked((prev) => !prev);
+  };
+
   return (
     <Wrapper>
       <Content>
@@ -17,7 +25,10 @@ const ColumnHeader = ({ title, count }: ColumnHeaderProps) => {
         <Title>{title}</Title>
         <CounterCard number={count} />
       </Content>
-      <SettingIcon style={{ cursor: "pointer" }} />
+      <Div>
+        <SettingIcon onClick={handleClick} style={{ cursor: "pointer" }} />
+        {isClicked && <KebabModal />}
+      </Div>
     </Wrapper>
   );
 };
@@ -46,4 +57,8 @@ const StyledCircleIcon = styled(CircleIcon)`
   circle {
     fill: var(--Main);
   }
+`;
+
+const Div = styled.div`
+  position: relative;
 `;
