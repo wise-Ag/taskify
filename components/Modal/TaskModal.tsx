@@ -1,7 +1,7 @@
 import { Card } from "@/api/cards/cards.types";
 import { getCard } from "@/api/cards/index";
 import { Comment } from "@/api/comments/comments.types";
-import { deleteComments, getComments, putComments } from "@/api/comments/index";
+import { deleteComments, getComments, postComments, putComments } from "@/api/comments/index";
 import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
 import Kebab from "@/assets/icons/kebab.svg";
@@ -9,13 +9,19 @@ import KebabModal from "@/components/Modal/KebabModal";
 import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
+import { useScroll } from "@/hooks/useScroll";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { formatUpdatedAt } from "@/utils/FormatDate";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
+// 임시 토큰
+const TMP_TOKEN =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc";
+
 const TaskModal: React.FC = () => {
+  const { observe, unobserve, targetRef, loadData } = useScroll();
   const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [cardData, setCardData] = useState<Card | null>(null);
@@ -23,6 +29,7 @@ const TaskModal: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [newCommentContent, setNewCommentContent] = useState("");
+  const [cursorId, setCursorId] = useState<number | null>(null);
 
   const handleKebabClick = () => {
     setIsKebabModalOpen(!isKebabModalOpen);
@@ -32,6 +39,53 @@ const TaskModal: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const loadCardData = async () => {
+    const data = await getCard({
+      cardId: 159,
+      token: TMP_TOKEN,
+    });
+    if (data) {
+      setCardData(data);
+    }
+  };
+
+  const loadCommentsData = async () => {
+    if (commentsData.length > 0 && cursorId === null) {
+      unobserve();
+      return;
+    }
+    try {
+      const commentsData = await getComments({
+        cardId: 159,
+        size: 2,
+        cursorId,
+        token: TMP_TOKEN,
+      });
+
+      if (commentsData) {
+        setCommentsData((prev) => {
+          return [...prev, ...commentsData.comments];
+        });
+        setCursorId(commentsData.cursorId);
+      }
+    } catch (error) {
+      console.error("Error loading comments:", error);
+    }
+    observe();
+  };
+
+  const submitComment = async (comment: string) => {
+    await postComments({
+      token: TMP_TOKEN,
+      content: comment,
+      cardId: 159,
+      columnId: 1242,
+      dashboardId: 394,
+    });
+
+    await loadCommentsData();
+  };
+
   const handleEditClick = (commentId: number, currentContent: string) => {
     setIsEditing(true);
     setEditingCommentId(commentId);
@@ -39,8 +93,8 @@ const TaskModal: React.FC = () => {
   };
 
   const handleDeleteClick = async (commentId: number) => {
-    await deleteComments({ commentId, token: "YOUR_TOKEN" });
-    await commentsData;
+    await deleteComments({ commentId, token: TMP_TOKEN });
+    await loadCommentsData();
   };
 
   const handleKeyDown = async (event: React.KeyboardEvent, commentId: number) => {
@@ -48,58 +102,34 @@ const TaskModal: React.FC = () => {
       event.preventDefault();
       await handleUpdateComment(commentId);
     }
+    await loadCommentsData();
   };
 
   const handleUpdateComment = async (commentId: number) => {
     if (commentId) {
       await putComments({
         commentId: commentId,
-        token: "YOUR_TOKEN",
+        token: TMP_TOKEN,
         content: newCommentContent,
       });
       setIsEditing(false);
       setEditingCommentId(null);
       setNewCommentContent("");
-      await commentsData;
+
+      await loadCommentsData();
     }
   };
 
   useEffect(() => {
-    const loadCardData = async () => {
-      const data = await getCard({
-        cardId: "159",
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc",
-      });
-      if (data) {
-        setCardData(data);
-      }
-    };
-
-    const loadCommentsData = async () => {
-      try {
-        const commentsData = await getComments({
-          cardId: 159,
-          size: 10,
-          cursorId: undefined,
-          token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc",
-        });
-
-        if (commentsData) {
-          setCommentsData(commentsData.comments);
-        }
-      } catch (error) {
-        console.error("Error loading comments:", error);
-      }
-    };
-
     loadCardData();
-    loadCommentsData();
   }, []);
 
-  if (!cardData || commentsData.length === 0) {
-    return <div>Loading...</div>; // 데이터 로딩 중 또는 데이터가 없는 경우 처리
+  useEffect(() => {
+    loadCommentsData();
+  }, [loadData]);
+
+  if (!cardData) {
+    return <div>Loading...</div>;
   }
 
   return (
@@ -140,7 +170,7 @@ const TaskModal: React.FC = () => {
       </CategoryWrapper>
       <Description>{cardData.description}</Description>
       <Image src={cardData.imageUrl} alt="Task Image" />
-      <ModalInput label="댓글" $inputType="댓글" />
+      <ModalInput label="댓글" $inputType="댓글" onSubmitComment={submitComment} />
       <CommentWrapper>
         {commentsData.map((comment) => (
           <CommentItem key={comment.id}>
@@ -164,6 +194,7 @@ const TaskModal: React.FC = () => {
             </RightWrapper>
           </CommentItem>
         ))}
+        <div ref={targetRef}></div>
       </CommentWrapper>
     </Wrapper>
   );
@@ -173,17 +204,20 @@ export default TaskModal;
 
 const Wrapper = styled.div`
   width: 73rem;
+  height: 76.3rem;
+  overflow-y: auto;
+
   padding: 3.2rem 2.8rem 2.8rem 2.8rem;
 
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
 
   border-radius: 8px;
   background: var(--White);
 
   @media (max-width: ${DeviceSize.mobile}) {
     width: 32.7rem;
+    height: 70.8rem;
 
     padding: 2.8rem 2rem 2.8rem 2rem;
 
@@ -193,6 +227,7 @@ const Wrapper = styled.div`
 
 const TitleWrapper = styled.div`
   width: 100%;
+  height: 8.5rem;
 
   display: flex;
   justify-content: space-between;
@@ -326,7 +361,7 @@ const Tags = styled.div`
 
     margin-right: 1.6rem;
 
-    align-items: end;
+    align-items: center;
     float: left;
   }
   @media (max-width: ${DeviceSize.mobile}) {
@@ -335,7 +370,13 @@ const Tags = styled.div`
 `;
 
 const DivisionWrapper = styled.div`
-  margin: 0 1rem;
+  margin-left: 2rem;
+  margin-right: 1rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    margin-left: 1.2rem;
+    margin-right: 0.2rem;
+  }
 `;
 
 const Description = styled.div`
@@ -383,6 +424,7 @@ const LeftWrapper = styled.div`
     border-radius: 50%;
   }
 `;
+
 const RightWrapper = styled.div``;
 
 const InfoWrapper = styled.div`
@@ -437,7 +479,7 @@ const FunctionWrapper = styled.div`
   gap: 1.2rem;
 `;
 
-const Edit = styled.div`
+const Edit = styled.button`
   color: var(--Gray9f);
   font-size: 1.2rem;
   text-decoration-line: underline;
@@ -447,7 +489,7 @@ const Edit = styled.div`
   }
 `;
 
-const Delete = styled.div`
+const Delete = styled.button`
   color: var(--Gray9f);
   font-size: 1.2rem;
   text-decoration-line: underline;

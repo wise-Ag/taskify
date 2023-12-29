@@ -9,9 +9,9 @@ export const ENDPOINTS = {
   CARDS: {
     POST: `/cards`,
     GET_LIST: `/cards`,
-    PUT: (cardId: string) => `/cards/${cardId}`,
-    GET_CARD: (cardId: string) => `/cards/${cardId}`,
-    DELETE: (cardId: string) => `/cards/${cardId}`,
+    PUT: (cardId: number) => `/cards/${cardId}`,
+    GET_CARD: (cardId: number) => `/cards/${cardId}`,
+    DELETE: (cardId: number) => `/cards/${cardId}`,
   },
 
   COLUMNS: {
@@ -25,8 +25,8 @@ export const ENDPOINTS = {
   COMMENT: {
     POST: `/comments`,
     GET: `/comments`,
-    PUT: (commentid: string) => `/comments/${commentid}`,
-    DELETE: (commentid: string) => `/comments/${commentid}`,
+    PUT: (commentid: number) => `/comments/${commentid}`,
+    DELETE: (commentid: number) => `/comments/${commentid}`,
   },
 
   DASHBOARDS: {
