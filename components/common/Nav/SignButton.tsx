@@ -1,12 +1,33 @@
 import { DeviceSize } from "@/styles/DeviceSize";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const SignButton = () => {
+  const [isSignIn, setIsSignIn] = useState(false);
+
+  useEffect(() => {
+    localStorage.getItem("accessToken") && setIsSignIn(true);
+  });
+
   return (
     <Wrapper>
-      <Button href="/signin">로그인</Button>
-      <Button href="/signup">회원가입</Button>
+      {isSignIn ? (
+        <Button
+          href="/"
+          onClick={() => {
+            localStorage.removeItem("accessToken");
+            setIsSignIn(false);
+          }}
+        >
+          로그아웃
+        </Button>
+      ) : (
+        <>
+          <Button href="/signin">로그인</Button>
+          <Button href="/signup">회원가입</Button>
+        </>
+      )}
     </Wrapper>
   );
 };
