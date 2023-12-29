@@ -35,7 +35,7 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
     };
 
     const handleCommentSubmit = () => {
-      if (onSubmitComment) {
+      if (onSubmitComment && inputValue.trim()) {
         onSubmitComment(inputValue);
         setInputValue("");
       }

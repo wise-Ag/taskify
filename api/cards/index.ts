@@ -1,9 +1,9 @@
 import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
-import { GetCardProps, GetCardListProps, PutCardProps, DeleteCardProps, Card, GetCardListData } from "@/api/cards/cards.types";
+import { GetCardProps, GetCardListProps, PutCardProps, DeleteCardProps, Card, GetCardListData, PostCardProps } from "@/api/cards/cards.types";
 
 export const getCard = async ({
-  cardId = "77",
+  cardId = 77,
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
 }: GetCardProps): Promise<Card | null> => {
   try {
@@ -45,9 +45,7 @@ export const getCardList = async ({
 
 export const postCards = async ({
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: {
-  token: string;
-}): Promise<Card | null> => {
+}: PostCardProps): Promise<Card | null> => {
   try {
     const res = await instance.post(
       ENDPOINTS.CARDS.POST,
@@ -74,7 +72,7 @@ export const postCards = async ({
 };
 
 export const putCard = async ({
-  cardId = "77",
+  cardId = 77,
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
 }: PutCardProps): Promise<Card | null> => {
   try {
@@ -102,7 +100,7 @@ export const putCard = async ({
 };
 
 export const deleteCard = async ({
-  cardId = "77",
+  cardId = 77,
   token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
 }: DeleteCardProps) => {
   try {
