@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import TodoModal from "@/components/Modal/TodoModal";
 import AlertModal from "@/components/Modal/AlertModal";
 import { Z_INDEX } from "@/styles/ZindexStyles";
@@ -12,7 +12,7 @@ const KebabModal = () => {
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModalFunc, closeModalFunc: closeEditModalFunc } = useModal();
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: { key: string }) => {
       if (event.key === "Escape") {
         closeDeleteModalFunc();
         closeEditModalFunc();
