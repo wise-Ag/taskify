@@ -29,13 +29,18 @@ const MyDashboardList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [invitations] = useAtom(invitationsAtom); // 초대 목록!!
 
+  // 새로운 대시보드 클릭 시
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
+  // 모달 닫을 때
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
+  // 생성할 때
+  const handleAddModal = () => {};
 
   useEffect(() => {
     const loadDashboardList = async () => {
@@ -77,7 +82,7 @@ const MyDashboardList = () => {
       </PageContent>
       {isModalOpen && (
         <ModalBackdrop>
-          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={handleCloseModal} />
+          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={handleCloseModal} onAdd={handleAddModal} />
         </ModalBackdrop>
       )}
     </Wrapper>

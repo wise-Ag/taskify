@@ -9,9 +9,10 @@ interface ModalProps {
   label: "이름" | "대시보드 이름";
   buttonType: "생성" | "변경";
   onClose?: () => void;
+  onAdd?: () => void;
 }
 
-const ModalContainer = ({ title, label, buttonType, onClose }: ModalProps) => {
+const ModalContainer = ({ title, label, buttonType, onClose, onAdd }: ModalProps) => {
   return (
     <Wrapper>
       <Title>{title}</Title>
@@ -22,7 +23,7 @@ const ModalContainer = ({ title, label, buttonType, onClose }: ModalProps) => {
         </ColorSelectorWrapper>
       )}
       <ButtonWrapper>
-        <ButtonSet type="modalSet" onClickLeft={onClose}>
+        <ButtonSet type="modalSet" onClickLeft={onClose} onClickRight={onAdd}>
           {buttonType}
         </ButtonSet>
       </ButtonWrapper>
