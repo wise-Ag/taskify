@@ -18,7 +18,7 @@ const SettingSideMenu = () => {
         <LogoButton />
       </LogoButtonContainer>
       <ButtonContainer>
-        <StyledButton onClick={() => handleClick("profile")} selected={tab === "profile"}>
+        <StyledButton onClick={() => handleClick("profile")} selected={tab === "profile" || !tab}>
           프로필 설정
         </StyledButton>
         <StyledButton onClick={() => handleClick("password")} selected={tab === "password"}>
@@ -108,14 +108,9 @@ const StyledButton = styled.button<{ selected?: boolean }>`
   ${({ selected }) =>
     selected &&
     `
-    font-weight: 700;
-    color: var(--Main);
-  `}
-
-  &:focus {
-    font-weight: 700;
-    color: var(--Main);
-  }
+      font-weight: 700;
+      color: var(--Main);
+    `}
 
   @media (max-width: ${DeviceSize.tablet}) {
     font-size: 1.6rem;
@@ -131,11 +126,7 @@ const StyledButton = styled.button<{ selected?: boolean }>`
     ${({ selected }) =>
       selected &&
       `
-    border-bottom: 2px solid var(--Main);
-  `}
-
-    &:focus {
-      border-bottom: 2px solid var(--Main);
-    }
+        border-bottom: 2px solid var(--Main);
+    `}
   }
 `;

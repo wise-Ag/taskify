@@ -61,7 +61,7 @@ const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
               <span>홈</span>
             </ItemContent>
           </MenuItem>
-          <MenuItem onClick={() => navigateTo("/mypage?tab=profile")}>
+          <MenuItem onClick={() => navigateTo("/mypage")}>
             <ItemContent>
               <FaUserCog />
               <span>계정 관리</span>

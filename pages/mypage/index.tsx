@@ -9,16 +9,15 @@ import styled from "styled-components";
 
 const Mypage = () => {
   const router = useRouter();
-  const { boardId, tab } = router.query;
+  const { tab } = router.query;
 
   return (
     <Wrapper>
       <SettingNav />
       <SettingSideMenu />
       <Container>
-        <BackButton href={`/board/${boardId}`} /> {/* 추후 경로 수정 예정 */}
-        {tab === "profile" && <AccountProfile />}
-        {tab === "password" && <AccountPassword />}
+        <BackButton href={`/mydashboard`} />
+        {tab === "password" ? <AccountPassword /> : <AccountProfile />}
       </Container>
     </Wrapper>
   );
