@@ -1,4 +1,5 @@
 import MainSection from "@/components/Landing/MainSection";
+import TagInput from "@/components/Modal/ModalInput/TagInput";
 import MainNav from "@/components/common/Nav/MainNav";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -16,7 +17,8 @@ export default function Home() {
   });
   return (
     <>
-      {isSignin || (
+      <TagInput />
+      {/* {isSignin || (
         <>
           <Head>
             <meta name="description" content="Taskify helps you manage your tasks with ease. Join now and get organized!" />
@@ -25,7 +27,7 @@ export default function Home() {
           <MainNav />
           <MainSection />
         </>
-      )}
+      )} */}
     </>
   );
 }
