@@ -1,36 +1,84 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 import ImageUploadInput from "@/components/Modal/ModalInput/ImageUploadInput";
 import Input from "@/components/Sign/SignInput/Input";
+import { useModal } from "@/hooks/useModal";
+import { Controller, useForm } from "react-hook-form";
+import { NICKNAME_RULES, PLACEHOLDER } from "@/constants/InputConstant";
+import { getUsers, putUsers } from "@/api/users";
+import ModalWrapper from "../Modal/ModalWrapper";
+import AlertModal from "../Modal/AlertModal";
 
 const AccountProfile = () => {
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("이메일 변경:", event.target.value);
+  const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const { control, handleSubmit, watch, setError, setValue, formState } = useForm({
+    defaultValues: { email: "", nickname: "" },
+    mode: "onBlur",
+  });
+
+  const handleCloseModal = () => {
+    closeModalFunc();
   };
 
-  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("닉네임 변경:", event.target.value);
-  };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("accessToken");
+
+      if (token) {
+        const userData = await getUsers({ token });
+        if (userData) {
+          setValue("email", userData.email);
+          setValue("nickname", userData.nickname);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [setValue]);
 
   return (
-    <Container>
-      <Title>프로필</Title>
+    <>
       <Wrapper>
-        <StyledImageUploadInput type="account" />
-        <InputWrapper>
-          <StyledInput label="이메일" value={""} placeholder={"/* 유저 이메일 정보 */"} onChange={handleEmailChange} />
-          <StyledInput label="닉네임" value={""} placeholder={"/* 유저 닉네임 정보 */"} onChange={handleNicknameChange} />
-        </InputWrapper>
+        <Title>프로필</Title>
+        <StyledForm
+          onSubmit={handleSubmit(async (data) => {
+            const res = await putUsers({ nickname: data.nickname, token: localStorage.getItem("accessToken") });
+            if (res !== null) {
+              return openModalFunc();
+            }
+            // setError("currentPassword", { message: ERROR_MESSAGE.currentPasswordDifferent });
+          })}
+        >
+          <Container>
+            <StyledImageUploadInput type="account" />
+            <InputWrapper>
+              <Controller control={control} name="email" render={({ field }) => <StyledInput label="이메일" {...field} disabled />} />
+              <Controller
+                control={control}
+                name="nickname"
+                rules={NICKNAME_RULES}
+                render={({ field, fieldState }) => (
+                  <StyledInput label="닉네임" {...field} placeholder={PLACEHOLDER.nickname} hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
+                )}
+              />
+            </InputWrapper>
+          </Container>
+          <SaveButton>저장</SaveButton>
+        </StyledForm>
       </Wrapper>
-      <SaveButton>저장</SaveButton>
-    </Container>
+      {isModalOpen && (
+        <ModalWrapper>
+          <AlertModal type="profileChangeComplete" onClick={handleCloseModal} />
+        </ModalWrapper>
+      )}
+    </>
   );
 };
 
 export default AccountProfile;
 
-const Container = styled.div`
+const Wrapper = styled.div`
   max-width: 62rem;
 
   padding: 3.2rem 2.8rem;
@@ -50,7 +98,14 @@ const Title = styled.p`
   color: var(--Black);
 `;
 
-const Wrapper = styled.div`
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2.4rem;
+`;
+
+const Container = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 1.6rem;
@@ -89,7 +144,6 @@ const SaveButton = styled.button`
   width: 8.4rem;
   height: 3.2rem;
 
-  margin: 2.4rem 0 -0.4rem auto;
   border-radius: 4px;
 
   background-color: var(--Main);

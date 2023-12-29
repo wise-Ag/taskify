@@ -1,12 +1,8 @@
 import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
-import { UserData, PostImageData, PostProfileImageProps, PostUsersProps } from "@/api/users/users.types";
+import { UserData, PostImageData, PostProfileImageProps, PostUsersProps, PutUsersProps } from "@/api/users/users.types";
 
-export const getUsers = async ({
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
-}: {
-  token: string;
-}): Promise<UserData | null> => {
+export const getUsers = async ({ token }: { token: string }): Promise<UserData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.USERS.GET, {
       headers: {
@@ -57,13 +53,13 @@ export const postUsers = async ({ email, nickname, password }: PostUsersProps): 
   }
 };
 
-export const putUsers = async ({ token }: { token: string | null }): Promise<UserData | null> => {
+export const putUsers = async ({ nickname, profileImageUrl, token }: PutUsersProps): Promise<UserData | null> => {
   try {
     const res = await instance.put(
       ENDPOINTS.USERS.PUT,
       {
-        nickname: "이은행",
-        profileImageUrl: null,
+        nickname: nickname,
+        profileImageUrl: profileImageUrl,
       },
       {
         headers: {

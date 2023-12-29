@@ -21,3 +21,9 @@ export interface PostUsersProps {
   nickname: string;
   password: string;
 }
+
+export interface PutUsersProps {
+  nickname: string;
+  profileImageUrl?: string | null;
+  token: string | null;
+}

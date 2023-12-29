@@ -59,7 +59,7 @@ const MyDashboardList = () => {
         {dashboards &&
           dashboards.map((v) => {
             return (
-              <Link key={v.id} href={`/dashboards/${v.id}`}>
+              <Link key={v.id} href={`/dashboard/${v.id}`}>
                 <Button type="dashboardList" title={v.title} color={v.color} id={v.id} createdByMe={v.createdByMe} />
                 {/* </div> */}
               </Link>
