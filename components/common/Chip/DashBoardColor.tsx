@@ -1,7 +1,6 @@
 import CheckIcon from "@/assets/icons/check.svg";
-import { selectedColorAtom } from "@/states/atoms";
+import { useState } from "react";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { useAtom } from "jotai";
 import styled from "styled-components";
 
 interface ColorCircleProps {
@@ -11,14 +10,16 @@ interface ColorCircleProps {
 }
 
 const DashBoardColor = () => {
-  const [selectedColor, setSelectedColor] = useAtom(selectedColorAtom);
+  const [selectedColor, setSelectedColor] = useState("");
 
   const colors = ["--Green", "--Purple", "--Orange", "--Blue", "--Pink"];
 
   return (
     <Container>
       {colors.map((colorVar) => (
-        <ColorCircle key={colorVar} color={colorVar} selected={selectedColor === `var(${colorVar})`} onClick={() => setSelectedColor(`var(${colorVar})`)} />
+        <ColorCircle key={colorVar} color={colorVar} selected={selectedColor === `var(${colorVar})`} onClick={() => setSelectedColor(`var(${colorVar})`)}>
+          {selectedColor === `var(${colorVar})` && <StyledCheckIcon />}
+        </ColorCircle>
       ))}
     </Container>
   );
@@ -48,21 +49,12 @@ const ColorCircle = styled.div<ColorCircleProps>`
 
   cursor: pointer;
 
-  &:after {
-    width: 2.4rem;
-    height: 2.4rem;
-
-    display: ${(props) => (props.selected ? "block" : "none")};
-    position: absolute;
-
-    background-image: url(${CheckIcon.src});
-    background-size: cover;
-
-    content: "";
-  }
-
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 2.8rem;
     height: 2.8rem;
   }
+`;
+
+const StyledCheckIcon = styled(CheckIcon)`
+  color: var(--White);
 `;
