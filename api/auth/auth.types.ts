@@ -14,3 +14,9 @@ export interface PostLoginProps {
   email: string;
   password: string;
 }
+
+export interface PutPasswordProps {
+  password: string;
+  newPassword: string;
+  token: string | null;
+}

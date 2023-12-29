@@ -9,16 +9,15 @@ import styled from "styled-components";
 
 const Mypage = () => {
   const router = useRouter();
-  const { boardId } = router.query;
+  const { tab } = router.query;
 
   return (
     <Wrapper>
       <SettingNav />
       <SettingSideMenu />
       <Container>
-        <BackButton href={`/board/${boardId}`} /> {/* 추후 경로 수정 예정 */}
-        <AccountProfile />
-        <AccountPassword />
+        <BackButton href={`/mydashboard`} />
+        {tab === "password" ? <AccountPassword /> : <AccountProfile />}
       </Container>
     </Wrapper>
   );
@@ -42,6 +41,7 @@ const Container = styled.div`
 
   @media (max-width: ${DeviceSize.tablet}) {
     margin-left: 18rem;
+    margin-right: 2rem;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {

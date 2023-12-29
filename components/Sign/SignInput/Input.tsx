@@ -2,21 +2,22 @@ import { ChangeEventHandler, FocusEventHandler, HTMLInputTypeAttribute, forwardR
 import styled from "styled-components";
 
 export interface InputProps {
-  label: "이메일" | "비밀번호" | "비밀번호 확인" | "닉네임";
+  label: string;
   type?: HTMLInputTypeAttribute;
   value: string;
   hasError?: boolean;
   errorText?: string;
-  placeholder: string;
+  placeholder?: string;
+  disabled?: boolean;
   onChange: ChangeEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
-const Input = forwardRef<HTMLInputElement, InputProps>(({ label, type, value, hasError = false, errorText, onChange, onBlur, placeholder }, ref) => {
+const Input = forwardRef<HTMLInputElement, InputProps>(({ label, type, value, hasError = false, errorText, onChange, onBlur, placeholder, disabled }, ref) => {
   return (
     <InputBox>
       <Label>{label}</Label>
-      <StyledInput ref={ref} type={type} value={value} onChange={onChange} onBlur={onBlur} placeholder={placeholder} className={hasError ? "error" : ""} />
+      <StyledInput ref={ref} type={type} value={value} onChange={onChange} onBlur={onBlur} placeholder={placeholder} disabled={disabled} className={hasError ? "error" : ""} />
       {hasError && <Error>{errorText}</Error>}
     </InputBox>
   );
@@ -38,7 +39,7 @@ const Label = styled.label`
   font-size: 1.6rem;
 `;
 
-const StyledInput = styled.input<{ hasError?: boolean }>`
+const StyledInput = styled.input<{ hasError?: boolean; disabled?: boolean }>`
   width: 100%;
   height: 5rem;
 
@@ -59,6 +60,11 @@ const StyledInput = styled.input<{ hasError?: boolean }>`
 
   &.error {
     border-color: var(--Red);
+  }
+
+  &:disabled {
+    color: var(--Gray9f);
+    cursor: default;
   }
 `;
 

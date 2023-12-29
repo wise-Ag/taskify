@@ -1,17 +1,29 @@
 import LogoButton from "@/components/common/Buttons/LogoButton";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
 const SettingSideMenu = () => {
+  const router = useRouter();
+  const { tab } = router.query;
+
+  const handleClick = (query: string) => {
+    router.push(`/mypage?tab=${query}`);
+  };
+
   return (
     <Wrapper>
       <LogoButtonContainer>
         <LogoButton />
       </LogoButtonContainer>
       <ButtonContainer>
-        <Button>프로필 설정</Button>
-        <Button>비밀번호 변경</Button>
+        <StyledButton onClick={() => handleClick("profile")} selected={tab === "profile" || !tab}>
+          프로필 설정
+        </StyledButton>
+        <StyledButton onClick={() => handleClick("password")} selected={tab === "password"}>
+          비밀번호 변경
+        </StyledButton>
       </ButtonContainer>
     </Wrapper>
   );
@@ -88,13 +100,17 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const Button = styled.button`
+const StyledButton = styled.button<{ selected?: boolean }>`
+  display: flex;
+
   font-size: 1.8rem;
 
-  &:focus {
-    font-weight: 700;
-    color: var(--Main);
-  }
+  ${({ selected }) =>
+    selected &&
+    `
+      font-weight: 700;
+      color: var(--Main);
+    `}
 
   @media (max-width: ${DeviceSize.tablet}) {
     font-size: 1.6rem;
@@ -102,11 +118,15 @@ const Button = styled.button`
 
   @media (max-width: ${DeviceSize.mobile}) {
     height: 5rem;
+
+    align-items: center;
+
     font-size: 1.5rem;
 
-    &:focus {
-      border-bottom: 2px solid var(--Main);
-      color: var(--Main);
-    }
+    ${({ selected }) =>
+      selected &&
+      `
+        border-bottom: 2px solid var(--Main);
+    `}
   }
 `;
