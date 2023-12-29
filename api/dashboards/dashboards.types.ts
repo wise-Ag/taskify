@@ -49,7 +49,7 @@ export interface GetDashboardListProps {
   cursorId?: number;
   page?: number;
   size?: number;
-  token: string;
+  token: string | null;
 }
 
 export interface PostDashboardInvitationsProps {

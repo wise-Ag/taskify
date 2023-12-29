@@ -10,27 +10,19 @@ import { Z_INDEX } from "@/styles/ZindexStyles";
 import { getDashboardList } from "@/api/dashboards";
 import { useAtom } from "jotai";
 import { invitationsAtom } from "@/states/atoms";
+import { Dashboard } from "@/api/dashboards/dashboards.types";
 
 interface DashboardProps {
+  boardId: number;
   color: string;
   title: string;
   createdByMe?: boolean;
   closePopup?: () => void;
 }
-export interface Dashboards {
-  id: number;
-  title: string;
-  color: string;
-  userId: number;
-  createdAt: string;
-  updatedAt: string;
-  createdByMe: boolean;
-}
 
-const Dashboard = ({ color, title, createdByMe }: DashboardProps) => {
+const Dashboard = ({ color, title, createdByMe, boardId }: DashboardProps) => {
   return (
-    // 질 동작하는지 확인하기 위해 임의로 설정한 경로
-    <Container href={"/dashboard"}>
+    <Container href={`/dashboard/${boardId}`}>
       <Color color={color} />
       <DashboardTitle>{title}</DashboardTitle>
       {createdByMe && <StyledCrown alt="왕관" />}
@@ -41,22 +33,8 @@ const Dashboard = ({ color, title, createdByMe }: DashboardProps) => {
 const SideMenu = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [cursorId, setCursorId] = useState(1);
-  const [dashboards, setDashboards] = useState<Dashboards[]>([]);
+  const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [invitations] = useAtom(invitationsAtom); // 초대 목록!!
-
-  useEffect(() => {
-    const loadDashboardList = async () => {
-      const res = await getDashboardList({
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQ4NDU5LCJpc3MiOiJzcC10YXNraWZ5In0.WYQWWikKqILh4vWyiDSCs0HDO-3TvKg7ci19-NUVexk",
-        navigationMethod: "infiniteScroll",
-      });
-      if (res && res.dashboards) {
-        setDashboards(res.dashboards); // 로드한 데이터를 상태에 저장
-      }
-    };
-    loadDashboardList();
-  }, [invitations]);
 
   const togglePopup = () => {
     setIsPopupVisible((prev) => !prev);
@@ -66,6 +44,26 @@ const SideMenu = () => {
     setIsPopupVisible(false);
   };
 
+  useEffect(() => {
+    const loadDashboardList = async () => {
+      const res = await getDashboardList({
+        token: localStorage.getItem("accessToken"),
+        navigationMethod: "infiniteScroll",
+      });
+      if (res && res.dashboards) {
+        setDashboards(...[res.dashboards]);
+      }
+    };
+    loadDashboardList();
+  }, [invitations]);
+
+  // useEffect(() => {
+  //   document.addEventListener("click", closePopup);
+  //   return () => {
+  //     document.removeEventListener("click", closePopup);
+  //   };
+  // });
+
   return (
     <Wrapper>
       <LogoButton />
@@ -74,7 +72,7 @@ const SideMenu = () => {
         <Popup>
           <DashboardList>
             {dashboards.map((dashboard, key) => {
-              return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} />;
+              return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
             })}
           </DashboardList>
         </Popup>
@@ -85,7 +83,7 @@ const SideMenu = () => {
       </HeaderWrapper>
       <DashboardList>
         {dashboards.map((dashboard, key) => {
-          return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} />;
+          return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
         })}
       </DashboardList>
     </Wrapper>
