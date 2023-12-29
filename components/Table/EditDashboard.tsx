@@ -1,8 +1,18 @@
 import styled from "styled-components";
+import React, { useState } from "react";
 import DashBoardColor from "@/components/common/Chip/DashBoardColor";
 import { DeviceSize } from "@/styles/DeviceSize";
+import ToastModal from "@/components/Modal/ToastModal";
+import { toast } from "react-toastify";
 
 const EditDashboard = () => {
+  const [toastVisible, setToastVisible] = useState(false);
+
+  const handleClick = () => {
+    toast("변경이 완료되었습니다.");
+    setToastVisible((prev) => !prev);
+  };
+
   return (
     <Wrapper>
       <Header>
@@ -14,7 +24,8 @@ const EditDashboard = () => {
         <Input placeholder="변경할 이름을 입력해 주세요." />
       </Form>
       <ButtonWrapper>
-        <Button>변경</Button>
+        <Button onClick={handleClick}> 변경</Button>
+        {toastVisible && <ToastModal />}
       </ButtonWrapper>
     </Wrapper>
   );

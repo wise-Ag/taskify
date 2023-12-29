@@ -1,51 +1,36 @@
-import instance from "@/api/axios";
 import Card from "@/components/Dashboard/Card/Card";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ColumnHeader from "@/components/Dashboard/Column/ColumnHeader";
-import { MOCK_DATA } from "@/components/Dashboard/Column/Columns";
 import Button from "@/components/common/Buttons/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { getCardList } from "@/api/cards";
+import { Card as CardData } from "@/api/cards/cards.types";
 
 interface ColumnProps {
   columnId: number;
   title: string;
 }
 
-export interface getCardsResponse {
-  assignee: { id: number; nickname: string; profileImageUrl: string | null };
-  columnId: number;
-  createdAt: string;
-  dashboardId: number;
-  description: string;
-  dueDate: string;
-  id: number;
-  imageUrl: string;
-  tags: string[];
-  teamId: string;
-  title: string;
-  updatedAt: string;
-}
-
 const Column = ({ columnId, title }: ColumnProps) => {
-  const [cards, setCards] = useState<getCardsResponse[]>([]);
+  const [cards, setCards] = useState<CardData[]>([]);
 
   useEffect(() => {
-    const getCards = async () => {
-      const res = await instance.get("/cards", {
-        params: {
-          columnId,
-        },
-        headers: {
-          Authorization: `Bearer ${MOCK_DATA.token}`,
-        },
+    const loadCardList = async () => {
+      const res = await getCardList({
+        size: 10,
+        cursorId: null,
+        columnId,
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjE2LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQxODYxLCJpc3MiOiJzcC10YXNraWZ5In0.onJAVE-0l39MjS77mTbfnS6UMU5bWMkVgBKlA-rs03U",
       });
-      const cards = res.data.cards;
-      setCards(() => {
-        return [...cards];
-      });
+
+      if (res !== null) {
+        setCards(res?.cards);
+      }
     };
-    getCards();
+
+    loadCardList();
   }, []);
 
   return (

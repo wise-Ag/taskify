@@ -1,12 +1,13 @@
 import CalenderIcon from "@/assets/icons/calender.svg";
 import Tag from "@/components/common/Chip/Tag";
-import { getCardsResponse } from "@/components/Dashboard/Column/Column";
+// import { getCardsResponse } from "@/components/Dashboard/Column/Column";
 import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { formatDate } from "@/utils/FormatDate";
 import styled from "styled-components";
+import { Card } from "@/api/cards/cards.types";
 
-const Card = ({ cardData }: { cardData: getCardsResponse }) => {
+const Card = ({ cardData }: { cardData: Card }) => {
   return (
     <Wrapper>
       {cardData.imageUrl && <CardImage cardimage={cardData.imageUrl || null} />}
