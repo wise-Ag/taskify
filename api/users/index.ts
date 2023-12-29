@@ -2,7 +2,7 @@ import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
 import { UserData, PostImageData, PostProfileImageProps, PostUsersProps, PutUsersProps } from "@/api/users/users.types";
 
-export const getUsers = async ({ token }: { token: string }): Promise<UserData | null> => {
+export const getUsers = async ({ token }: { token: string | null }): Promise<UserData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.USERS.GET, {
       headers: {

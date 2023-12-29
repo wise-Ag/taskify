@@ -1,6 +1,5 @@
 import CalenderIcon from "@/assets/icons/calender.svg";
 import Tag from "@/components/common/Chip/Tag";
-// import { getCardsResponse } from "@/components/Dashboard/Column/Column";
 import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { formatDate } from "@/utils/FormatDate";
@@ -10,8 +9,8 @@ import { Card } from "@/api/cards/cards.types";
 const Card = ({ cardData }: { cardData: Card }) => {
   return (
     <Wrapper>
-      {cardData.imageUrl && <CardImage cardimage={cardData.imageUrl || null} />}
-      <Title imageurl={cardData.imageUrl}>{cardData.title}</Title>
+      {cardData.imageUrl && <CardImage $cardimage={cardData.imageUrl || null} />}
+      <Title $imageurl={cardData.imageUrl}>{cardData.title}</Title>
       {cardData.tags[0] && (
         <Tags>
           {cardData.tags.map((tag, idx) => {
@@ -31,7 +30,7 @@ const Card = ({ cardData }: { cardData: Card }) => {
           <ProfileImage url={cardData.assignee.profileImageUrl} />
         ) : (
           <NoProfileImageWrapper>
-            <NoProfileImage />
+            <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
           </NoProfileImageWrapper>
         )}
       </div>
@@ -46,7 +45,7 @@ const Wrapper = styled.div`
 
   padding: 2rem;
   border-radius: 6px;
-  border: 1px solid var(--Grey30, #d9d9d9);
+  border: 1px solid var(--Grayd9);
 
   position: relative;
   display: flex;
@@ -55,7 +54,7 @@ const Wrapper = styled.div`
   align-items: start;
   justify-content: center;
 
-  background-color: white;
+  background-color: var(--White);
 
   cursor: pointer;
 
@@ -76,13 +75,13 @@ const Wrapper = styled.div`
   }
 `;
 
-const CardImage = styled.div<{ cardimage: string | null }>`
+const CardImage = styled.div<{ $cardimage: string | null }>`
   width: 27.4rem;
   height: 16rem;
 
   border-radius: 6px;
 
-  background-image: url(${(props) => props.cardimage || ""});
+  background-image: url(${(props) => props.$cardimage || ""});
   background-size: cover;
   background-repeat: no-repeat;
 
@@ -103,12 +102,12 @@ const CardImage = styled.div<{ cardimage: string | null }>`
   }
 `;
 
-const Title = styled.div<{ imageurl: string }>`
+const Title = styled.div<{ $imageurl: string }>`
   font-size: 1.6rem;
   font-weight: 500;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    width: ${(props) => (props.imageurl ? "75%" : "100%")};
+    width: ${(props) => (props.$imageurl ? "75%" : "100%")};
     height: 50%;
     float: left;
 
