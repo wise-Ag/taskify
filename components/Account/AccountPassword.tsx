@@ -10,7 +10,7 @@ import styled from "styled-components";
 
 const AccountPassword = () => {
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
-  const { control, handleSubmit, watch, setError, reset } = useForm({
+  const { control, handleSubmit, watch, setError, reset, formState } = useForm({
     defaultValues: { currentPassword: "", newPassword: "", confirmNewPassword: "" },
     mode: "onBlur",
   });
@@ -87,7 +87,7 @@ const AccountPassword = () => {
               )}
             />
           </InputWrapper>
-          <SaveButton>변경</SaveButton>
+          <SaveButton disabled={!formState.isValid}>변경</SaveButton>
         </StyledForm>
       </Container>
       {isModalOpen && (
@@ -148,7 +148,7 @@ const StyledPasswordInput = styled(PasswordInput)`
   }
 `;
 
-const SaveButton = styled.button`
+const SaveButton = styled.button<{ disabled: boolean }>`
   width: 8.4rem;
   height: 3.2rem;
 
@@ -158,4 +158,11 @@ const SaveButton = styled.button`
 
   color: var(--White);
   font-size: 1.4rem;
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+      background: var(--Gray9f);
+      cursor: default;
+    `}
 `;
