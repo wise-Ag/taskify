@@ -1,30 +1,48 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TodoModal from "@/components/Modal/TodoModal";
 import AlertModal from "@/components/Modal/AlertModal";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useModal } from "@/hooks/useModal";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
 
 const KebabModal = () => {
-  const [editModal, setEditModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
+  const { isModalOpen: isEditModalOpen, openModalFunc: openEditModalFunc, closeModalFunc: closeEditModalFunc } = useModal();
 
-  const handleEdit = () => {
-    setEditModal((prev) => !prev);
-  };
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        closeDeleteModalFunc();
+        closeEditModalFunc();
+      }
+    };
 
-  const handleDelete = () => {
-    setDeleteModal((prev) => !prev);
-  };
+    if (isDeleteModalOpen || isEditModalOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [closeDeleteModalFunc, closeEditModalFunc]);
 
   return (
     <Wrapper>
       <KebabListWrapper>
-        <KebabList onClick={handleEdit}>수정하기</KebabList>
-        {editModal && <TodoModal type="edit" />}
-        <KebabList onClick={handleDelete}>삭제하기</KebabList>
-        {deleteModal && <AlertModal type="delete" />}
+        <KebabList onClick={openEditModalFunc}>수정하기</KebabList>
+        {isEditModalOpen && (
+          <ModalWrapper>
+            <TodoModal type="edit" />
+          </ModalWrapper>
+        )}
+        <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
+        {isDeleteModalOpen && (
+          <ModalWrapper>
+            <AlertModal type="delete" />
+          </ModalWrapper>
+        )}
       </KebabListWrapper>
     </Wrapper>
   );
