@@ -55,9 +55,9 @@ const ProfileImages = () => {
         <Contents>
           {members.slice(0, 4).map((member, index) =>
             member.profileImageUrl ? (
-              <ProfileImg key={member.id} index={index} image={member.profileImageUrl} />
+              <ProfileImg key={member.id} $index={index} image={member.profileImageUrl} />
             ) : (
-              <NoProfileImageWrapper key={member.id} index={index}>
+              <NoProfileImageWrapper key={member.id} $index={index}>
                 <NoProfileImage id={member.id} nickname={member.nickname} isBorder={true} />
               </NoProfileImageWrapper>
             ),
@@ -106,7 +106,7 @@ const Contents = styled.div`
   }
 `;
 
-const ProfileImg = styled.div<{ index: number; image: string }>`
+const ProfileImg = styled.div<{ $index: number; image: string }>`
   width: 3.8rem;
   height: 3.8rem;
 
@@ -115,7 +115,7 @@ const ProfileImg = styled.div<{ index: number; image: string }>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: ${({ index }) => `${(index + 1) * 3}rem`};
+  right: ${({ $index: index }) => `${(index + 1) * 3}rem`};
 
   border-radius: 100%;
   border: 2px solid var(--White);
@@ -124,7 +124,7 @@ const ProfileImg = styled.div<{ index: number; image: string }>`
   background-size: cover;
   background-repeat: no-repeat;
 
-  z-index: ${({ index }) => `${3 - index}`};
+  z-index: ${({ $index: index }) => `${3 - index}`};
 
   @media (max-width: ${DeviceSize.mobile}) {
     width: 3.4rem;
@@ -132,7 +132,7 @@ const ProfileImg = styled.div<{ index: number; image: string }>`
   }
 `;
 
-const NoProfileImageWrapper = styled.div<{ index: number }>`
+const NoProfileImageWrapper = styled.div<{ $index: number }>`
   width: 3.8rem;
   line-height: 3.4rem;
 
@@ -142,16 +142,16 @@ const NoProfileImageWrapper = styled.div<{ index: number }>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: ${({ index }) => `${(index + 1) * 3}rem`};
+  right: ${({ $index: index }) => `${(index + 1) * 3}rem`};
 
-  z-index: ${({ index }) => `${3 - index}`};
+  z-index: ${({ $index: index }) => `${3 - index}`};
 
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.4rem;
     width: 3.4rem;
     line-height: 3rem;
 
-    right: ${({ index }) => `${(index + 1) * 2.4}rem`};
+    right: ${({ $index: index }) => `${(index + 1) * 2.4}rem`};
   }
 `;
 

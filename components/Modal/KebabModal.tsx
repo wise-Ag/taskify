@@ -64,7 +64,7 @@ const Wrapper = styled.div`
   border-radius: 6px;
   border: 1px solid var(--Grayd9);
 
-  background: var(--MainLight);
+  background: var(--Grayfa);
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
 
   z-index: ${Z_INDEX.KebabModal_Wrapper};

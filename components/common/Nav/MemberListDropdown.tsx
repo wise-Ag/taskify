@@ -30,6 +30,7 @@ const Dropdown = styled.div`
 
   border: 1px solid var(--Grayd9);
   border-radius: 16px;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
 
   position: absolute;
   top: 8%;

@@ -55,11 +55,11 @@ const Profile = () => {
             <ProfileIcon image={user.profileImageUrl} />
           ) : (
             <NoProfileImageWrapper>
-              <NoProfileImage id={user.id} nickname={user.nickname} />
+              <NoProfileImage id={user.id} nickname={user.nickname} isBorder={true} />
             </NoProfileImageWrapper>
           )}
           <Name>{user?.nickname}</Name>
-          <StyledArrowIcon active={activeDropdown === "profile"} onClick={toggleKebabMenu} />
+          <StyledArrowIcon $active={activeDropdown === "profile"} onClick={toggleKebabMenu} />
           {activeDropdown === "profile" && (
             <DropdownMenu>
               <MenuItem onClick={() => navigateTo("/mydashboard")}>
@@ -130,7 +130,14 @@ const NoProfileImageWrapper = styled.div`
   width: 3.8rem;
 
   font-size: 1.5rem;
-  line-height: 3.8rem;
+  line-height: 3.4rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 3.4rem;
+
+    font-size: 1.4rem;
+    line-height: 3rem;
+  }
 `;
 
 const DropdownMenu = styled.div`

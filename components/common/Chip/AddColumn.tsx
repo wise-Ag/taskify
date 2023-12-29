@@ -24,7 +24,7 @@ const Container = styled.div`
   flex-shrink: 0;
 
   border-radius: 4px;
-  background: var(--MainLight);
+  background: var(--Grayfa);
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 2rem;
