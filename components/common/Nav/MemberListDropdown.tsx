@@ -1,27 +1,21 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
+import NoProfileImage from "../NoProfileImage/ProfileImage";
+import { Member } from "@/api/members/members.types";
 
-interface Member {
-  id: number;
-  userId: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string | null;
-  createdAt: string;
-  updatedAt: string;
-  isOwner: boolean;
-}
-
-interface MemberListProps {
-  members: Member[];
-}
-
-const MemberListDropdown = ({ members }: MemberListProps) => {
+const MemberListDropdown = ({ members }: { members: Member[] }) => {
   return (
     <Dropdown>
       {members.map((member) => (
-        <Item>
-          <Profile src={member.profileImageUrl || ""} alt={member.nickname} />
+        <Item key={member.id}>
+          {member.profileImageUrl ? (
+            <Profile src={member.profileImageUrl} alt={member.nickname} />
+          ) : (
+            <NoProfileImageWrapper>
+              <NoProfileImage id={member.id} nickname={member.nickname} />
+            </NoProfileImageWrapper>
+          )}
+
           <div key={member.id}>{member.nickname}</div>
         </Item>
       ))}
@@ -76,6 +70,24 @@ const Profile = styled.img`
   border-radius: 50%;
 
   object-fit: cover;
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    width: 3.4rem;
+    height: 3.4rem;
+
+    margin-right: 0.8rem;
+  }
+`;
+
+const NoProfileImageWrapper = styled.div`
+  width: 3rem;
+  height: 3rem;
+
+  font-size: 1.5rem;
+  line-height: 3rem;
+  margin-right: 1.2rem;
+
+  border-radius: 100%;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 3.4rem;

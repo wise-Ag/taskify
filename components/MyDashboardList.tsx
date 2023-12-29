@@ -6,6 +6,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import ModalContainer from "@/components/Modal/ModalContainer";
+import { useAtom } from "jotai";
+import { invitationsAtom } from "@/states/atoms";
+import { Z_INDEX } from "@/styles/ZindexStyles";
 
 export interface Dashboards {
   id: number;
@@ -16,13 +19,15 @@ export interface Dashboards {
   updatedAt: string;
   createdByMe: boolean;
 }
-const PAGE_SIZE = 5;
+
+const PAGE_SIZE = 30;
 
 const MyDashboardList = () => {
   const [dashboards, setDashboards] = useState<Dashboards[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPageCount, setTotalPageCount] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [invitations] = useAtom(invitationsAtom); // 초대 목록!!
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -37,19 +42,20 @@ const MyDashboardList = () => {
       const res = await getDashboardList({
         size: PAGE_SIZE,
         token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQ4NDU5LCJpc3MiOiJzcC10YXNraWZ5In0.WYQWWikKqILh4vWyiDSCs0HDO-3TvKg7ci19-NUVexk",
         navigationMethod: "pagination",
         page: currentPage,
       });
 
-      const resDashboards = res?.dashboards;
-      const totalCount = res?.totalCount;
+      const resDashboards = res?.dashboards || [];
+      const totalCount = res?.totalCount || 0;
 
-      setDashboards(() => [...resDashboards]);
+      setDashboards(resDashboards);
       setTotalPageCount(Math.ceil(totalCount / PAGE_SIZE));
     };
     loadDashboardList();
-  }, [currentPage]);
+  }, [currentPage, invitations]);
+
   return (
     <Wrapper>
       <Container>
@@ -116,14 +122,18 @@ const Wrapper = styled.div`
 `;
 
 const ModalBackdrop = styled.div`
+  width: 100%;
+  height: 100%;
+
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  z-index: ${Z_INDEX.MyDashboardList_ModalBackdrop};
 `;

@@ -22,7 +22,7 @@ const ModalContainer = ({ title, label, buttonType, onClose }: ModalProps) => {
         </ColorSelectorWrapper>
       )}
       <ButtonWrapper>
-        <ButtonSet type="modalSet" onClickCancel={onClose}>
+        <ButtonSet type="modalSet" onClickLeft={onClose}>
           {buttonType}
         </ButtonSet>
       </ButtonWrapper>

@@ -1,21 +1,19 @@
-import { useEffect, MouseEvent, useRef } from "react";
+import { getUsers } from "@/api/users";
+import { UserData } from "@/api/users/users.types";
+import ArrowIcon from "@/assets/icons/arrow-drop-down.svg";
+import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
+import { activeDropdownAtom } from "@/states/atoms";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
-import { DeviceSize } from "@/styles/DeviceSize";
-import { FaHome, FaUserCog, FaSignOutAlt } from "react-icons/fa";
+import { MouseEvent, useEffect, useRef, useState } from "react";
+import { FaHome, FaSignOutAlt, FaUserCog } from "react-icons/fa";
 import styled from "styled-components";
-import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
-import ArrowIcon from "@/assets/icons/arrow-drop-down.svg";
-import { Z_INDEX } from "@/styles/ZindexStyles";
-import { activeDropdownAtom } from "@/states/atoms";
 
-interface ProfileProps {
-  profileImageUrl: string | null;
-  nickname: string;
-}
-
-const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
+const Profile = () => {
   const router = useRouter();
+  const [user, setUser] = useState<UserData>();
   const [activeDropdown, setActiveDropdown] = useAtom(activeDropdownAtom);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -24,7 +22,19 @@ const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
     setActiveDropdown(activeDropdown === "profile" ? null : "profile");
   };
 
+  const navigateTo = (path: string) => {
+    router.push(path);
+    setActiveDropdown(null);
+  };
+
   useEffect(() => {
+    const loadUserData = async () => {
+      const res = await getUsers({ token: localStorage.getItem("accessToken") });
+      if (res !== null) setUser({ ...res });
+    };
+
+    loadUserData();
+
     const closeMenu = (event: Event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setActiveDropdown(null);
@@ -37,45 +47,44 @@ const Profile = ({ profileImageUrl, nickname }: ProfileProps) => {
     };
   }, []);
 
-  const navigateTo = (path: string) => {
-    router.push(path);
-    setActiveDropdown(null);
-  };
-
   return (
-    <Wrapper onClick={toggleKebabMenu} ref={dropdownRef}>
-      {profileImageUrl ? (
-        <ProfileIcon image={profileImageUrl} />
-      ) : (
-        <NoProfileImageWrapper>
-          <NoProfileImage />
-        </NoProfileImageWrapper>
+    <>
+      {user && (
+        <Wrapper onClick={toggleKebabMenu} ref={dropdownRef}>
+          {user.profileImageUrl ? (
+            <ProfileIcon image={user.profileImageUrl} />
+          ) : (
+            <NoProfileImageWrapper>
+              <NoProfileImage id={user.id} nickname={user.nickname} />
+            </NoProfileImageWrapper>
+          )}
+          <Name>{user?.nickname}</Name>
+          <StyledArrowIcon active={activeDropdown === "profile"} onClick={toggleKebabMenu} />
+          {activeDropdown === "profile" && (
+            <DropdownMenu>
+              <MenuItem onClick={() => navigateTo("/mydashboard")}>
+                <ItemContent>
+                  <FaHome />
+                  <span>홈</span>
+                </ItemContent>
+              </MenuItem>
+              <MenuItem onClick={() => navigateTo("/mypage")}>
+                <ItemContent>
+                  <FaUserCog />
+                  <span>계정 관리</span>
+                </ItemContent>
+              </MenuItem>
+              <MenuItem onClick={() => navigateTo("/")}>
+                <ItemContent>
+                  <FaSignOutAlt />
+                  <span>로그아웃</span>
+                </ItemContent>
+              </MenuItem>
+            </DropdownMenu>
+          )}
+        </Wrapper>
       )}
-      <Name>{nickname}</Name>
-      <StyledArrowIcon active={activeDropdown === "profile"} onClick={toggleKebabMenu} />
-      {activeDropdown === "profile" && (
-        <DropdownMenu>
-          <MenuItem onClick={() => navigateTo("/mydashboard")}>
-            <ItemContent>
-              <FaHome />
-              <span>홈</span>
-            </ItemContent>
-          </MenuItem>
-          <MenuItem onClick={() => navigateTo("/mypage")}>
-            <ItemContent>
-              <FaUserCog />
-              <span>계정 관리</span>
-            </ItemContent>
-          </MenuItem>
-          <MenuItem onClick={() => navigateTo("/")}>
-            <ItemContent>
-              <FaSignOutAlt />
-              <span>로그아웃</span>
-            </ItemContent>
-          </MenuItem>
-        </DropdownMenu>
-      )}
-    </Wrapper>
+    </>
   );
 };
 

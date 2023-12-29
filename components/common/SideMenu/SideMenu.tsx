@@ -3,17 +3,28 @@ import Crown from "@/assets/icons/crown.svg";
 import LogoButton from "@/components/common/Buttons/LogoButton";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import dashboardData from "./mockData";
 import ArrowButton from "@/assets/icons/arrow-forward.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { getDashboardList } from "@/api/dashboards";
+import { useAtom } from "jotai";
+import { invitationsAtom } from "@/states/atoms";
 
 interface DashboardProps {
   color: string;
   title: string;
   createdByMe?: boolean;
   closePopup?: () => void;
+}
+export interface Dashboards {
+  id: number;
+  title: string;
+  color: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  createdByMe: boolean;
 }
 
 const Dashboard = ({ color, title, createdByMe }: DashboardProps) => {
@@ -28,8 +39,24 @@ const Dashboard = ({ color, title, createdByMe }: DashboardProps) => {
 };
 
 const SideMenu = () => {
-  const data = dashboardData.dashboards;
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [cursorId, setCursorId] = useState(1);
+  const [dashboards, setDashboards] = useState<Dashboards[]>([]);
+  const [invitations] = useAtom(invitationsAtom); // 초대 목록!!
+
+  useEffect(() => {
+    const loadDashboardList = async () => {
+      const res = await getDashboardList({
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQ4NDU5LCJpc3MiOiJzcC10YXNraWZ5In0.WYQWWikKqILh4vWyiDSCs0HDO-3TvKg7ci19-NUVexk",
+        navigationMethod: "infiniteScroll",
+      });
+      if (res && res.dashboards) {
+        setDashboards(res.dashboards); // 로드한 데이터를 상태에 저장
+      }
+    };
+    loadDashboardList();
+  }, [invitations]);
 
   const togglePopup = () => {
     setIsPopupVisible((prev) => !prev);
@@ -46,7 +73,7 @@ const SideMenu = () => {
       {isPopupVisible && (
         <Popup>
           <DashboardList>
-            {data.map((dashboard, key) => {
+            {dashboards.map((dashboard, key) => {
               return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} />;
             })}
           </DashboardList>
@@ -57,7 +84,7 @@ const SideMenu = () => {
         <StyledAddButton alt="추가 버튼" width={20} height={20} />
       </HeaderWrapper>
       <DashboardList>
-        {data.map((dashboard, key) => {
+        {dashboards.map((dashboard, key) => {
           return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} />;
         })}
       </DashboardList>

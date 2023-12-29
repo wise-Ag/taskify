@@ -18,7 +18,7 @@ export interface GetMembersProps {
   dashboardId: number;
   size?: number;
   page?: number;
-  token: string;
+  token: string | null;
 }
 
 export interface DeleteMembersProps {

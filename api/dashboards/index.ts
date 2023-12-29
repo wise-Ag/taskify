@@ -45,15 +45,9 @@ export const deleteDashboardInvitations = async ({
   }
 };
 
-export const getDashboard = async ({
-  dashboardId = "193",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: GetDashboardProps): Promise<Dashboard | null> => {
+export const getDashboard = async ({ dashboardId, token }: GetDashboardProps): Promise<Dashboard | null> => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET(dashboardId), {
-      params: {
-        dashboardId,
-      },
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -89,7 +83,7 @@ export const getDashboardInvitations = async ({
   }
 };
 
-export const getDashboardList = async ({ navigationMethod, size = 5, cursorId, token }: GetDashboardListProps): Promise<GetDashboardListData | null> => {
+export const getDashboardList = async ({ navigationMethod, size, cursorId, token }: GetDashboardListProps): Promise<GetDashboardListData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_LIST, {
       params: {
