@@ -2,31 +2,22 @@ import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import NoInvitation from "@/components/Table/NoInvite";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getInvitations } from "@/api/invitations";
 import { putInvitations } from "@/api/invitations";
+import { useAtom } from "jotai";
+import { invitationsAtom } from "@/states/atoms";
 
-interface Invitation {
-  id: number;
-  inviterUserId: number;
-  teamId: string;
-  dashboard: { title: string; id: number };
-  invitee: { nickname: string; id: number };
-  inviteAccepted: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 10;
 
 const InvitedDashboard = () => {
   const tableTitles = ["이름", "초대자", "수락 여부"];
-  const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [invitations, setInvitations] = useAtom(invitationsAtom);
 
-  const fetchData = async () => {
+  const loadInvitations = async () => {
     const data = await getInvitations({
       size: PAGE_SIZE,
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNjc1NzE2LCJpc3MiOiJzcC10YXNraWZ5In0.J60KP7YBw6JWhFDqk4u3Pm5g9KSCr0UrTt4GAelAvhI",
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQ4NDU5LCJpc3MiOiJzcC10YXNraWZ5In0.WYQWWikKqILh4vWyiDSCs0HDO-3TvKg7ci19-NUVexk",
     });
     if (data && data.invitations) {
       setInvitations(data.invitations);
@@ -34,17 +25,17 @@ const InvitedDashboard = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    loadInvitations();
   }, []);
 
   const handleInvitationResponse = async (invitationId: number, accept: boolean) => {
     const updatedInvitation = await putInvitations({
       invitationId,
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNjc1NzE2LCJpc3MiOiJzcC10YXNraWZ5In0.J60KP7YBw6JWhFDqk4u3Pm5g9KSCr0UrTt4GAelAvhI",
+      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQ4NDU5LCJpc3MiOiJzcC10YXNraWZ5In0.WYQWWikKqILh4vWyiDSCs0HDO-3TvKg7ci19-NUVexk",
       inviteAccepted: accept,
     });
     if (updatedInvitation) {
-      fetchData();
+      loadInvitations();
     }
   };
 
