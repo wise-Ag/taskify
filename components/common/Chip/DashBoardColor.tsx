@@ -3,16 +3,18 @@ import { useState } from "react";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
+import { HexColorPicker } from "react-colorful";
+import { VscColorMode } from "react-icons/vsc";
 
 interface ColorCircleProps {
-  color: string;
-  selected: boolean;
-  onClick: () => void;
+  color?: string;
+  selected?: boolean;
+  onClick?: () => void;
 }
 
 const DashBoardColor = () => {
   const [selectedColor, setSelectedColor] = useState(DASHBOARD_COLOR[0]);
-
+  const [isHover, setIsHover] = useState(false);
   return (
     <Container>
       {DASHBOARD_COLOR.map((color) => (
@@ -20,6 +22,12 @@ const DashBoardColor = () => {
           {selectedColor === color && <StyledCheckIcon />}
         </ColorCircle>
       ))}
+      <div style={{ position: "relative", width: "3rem", height: "3rem" }} onMouseOver={() => setIsHover(true)} onMouseOut={() => setIsHover(false)}>
+        <ColorCircle color={`${selectedColor}`}>
+          <StyledColorIcon />
+        </ColorCircle>
+        {isHover && <StyledColorPicker color={selectedColor} onChange={setSelectedColor} />}
+      </div>
     </Container>
   );
 };
@@ -56,4 +64,21 @@ const ColorCircle = styled.div<ColorCircleProps>`
 
 const StyledCheckIcon = styled(CheckIcon)`
   color: var(--White);
+`;
+
+const StyledColorIcon = styled(VscColorMode)`
+  color: var(--White);
+  width: 3rem;
+  height: 3rem;
+`;
+
+const StyledColorPicker = styled(HexColorPicker)`
+  position: absolute;
+  top: -3rem;
+  left: 3rem;
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    top: -2.8rem;
+    left: 2.8rem;
+  }
 `;
