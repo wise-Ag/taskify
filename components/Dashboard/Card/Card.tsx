@@ -14,11 +14,7 @@ const Card = ({ cardData }: { cardData: Card }) => {
       {cardData.tags[0] && (
         <Tags>
           {cardData.tags.map((tag, idx) => {
-            return (
-              <Tag key={idx} $bgColor="--Pinkf7" $textColor="--Pinkd5">
-                {tag}
-              </Tag>
-            );
+            return <Tag key={idx} tag={tag} />;
           })}
         </Tags>
       )}

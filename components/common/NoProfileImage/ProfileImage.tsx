@@ -1,6 +1,5 @@
+import { PROFILE_COLOR } from "@/constants/ColorConstant";
 import styled from "styled-components";
-
-const PROFILE_COLOR = ["#A3C4A2", "#FDD446", "#76A5EA", "#0e465d", "#C4B1A2", "#ef823e", "#df8ec1", "#ea3835", "#701cb0", "#137549"];
 
 interface NoProfileImageProps {
   id: number;
