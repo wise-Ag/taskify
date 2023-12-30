@@ -1,28 +1,42 @@
-import styled from "styled-components";
-import { DeviceSize } from "@/styles/DeviceSize";
-import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { getInvitations, putInvitations } from "@/api/invitations";
+import { Invitation } from "@/api/invitations/invitations.types";
 import NoInvitation from "@/components/Table/NoInvite";
-import { useEffect } from "react";
-import { getInvitations } from "@/api/invitations";
-import { putInvitations } from "@/api/invitations";
-import { useAtom } from "jotai";
+import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { invitationsAtom } from "@/states/atoms";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 
 const InvitedDashboard = () => {
   const tableTitles = ["이름", "초대자", "수락 여부"];
   const [invitations, setInvitations] = useAtom(invitationsAtom);
+  const [invitationData, setInvitationData] = useState<Invitation[]>([]);
+  const [cursorId, setCursorId] = useState<number | null>(null);
 
   const loadInvitations = async () => {
+    if (invitationData.length > 0 && cursorId == null) {
+      return;
+    }
+    setIsLoading(true);
     const data = await getInvitations({
+      cursorId,
       size: PAGE_SIZE,
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQ4NDU5LCJpc3MiOiJzcC10YXNraWZ5In0.WYQWWikKqILh4vWyiDSCs0HDO-3TvKg7ci19-NUVexk",
+      token: localStorage.getItem("accessToken"),
     });
+
     if (data && data.invitations) {
-      setInvitations(data.invitations);
+      setInvitationData((prev) => [...prev, ...data.invitations]);
+      setInvitations(invitationData);
+      setCursorId(data.cursorId);
+      setIsLoading(false);
     }
   };
+
+  const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadInvitations });
 
   useEffect(() => {
     loadInvitations();
@@ -31,17 +45,20 @@ const InvitedDashboard = () => {
   const handleInvitationResponse = async (invitationId: number, accept: boolean) => {
     const updatedInvitation = await putInvitations({
       invitationId,
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQ4NDU5LCJpc3MiOiJzcC10YXNraWZ5In0.WYQWWikKqILh4vWyiDSCs0HDO-3TvKg7ci19-NUVexk",
+      token: localStorage.getItem("accessToken"),
       inviteAccepted: accept,
     });
     if (updatedInvitation) {
-      loadInvitations();
+      console.log("거절도 업데이트");
+      // setCursorId(null);
+      // setInvitationData(invitationData.splice(0, invitationData.length));
+      // loadInvitations();
     }
   };
 
   return (
     <>
-      {invitations.length > 0 ? (
+      {invitationData.length > 0 ? (
         <Container>
           <Title>초대받은 대시보드</Title>
           <Header>
@@ -49,7 +66,7 @@ const InvitedDashboard = () => {
               <TableTitle key={title}>{title}</TableTitle>
             ))}
           </Header>
-          {invitations.map((invitation) => (
+          {invitationData.map((invitation) => (
             <InvitationItem key={invitation.id}>
               <Info>
                 <MobileTableTitle>이름</MobileTableTitle>
@@ -68,6 +85,7 @@ const InvitedDashboard = () => {
               </Info>
             </InvitationItem>
           ))}
+          <div ref={targetRef} />
         </Container>
       ) : (
         <NoInvitation />
@@ -80,9 +98,11 @@ export default InvitedDashboard;
 
 const Container = styled.div`
   width: 102rem;
-
+  height: 60rem;
   padding: 3rem;
   border-radius: 8px;
+
+  overflow: auto;
 
   background: var(--White);
 
