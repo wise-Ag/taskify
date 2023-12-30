@@ -48,10 +48,6 @@ const TaskModal: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    loadCardListData();
-  }, []);
-
   const loadCardData = async () => {
     const data = await getCard({
       cardId,
@@ -110,14 +106,6 @@ const TaskModal: React.FC = () => {
     await loadCommentsData();
   };
 
-  const handleKeyDown = async (event: React.KeyboardEvent, commentId: number) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      await handleUpdateComment(commentId);
-    }
-    await loadCommentsData();
-  };
-
   const handleUpdateComment = async (commentId: number) => {
     if (commentId) {
       await putComments({
@@ -140,6 +128,10 @@ const TaskModal: React.FC = () => {
   const handleCloseClick = () => {
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    loadCardListData();
+  }, []);
 
   useEffect(() => {
     loadCardData();
@@ -448,13 +440,13 @@ const LeftWrapper = styled.div`
     width: 3.2rem;
     height: 3.2rem;
 
-    margin-right: 1rem;
-
     border-radius: 50%;
   }
 `;
 
-const RightWrapper = styled.div``;
+const RightWrapper = styled.div`
+  margin-left: 1rem;
+`;
 
 const CommentTextarea = styled.textarea`
   margin-top: 1rem;
