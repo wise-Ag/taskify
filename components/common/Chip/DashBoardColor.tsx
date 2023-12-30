@@ -2,6 +2,7 @@ import CheckIcon from "@/assets/icons/check.svg";
 import { useState } from "react";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
+import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
 
 interface ColorCircleProps {
   color: string;
@@ -10,15 +11,13 @@ interface ColorCircleProps {
 }
 
 const DashBoardColor = () => {
-  const [selectedColor, setSelectedColor] = useState("");
-
-  const colors = ["--Green", "--Purple", "--Orange", "--Blue", "--Pink"];
+  const [selectedColor, setSelectedColor] = useState(DASHBOARD_COLOR[0]);
 
   return (
     <Container>
-      {colors.map((colorVar) => (
-        <ColorCircle key={colorVar} color={colorVar} selected={selectedColor === `var(${colorVar})`} onClick={() => setSelectedColor(`var(${colorVar})`)}>
-          {selectedColor === `var(${colorVar})` && <StyledCheckIcon />}
+      {DASHBOARD_COLOR.map((color) => (
+        <ColorCircle key={color} color={color} selected={selectedColor === color} onClick={() => setSelectedColor(color)}>
+          {selectedColor === color && <StyledCheckIcon />}
         </ColorCircle>
       ))}
     </Container>
@@ -45,7 +44,7 @@ const ColorCircle = styled.div<ColorCircleProps>`
   position: relative;
 
   border-radius: 50%;
-  background-color: ${(props) => `var(${props.color})`};
+  background-color: ${(props) => props.color};
 
   cursor: pointer;
 
