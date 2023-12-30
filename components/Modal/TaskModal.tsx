@@ -28,10 +28,7 @@ const TaskModal: React.FC = () => {
   const [newCommentContent, setNewCommentContent] = useState("");
   const [cursorId, setCursorId] = useState<number | null>(null);
 
-  // const token = localStorage.getItem("accessToken");
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc";
-
+  const token = localStorage.getItem("accessToken");
   const dashboardId = 394;
   const columnId = 1242;
   const cardId = 159;
