@@ -33,8 +33,10 @@ const ButtonContent = ({ type, children, id, title, color, createdByMe }: Button
         <>
           <StyledTitleWrapper>
             {color && <Color color={color} />}
-            {title && <StyledDashboardTitle>{title}</StyledDashboardTitle>}
-            {createdByMe && <CrownIcon />}
+            <div style={{ display: "flex", gap: "0.8rem", width: "85%" }}>
+              {createdByMe && <CrownIcon />}
+              {title && <StyledDashboardTitle>{title}</StyledDashboardTitle>}
+            </div>
           </StyledTitleWrapper>
           <ArrowIcon />
         </>
@@ -92,8 +94,19 @@ const Color = styled.div<{ color: string }>`
 const StyledTitleWrapper = styled.div`
   display: flex;
   align-items: center;
+  gap: 1.6rem;
+
+  width: 90%;
 `;
 
 const StyledDashboardTitle = styled.span`
-  margin: 0 0.8rem 0 1.6rem;
+  width: 85%;
+  height: 1.8rem;
+
+  display: block;
+
+  text-align: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
