@@ -16,13 +16,14 @@ const Columns = () => {
     const loadColumnsData = async () => {
       const res = await getColumns({
         dashboardId: 399,
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjE2LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQxODYxLCJpc3MiOiJzcC10YXNraWZ5In0.onJAVE-0l39MjS77mTbfnS6UMU5bWMkVgBKlA-rs03U",
+        token: localStorage.getItem("accessToken"),
       });
       const columns = res?.data;
-      setColumns(() => {
-        return [...columns];
-      });
+      if (columns) {
+        setColumns(() => {
+          return [...columns];
+        });
+      }
     };
     loadColumnsData();
   }, []);
