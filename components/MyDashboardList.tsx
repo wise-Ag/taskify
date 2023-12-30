@@ -9,6 +9,8 @@ import ModalContainer from "@/components/Modal/ModalContainer";
 import { useAtom } from "jotai";
 import { invitationsAtom } from "@/states/atoms";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useModal } from "@/hooks/useModal";
+import ModalWrapper from "./Modal/ModalWrapper";
 
 export interface Dashboards {
   id: number;
@@ -26,28 +28,16 @@ const MyDashboardList = () => {
   const [dashboards, setDashboards] = useState<Dashboards[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPageCount, setTotalPageCount] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [invitations] = useAtom(invitationsAtom); // 초대 목록!!
+  const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const [invitations] = useAtom(invitationsAtom);
 
-  // 새로운 대시보드 클릭 시
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  // 모달 닫을 때
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  // 생성할 때
   const handleAddModal = () => {};
 
   useEffect(() => {
     const loadDashboardList = async () => {
       const res = await getDashboardList({
         size: PAGE_SIZE,
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQ4NDU5LCJpc3MiOiJzcC10YXNraWZ5In0.WYQWWikKqILh4vWyiDSCs0HDO-3TvKg7ci19-NUVexk",
+        token: localStorage.getItem("accessToken"),
         navigationMethod: "pagination",
         page: currentPage,
       });
@@ -64,7 +54,12 @@ const MyDashboardList = () => {
   return (
     <Wrapper>
       <Container>
-        <Button type="newDashboard" onClick={handleOpenModal}>
+        <Button
+          type="newDashboard"
+          onClick={() => {
+            openModalFunc();
+          }}
+        >
           새로운 대시보드
         </Button>
         {dashboards &&
@@ -72,7 +67,6 @@ const MyDashboardList = () => {
             return (
               <Link key={v.id} href={`/dashboard/${v.id}`}>
                 <Button type="dashboardList" title={v.title} color={v.color} id={v.id} createdByMe={v.createdByMe} />
-                {/* </div> */}
               </Link>
             );
           })}
@@ -81,9 +75,9 @@ const MyDashboardList = () => {
         {totalPageCount} 페이지 중 {currentPage} <ButtonSet type="forwardAndBackward" />
       </PageContent>
       {isModalOpen && (
-        <ModalBackdrop>
-          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={handleCloseModal} onAdd={handleAddModal} />
-        </ModalBackdrop>
+        <ModalWrapper>
+          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} onAdd={handleAddModal} />
+        </ModalWrapper>
       )}
     </Wrapper>
   );
@@ -124,21 +118,4 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 1.2rem;
   align-items: end;
-`;
-
-const ModalBackdrop = styled.div`
-  width: 100%;
-  height: 100%;
-
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background-color: rgba(0, 0, 0, 0.5);
-
-  z-index: ${Z_INDEX.MyDashboardList_ModalBackdrop};
 `;
