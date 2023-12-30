@@ -1,24 +1,19 @@
-import { postColumns } from "@/api/columns";
+import { putColumns } from "@/api/columns";
+import Input from "@/components/Sign/SignInput/Input";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
-import ColorSelector from "@/components/common/Chip/DashBoardColor";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import Input from "@/components/Sign/SignInput/Input";
 
 interface ModalProps {
-  title: "새 컬럼 생성" | "컬럼 관리" | "새로운 대시보드";
-  label: "이름" | "대시보드 이름";
-  buttonType: "생성" | "변경";
-  boardid?: number;
-  columnId?: number;
+  columnId: number;
   onClose?: () => void;
   onAdd?: () => void;
   closeModalFunc?: () => void;
   isTitleExist: (title: string) => boolean;
 }
 
-const ModalContainer = ({ title, label, buttonType, boardid, onClose, onAdd, closeModalFunc, isTitleExist }: ModalProps) => {
+const ChangeColumnNameModal = ({ columnId, onClose, onAdd, closeModalFunc, isTitleExist }: ModalProps) => {
   const { control, handleSubmit, formState, setError } = useForm({
     defaultValues: { newTitle: "" },
     mode: "onBlur",
@@ -26,7 +21,7 @@ const ModalContainer = ({ title, label, buttonType, boardid, onClose, onAdd, clo
 
   return (
     <Wrapper>
-      <Title>{title}</Title>
+      <Title>컬럼 관리</Title>
       <form
         onSubmit={handleSubmit(async (data) => {
           if (isTitleExist(data.newTitle)) {
@@ -34,7 +29,7 @@ const ModalContainer = ({ title, label, buttonType, boardid, onClose, onAdd, clo
             return;
           }
 
-          const res = await postColumns({ title: data.newTitle, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
+          const res = await putColumns({ title: data.newTitle, columnId: columnId, token: localStorage.getItem("accessToken") });
           if (res !== null && closeModalFunc) {
             closeModalFunc();
           }
@@ -44,20 +39,15 @@ const ModalContainer = ({ title, label, buttonType, boardid, onClose, onAdd, clo
           <Controller
             control={control}
             name="newTitle"
-            rules={{ required: "생성할 이름을 입력해주세요" }}
+            rules={{ required: "변경할 이름을 입력해주세요" }}
             render={({ field, fieldState }) => (
-              <Input label={label} {...field} placeholder="이름을 입력하세요" hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
+              <Input label="컬럼 이름" {...field} placeholder="이름을 입력하세요" hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
             )}
           />
         </InputWrapper>
-        {title === "새로운 대시보드" && (
-          <ColorSelectorWrapper>
-            <ColorSelector />
-          </ColorSelectorWrapper>
-        )}
         <ButtonWrapper>
           <ButtonSet type="modalSet" onClickLeft={onClose} onClickRight={onAdd} isDisabled={!formState.isValid}>
-            {buttonType}
+            변경
           </ButtonSet>
         </ButtonWrapper>
       </form>
@@ -65,7 +55,7 @@ const ModalContainer = ({ title, label, buttonType, boardid, onClose, onAdd, clo
   );
 };
 
-export default ModalContainer;
+export default ChangeColumnNameModal;
 
 const Wrapper = styled.div`
   display: flex;

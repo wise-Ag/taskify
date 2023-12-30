@@ -1,16 +1,15 @@
-import instance from "@/api/axios";
-import Column from "@/components/Dashboard/Column/Column";
-import Button from "@/components/common/Buttons/Button";
-import { DeviceSize } from "@/styles/DeviceSize";
-import { useEffect, useState } from "react";
-import { Z_INDEX } from "@/styles/ZindexStyles";
-import styled from "styled-components";
 import { getColumns } from "@/api/columns";
 import { Columns as ColumnsData } from "@/api/columns/columns.types";
-import { useRouter } from "next/router";
-import { useModal } from "@/hooks/useModal";
-import ModalWrapper from "@/components/Modal/ModalWrapper";
+import Column from "@/components/Dashboard/Column/Column";
 import ModalContainer from "@/components/Modal/ModalContainer";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
+import Button from "@/components/common/Buttons/Button";
+import { useModal } from "@/hooks/useModal";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 const Columns = () => {
   const [columns, setColumns] = useState<ColumnsData[]>([]);
@@ -80,8 +79,6 @@ const Wrapper = styled.div`
 
   display: flex;
 
-  /* background: var(--Grayfa); */
-
   @media (max-width: ${DeviceSize.tablet}) {
     margin-left: 16rem;
 
@@ -99,7 +96,6 @@ const ButtonWrapper = styled.div`
   width: 100%;
   height: 11rem;
 
-  padding-top: 2rem;
   margin-top: 6.3rem;
   margin-left: 2rem;
 

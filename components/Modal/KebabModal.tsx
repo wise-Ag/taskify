@@ -1,15 +1,28 @@
-import styled from "styled-components";
-import { DeviceSize } from "@/styles/DeviceSize";
-import { useEffect } from "react";
-import TodoModal from "@/components/Modal/TodoModal";
+import { deleteColumns } from "@/api/columns";
+import { Columns } from "@/api/columns/columns.types";
 import AlertModal from "@/components/Modal/AlertModal";
-import { Z_INDEX } from "@/styles/ZindexStyles";
-import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
+import { useModal } from "@/hooks/useModal";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import ChangeColumnNameModal from "@/components/Modal/ChangeColumnNameModal";
 
-const KebabModal = () => {
+const KebabModal = ({ columnId }: { columnId: number }) => {
+  const [columns, setColumns] = useState<Columns[]>([]);
   const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModalFunc, closeModalFunc: closeEditModalFunc } = useModal();
+
+  const isTitleExist = (titleToCheck: string) => {
+    return columns.some((column) => column.title === titleToCheck);
+  };
+
+  const handleDeleteColumn = async () => {
+    await deleteColumns({ columnId: columnId, token: localStorage.getItem("accessToken") });
+
+    closeDeleteModalFunc();
+  };
 
   useEffect(() => {
     const handleKeyDown = (event: { key: string }) => {
@@ -34,13 +47,13 @@ const KebabModal = () => {
         <KebabList onClick={openEditModalFunc}>수정하기</KebabList>
         {isEditModalOpen && (
           <ModalWrapper>
-            <TodoModal type="edit" />
+            <ChangeColumnNameModal closeModalFunc={() => closeEditModalFunc()} onClose={closeEditModalFunc} columnId={columnId} isTitleExist={isTitleExist} />
           </ModalWrapper>
         )}
         <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
         {isDeleteModalOpen && (
           <ModalWrapper>
-            <AlertModal type="delete" />
+            <AlertModal type="deleteColumn" onCancel={closeDeleteModalFunc} onConfirm={handleDeleteColumn} />
           </ModalWrapper>
         )}
       </KebabListWrapper>

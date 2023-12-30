@@ -38,14 +38,11 @@ export const getColumns = async ({ dashboardId, token }: GetColumnsProps): Promi
   }
 };
 
-export const putColumns = async ({
-  columnId = "16",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: PutColumnsProps): Promise<Columns | null> => {
+export const putColumns = async ({ title, columnId, token }: PutColumnsProps): Promise<Columns | null> => {
   try {
     const res = await instance.put(
       ENDPOINTS.COLUMNS.PUT(columnId),
-      { title: "test" },
+      { title },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -59,12 +56,9 @@ export const putColumns = async ({
   }
 };
 
-export const deleteColumns = async ({
-  columnId = "623",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: DeleteColumnsProps) => {
+export const deleteColumns = async ({ columnId, token }: DeleteColumnsProps) => {
   try {
-    const res = await instance.delete(ENDPOINTS.COLUMNS.DELETE(columnId), {
+    await instance.delete(ENDPOINTS.COLUMNS.DELETE(columnId), {
       params: {
         columnId: columnId,
       },

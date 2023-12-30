@@ -38,7 +38,7 @@ const Column = ({ columnId, title }: ColumnProps) => {
     };
 
     loadCardList();
-  }, []);
+  }, [columnId, isModalOpen]);
 
   return (
     <Wrapper>
