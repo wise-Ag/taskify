@@ -74,7 +74,12 @@ const Profile = () => {
                   <span>계정 관리</span>
                 </ItemContent>
               </MenuItem>
-              <MenuItem onClick={() => navigateTo("/")}>
+              <MenuItem
+                onClick={() => {
+                  localStorage.removeItem("accessToken");
+                  navigateTo("/");
+                }}
+              >
                 <ItemContent>
                   <FaSignOutAlt />
                   <span>로그아웃</span>
