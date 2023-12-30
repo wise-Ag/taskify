@@ -11,6 +11,7 @@ import { invitationsAtom } from "@/states/atoms";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "./Modal/ModalWrapper";
+import { usePagination } from "@/hooks/usePagination";
 
 export interface Dashboards {
   id: number;
@@ -22,32 +23,32 @@ export interface Dashboards {
   createdByMe: boolean;
 }
 
-const PAGE_SIZE = 30;
+const PAGE_SIZE = 5;
 
 const MyDashboardList = () => {
   const [dashboards, setDashboards] = useState<Dashboards[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPageCount, setTotalPageCount] = useState(1);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const { currentPage, handlePageChange } = usePagination(totalPageCount);
   const [invitations] = useAtom(invitationsAtom);
 
   const handleAddModal = () => {};
 
+  const loadDashboardList = async () => {
+    const res = await getDashboardList({
+      size: PAGE_SIZE,
+      token: localStorage.getItem("accessToken"),
+      navigationMethod: "pagination",
+      page: currentPage,
+    });
+
+    if (res !== null) {
+      setDashboards([...res.dashboards]);
+      setTotalPageCount(Math.ceil(res.totalCount / PAGE_SIZE));
+    }
+  };
+
   useEffect(() => {
-    const loadDashboardList = async () => {
-      const res = await getDashboardList({
-        size: PAGE_SIZE,
-        token: localStorage.getItem("accessToken"),
-        navigationMethod: "pagination",
-        page: currentPage,
-      });
-
-      const resDashboards = res?.dashboards || [];
-      const totalCount = res?.totalCount || 0;
-
-      setDashboards(resDashboards);
-      setTotalPageCount(Math.ceil(totalCount / PAGE_SIZE));
-    };
     loadDashboardList();
   }, [currentPage, invitations]);
 
@@ -72,7 +73,14 @@ const MyDashboardList = () => {
           })}
       </Container>
       <PageContent>
-        {totalPageCount} 페이지 중 {currentPage} <ButtonSet type="forwardAndBackward" />
+        {totalPageCount} 페이지 중 {currentPage}{" "}
+        <ButtonSet
+          type="forwardAndBackward"
+          isLeftDisabled={currentPage === 1}
+          isRightDisabled={currentPage === totalPageCount}
+          onClickLeft={() => handlePageChange(-1)}
+          onClickRight={() => handlePageChange(1)}
+        />
       </PageContent>
       {isModalOpen && (
         <ModalWrapper>
