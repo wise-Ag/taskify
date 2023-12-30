@@ -7,9 +7,10 @@ import styled from "styled-components";
 
 interface CategoryProps {
   type: "create" | "edit";
+  onClick?: () => void;
 }
 
-const TodoModal = ({ type }: CategoryProps) => {
+const TodoModal = ({ type, onClick }: CategoryProps) => {
   return (
     <Wrapper>
       <TodoTitle>할 일 {type === "create" ? "생성" : "수정"}</TodoTitle>
@@ -22,7 +23,7 @@ const TodoModal = ({ type }: CategoryProps) => {
       <ModalInput $inputType="마감일" label="마감일" />
       <TagInput />
       <ButtonWrapper>
-        <ButtonSet type="modalSet">
+        <ButtonSet type="modalSet" onClickLeft={onClick}>
           {type === "create" && "생성"}
           {type === "edit" && "수정"}
         </ButtonSet>

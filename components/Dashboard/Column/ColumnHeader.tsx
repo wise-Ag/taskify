@@ -3,7 +3,7 @@ import SettingIcon from "@/assets/icons/settings.svg";
 import CounterCard from "@/components/common/Chip/CounterCard";
 import styled from "styled-components";
 import KebabModal from "@/components/Modal/KebabModal";
-import { useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
 interface ColumnHeaderProps {
   title: string;
@@ -13,10 +13,24 @@ interface ColumnHeaderProps {
 
 const ColumnHeader = ({ title, count }: ColumnHeaderProps) => {
   const [isClicked, setIsClicked] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const handleClick = () => {
     setIsClicked((prev) => !prev);
   };
+
+  useEffect(() => {
+    const handleOutsideClick = (event: Event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        setIsClicked(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
 
   return (
     <Wrapper>
@@ -25,7 +39,7 @@ const ColumnHeader = ({ title, count }: ColumnHeaderProps) => {
         <Title>{title}</Title>
         <CounterCard number={count} />
       </Content>
-      <Div>
+      <Div ref={modalRef}>
         <SettingIcon onClick={handleClick} style={{ cursor: "pointer" }} />
         {isClicked && <KebabModal />}
       </Div>
