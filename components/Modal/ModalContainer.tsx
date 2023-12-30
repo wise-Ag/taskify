@@ -1,32 +1,66 @@
+import { postColumns } from "@/api/columns";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import ColorSelector from "@/components/common/Chip/DashBoardColor";
-import NameInput from "@/components/Modal/NameInput";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
+import Input from "../Sign/SignInput/Input";
 
 interface ModalProps {
   title: "새 컬럼 생성" | "컬럼 관리" | "새로운 대시보드";
   label: "이름" | "대시보드 이름";
   buttonType: "생성" | "변경";
+  boardid?: number;
   onClose?: () => void;
   onAdd?: () => void;
+  closeModalFunc?: () => void;
+  isTitleExist: (title: string) => boolean;
 }
 
-const ModalContainer = ({ title, label, buttonType, onClose, onAdd }: ModalProps) => {
+const ModalContainer = ({ title, label, buttonType, boardid, onClose, onAdd, closeModalFunc, isTitleExist }: ModalProps) => {
+  const { control, handleSubmit, formState, setError } = useForm({
+    defaultValues: { newTitle: "" },
+    mode: "onBlur",
+  });
+
   return (
     <Wrapper>
       <Title>{title}</Title>
-      <NameInput label={label} />
-      {title === "새로운 대시보드" && (
-        <ColorSelectorWrapper>
-          <ColorSelector />
-        </ColorSelectorWrapper>
-      )}
-      <ButtonWrapper>
-        <ButtonSet type="modalSet" onClickLeft={onClose} onClickRight={onAdd}>
-          {buttonType}
-        </ButtonSet>
-      </ButtonWrapper>
+      <form
+        onSubmit={handleSubmit(async (data) => {
+          if (isTitleExist(data.newTitle)) {
+            setError("newTitle", { message: "이름이 중복되었습니다. 다시 입력해주세요!" });
+            return;
+          }
+
+          const res = await postColumns({ title: data.newTitle, dashboardId: boardid, token: localStorage.getItem("accessToken") });
+
+          if (res !== null && closeModalFunc) {
+            closeModalFunc();
+          }
+        })}
+      >
+        <InputWrapper>
+          <Controller
+            control={control}
+            name="newTitle"
+            rules={{ required: "생성할 이름을 입력해주세요" }}
+            render={({ field, fieldState }) => (
+              <Input label={label} {...field} placeholder="이름을 입력하세요" hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
+            )}
+          />
+        </InputWrapper>
+        {title === "새로운 대시보드" && (
+          <ColorSelectorWrapper>
+            <ColorSelector />
+          </ColorSelectorWrapper>
+        )}
+        <ButtonWrapper>
+          <ButtonSet type="modalSet" onClickLeft={onClose} onClickRight={onAdd} isDisabled={!formState.isValid}>
+            {buttonType}
+          </ButtonSet>
+        </ButtonWrapper>
+      </form>
     </Wrapper>
   );
 };
@@ -60,6 +94,52 @@ const Title = styled.div`
 
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 2rem;
+  }
+`;
+
+const InputWrapper = styled.div`
+  margin-top: 3.2rem;
+  margin-bottom: 2.8rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.8rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    margin-top: 2.4rem;
+    margin-bottom: 2.4rem;
+  }
+`;
+
+const NameType = styled.label`
+  color: var(--Black33);
+
+  font-size: 1.8rem;
+  font-weight: 500;
+`;
+
+const NameInputBox = styled.input`
+  width: 100%;
+  height: 4.8rem;
+
+  border: 1px solid var(--Grayd9);
+  padding: 1.5rem 1.6rem 1.4rem 1.6rem;
+  border-radius: 6px;
+
+  font-size: 1.6rem;
+  font-weight: 400;
+
+  &:focus {
+    outline: none;
+    border-color: var(--Main);
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 100%;
+    height: 4.2rem;
+
+    border-radius: 8px;
   }
 `;
 

@@ -104,6 +104,12 @@ const TYPES = {
     color: var(--White);
     font-size: 1.6rem;
 
+    &:disabled {
+      border: none;
+      background-color: var(--Gray9f);
+      cursor: default;
+    }
+
     @media (max-width: ${DeviceSize.mobile}) {
       width: 13.8rem;
 

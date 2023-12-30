@@ -14,6 +14,12 @@ export interface CardImage {
   imageUrl: string;
 }
 
+export interface PostColumnsProps {
+  title: string;
+  dashboardId?: number;
+  token: string | null;
+}
+
 export interface GetColumnsProps {
   dashboardId?: number;
   token?: string | null;
