@@ -8,12 +8,12 @@ import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
 const SignInForm = () => {
-  const { control, handleSubmit, setError } = useForm({
+  const { control, handleSubmit, setError, formState } = useForm({
     defaultValues: { email: "", password: "" },
     mode: "onBlur",
   });
   const router = useRouter();
-  
+
   return (
     <StyledForm
       onSubmit={handleSubmit(async (data) => {
@@ -44,7 +44,9 @@ const SignInForm = () => {
         )}
       />
       <ButtonWrapper>
-        <Button type="login">로그인</Button>
+        <Button disabled={!formState.isValid} type="login">
+          로그인
+        </Button>
       </ButtonWrapper>
     </StyledForm>
   );
