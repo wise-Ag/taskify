@@ -172,9 +172,7 @@ const TaskModal: React.FC = () => {
         </DivisionWrapper>
         <Tags>
           {cardData.tags.map((tag, idx) => (
-            <Tag key={idx} $bgColor="--Pinkf7" $textColor="--Pinkd5">
-              {tag}
-            </Tag>
+            <Tag key={idx} tag={tag} />
           ))}
         </Tags>
       </CategoryWrapper>
