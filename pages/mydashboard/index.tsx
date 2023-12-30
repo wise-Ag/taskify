@@ -4,6 +4,7 @@ import SideMenu from "@/components/common/SideMenu/SideMenu";
 import InvitedDashboard from "@/components/Table/InvitedDashboard";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { styled } from "styled-components";
+import { Z_INDEX } from "@/styles/ZindexStyles";
 
 const MyDashboard = () => {
   return (
@@ -25,6 +26,8 @@ export default MyDashboard;
 const SideMenuWrapper = styled.div`
   position: fixed;
   top: 0;
+
+  z-index: ${Z_INDEX.SideMenu_Wrapper};
 `;
 
 const Container = styled.div`
