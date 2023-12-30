@@ -49,10 +49,8 @@ const InvitedDashboard = () => {
       inviteAccepted: accept,
     });
     if (updatedInvitation) {
-      console.log("거절도 업데이트");
-      // setCursorId(null);
-      // setInvitationData(invitationData.splice(0, invitationData.length));
-      // loadInvitations();
+      setInvitationData([...invitationData.filter((v) => v.id !== invitationId)]);
+      setInvitations([...invitationData]);
     }
   };
 
