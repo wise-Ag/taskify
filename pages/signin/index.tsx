@@ -17,7 +17,7 @@ const SignInPage = () => {
           <Greeting>오늘도 만나서 반가워요!</Greeting>
           <SignInForm />
           <CheckMembership>
-            {"회원이 아니신가요? "}
+            회원이 아니신가요?
             <Link href="/signup">
               <GoToSignUp>회원가입하기</GoToSignUp>
             </Link>

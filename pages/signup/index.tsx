@@ -18,7 +18,7 @@ const SignUpPage = () => {
             <SignUpForm />
           </SignUpFormWrapper>
           <CheckMembership>
-            {"이미 가입하셨나요? "}
+            이미 가입하셨나요?
             <Link href="/signin">
               <GoToSignUp>로그인하기</GoToSignUp>
             </Link>
