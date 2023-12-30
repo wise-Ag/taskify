@@ -1,4 +1,4 @@
-import { getDashboardList } from "@/api/dashboards";
+import { getDashboardList, postDashboard } from "@/api/dashboards";
 import Button from "@/components/common/Buttons/Button";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
@@ -7,11 +7,12 @@ import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import ModalContainer from "@/components/Modal/ModalContainer";
 import { useAtom } from "jotai";
-import { invitationsAtom } from "@/states/atoms";
+import { dashboardColorAtom, invitationsAtom, modalInputAtom } from "@/states/atoms";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "./Modal/ModalWrapper";
 import { usePagination } from "@/hooks/usePagination";
+import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
 
 export interface Dashboards {
   id: number;
@@ -29,10 +30,26 @@ const MyDashboardList = () => {
   const [dashboards, setDashboards] = useState<Dashboards[]>([]);
   const [totalPageCount, setTotalPageCount] = useState(1);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
-  const { currentPage, handlePageChange } = usePagination(totalPageCount);
+  const { currentPage, setCurrentPage, handlePageChange } = usePagination(totalPageCount);
   const [invitations] = useAtom(invitationsAtom);
+  const [dashboardTitle, setDashboardTitle] = useAtom(modalInputAtom);
+  const [dashboardColor, setDashboardColor] = useAtom(dashboardColorAtom);
 
-  const handleAddModal = () => {};
+  const handleAddModal = async () => {
+    const res = await postDashboard({ token: localStorage.getItem("accessToken"), title: dashboardTitle, color: dashboardColor });
+
+    setDashboardColor(`${DASHBOARD_COLOR[0]}`);
+    setDashboardTitle("");
+
+    if (res == null) {
+      alert("대시보드 생성에 실패했습니다.");
+      closeModalFunc();
+      return;
+    }
+    currentPage === 1 ? setDashboards(() => [res, ...dashboards.slice(0, dashboards.length - 1)]) : setCurrentPage(1);
+
+    closeModalFunc();
+  };
 
   const loadDashboardList = async () => {
     const res = await getDashboardList({

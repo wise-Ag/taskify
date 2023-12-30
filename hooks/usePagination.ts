@@ -9,5 +9,5 @@ export const usePagination = (totalPageNum: number) => {
     setCurrentPage((prevPage) => Math.min(Math.max(prevPage + increment, 1), totalPageNum));
   };
 
-  return { currentPage, handlePageChange };
+  return { currentPage, setCurrentPage, handlePageChange };
 };

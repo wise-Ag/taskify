@@ -1,4 +1,6 @@
+import { modalInputAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
 import styled from "styled-components";
 
 interface NameModalProps {
@@ -6,10 +8,17 @@ interface NameModalProps {
 }
 
 const NameInput = ({ label }: NameModalProps) => {
+  const [modalInput, setModalInput] = useAtom(modalInputAtom);
+
   return (
     <Wrapper>
       <NameType>{label}</NameType>
-      <NameInputBox placeholder="이름을 입력하세요"></NameInputBox>
+      <NameInputBox
+        onChange={(e) => {
+          setModalInput(e.target.value);
+        }}
+        placeholder="이름을 입력하세요"
+      ></NameInputBox>
     </Wrapper>
   );
 };

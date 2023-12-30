@@ -1,7 +1,9 @@
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import ColorSelector from "@/components/common/Chip/DashBoardColor";
 import NameInput from "@/components/Modal/NameInput";
+import { modalInputAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
 import styled from "styled-components";
 
 interface ModalProps {
@@ -13,6 +15,8 @@ interface ModalProps {
 }
 
 const ModalContainer = ({ title, label, buttonType, onClose, onAdd }: ModalProps) => {
+  const [modalInput] = useAtom(modalInputAtom);
+
   return (
     <Wrapper>
       <Title>{title}</Title>
@@ -23,7 +27,7 @@ const ModalContainer = ({ title, label, buttonType, onClose, onAdd }: ModalProps
         </ColorSelectorWrapper>
       )}
       <ButtonWrapper>
-        <ButtonSet type="modalSet" onClickLeft={onClose} onClickRight={onAdd}>
+        <ButtonSet type="modalSet" onClickLeft={onClose} onClickRight={onAdd} isRightDisabled={modalInput === ""}>
           {buttonType}
         </ButtonSet>
       </ButtonWrapper>

@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
 import { HexColorPicker } from "react-colorful";
 import { VscColorMode } from "react-icons/vsc";
+import { dashboardColorAtom } from "@/states/atoms";
+import { useAtom } from "jotai";
 
 interface ColorCircleProps {
   color?: string;
@@ -13,8 +15,9 @@ interface ColorCircleProps {
 }
 
 const DashBoardColor = () => {
-  const [selectedColor, setSelectedColor] = useState(DASHBOARD_COLOR[0]);
+  const [selectedColor, setSelectedColor] = useAtom(dashboardColorAtom);
   const [isHover, setIsHover] = useState(false);
+
   return (
     <Container>
       {DASHBOARD_COLOR.map((color) => (
