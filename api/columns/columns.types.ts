@@ -16,7 +16,7 @@ export interface CardImage {
 
 export interface GetColumnsProps {
   dashboardId?: number;
-  token?: string;
+  token?: string | null;
 }
 
 export interface PutColumnsProps {

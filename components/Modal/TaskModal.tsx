@@ -1,5 +1,5 @@
 import { Card } from "@/api/cards/cards.types";
-import { getCard } from "@/api/cards/index";
+import { getCard, getCardList } from "@/api/cards/index";
 import { Comment } from "@/api/comments/comments.types";
 import { deleteComments, getComments, postComments, putComments } from "@/api/comments/index";
 import Division from "@/assets/icons/category-division.svg";
@@ -16,14 +16,11 @@ import { formatUpdatedAt } from "@/utils/FormatDate";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-// 임시 토큰
-const TMP_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc";
-
 const TaskModal: React.FC = () => {
   const { observe, unobserve, targetRef, loadData } = useScroll();
   const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [cardList, setCardList] = useState<Card[]>([]);
   const [cardData, setCardData] = useState<Card | null>(null);
   const [commentsData, setCommentsData] = useState<Comment[]>([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -31,18 +28,27 @@ const TaskModal: React.FC = () => {
   const [newCommentContent, setNewCommentContent] = useState("");
   const [cursorId, setCursorId] = useState<number | null>(null);
 
-  const handleKebabClick = () => {
-    setIsKebabModalOpen(!isKebabModalOpen);
-  };
+  const token = localStorage.getItem("accessToken");
+  const dashboardId = 394;
+  const columnId = 1242;
+  const cardId = 159;
 
-  const handleCloseClick = () => {
-    setIsModalOpen(false);
+  const loadCardListData = async () => {
+    const data = await getCardList({
+      cursorId,
+      columnId,
+      token,
+    });
+
+    if (data && data.cards) {
+      setCardList(data.cards);
+    }
   };
 
   const loadCardData = async () => {
     const data = await getCard({
-      cardId: 159,
-      token: TMP_TOKEN,
+      cardId,
+      token,
     });
     if (data) {
       setCardData(data);
@@ -56,10 +62,10 @@ const TaskModal: React.FC = () => {
     }
     try {
       const commentsData = await getComments({
-        cardId: 159,
+        cardId,
         size: 2,
         cursorId,
-        token: TMP_TOKEN,
+        token,
       });
 
       if (commentsData) {
@@ -76,11 +82,11 @@ const TaskModal: React.FC = () => {
 
   const submitComment = async (comment: string) => {
     await postComments({
-      token: TMP_TOKEN,
+      token,
       content: comment,
-      cardId: 159,
-      columnId: 1242,
-      dashboardId: 394,
+      cardId,
+      columnId,
+      dashboardId,
     });
 
     await loadCommentsData();
@@ -93,15 +99,7 @@ const TaskModal: React.FC = () => {
   };
 
   const handleDeleteClick = async (commentId: number) => {
-    await deleteComments({ commentId, token: TMP_TOKEN });
-    await loadCommentsData();
-  };
-
-  const handleKeyDown = async (event: React.KeyboardEvent, commentId: number) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      await handleUpdateComment(commentId);
-    }
+    await deleteComments({ commentId, token });
     await loadCommentsData();
   };
 
@@ -109,7 +107,7 @@ const TaskModal: React.FC = () => {
     if (commentId) {
       await putComments({
         commentId: commentId,
-        token: TMP_TOKEN,
+        token,
         content: newCommentContent,
       });
       setIsEditing(false);
@@ -119,6 +117,18 @@ const TaskModal: React.FC = () => {
       await loadCommentsData();
     }
   };
+
+  const handleKebabClick = () => {
+    setIsKebabModalOpen(!isKebabModalOpen);
+  };
+
+  const handleCloseClick = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    loadCardListData();
+  }, []);
 
   useEffect(() => {
     loadCardData();
@@ -162,9 +172,7 @@ const TaskModal: React.FC = () => {
         </DivisionWrapper>
         <Tags>
           {cardData.tags.map((tag, idx) => (
-            <Tag key={idx} $bgColor="--Pinkf7" $textColor="--Pinkd5">
-              {tag}
-            </Tag>
+            <Tag key={idx} tag={tag} />
           ))}
         </Tags>
       </CategoryWrapper>
@@ -183,13 +191,21 @@ const TaskModal: React.FC = () => {
                 <CommentDate>{formatUpdatedAt(comment.updatedAt)}</CommentDate>
               </InfoWrapper>
               {isEditing && editingCommentId === comment.id ? (
-                <input type="text" value={newCommentContent} onChange={(e) => setNewCommentContent(e.target.value)} onKeyDown={(e) => handleKeyDown(e, comment.id)} />
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleUpdateComment(comment.id);
+                  }}
+                >
+                  <CommentTextarea value={newCommentContent} onChange={(e) => setNewCommentContent(e.target.value)} rows={2} />
+                  <Edit type="submit">저장</Edit>
+                </form>
               ) : (
                 <CommentContent>{comment.content}</CommentContent>
               )}
               <FunctionWrapper>
-                <Edit onClick={() => handleEditClick(comment.id, comment.content)}>수정</Edit>
-                <Delete onClick={() => handleDeleteClick(comment.id)}>삭제</Delete>
+                {!isEditing || editingCommentId !== comment.id ? <Edit onClick={() => handleEditClick(comment.id, comment.content)}>수정</Edit> : null}
+                {!isEditing || editingCommentId !== comment.id ? <Delete onClick={() => handleDeleteClick(comment.id)}>삭제</Delete> : null}
               </FunctionWrapper>
             </RightWrapper>
           </CommentItem>
@@ -419,13 +435,26 @@ const LeftWrapper = styled.div`
     width: 3.2rem;
     height: 3.2rem;
 
-    margin-right: 1rem;
-
     border-radius: 50%;
   }
 `;
 
-const RightWrapper = styled.div``;
+const RightWrapper = styled.div`
+  margin-left: 1rem;
+`;
+
+const CommentTextarea = styled.textarea`
+  margin-top: 1rem;
+  margin-right: 1rem;
+  padding: 1rem;
+
+  border: 1px solid var(--Grayd9);
+  border-radius: 6px;
+
+  &:focus {
+    border-color: var(--Main);
+  }
+`;
 
 const InfoWrapper = styled.div`
   display: flex;

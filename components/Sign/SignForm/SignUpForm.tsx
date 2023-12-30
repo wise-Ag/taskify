@@ -12,7 +12,7 @@ import styled from "styled-components";
 
 const SignUpForm = () => {
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
-  const { control, handleSubmit, watch, setError } = useForm({
+  const { control, handleSubmit, watch, setError, formState } = useForm({
     defaultValues: { email: "", nickname: "", password: "", confirmPassword: "" },
     mode: "onBlur",
   });
@@ -79,7 +79,9 @@ const SignUpForm = () => {
           )}
         />
         <ButtonWrapper>
-          <Button type="login">가입하기</Button>
+          <Button disabled={!formState.isValid} type="login">
+            가입하기
+          </Button>
         </ButtonWrapper>
       </StyledForm>
       {isModalOpen && (

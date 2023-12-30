@@ -1,23 +1,30 @@
 import MainLogo from "@/assets/icons/main-logo.svg";
 import SignInForm from "@/components/Sign/SignForm/SignInForm";
+import { useIsSignin } from "@/hooks/useIsSignin";
 import Link from "next/link";
 import styled from "styled-components";
 
 const SignInPage = () => {
+  const { isSignin } = useIsSignin("/mydashboard");
+
   return (
-    <Container>
-      <Link href="/">
-        <MainLogo />
-      </Link>
-      <Greeting>오늘도 만나서 반가워요!</Greeting>
-      <SignInForm />
-      <CheckMembership>
-        {"회원이 아니신가요? "}
-        <Link href="/signup">
-          <GoToSignUp>회원가입하기</GoToSignUp>
-        </Link>
-      </CheckMembership>
-    </Container>
+    <>
+      {isSignin || (
+        <Container>
+          <Link href="/">
+            <MainLogo />
+          </Link>
+          <Greeting>오늘도 만나서 반가워요!</Greeting>
+          <SignInForm />
+          <CheckMembership>
+            회원이 아니신가요?
+            <Link href="/signup">
+              <GoToSignUp>회원가입하기</GoToSignUp>
+            </Link>
+          </CheckMembership>
+        </Container>
+      )}
+    </>
   );
 };
 

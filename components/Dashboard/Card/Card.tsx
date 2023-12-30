@@ -5,20 +5,29 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { formatDate } from "@/utils/FormatDate";
 import styled from "styled-components";
 import { Card } from "@/api/cards/cards.types";
+import { useModal } from "@/hooks/useModal";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
+import TaskModal from "@/components/Modal/TaskModal";
 
 const Card = ({ cardData }: { cardData: Card }) => {
+  const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+
+  const handleCloseModal = () => {
+    closeModalFunc();
+  };
+
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={() => {
+        openModalFunc();
+      }}
+    >
       {cardData.imageUrl && <CardImage $cardimage={cardData.imageUrl || null} />}
       <Title $imageurl={cardData.imageUrl}>{cardData.title}</Title>
       {cardData.tags[0] && (
         <Tags>
           {cardData.tags.map((tag, idx) => {
-            return (
-              <Tag key={idx} $bgColor="--Pinkf7" $textColor="--Pinkd5">
-                {tag}
-              </Tag>
-            );
+            return <Tag key={idx} tag={tag} />;
           })}
         </Tags>
       )}
@@ -34,6 +43,11 @@ const Card = ({ cardData }: { cardData: Card }) => {
           </NoProfileImageWrapper>
         )}
       </div>
+      {isModalOpen && (
+        <ModalWrapper>
+          <TaskModal />
+        </ModalWrapper>
+      )}
     </Wrapper>
   );
 };
