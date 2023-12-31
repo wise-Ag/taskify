@@ -12,10 +12,6 @@ import TaskModal from "@/components/Modal/TaskModal";
 const Card = ({ cardData }: { cardData: Card }) => {
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
 
-  const handleCloseModal = () => {
-    closeModalFunc();
-  };
-
   return (
     <Wrapper
       onClick={() => {
@@ -45,7 +41,7 @@ const Card = ({ cardData }: { cardData: Card }) => {
       </div>
       {isModalOpen && (
         <ModalWrapper>
-          <TaskModal cardData={cardData} />
+          <TaskModal cardData={cardData} closeModalFunc={closeModalFunc} />
         </ModalWrapper>
       )}
     </Wrapper>
