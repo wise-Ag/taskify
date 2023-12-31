@@ -10,6 +10,7 @@ import {
   GetDashboardListProps,
   GetDashboardProps,
   PostDashboardInvitationsProps,
+  PostDashboardProps,
   PutDashboardProps,
 } from "@/api/dashboards/dashboards.types";
 import { Invitation } from "@/api/invitations/invitations.types";
@@ -83,13 +84,14 @@ export const getDashboardInvitations = async ({
   }
 };
 
-export const getDashboardList = async ({ navigationMethod, size, cursorId, token }: GetDashboardListProps): Promise<GetDashboardListData | null> => {
+export const getDashboardList = async ({ navigationMethod, size, cursorId, page, token }: GetDashboardListProps): Promise<GetDashboardListData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_LIST, {
       params: {
         navigationMethod,
         size,
         cursorId,
+        page,
       },
       headers: {
         Authorization: `Bearer ${token}`,
@@ -102,17 +104,13 @@ export const getDashboardList = async ({ navigationMethod, size, cursorId, token
   }
 };
 
-export const postDashboard = async ({
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: {
-  token: string;
-}): Promise<Dashboard | null> => {
+export const postDashboard = async ({ token, title, color }: PostDashboardProps): Promise<Dashboard | null> => {
   try {
     const res = await instance.post(
       ENDPOINTS.DASHBOARDS.POST,
       {
-        title: "메롱메롱~~",
-        color: "#ffffff",
+        title,
+        color,
       },
       {
         headers: {

@@ -1,25 +1,44 @@
-import { getColumns } from "@/api/columns";
-import { Columns as ColumnsData } from "@/api/columns/columns.types";
+import { getColumns, postColumns } from "@/api/columns";
 import Column from "@/components/Dashboard/Column/Column";
-import ModalContainer from "@/components/Modal/ModalContainer";
+import ModalContainer, { FormData } from "@/components/Modal/ModalContainer";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
 import { useModal } from "@/hooks/useModal";
+import { columnsAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Columns = () => {
-  const [columns, setColumns] = useState<ColumnsData[]>([]);
   const [totalColumns, setTotalColumns] = useState(3);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const [columns, setColumns] = useAtom(columnsAtom);
   const router = useRouter();
   const { boardid } = router.query;
 
   const isTitleExist = (titleToCheck: string) => {
     return columns.some((column) => column.title === titleToCheck);
+  };
+
+  const rules = {
+    required: "생성할 이름을 입력해주세요",
+    validate: (v: string) => {
+      if (isTitleExist(v)) return "이름이 중복되었습니다. 다시 입력해주세요!";
+    },
+  };
+
+  const handleOnSubmit = async (data: FormData) => {
+    const res = await postColumns({ title: data.newTitle, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
+    if (res == null) {
+      alert("컬럼 생성에 실패했습니다.");
+      closeModalFunc();
+      return;
+    }
+    setColumns([...columns, res]);
+    closeModalFunc();
   };
 
   useEffect(() => {
@@ -39,7 +58,7 @@ const Columns = () => {
       }
     };
     loadColumnsData();
-  }, [boardid, isModalOpen]);
+  }, [boardid]);
 
   return (
     <>
@@ -56,15 +75,7 @@ const Columns = () => {
       </Wrapper>
       {isModalOpen && (
         <ModalWrapper>
-          <ModalContainer
-            title="새 컬럼 생성"
-            label="이름"
-            buttonType="생성"
-            closeModalFunc={() => closeModalFunc()}
-            onClose={closeModalFunc}
-            boardid={Number(boardid)}
-            isTitleExist={isTitleExist}
-          />
+          <ModalContainer title="새 컬럼 생성" label="이름" buttonType="생성" onClose={closeModalFunc} boardid={Number(boardid)} onSubmit={handleOnSubmit} rules={rules} />
         </ModalWrapper>
       )}
     </>
@@ -108,3 +119,6 @@ const ButtonWrapper = styled.div`
     bottom: 0;
   }
 `;
+function setError(arg0: string, arg1: { message: string }) {
+  throw new Error("Function not implemented.");
+}

@@ -1,25 +1,28 @@
-import { postColumns } from "@/api/columns";
+import Input from "@/components/Sign/SignInput/Input";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import ColorSelector from "@/components/common/Chip/DashBoardColor";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
-import Input from "@/components/Sign/SignInput/Input";
 
 interface ModalProps {
   title: "새 컬럼 생성" | "컬럼 관리" | "새로운 대시보드";
-  label: "이름" | "대시보드 이름";
+  label: "이름" | "대시보드 이름" | "컬럼 이름";
   buttonType: "생성" | "변경";
   boardid?: number;
   columnId?: number;
   onClose?: () => void;
   onAdd?: () => void;
-  closeModalFunc?: () => void;
-  isTitleExist: (title: string) => boolean;
+  onSubmit: (data: any) => Promise<void>;
+  rules: {};
 }
 
-const ModalContainer = ({ title, label, buttonType, boardid, onClose, onAdd, closeModalFunc, isTitleExist }: ModalProps) => {
-  const { control, handleSubmit, formState, setError } = useForm({
+export interface FormData {
+  newTitle: string;
+}
+
+const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, rules }: ModalProps) => {
+  const { control, handleSubmit, formState } = useForm({
     defaultValues: { newTitle: "" },
     mode: "onBlur",
   });
@@ -27,26 +30,14 @@ const ModalContainer = ({ title, label, buttonType, boardid, onClose, onAdd, clo
   return (
     <Wrapper>
       <Title>{title}</Title>
-      <form
-        onSubmit={handleSubmit(async (data) => {
-          if (isTitleExist(data.newTitle)) {
-            setError("newTitle", { message: "이름이 중복되었습니다. 다시 입력해주세요!" });
-            return;
-          }
-
-          const res = await postColumns({ title: data.newTitle, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
-          if (res !== null && closeModalFunc) {
-            closeModalFunc();
-          }
-        })}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
           <Controller
             control={control}
             name="newTitle"
-            rules={{ required: "생성할 이름을 입력해주세요" }}
+            rules={rules}
             render={({ field, fieldState }) => (
-              <Input label={label} {...field} placeholder="이름을 입력하세요" hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
+              <Input label={label} {...field} placeholder={`${label}을 입력하세요`} hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
             )}
           />
         </InputWrapper>
@@ -56,7 +47,7 @@ const ModalContainer = ({ title, label, buttonType, boardid, onClose, onAdd, clo
           </ColorSelectorWrapper>
         )}
         <ButtonWrapper>
-          <ButtonSet type="modalSet" onClickLeft={onClose} onClickRight={onAdd} isDisabled={!formState.isValid}>
+          <ButtonSet type="modalSet" onClickLeft={onClose} onClickRight={onAdd} isRightDisabled={!formState.isValid}>
             {buttonType}
           </ButtonSet>
         </ButtonWrapper>

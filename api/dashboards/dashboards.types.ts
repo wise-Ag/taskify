@@ -61,3 +61,9 @@ export interface PutDashboardProps {
   dashboardId: string;
   token: string;
 }
+
+export interface PostDashboardProps {
+  token: string | null;
+  title: string;
+  color: string;
+}
