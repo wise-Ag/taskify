@@ -8,18 +8,17 @@ import KebabModal from "@/components/Modal/KebabModal";
 import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
-import { useScroll } from "@/hooks/useInfiniteScroll";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { formatUpdatedAt } from "@/utils/FormatDate";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import NoProfileImage from "../common/NoProfileImage/ProfileImage";
 
-const TaskModal: React.FC<{ cardData: Card }> = ({ cardData }) => {
-  const { observe, unobserve, targetRef, loadData } = useScroll();
+const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ cardData, closeModalFunc }) => {
   const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(true);
   const [commentsData, setCommentsData] = useState<Comment[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
@@ -30,40 +29,37 @@ const TaskModal: React.FC<{ cardData: Card }> = ({ cardData }) => {
   const token = localStorage.getItem("accessToken");
 
   const loadCommentsData = async () => {
+    setIsLoading(true);
     if (commentsData.length > 0 && cursorId === null) {
-      unobserve();
       return;
     }
-    try {
-      const commentsData = await getComments({
-        cardId: cardData.id,
-        size: 2,
-        cursorId,
-        token,
-      });
+    const res = await getComments({
+      cardId: cardData.id,
+      size: 2,
+      cursorId,
+      token,
+    });
 
-      if (commentsData) {
-        setCommentsData((prev) => {
-          return [...prev, ...commentsData.comments];
-        });
-        setCursorId(commentsData.cursorId);
-      }
-    } catch (error) {
-      console.error("Error loading comments:", error);
+    if (res) {
+      setCommentsData((prev) => {
+        return [...prev, ...res.comments];
+      });
+      setCursorId(res.cursorId);
     }
-    observe();
+    setIsLoading(false);
   };
 
+  const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCommentsData });
+
   const submitComment = async (comment: string) => {
-    await postComments({
+    const res = await postComments({
       token,
       content: comment,
       cardId: cardData.id,
       columnId: cardData.columnId,
       dashboardId: Number(boardid),
     });
-
-    await loadCommentsData();
+    if (res) setCommentsData([res, ...commentsData]);
   };
 
   const handleEditClick = (commentId: number, currentContent: string) => {
@@ -74,21 +70,18 @@ const TaskModal: React.FC<{ cardData: Card }> = ({ cardData }) => {
 
   const handleDeleteClick = async (commentId: number) => {
     await deleteComments({ commentId, token });
-    await loadCommentsData();
+    setCommentsData([...commentsData.filter((v) => v.id !== commentId)]);
   };
 
   const handleUpdateComment = async (commentId: number) => {
-    if (commentId) {
-      await putComments({
-        commentId: commentId,
-        token,
-        content: newCommentContent,
-      });
+    const res = await putComments({
+      commentId,
+      token,
+      content: newCommentContent,
+    });
+    if (res) {
+      setCommentsData([...commentsData.map((v) => (v.id === commentId ? res : v))]);
       setIsEditing(false);
-      setEditingCommentId(null);
-      setNewCommentContent("");
-
-      await loadCommentsData();
     }
   };
 
@@ -96,13 +89,9 @@ const TaskModal: React.FC<{ cardData: Card }> = ({ cardData }) => {
     setIsKebabModalOpen(!isKebabModalOpen);
   };
 
-  const handleCloseClick = () => {
-    setIsModalOpen(false);
-  };
-
   useEffect(() => {
     loadCommentsData();
-  }, [loadData, boardid]);
+  }, [boardid]);
 
   if (!cardData) {
     return <div>Loading...</div>;
@@ -115,9 +104,9 @@ const TaskModal: React.FC<{ cardData: Card }> = ({ cardData }) => {
         <IconContainer>
           <KebabIconContainer>
             <Kebab alt="kebab" width={28} height={28} onClick={handleKebabClick} />
-            {isKebabModalOpen && <StyledKebabModal />}
+            {isKebabModalOpen && <StyledKebabModal columnId={cardData.columnId} />}
           </KebabIconContainer>
-          <Close alt="close" width={28} height={28} onClick={handleCloseClick} />
+          <Close alt="close" width={28} height={28} onClick={() => closeModalFunc()} />
         </IconContainer>
       </TitleWrapper>
       <ContactDeadLineWrapper>
@@ -125,8 +114,15 @@ const TaskModal: React.FC<{ cardData: Card }> = ({ cardData }) => {
         <DeadLine>마감일</DeadLine>
         <ContactName>
           <ProfileImageWrapper>
-            <img src={cardData.assignee.profileImageUrl} alt="Profile Image" />
+            {cardData.assignee.profileImageUrl ? (
+              <ProfileImage url={cardData.assignee.profileImageUrl} />
+            ) : (
+              <NoProfileImageWrapper>
+                <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
+              </NoProfileImageWrapper>
+            )}
           </ProfileImageWrapper>
+
           {cardData.assignee.nickname}
         </ContactName>
         <DeadLineDate>{cardData.dueDate}</DeadLineDate>
@@ -149,7 +145,13 @@ const TaskModal: React.FC<{ cardData: Card }> = ({ cardData }) => {
         {commentsData.map((comment) => (
           <CommentItem key={comment.id}>
             <LeftWrapper>
-              <img src={comment.author.profileImageUrl} alt="nickname" />
+              {comment.author.profileImageUrl ? (
+                <ProfileImage url={comment.author.profileImageUrl} />
+              ) : (
+                <NoProfileImageWrapper>
+                  <NoProfileImage id={comment.author.id} nickname={comment.author.nickname} />
+                </NoProfileImageWrapper>
+              )}
             </LeftWrapper>
             <RightWrapper>
               <InfoWrapper>
@@ -176,7 +178,7 @@ const TaskModal: React.FC<{ cardData: Card }> = ({ cardData }) => {
             </RightWrapper>
           </CommentItem>
         ))}
-        <div ref={targetRef}></div>
+        <div ref={targetRef} />
       </CommentWrapper>
     </Wrapper>
   );
@@ -491,5 +493,27 @@ const Delete = styled.button`
 
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1rem;
+  }
+`;
+const ProfileImage = styled.div<{ url: string }>`
+  width: 2.7rem;
+  height: 2.7rem;
+
+  border-radius: 4.4rem;
+
+  background-image: url(${(props) => props.url});
+  background-size: cover;
+`;
+
+const NoProfileImageWrapper = styled.div`
+  width: 2.7rem;
+
+  line-height: 2.7rem;
+  font-size: 1.3rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 2.4rem;
+
+    line-height: 2.4rem;
   }
 `;

@@ -1,5 +1,5 @@
 import instance from "@/api/axios";
-import { DeleteCommentsProps, GetCommentsData, GetCommentsProps, PostCommentsProps, PutCommentsProps } from "@/api/comments/comments.types";
+import { DeleteCommentsProps, GetCommentsData, GetCommentsProps, PostCommentsProps, PutCommentsProps, Comment } from "@/api/comments/comments.types";
 import { ENDPOINTS } from "@/api/config";
 
 export const getComments = async ({ cardId, size, cursorId, token }: GetCommentsProps): Promise<GetCommentsData | null> => {
