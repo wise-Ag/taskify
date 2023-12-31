@@ -11,7 +11,7 @@ interface ColumnHeaderProps {
   count: number;
 }
 
-const ColumnHeader = ({ title, count }: ColumnHeaderProps) => {
+const ColumnHeader = ({ title, count, columnId }: ColumnHeaderProps) => {
   const [isClicked, setIsClicked] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +41,7 @@ const ColumnHeader = ({ title, count }: ColumnHeaderProps) => {
       </Content>
       <Div ref={modalRef}>
         <SettingIcon onClick={handleClick} style={{ cursor: "pointer" }} />
-        {isClicked && <KebabModal />}
+        {isClicked && <KebabModal columnId={columnId} />}
       </Div>
     </Wrapper>
   );

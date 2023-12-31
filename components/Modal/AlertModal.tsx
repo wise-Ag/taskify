@@ -4,24 +4,26 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 
 interface AlertProps {
-  type: "signupComplete" | "delete" | "confirm" | "cancel" | "passwordChangeComplete" | "profileChangeComplete";
+  type: "signupComplete" | "deleteColumn" | "confirm" | "cancel" | "passwordChangeComplete" | "profileChangeComplete";
   onClick?: () => void;
+  onCancel?: () => void;
+  onConfirm?: () => void;
 }
 
-const AlertModal = ({ type, onClick }: AlertProps) => {
+const AlertModal = ({ type, onClick, onCancel, onConfirm }: AlertProps) => {
   return (
     <Wrapper>
       <Contents>
         {type === "signupComplete" && "가입이 완료되었습니다!"}
-        {type === "delete" && "칼럼의 모든 카드가 삭제됩니다."}
+        {type === "deleteColumn" && "칼럼을 삭제하시겠습니까?"}
         {type === "confirm" && "정말 삭제하시겠습니까?"}
         {type === "cancel" && "요청이 취소됩니다."}
         {type === "passwordChangeComplete" && "비밀번호 변경이 완료되었습니다!"}
         {type === "profileChangeComplete" && "프로필 변경이 완료되었습니다!"}
       </Contents>
       <ButtonWrapper>
-        {type === "delete" || type === "confirm" ? (
-          <ButtonSet type="modalSet" onClickLeft={onClick}>
+        {type === "deleteColumn" || type === "confirm" ? (
+          <ButtonSet type="modalSet" onClickLeft={onCancel} onClickRight={onConfirm}>
             삭제
           </ButtonSet>
         ) : (
