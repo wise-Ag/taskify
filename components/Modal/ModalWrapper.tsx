@@ -1,3 +1,4 @@
+import { Z_INDEX } from "@/styles/ZindexStyles";
 import { styled } from "styled-components";
 
 const ModalWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -20,7 +21,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: ${Z_INDEX.MyDashboardList_ModalBackdrop};
 `;
 
 const Container = styled.div`

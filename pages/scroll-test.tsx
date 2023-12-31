@@ -2,7 +2,7 @@ import { getCardList } from "@/api/cards";
 import Card from "@/components/Dashboard/Card/Card";
 import ColumnHeader from "@/components/Dashboard/Column/ColumnHeader";
 import Button from "@/components/common/Buttons/Button";
-import { useScroll } from "@/hooks/useScroll";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -27,16 +27,15 @@ const title = "test";
 
 const Column = () => {
   const [cards, setCards] = useState<getCardsResponse[]>([]);
-  const { observe, unobserve, targetRef, loadData } = useScroll();
+
   const [cursorId, setCursorId] = useState(null);
   const [totalCount, setTotalCount] = useState(1);
 
   const loadCards = async () => {
     if (cards.length === totalCount) {
-      unobserve();
       return;
     }
-
+    setIsLoading(true);
     const res = await getCardList({
       size: 6,
       cursorId,
@@ -49,12 +48,12 @@ const Column = () => {
     });
     setCursorId(res?.cursorId);
     setTotalCount(res?.totalCount);
-    observe();
+    setIsLoading(false);
   };
-
+  const { setIsLoading, targetRef } = useInfiniteScroll({ callbackFunc: loadCards });
   useEffect(() => {
     loadCards();
-  }, [loadData]);
+  }, []);
 
   return (
     <Wrapper>

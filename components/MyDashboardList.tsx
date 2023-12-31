@@ -1,4 +1,4 @@
-import { getDashboardList } from "@/api/dashboards";
+import { getDashboardList, postDashboard } from "@/api/dashboards";
 import Button from "@/components/common/Buttons/Button";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
@@ -7,8 +7,12 @@ import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import ModalContainer from "@/components/Modal/ModalContainer";
 import { useAtom } from "jotai";
-import { invitationsAtom } from "@/states/atoms";
+import { dashboardColorAtom, invitationsAtom, modalInputAtom } from "@/states/atoms";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useModal } from "@/hooks/useModal";
+import ModalWrapper from "./Modal/ModalWrapper";
+import { usePagination } from "@/hooks/usePagination";
+import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
 
 export interface Dashboards {
   id: number;
@@ -20,51 +24,60 @@ export interface Dashboards {
   createdByMe: boolean;
 }
 
-const PAGE_SIZE = 30;
+const PAGE_SIZE = 5;
 
 const MyDashboardList = () => {
   const [dashboards, setDashboards] = useState<Dashboards[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPageCount, setTotalPageCount] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [invitations] = useAtom(invitationsAtom); // 초대 목록!!
+  const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const { currentPage, setCurrentPage, handlePageChange } = usePagination(totalPageCount);
+  const [invitations] = useAtom(invitationsAtom);
+  const [dashboardTitle, setDashboardTitle] = useAtom(modalInputAtom);
+  const [dashboardColor, setDashboardColor] = useAtom(dashboardColorAtom);
 
-  // 새로운 대시보드 클릭 시
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const handleAddModal = async () => {
+    const res = await postDashboard({ token: localStorage.getItem("accessToken"), title: dashboardTitle, color: dashboardColor });
+
+    setDashboardColor(`${DASHBOARD_COLOR[0]}`);
+    setDashboardTitle("");
+
+    if (res == null) {
+      alert("대시보드 생성에 실패했습니다.");
+      closeModalFunc();
+      return;
+    }
+    currentPage === 1 ? setDashboards(() => [res, ...dashboards.slice(0, dashboards.length - 1)]) : setCurrentPage(1);
+
+    closeModalFunc();
   };
 
-  // 모달 닫을 때
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const loadDashboardList = async () => {
+    const res = await getDashboardList({
+      size: PAGE_SIZE,
+      token: localStorage.getItem("accessToken"),
+      navigationMethod: "pagination",
+      page: currentPage,
+    });
 
-  // 생성할 때
-  const handleAddModal = () => {};
+    if (res !== null) {
+      setDashboards([...res.dashboards]);
+      setTotalPageCount(Math.ceil(res.totalCount / PAGE_SIZE));
+    }
+  };
 
   useEffect(() => {
-    const loadDashboardList = async () => {
-      const res = await getDashboardList({
-        size: PAGE_SIZE,
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgxLCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQ4NDU5LCJpc3MiOiJzcC10YXNraWZ5In0.WYQWWikKqILh4vWyiDSCs0HDO-3TvKg7ci19-NUVexk",
-        navigationMethod: "pagination",
-        page: currentPage,
-      });
-
-      const resDashboards = res?.dashboards || [];
-      const totalCount = res?.totalCount || 0;
-
-      setDashboards(resDashboards);
-      setTotalPageCount(Math.ceil(totalCount / PAGE_SIZE));
-    };
     loadDashboardList();
   }, [currentPage, invitations]);
 
   return (
     <Wrapper>
       <Container>
-        <Button type="newDashboard" onClick={handleOpenModal}>
+        <Button
+          type="newDashboard"
+          onClick={() => {
+            openModalFunc();
+          }}
+        >
           새로운 대시보드
         </Button>
         {dashboards &&
@@ -72,18 +85,24 @@ const MyDashboardList = () => {
             return (
               <Link key={v.id} href={`/dashboard/${v.id}`}>
                 <Button type="dashboardList" title={v.title} color={v.color} id={v.id} createdByMe={v.createdByMe} />
-                {/* </div> */}
               </Link>
             );
           })}
       </Container>
       <PageContent>
-        {totalPageCount} 페이지 중 {currentPage} <ButtonSet type="forwardAndBackward" />
+        {totalPageCount} 페이지 중 {currentPage}{" "}
+        <ButtonSet
+          type="forwardAndBackward"
+          isLeftDisabled={currentPage === 1}
+          isRightDisabled={currentPage === totalPageCount}
+          onClickLeft={() => handlePageChange(-1)}
+          onClickRight={() => handlePageChange(1)}
+        />
       </PageContent>
       {isModalOpen && (
-        <ModalBackdrop>
-          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={handleCloseModal} onAdd={handleAddModal} />
-        </ModalBackdrop>
+        <ModalWrapper>
+          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} onAdd={handleAddModal} />
+        </ModalWrapper>
       )}
     </Wrapper>
   );
@@ -124,21 +143,4 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 1.2rem;
   align-items: end;
-`;
-
-const ModalBackdrop = styled.div`
-  width: 100%;
-  height: 100%;
-
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background-color: rgba(0, 0, 0, 0.5);
-
-  z-index: ${Z_INDEX.MyDashboardList_ModalBackdrop};
 `;

@@ -4,7 +4,8 @@ import { ReactNode } from "react";
 import styled, { css } from "styled-components";
 
 interface ButtonProps {
-  isDisabled?: boolean;
+  isLeftDisabled?: boolean;
+  isRightDisabled?: boolean;
   $buttonType: keyof typeof TYPES;
   onClickLeft?: () => void;
   onClickRight?: () => void;
@@ -17,35 +18,35 @@ interface ButtonSetProps extends ButtonCommonProps {
   children?: ReactNode;
 }
 
-const ButtonSet = ({ type, isDisabled, children, onClickLeft, onClickRight }: ButtonSetProps) => {
+const ButtonSet = ({ type, isLeftDisabled, isRightDisabled, children, onClickLeft, onClickRight }: ButtonSetProps) => {
   return (
     <ButtonSetContainer type={type}>
       {type === "forwardAndBackward" && (
         <>
-          <Button $buttonType="backward" disabled={isDisabled} onClick={onClickLeft}>
-            <StyledArrowIcon disabled={isDisabled} />
+          <Button $buttonType="backward" disabled={isLeftDisabled} onClick={onClickLeft}>
+            <StyledArrowIcon disabled={isLeftDisabled} />
           </Button>
-          <Button $buttonType="forward" disabled={isDisabled} onClick={onClickRight}>
-            <StyledArrowIcon disabled={isDisabled} />
+          <Button $buttonType="forward" disabled={isRightDisabled} onClick={onClickRight}>
+            <StyledArrowIcon disabled={isRightDisabled} />
           </Button>
         </>
       )}
       {type === "acceptAndReject" && (
         <>
-          <Button $buttonType="accept" disabled={isDisabled} onClick={onClickLeft}>
+          <Button $buttonType="accept" disabled={isLeftDisabled} onClick={onClickLeft}>
             수락
           </Button>
-          <Button $buttonType="reject" disabled={isDisabled} onClick={onClickRight}>
+          <Button $buttonType="reject" disabled={isRightDisabled} onClick={onClickRight}>
             거절
           </Button>
         </>
       )}
       {type === "modalSet" && (
         <>
-          <Button $buttonType="cancel" onClick={onClickLeft}>
+          <Button $buttonType="cancel" disabled={isLeftDisabled} onClick={onClickLeft}>
             취소
           </Button>
-          <Button $buttonType="basic" disabled={isDisabled} onClick={onClickRight}>
+          <Button $buttonType="basic" disabled={isRightDisabled} onClick={onClickRight}>
             {children}
           </Button>
         </>

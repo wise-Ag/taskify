@@ -27,12 +27,12 @@ export interface GetInvitationsData {
 export interface GetInvitationProps {
   title?: string;
   size?: number;
-  cursorId?: number;
-  token: string;
+  cursorId?: number | null;
+  token: string | null;
 }
 
 export interface PutInvitationsProps {
   invitationId: number;
-  token: string;
+  token: string | null;
   inviteAccepted: boolean;
 }

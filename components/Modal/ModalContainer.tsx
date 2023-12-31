@@ -1,8 +1,10 @@
 import Input from "@/components/Sign/SignInput/Input";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import ColorSelector from "@/components/common/Chip/DashBoardColor";
+import NameInput from "@/components/Modal/NameInput";
+import { modalInputAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { Controller, useForm } from "react-hook-form";
+import { useAtom } from "jotai";
 import styled from "styled-components";
 
 interface ModalProps {
@@ -18,6 +20,8 @@ interface ModalProps {
 }
 
 const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, rules }: ModalProps) => {
+  const [modalInput] = useAtom(modalInputAtom);
+
   const { control, handleSubmit, formState } = useForm({
     defaultValues: { newTitle: "" },
     mode: "onBlur",
