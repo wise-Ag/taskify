@@ -1,14 +1,14 @@
-import Card from "@/components/Dashboard/Card/Card";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import ColumnHeader from "@/components/Dashboard/Column/ColumnHeader";
-import Button from "@/components/common/Buttons/Button";
-import { DeviceSize } from "@/styles/DeviceSize";
 import { getCardList } from "@/api/cards";
 import { Card as CardData } from "@/api/cards/cards.types";
-import TodoModal from "@/components/Modal/TodoModal";
-import { useModal } from "@/hooks/useModal";
+import Card from "@/components/Dashboard/Card/Card";
+import ColumnHeader from "@/components/Dashboard/Column/ColumnHeader";
+import AddTaskModal from "@/components/Modal/AddTaskModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
+import Button from "@/components/common/Buttons/Button";
+import { useModal } from "@/hooks/useModal";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 interface ColumnProps {
   columnId: number;
@@ -52,7 +52,7 @@ const Column = ({ columnId, title }: ColumnProps) => {
         />
         {isModalOpen && (
           <ModalWrapper>
-            <TodoModal type="create" />
+            <AddTaskModal />
           </ModalWrapper>
         )}
         {cards.map((card) => {
