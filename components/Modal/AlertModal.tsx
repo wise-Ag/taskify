@@ -21,7 +21,9 @@ const AlertModal = ({ type, onClick }: AlertProps) => {
       </Contents>
       <ButtonWrapper>
         {type === "delete" || type === "confirm" ? (
-          <ButtonSet type="modalSet">삭제</ButtonSet>
+          <ButtonSet type="modalSet" onClickLeft={onClick}>
+            삭제
+          </ButtonSet>
         ) : (
           <Button onClick={onClick} type="modalConfirm">
             확인

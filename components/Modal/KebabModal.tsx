@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { useEffect } from "react";
 import TodoModal from "@/components/Modal/TodoModal";
 import AlertModal from "@/components/Modal/AlertModal";
 import { Z_INDEX } from "@/styles/ZindexStyles";
@@ -8,39 +7,22 @@ import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 
 const KebabModal = () => {
-  const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModalFunc, closeModalFunc: closeEditModalFunc } = useModal();
-
-  useEffect(() => {
-    const handleKeyDown = (event: { key: string }) => {
-      if (event.key === "Escape") {
-        closeDeleteModalFunc();
-        closeEditModalFunc();
-      }
-    };
-
-    if (isDeleteModalOpen || isEditModalOpen) {
-      window.addEventListener("keydown", handleKeyDown);
-    }
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closeDeleteModalFunc, closeEditModalFunc]);
+  const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
 
   return (
     <Wrapper>
       <KebabListWrapper>
         <KebabList onClick={openEditModalFunc}>수정하기</KebabList>
+        <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
         {isEditModalOpen && (
           <ModalWrapper>
-            <TodoModal type="edit" />
+            <TodoModal type="edit" onClick={closeEditModalFunc} />
           </ModalWrapper>
         )}
-        <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
         {isDeleteModalOpen && (
           <ModalWrapper>
-            <AlertModal type="delete" />
+            <AlertModal type="delete" onClick={closeDeleteModalFunc} />
           </ModalWrapper>
         )}
       </KebabListWrapper>
