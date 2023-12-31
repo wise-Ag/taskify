@@ -3,10 +3,12 @@ import { Invitation } from "@/api/invitations/invitations.types";
 import NoInvitation from "@/components/Table/NoInvite";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
 import { invitationsAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FaArrowUpWideShort } from "react-icons/fa6";
 import styled from "styled-components";
 
 const PAGE_SIZE = 6;
@@ -16,6 +18,8 @@ const InvitedDashboard = () => {
   const [invitations, setInvitations] = useAtom(invitationsAtom);
   const [invitationData, setInvitationData] = useState<Invitation[]>([]);
   const [cursorId, setCursorId] = useState<number | null>(null);
+  const scrollContainerRef = useRef(null);
+  const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
 
   const loadInvitations = async () => {
     if (invitationData.length > 0 && cursorId == null) {
@@ -38,10 +42,6 @@ const InvitedDashboard = () => {
 
   const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadInvitations });
 
-  useEffect(() => {
-    loadInvitations();
-  }, []);
-
   const handleInvitationResponse = async (invitationId: number, accept: boolean) => {
     const updatedInvitation = await putInvitations({
       invitationId,
@@ -54,11 +54,15 @@ const InvitedDashboard = () => {
     }
   };
 
+  useEffect(() => {
+    loadInvitations();
+  }, []);
+
   return (
     <>
       {invitationData.length > 0 ? (
-        <Container>
-          <Title>초대받은 대시보드</Title>
+        <Container ref={scrollContainerRef}>
+          <Title ref={startRef}>초대받은 대시보드</Title>
           <Header>
             {tableTitles.map((title) => (
               <TableTitle key={title}>{title}</TableTitle>
@@ -84,6 +88,12 @@ const InvitedDashboard = () => {
             </InvitationItem>
           ))}
           <div ref={targetRef} />
+          <div ref={endRef} />
+          {PAGE_SIZE < invitationData.length && (
+            <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
+              <ScrollNavigateIcon $isScrollingUp={isScrollingUp} />
+            </ScrollNavigateButton>
+          )}
         </Container>
       ) : (
         <NoInvitation />
@@ -99,6 +109,8 @@ const Container = styled.div`
   height: 60rem;
   padding: 3rem;
   border-radius: 8px;
+
+  position: relative;
 
   overflow: auto;
 
@@ -201,4 +213,32 @@ const TableBody = styled.h3`
 
     font-size: 1.4rem;
   }
+`;
+
+const ScrollNavigateButton = styled.div`
+  position: sticky;
+  bottom: 0;
+  left: 100rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 4rem;
+  height: 4rem;
+
+  border-radius: 1.5rem;
+
+  cursor: pointer;
+
+  background-color: var(--MainHover);
+`;
+
+const ScrollNavigateIcon = styled(FaArrowUpWideShort)<{ $isScrollingUp: boolean }>`
+  width: 2.5rem;
+  height: 2.5rem;
+
+  ${(props) => props.$isScrollingUp && " transform: scaleY(-1)"};
+
+  fill: var(--Main);
 `;
