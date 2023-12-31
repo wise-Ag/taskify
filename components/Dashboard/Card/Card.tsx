@@ -45,7 +45,7 @@ const Card = ({ cardData }: { cardData: Card }) => {
       </div>
       {isModalOpen && (
         <ModalWrapper>
-          <TaskModal />
+          <TaskModal cardData={cardData} />
         </ModalWrapper>
       )}
     </Wrapper>

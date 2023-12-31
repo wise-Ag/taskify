@@ -1,11 +1,8 @@
 import instance from "@/api/axios";
+import { Card, CardProps, PutCardProps, DeleteCardProps, GetCardListData, GetCardListProps, GetCardProps } from "@/api/cards/cards.types";
 import { ENDPOINTS } from "@/api/config";
-import { GetCardProps, GetCardListProps, PutCardProps, DeleteCardProps, Card, GetCardListData, PostCardProps } from "@/api/cards/cards.types";
 
-export const getCard = async ({
-  cardId = 77,
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: GetCardProps): Promise<Card | null> => {
+export const getCard = async ({ cardId, token }: GetCardProps): Promise<Card | null> => {
   try {
     const res = await instance.get(ENDPOINTS.CARDS.GET_CARD(cardId), {
       headers: {
@@ -19,12 +16,7 @@ export const getCard = async ({
   }
 };
 
-export const getCardList = async ({
-  size = 5,
-  cursorId = 5,
-  columnId = 16,
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: GetCardListProps): Promise<GetCardListData | null> => {
+export const getCardList = async ({ size, cursorId, columnId, token }: GetCardListProps): Promise<GetCardListData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.CARDS.GET_LIST, {
       params: {
@@ -43,20 +35,19 @@ export const getCardList = async ({
   }
 };
 
-export const postCards = async ({
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: PostCardProps): Promise<Card | null> => {
+export const postCards = async ({ assigneeUserId, dashboardId, columnId, title, description, dueDate, tags, imageUrl, token }: CardProps): Promise<Card | null> => {
   try {
     const res = await instance.post(
       ENDPOINTS.CARDS.POST,
       {
-        assigneeUserId: 13,
-        dashboardId: 5,
-        columnId: 16,
-        title: "happy",
-        description: "TEST 입니당~~",
-        dueDate: "2023-12-31 00:00",
-        tags: ["메롱"],
+        assigneeUserId,
+        dashboardId,
+        columnId,
+        title,
+        description,
+        dueDate,
+        tags,
+        imageUrl,
       },
       {
         headers: {
@@ -71,20 +62,18 @@ export const postCards = async ({
   }
 };
 
-export const putCard = async ({
-  cardId = 77,
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: PutCardProps): Promise<Card | null> => {
+export const putCard = async ({ columnId, assigneeUserId, title, description, dueDate, tags, imageUrl, cardId, token }: PutCardProps): Promise<Card | null> => {
   try {
     const res = await instance.put(
       ENDPOINTS.CARDS.PUT(cardId),
       {
-        columnId: 623,
-        assigneeUserId: 13,
-        title: "not happy",
-        description: "TEST 다시 해보기",
-        dueDate: "2023-12-31 01:00",
-        tags: ["누가 만들었는지 참 흥"],
+        columnId,
+        assigneeUserId,
+        title,
+        description,
+        dueDate,
+        tags,
+        imageUrl,
       },
       {
         headers: {
@@ -99,10 +88,7 @@ export const putCard = async ({
   }
 };
 
-export const deleteCard = async ({
-  cardId = 77,
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: DeleteCardProps) => {
+export const deleteCard = async ({ cardId, token }: DeleteCardProps) => {
   try {
     const res = await instance.delete(ENDPOINTS.CARDS.DELETE(cardId), {
       headers: {

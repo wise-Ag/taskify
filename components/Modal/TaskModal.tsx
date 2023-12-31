@@ -1,5 +1,4 @@
 import { Card } from "@/api/cards/cards.types";
-import { getCard, getCardList } from "@/api/cards/index";
 import { Comment } from "@/api/comments/comments.types";
 import { deleteComments, getComments, postComments, putComments } from "@/api/comments/index";
 import Division from "@/assets/icons/category-division.svg";
@@ -13,47 +12,22 @@ import { useScroll } from "@/hooks/useScroll";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { formatUpdatedAt } from "@/utils/FormatDate";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const TaskModal: React.FC = () => {
+const TaskModal: React.FC<{ cardData: Card }> = ({ cardData }) => {
   const { observe, unobserve, targetRef, loadData } = useScroll();
   const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [cardList, setCardList] = useState<Card[]>([]);
-  const [cardData, setCardData] = useState<Card | null>(null);
   const [commentsData, setCommentsData] = useState<Comment[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [newCommentContent, setNewCommentContent] = useState("");
   const [cursorId, setCursorId] = useState<number | null>(null);
-
+  const router = useRouter();
+  const { boardid } = router.query;
   const token = localStorage.getItem("accessToken");
-  const dashboardId = 394;
-  const columnId = 1242;
-  const cardId = 159;
-
-  const loadCardListData = async () => {
-    const data = await getCardList({
-      cursorId,
-      columnId,
-      token,
-    });
-
-    if (data && data.cards) {
-      setCardList(data.cards);
-    }
-  };
-
-  const loadCardData = async () => {
-    const data = await getCard({
-      cardId,
-      token,
-    });
-    if (data) {
-      setCardData(data);
-    }
-  };
 
   const loadCommentsData = async () => {
     if (commentsData.length > 0 && cursorId === null) {
@@ -62,7 +36,7 @@ const TaskModal: React.FC = () => {
     }
     try {
       const commentsData = await getComments({
-        cardId,
+        cardId: cardData.id,
         size: 2,
         cursorId,
         token,
@@ -84,9 +58,9 @@ const TaskModal: React.FC = () => {
     await postComments({
       token,
       content: comment,
-      cardId,
-      columnId,
-      dashboardId,
+      cardId: cardData.id,
+      columnId: cardData.columnId,
+      dashboardId: Number(boardid),
     });
 
     await loadCommentsData();
@@ -127,16 +101,8 @@ const TaskModal: React.FC = () => {
   };
 
   useEffect(() => {
-    loadCardListData();
-  }, []);
-
-  useEffect(() => {
-    loadCardData();
-  }, []);
-
-  useEffect(() => {
     loadCommentsData();
-  }, [loadData]);
+  }, [loadData, boardid]);
 
   if (!cardData) {
     return <div>Loading...</div>;
