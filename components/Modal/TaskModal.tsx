@@ -46,7 +46,7 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
       });
       setCursorId(res.cursorId);
     }
-    setIsLoading(false);
+    if (commentsData.length !== 0) setIsLoading(false);
   };
 
   const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCommentsData });
@@ -59,7 +59,8 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
       columnId: cardData.columnId,
       dashboardId: Number(boardid),
     });
-    if (res) setCommentsData([res, ...commentsData]);
+    if (res && commentsData.length == 0) setCommentsData([res]);
+    if (res && commentsData.length > 0) setCommentsData([res, ...commentsData]);
   };
 
   const handleEditClick = (commentId: number, currentContent: string) => {
