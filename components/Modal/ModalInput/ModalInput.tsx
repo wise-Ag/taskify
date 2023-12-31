@@ -8,8 +8,10 @@ import React, { ChangeEvent, forwardRef, useState } from "react";
 import styled from "styled-components";
 
 interface ModalInputProps {
-  label: string;
   $inputType: "댓글" | "제목" | "마감일" | "설명";
+  label: string;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface InputAreaProps {
@@ -104,7 +106,7 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
 export default ModalInput;
 
 const CustomDatePicker = ({ placeholder = "날짜를 입력해 주세요.", onChange }: DateInputProps) => {
-  const [dates, setDates] = useState<Dayjs | null>();
+  const [dates, setDates] = useState<Dayjs | null>(null);
 
   const handleDateChange = (newVal: Dayjs | null) => {
     setDates(newVal);
@@ -137,7 +139,7 @@ const CustomDatePicker = ({ placeholder = "날짜를 입력해 주세요.", onCh
           disablePast
           closeOnSelect
           format="YYYY.MM.DD hh:mm A"
-          onChange={(newValue: Dayjs | null) => handleDateChange(newValue)}
+          onChange={handleDateChange}
           slotProps={{ textField: { placeholder: placeholder } }}
         />
       </LocalizationProvider>

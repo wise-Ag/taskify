@@ -2,7 +2,7 @@ export interface Card {
   id: number;
   title: string;
   description: string;
-  tags: [string];
+  tags: string[];
   dueDate: string;
   assignee: {
     profileImageUrl?: string;
@@ -41,7 +41,7 @@ export interface CardProps {
   title: string;
   description: string;
   dueDate: string;
-  tags: [string];
+  tags: string[];
   imageUrl?: string;
   token: string | null;
 }

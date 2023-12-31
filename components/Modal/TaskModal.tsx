@@ -141,7 +141,7 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
       </CategoryWrapper>
       <Description>{cardData.description}</Description>
       <Image src={cardData.imageUrl} alt="Task Image" />
-      <ModalInput label="댓글" $inputType="댓글" onSubmitComment={submitComment} />
+      <ModalInput label="댓글" $inputType="댓글" value={newCommentContent} onChange={(e) => setNewCommentContent(e.target.value)} onSubmitComment={submitComment} />
       <CommentWrapper>
         {commentsData.map((comment) => (
           <CommentItem key={comment.id}>
