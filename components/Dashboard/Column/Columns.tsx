@@ -5,16 +5,18 @@ import ModalContainer from "@/components/Modal/ModalContainer";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
 import { useModal } from "@/hooks/useModal";
+import { columnsAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Columns = () => {
-  const [columns, setColumns] = useState<ColumnsData[]>([]);
   const [totalColumns, setTotalColumns] = useState(3);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const [columns, setColumns] = useAtom(columnsAtom);
   const router = useRouter();
   const { boardid } = router.query;
 
@@ -25,14 +27,18 @@ const Columns = () => {
   const rules = {
     required: "생성할 이름을 입력해주세요",
     validate: (v: string) => {
-      if (isTitleExist(v)) return "중복된 이름입니다.";
+      if (isTitleExist(v)) return "이름이 중복되었습니다. 다시 입력해주세요!";
     },
   };
 
   const handleOnSubmit = async (data: any) => {
     const res = await postColumns({ title: data.newTitle, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
-    if (res == null) alert("컬럼 생성에 실패했습니다.");
-
+    if (res == null) {
+      alert("컬럼 생성에 실패했습니다.");
+      closeModalFunc();
+      return;
+    }
+    setColumns([...columns, res]);
     closeModalFunc();
   };
 
@@ -53,7 +59,7 @@ const Columns = () => {
       }
     };
     loadColumnsData();
-  }, [boardid, isModalOpen]);
+  }, [boardid]);
 
   return (
     <>

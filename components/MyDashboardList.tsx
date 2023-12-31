@@ -1,18 +1,17 @@
 import { getDashboardList, postDashboard } from "@/api/dashboards";
+import ModalContainer from "@/components/Modal/ModalContainer";
 import Button from "@/components/common/Buttons/Button";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
+import { useModal } from "@/hooks/useModal";
+import { usePagination } from "@/hooks/usePagination";
+import { dashboardColorAtom, invitationsAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import ModalContainer from "@/components/Modal/ModalContainer";
-import { useAtom } from "jotai";
-import { dashboardColorAtom, invitationsAtom, modalInputAtom } from "@/states/atoms";
-import { Z_INDEX } from "@/styles/ZindexStyles";
-import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "./Modal/ModalWrapper";
-import { usePagination } from "@/hooks/usePagination";
-import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
 
 export interface Dashboards {
   id: number;
@@ -32,14 +31,22 @@ const MyDashboardList = () => {
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const { currentPage, setCurrentPage, handlePageChange } = usePagination(totalPageCount);
   const [invitations] = useAtom(invitationsAtom);
-  const [dashboardTitle, setDashboardTitle] = useAtom(modalInputAtom);
   const [dashboardColor, setDashboardColor] = useAtom(dashboardColorAtom);
 
-  const handleAddModal = async () => {
-    const res = await postDashboard({ token: localStorage.getItem("accessToken"), title: dashboardTitle, color: dashboardColor });
+  const isTitleExist = (titleToCheck: string) => {
+    return dashboards.some((v) => v.title === titleToCheck);
+  };
 
+  const rules = {
+    required: "생성할 이름을 입력해주세요",
+    validate: (v: string) => {
+      if (isTitleExist(v)) return "이름이 중복되었습니다. 다시 입력해주세요!";
+    },
+  };
+
+  const handleAddModal = async (data: any) => {
+    const res = await postDashboard({ token: localStorage.getItem("accessToken"), title: data.newTitle, color: dashboardColor });
     setDashboardColor(`${DASHBOARD_COLOR[0]}`);
-    setDashboardTitle("");
 
     if (res == null) {
       alert("대시보드 생성에 실패했습니다.");
@@ -101,7 +108,7 @@ const MyDashboardList = () => {
       </PageContent>
       {isModalOpen && (
         <ModalWrapper>
-          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} onAdd={handleAddModal} />
+          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} onSubmit={handleAddModal} rules={rules} />
         </ModalWrapper>
       )}
     </Wrapper>

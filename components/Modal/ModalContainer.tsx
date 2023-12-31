@@ -1,15 +1,13 @@
 import Input from "@/components/Sign/SignInput/Input";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import ColorSelector from "@/components/common/Chip/DashBoardColor";
-import NameInput from "@/components/Modal/NameInput";
-import { modalInputAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { useAtom } from "jotai";
+import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
 interface ModalProps {
   title: "새 컬럼 생성" | "컬럼 관리" | "새로운 대시보드";
-  label: "이름" | "대시보드 이름";
+  label: "이름" | "대시보드 이름" | "컬럼 이름";
   buttonType: "생성" | "변경";
   boardid?: number;
   columnId?: number;
@@ -20,8 +18,6 @@ interface ModalProps {
 }
 
 const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, rules }: ModalProps) => {
-  const [modalInput] = useAtom(modalInputAtom);
-
   const { control, handleSubmit, formState } = useForm({
     defaultValues: { newTitle: "" },
     mode: "onBlur",
@@ -47,7 +43,7 @@ const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, ru
           </ColorSelectorWrapper>
         )}
         <ButtonWrapper>
-          <ButtonSet type="modalSet" onClickLeft={onClose} onClickRight={onAdd} isDisabled={!formState.isValid}>
+          <ButtonSet type="modalSet" onClickLeft={onClose} onClickRight={onAdd} isRightDisabled={!formState.isValid}>
             {buttonType}
           </ButtonSet>
         </ButtonWrapper>
