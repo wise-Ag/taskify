@@ -8,12 +8,6 @@ import { VscColorMode } from "react-icons/vsc";
 import { dashboardColorAtom } from "@/states/atoms";
 import { useAtom } from "jotai";
 
-interface ColorCircleProps {
-  color?: string;
-  selected?: boolean;
-  onClick?: () => void;
-}
-
 const DashBoardColor = () => {
   const [selectedColor, setSelectedColor] = useAtom(dashboardColorAtom);
   const [isHover, setIsHover] = useState(false);
@@ -21,7 +15,7 @@ const DashBoardColor = () => {
   return (
     <Container>
       {DASHBOARD_COLOR.map((color) => (
-        <ColorCircle key={color} color={color} selected={selectedColor === color} onClick={() => setSelectedColor(color)}>
+        <ColorCircle key={color} color={color} onClick={() => setSelectedColor(color)}>
           {selectedColor === color && <StyledCheckIcon />}
         </ColorCircle>
       ))}
@@ -45,7 +39,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const ColorCircle = styled.div<ColorCircleProps>`
+const ColorCircle = styled.div.attrs((props) => ({ style: { backgroundColor: props.color } }))`
   width: 3rem;
   height: 3rem;
 
@@ -55,7 +49,6 @@ const ColorCircle = styled.div<ColorCircleProps>`
   position: relative;
 
   border-radius: 50%;
-  background-color: ${(props) => props.color};
 
   cursor: pointer;
 
