@@ -1,4 +1,4 @@
-import { deleteColumns } from "@/api/columns";
+import { deleteColumns, putColumns } from "@/api/columns";
 import { Columns } from "@/api/columns/columns.types";
 import AlertModal from "@/components/Modal/AlertModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
@@ -8,6 +8,7 @@ import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ChangeColumnNameModal from "@/components/Modal/ChangeColumnNameModal";
+import ModalContainer from "./ModalContainer";
 
 const KebabModal = ({ columnId }: { columnId: number }) => {
   const [columns, setColumns] = useState<Columns[]>([]);
@@ -18,6 +19,18 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
     return columns.some((column) => column.title === titleToCheck);
   };
 
+  const rules = {
+    required: "변경할 이름을 입력해주세요",
+    validate: (v: string) => {
+      if (isTitleExist(v)) return "중복된 이름입니다.";
+    },
+  };
+
+  const handleSubmit = async (data: any) => {
+    const res = await putColumns({ title: data.newTitle, columnId: columnId, token: localStorage.getItem("accessToken") });
+    if (res == null) alert("컬럼 이름 변경에 실피했습니다.");
+    closeEditModalFunc();
+  };
   const handleDeleteColumn = async () => {
     await deleteColumns({ columnId: columnId, token: localStorage.getItem("accessToken") });
 
@@ -48,13 +61,12 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
         <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
         {isEditModalOpen && (
           <ModalWrapper>
-            <ChangeColumnNameModal closeModalFunc={() => closeEditModalFunc()} onClose={closeEditModalFunc} columnId={columnId} isTitleExist={isTitleExist} />
+            <ModalContainer title="컬럼 관리" label="이름" buttonType="변경" onClose={closeEditModalFunc} onSubmit={handleSubmit} rules={rules} />
           </ModalWrapper>
         )}
         {isDeleteModalOpen && (
           <ModalWrapper>
             <AlertModal type="deleteColumn" onCancel={closeDeleteModalFunc} onConfirm={handleDeleteColumn} />
-
           </ModalWrapper>
         )}
       </KebabListWrapper>

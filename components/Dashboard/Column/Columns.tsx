@@ -1,4 +1,4 @@
-import { getColumns } from "@/api/columns";
+import { getColumns, postColumns } from "@/api/columns";
 import { Columns as ColumnsData } from "@/api/columns/columns.types";
 import Column from "@/components/Dashboard/Column/Column";
 import ModalContainer from "@/components/Modal/ModalContainer";
@@ -20,6 +20,20 @@ const Columns = () => {
 
   const isTitleExist = (titleToCheck: string) => {
     return columns.some((column) => column.title === titleToCheck);
+  };
+
+  const rules = {
+    required: "생성할 이름을 입력해주세요",
+    validate: (v: string) => {
+      if (isTitleExist(v)) return "중복된 이름입니다.";
+    },
+  };
+
+  const handleOnSubmit = async (data: any) => {
+    const res = await postColumns({ title: data.newTitle, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
+    if (res == null) alert("컬럼 생성에 실패했습니다.");
+
+    closeModalFunc();
   };
 
   useEffect(() => {
@@ -56,15 +70,7 @@ const Columns = () => {
       </Wrapper>
       {isModalOpen && (
         <ModalWrapper>
-          <ModalContainer
-            title="새 컬럼 생성"
-            label="이름"
-            buttonType="생성"
-            closeModalFunc={() => closeModalFunc()}
-            onClose={closeModalFunc}
-            boardid={Number(boardid)}
-            isTitleExist={isTitleExist}
-          />
+          <ModalContainer title="새 컬럼 생성" label="이름" buttonType="생성" onClose={closeModalFunc} boardid={Number(boardid)} onSubmit={handleOnSubmit} rules={rules} />
         </ModalWrapper>
       )}
     </>
@@ -108,3 +114,6 @@ const ButtonWrapper = styled.div`
     bottom: 0;
   }
 `;
+function setError(arg0: string, arg1: { message: string }) {
+  throw new Error("Function not implemented.");
+}
