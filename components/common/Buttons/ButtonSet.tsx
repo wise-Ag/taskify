@@ -42,7 +42,7 @@ const ButtonSet = ({ type, isDisabled, children, onClickLeft, onClickRight }: Bu
       )}
       {type === "modalSet" && (
         <>
-          <Button $buttonType="cancel" disabled={isDisabled} onClick={onClickLeft}>
+          <Button $buttonType="cancel" onClick={onClickLeft}>
             취소
           </Button>
           <Button $buttonType="basic" disabled={isDisabled} onClick={onClickRight}>
