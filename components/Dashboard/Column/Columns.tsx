@@ -1,7 +1,6 @@
 import { getColumns, postColumns } from "@/api/columns";
-import { Columns as ColumnsData } from "@/api/columns/columns.types";
 import Column from "@/components/Dashboard/Column/Column";
-import ModalContainer from "@/components/Modal/ModalContainer";
+import ModalContainer, { FormData } from "@/components/Modal/ModalContainer";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
 import { useModal } from "@/hooks/useModal";
@@ -31,7 +30,7 @@ const Columns = () => {
     },
   };
 
-  const handleOnSubmit = async (data: any) => {
+  const handleOnSubmit = async (data: FormData) => {
     const res = await postColumns({ title: data.newTitle, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
     if (res == null) {
       alert("컬럼 생성에 실패했습니다.");

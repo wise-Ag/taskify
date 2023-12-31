@@ -1,15 +1,14 @@
 import { deleteColumns, putColumns } from "@/api/columns";
-import { Columns } from "@/api/columns/columns.types";
 import AlertModal from "@/components/Modal/AlertModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import { useModal } from "@/hooks/useModal";
+import { columnsAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import ModalContainer from "./ModalContainer";
 import { useAtom } from "jotai";
-import { columnsAtom } from "@/states/atoms";
+import { useEffect } from "react";
+import styled from "styled-components";
+import ModalContainer, { FormData } from "./ModalContainer";
 
 const KebabModal = ({ columnId }: { columnId: number }) => {
   const [columns, setColumns] = useAtom(columnsAtom);
@@ -27,7 +26,7 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
     },
   };
 
-  const handleChangeColumnName = async (data: any) => {
+  const handleChangeColumnName = async (data: FormData) => {
     const res = await putColumns({ title: data.newTitle, columnId: columnId, token: localStorage.getItem("accessToken") });
     if (res == null) {
       alert("컬럼 이름 변경에 실피했습니다.");

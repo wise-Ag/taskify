@@ -1,5 +1,5 @@
 import { getDashboardList, postDashboard } from "@/api/dashboards";
-import ModalContainer from "@/components/Modal/ModalContainer";
+import ModalContainer, { FormData } from "@/components/Modal/ModalContainer";
 import Button from "@/components/common/Buttons/Button";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
@@ -44,7 +44,7 @@ const MyDashboardList = () => {
     },
   };
 
-  const handleAddModal = async (data: any) => {
+  const handleAddModal = async (data: FormData) => {
     const res = await postDashboard({ token: localStorage.getItem("accessToken"), title: data.newTitle, color: dashboardColor });
     setDashboardColor(`${DASHBOARD_COLOR[0]}`);
 

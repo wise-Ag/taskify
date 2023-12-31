@@ -17,6 +17,10 @@ interface ModalProps {
   rules: {};
 }
 
+export interface FormData {
+  newTitle: string;
+}
+
 const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, rules }: ModalProps) => {
   const { control, handleSubmit, formState } = useForm({
     defaultValues: { newTitle: "" },
