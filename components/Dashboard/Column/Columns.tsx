@@ -1,21 +1,22 @@
-import instance from "@/api/axios";
+import { getColumns } from "@/api/columns";
+import { Columns as ColumnsData } from "@/api/columns/columns.types";
 import Column from "@/components/Dashboard/Column/Column";
 import Button from "@/components/common/Buttons/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { useEffect, useState } from "react";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getColumns } from "@/api/columns";
-import { Columns as ColumnsData } from "@/api/columns/columns.types";
 
 const Columns = () => {
   const [columns, setColumns] = useState<ColumnsData[]>([]);
   const [isClicked, setIsClicked] = useState(false);
-
+  const router = useRouter();
+  const { boardid } = router.query;
   useEffect(() => {
     const loadColumnsData = async () => {
       const res = await getColumns({
-        dashboardId: 399,
+        dashboardId: Number(boardid),
         token: localStorage.getItem("accessToken"),
       });
       const columns = res?.data;
@@ -26,7 +27,7 @@ const Columns = () => {
       }
     };
     loadColumnsData();
-  }, []);
+  }, [boardid]);
 
   return (
     <Wrapper>

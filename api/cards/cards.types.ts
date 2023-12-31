@@ -5,7 +5,7 @@ export interface Card {
   tags: [string];
   dueDate: string;
   assignee: {
-    profileImageUrl: string;
+    profileImageUrl?: string;
     nickname: string;
     id: number;
   };
@@ -31,10 +31,10 @@ export interface GetCardListProps {
   size?: number;
   cursorId: number | null;
   columnId: number;
-  token?: string | null;
+  token: string | null;
 }
 
-export interface PostCardProps {
+export interface CardProps {
   assigneeUserId: number;
   dashboardId: number;
   columnId: number;
@@ -42,16 +42,15 @@ export interface PostCardProps {
   description: string;
   dueDate: string;
   tags: [string];
-  imageUrl: string;
+  imageUrl?: string;
   token: string | null;
 }
 
-export interface PutCardProps {
+export interface PutCardProps extends CardProps {
   cardId: number;
-  token: string | null;
 }
 
 export interface DeleteCardProps {
   cardId: number;
-  token?: string | null;
+  token: string | null;
 }
