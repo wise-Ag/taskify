@@ -43,10 +43,10 @@ const ButtonSet = ({ type, isLeftDisabled, isRightDisabled, children, onClickLef
       )}
       {type === "modalSet" && (
         <>
-          <Button $buttonType="cancel" disabled={isLeftDisabled} onClick={onClickLeft}>
+          <Button type="button" $buttonType="cancel" disabled={isLeftDisabled} onClick={onClickLeft}>
             취소
           </Button>
-          <Button $buttonType="basic" disabled={isRightDisabled} onClick={onClickRight}>
+          <Button type="submit" $buttonType="basic" disabled={isRightDisabled} onClick={onClickRight}>
             {children}
           </Button>
         </>
