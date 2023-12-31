@@ -24,5 +24,9 @@ const Wrapper = styled.div`
 
 const Button = styled(Link)`
   color: var(--Black33);
-  font-size: 1.4rem;
+  font-size: 1.6rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.4rem;
+  }
 `;

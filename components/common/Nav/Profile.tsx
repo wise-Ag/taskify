@@ -164,6 +164,10 @@ const DropdownMenu = styled.div`
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
 
   z-index: ${Z_INDEX.Profile_DropdownMenu};
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 16rem;
+  }
 `;
 
 const MenuItem = styled.div<{ $location?: boolean }>`
@@ -200,6 +204,10 @@ const MenuItem = styled.div<{ $location?: boolean }>`
 
     box-shadow: 0 0 0 6px white inset;
   }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.4rem;
+  }
 `;
 
 const ItemContent = styled.span`
@@ -209,5 +217,5 @@ const ItemContent = styled.span`
 `;
 
 const StyledArrowIcon = styled(ArrowIcon)`
-  transform: ${({ active }) => (active ? "scaleY(-1)" : "none")};
+  transform: ${({ $active }) => ($active ? "scaleY(-1)" : "none")};
 `;

@@ -6,6 +6,7 @@ import PasswordInput from "@/components/Sign/SignInput/PasswordInput";
 import Button from "@/components/common/Buttons/Button";
 import { ERROR_MESSAGE, NICKNAME_RULES, SIGNUP_PASSWORD_RULES, PLACEHOLDER } from "@/constants/InputConstant";
 import { useModal } from "@/hooks/useModal";
+import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
@@ -101,6 +102,10 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   row-gap: 1.6rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 35.1rem;
+  }
 `;
 
 const ButtonWrapper = styled.div`

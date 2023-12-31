@@ -81,7 +81,8 @@ export default ProfileImages;
 const Container = styled.div``;
 
 const Contents = styled.div`
-  width: 15.8rem;
+  min-width: 8rem;
+  max-width: 15.8rem;
 
   position: relative;
 

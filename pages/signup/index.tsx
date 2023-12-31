@@ -61,6 +61,8 @@ const CheckMembership = styled.p`
 `;
 
 const GoToSignUp = styled.span`
+  margin-left: 0.5rem;
+
   color: var(--Main);
   text-decoration-line: underline;
 `;

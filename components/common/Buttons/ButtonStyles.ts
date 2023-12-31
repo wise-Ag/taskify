@@ -3,7 +3,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 
 const TYPES = {
   login: css`
-    width: 52rem;
+    width: 100%;
 
     padding: 1.4rem 0;
 
@@ -20,8 +20,6 @@ const TYPES = {
     }
 
     @media (max-width: ${DeviceSize.mobile}) {
-      width: 35.1rem;
-
       padding: 1.4rem 0;
 
       border: none;
