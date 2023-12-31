@@ -46,7 +46,7 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
       });
       setCursorId(res.cursorId);
     }
-    if (commentsData.length !== 0) setIsLoading(false);
+    setIsLoading(false);
   };
 
   const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCommentsData });
@@ -145,6 +145,7 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
       <CommentWrapper>
         {commentsData.map((comment) => (
           <CommentItem key={comment.id}>
+            {comment.id === cursorId && <div ref={targetRef} />}
             <LeftWrapper>
               {comment.author.profileImageUrl ? (
                 <ProfileImage url={comment.author.profileImageUrl} />
@@ -157,6 +158,7 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
             <RightWrapper>
               <InfoWrapper>
                 {comment.author.nickname}
+
                 <CommentDate>{formatUpdatedAt(comment.updatedAt)}</CommentDate>
               </InfoWrapper>
               {isEditing && editingCommentId === comment.id ? (
@@ -179,7 +181,6 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
             </RightWrapper>
           </CommentItem>
         ))}
-        <div ref={targetRef} />
       </CommentWrapper>
     </Wrapper>
   );
