@@ -21,8 +21,8 @@ export interface PostColumnsProps {
 }
 
 export interface GetColumnsProps {
-  dashboardId?: number;
-  token?: string | null;
+  dashboardId: number;
+  token: string | null;
 }
 
 export interface PutColumnsProps {

@@ -45,15 +45,16 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
     <Wrapper>
       <KebabListWrapper>
         <KebabList onClick={openEditModalFunc}>수정하기</KebabList>
+        <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
         {isEditModalOpen && (
           <ModalWrapper>
             <ChangeColumnNameModal closeModalFunc={() => closeEditModalFunc()} onClose={closeEditModalFunc} columnId={columnId} isTitleExist={isTitleExist} />
           </ModalWrapper>
         )}
-        <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
         {isDeleteModalOpen && (
           <ModalWrapper>
             <AlertModal type="deleteColumn" onCancel={closeDeleteModalFunc} onConfirm={handleDeleteColumn} />
+
           </ModalWrapper>
         )}
       </KebabListWrapper>
