@@ -69,7 +69,7 @@ const InvitationHistory = () => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, boardid]);
+  }, [currentPage, boardid, isInvitaionModalOpen]);
 
   return (
     <>
