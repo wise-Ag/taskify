@@ -14,6 +14,7 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
   const [columns, setColumns] = useAtom(columnsAtom);
   const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModalFunc, closeModalFunc: closeEditModalFunc } = useModal();
+  const token = localStorage.getItem("accessToken");
 
   const isTitleExist = (titleToCheck: string) => {
     return columns.some((column) => column.title === titleToCheck);
@@ -27,19 +28,18 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
   };
 
   const handleChangeColumnName = async (data: FormData) => {
-    const res = await putColumns({ title: data.newTitle, columnId: columnId, token: localStorage.getItem("accessToken") });
+    const res = await putColumns({ title: data.newTitle, columnId: columnId, token });
     if (res == null) {
       alert("컬럼 이름 변경에 실패했습니다.");
       closeEditModalFunc();
       return;
     }
-    const newUpdatedAt = new Date();
-    setColumns(columns.map((v) => (v.id == columnId ? { title: data.newTitle, id: v.id, createdAt: v.createdAt, updatedAt: newUpdatedAt.toISOString() } : v)));
+    setColumns(columns.map((v) => (v.id == columnId ? res : v)));
     closeEditModalFunc();
   };
 
   const handleDeleteColumn = async () => {
-    await deleteColumns({ columnId, token: localStorage.getItem("accessToken") });
+    await deleteColumns({ columnId, token });
     setColumns([...columns.filter((v) => v.id !== columnId)]);
     closeDeleteModalFunc();
   };
