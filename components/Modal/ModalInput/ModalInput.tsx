@@ -9,8 +9,7 @@ import styled from "styled-components";
 
 interface ModalInputProps {
   $inputType: "댓글" | "제목" | "마감일" | "설명";
-  label: string;
-  value?: string;
+  value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
@@ -23,29 +22,12 @@ interface DateInputProps {
   onChange: (value: string) => void;
 }
 
-const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInputProps & { onSubmitComment?: (comment: string) => void }>(
+const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInputProps & { onSubmitComment?: () => void }>(
   ({ label, $inputType, value, onChange, onSubmitComment }, ref) => {
-    const [inputValue, setInputValue] = useState(value || "");
     const [selectedDate, setSelectedDate] = useState("");
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setInputValue(e.target.value);
-      if (onChange) {
-        onChange(e);
-      }
-    };
-
-    const effectiveOnChange = onChange || handleInputChange;
 
     const handleDateChange = (dateStr: string) => {
       setSelectedDate(dateStr);
-    };
-
-    const handleCommentSubmit = () => {
-      if (onSubmitComment && inputValue.trim()) {
-        onSubmitComment(inputValue);
-        setInputValue("");
-      }
     };
 
     const renderInput = () => {
@@ -64,7 +46,7 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
               />
               {$inputType === "댓글" && (
                 <PositionedButton>
-                  <Button type="modalInput" onClick={handleCommentSubmit} disabled={!inputValue.trim()}>
+                  <Button type="modalInput" onClick={onSubmitComment} disabled={!value.trim()}>
                     입력
                   </Button>
                 </PositionedButton>
