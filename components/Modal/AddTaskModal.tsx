@@ -32,8 +32,6 @@ const AddTaskModal = ({ onCancel }: AddTaskModalProps) => {
   const handleDueDateChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDueDate(event.target.value);
 
   const handleSubmit = async () => {
-    console.log(title);
-
     try {
       const card = await postCards({
         assigneeUserId: 209, // 수정 필요

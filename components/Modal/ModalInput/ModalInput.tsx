@@ -115,9 +115,15 @@ const CustomDatePicker = ({ placeholder = "날짜를 입력해 주세요.", onCh
 
   const handleDateChange = (newVal: Dayjs | null) => {
     setDates(newVal);
-    if (newVal === (undefined || null)) return;
-    const dateToStr = newVal.year() + "." + (newVal.month() + 1) + "." + newVal?.date() + " " + newVal?.hour() + ":" + newVal?.minute();
-    onChange(dateToStr);
+    if (newVal) {
+      console.log(newVal);
+      const formattedDate = newVal.format("YYYY-MM-DD HH:mm");
+      console.log("Formatted Date:", formattedDate);
+      console.log(typeof formattedDate);
+      onChange(formattedDate);
+    } else {
+      onChange("");
+    }
   };
 
   return (
@@ -143,7 +149,7 @@ const CustomDatePicker = ({ placeholder = "날짜를 입력해 주세요.", onCh
           value={dates}
           disablePast
           closeOnSelect
-          format="YYYY.MM.DD hh:mm A"
+          format="YYYY-MM-DD HH:mm"
           onChange={handleDateChange}
           slotProps={{ textField: { placeholder: placeholder } }}
         />
