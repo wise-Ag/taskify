@@ -81,7 +81,7 @@ const SideMenu = () => {
       <LogoButton />
       <StyledArrowButton onClick={togglePopup} $isPopupVisible={isPopupVisible} />
       {isPopupVisible && (
-        <Popup>
+        <Popup isPopupVisible={isPopupVisible}>
           <DashboardList>
             {dashboards.map((dashboard) => {
               return <Dashboard key={dashboard.id} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
@@ -256,7 +256,7 @@ const DashboardTitle = styled.div`
   position: relative;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    width: 60%;
+    width: 55%;
     font-size: 1.6rem;
   }
 
@@ -266,10 +266,6 @@ const DashboardTitle = styled.div`
 `;
 
 const StyledCrown = styled(Crown)`
-  /* display: flex;
-  position: absolute;
-  right: 10px; */
-
   @media (max-width: ${DeviceSize.mobile}) {
     display: none;
   }
@@ -293,6 +289,7 @@ const StyledArrowButton = styled(ArrowButton)<{ $isPopupVisible: boolean }>`
 `;
 
 const Popup = styled.div`
+  padding: 0.5rem;
   display: none;
 
   position: absolute;
@@ -309,9 +306,11 @@ const Popup = styled.div`
 
   @media (max-width: ${DeviceSize.mobile}) {
     display: block;
+    opacity: ${({ isPopupVisible }) => (isPopupVisible ? 1 : 0)};
+    transition: opacity 0.3s ease;
 
     ${DashboardList} {
-      width: 13.4rem;
+      width: 18rem;
 
       margin: 0.8rem 0;
     }
