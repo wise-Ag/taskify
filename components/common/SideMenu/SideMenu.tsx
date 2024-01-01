@@ -14,6 +14,7 @@ import { Dashboard } from "@/api/dashboards/dashboards.types";
 import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import ModalContainer from "@/components/Modal/ModalContainer";
+import { useParams } from "next/navigation";
 
 interface DashboardProps {
   boardId: number;
@@ -24,8 +25,11 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ color, title, createdByMe, boardId }: DashboardProps) => {
+  const param = useParams();
+  const isActive = boardId === Number(param.boardid);
+  console.log(isActive);
   return (
-    <Container href={`/dashboard/${boardId}`}>
+    <Container href={`/dashboard/${boardId}`} $isActive={isActive}>
       <Color color={color} />
       <DashboardTitle>{title}</DashboardTitle>
       {createdByMe && <StyledCrown alt="왕관" />}
@@ -175,7 +179,7 @@ const StyledAddButton = styled(AddButton)`
 `;
 
 const DashboardList = styled.div`
-  width: 27.6rem;
+  width: 100%;
 
   margin-top: 1.8rem;
 
@@ -183,7 +187,6 @@ const DashboardList = styled.div`
   flex-direction: column;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    width: 13.4rem;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
@@ -193,7 +196,8 @@ const DashboardList = styled.div`
   }
 `;
 
-const Container = styled(Link)`
+const Container = styled(Link)<{ $isActive: boolean }>`
+  width: 100%;
   height: 4.5rem;
 
   padding-left: 1.2rem;
@@ -204,6 +208,7 @@ const Container = styled(Link)`
   flex-shrink: 0;
 
   border-radius: 0.4rem;
+  background: ${({ $isActive }) => ($isActive ? `var(--MainHover)` : "")};
 
   &:hover {
     background-color: var(--MainHover);
@@ -211,7 +216,7 @@ const Container = styled(Link)`
 
   @media (max-width: ${DeviceSize.tablet}) {
     height: 4.3rem;
-
+    width: 100%;
     padding-left: 1rem;
   }
 
@@ -245,6 +250,9 @@ const DashboardTitle = styled.div`
   color: var(--Gray78);
   font-size: 1.8rem;
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
 
   @media (max-width: ${DeviceSize.tablet}) {
     font-size: 1.6rem;
@@ -256,6 +264,10 @@ const DashboardTitle = styled.div`
 `;
 
 const StyledCrown = styled(Crown)`
+  display: flex;
+  position: absolute;
+  right: 10px;
+
   @media (max-width: ${DeviceSize.mobile}) {
     display: none;
   }
