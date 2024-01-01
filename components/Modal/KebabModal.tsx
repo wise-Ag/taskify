@@ -29,7 +29,7 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
   const handleChangeColumnName = async (data: FormData) => {
     const res = await putColumns({ title: data.newTitle, columnId: columnId, token: localStorage.getItem("accessToken") });
     if (res == null) {
-      alert("컬럼 이름 변경에 실피했습니다.");
+      alert("컬럼 이름 변경에 실패했습니다.");
       closeEditModalFunc();
       return;
     }
