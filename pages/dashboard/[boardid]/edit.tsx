@@ -19,9 +19,9 @@ const DashboardEditPage = () => {
       <SideMenu />
       <Container>
         <BackButton href={`/dashboard/${boardid}`} />
-        <EditDashboard boardid={boardid} />
-        <MembersList boardid={Number(boardid)} />
-        <InvitationHistory boardid={boardid} />
+        <EditDashboard />
+        <MembersList />
+        <InvitationHistory />
         <StyledButton>
           <Button type="deleteDashboard">대시보드 삭제하기</Button>
         </StyledButton>

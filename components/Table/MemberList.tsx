@@ -4,30 +4,33 @@ import Button from "@/components/common/Buttons/Button";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { usePagination } from "@/hooks/usePagination";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const PAGE_SIZE = 4; // 임의로 추가
 
-interface MemberListProps {
-  boardid: number;
-}
+// interface MemberListProps {
+//   boardid: number;
+// }
 
-const MembersList = ({ boardid }: MemberListProps) => {
+const MembersList = () => {
   const [members, setMembers] = useState<Member[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPageNum, setTotalPageNum] = useState(1);
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
+  const router = useRouter();
+  const { boardid } = router.query;
+  console.log(boardid);
 
   const fetchData = async () => {
     const result = await getMembers({
-      dashboardId: boardid,
+      dashboardId: Number(boardid),
       token: localStorage.getItem("accessToken"),
       size: PAGE_SIZE,
       page: currentPage,
     });
-
-    if (result !== null) {
+    if (result) {
       const { members, totalCount } = result;
       setMembers(members);
       setTotalCount(totalCount);
@@ -37,7 +40,7 @@ const MembersList = ({ boardid }: MemberListProps) => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage]);
+  }, [boardid]);
 
   return (
     <Container>

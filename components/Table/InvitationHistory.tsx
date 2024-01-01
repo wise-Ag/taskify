@@ -4,29 +4,31 @@ import Button from "@/components/common/Buttons/Button";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { usePagination } from "@/hooks/usePagination";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const PAGE_SIZE = 5; // 임의로 추가
 
-interface InvitationHistoryProps {
-  boardid: string;
-}
+// interface InvitationHistoryProps {
+//   boardid: string;
+// }
 
-const InvitationHistory = ({ boardid }: InvitationHistoryProps) => {
+const InvitationHistory = () => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPageNum, setTotalPageNum] = useState(1);
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
+  const router = useRouter();
+  const { boardid } = router.query;
 
   const fetchData = async () => {
     const result = await getDashboardInvitations({
-      dashboardId: boardid,
+      dashboardId: String(boardid),
       token: String(localStorage.getItem("accessToken")),
       size: PAGE_SIZE,
       page: currentPage,
     });
-
     if (result !== null) {
       const { invitations, totalCount } = result;
       setInvitations(invitations);
@@ -37,7 +39,7 @@ const InvitationHistory = ({ boardid }: InvitationHistoryProps) => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage]);
+  }, [boardid]);
 
   return (
     <Container>

@@ -9,7 +9,6 @@ const DashboardNav = () => {
   const { boardid } = router.query;
   const [dashboard, setDashboard] = useState<Dashboard>();
 
-  console.log(dashboard);
   useEffect(() => {
     if (!boardid) return;
     const loadDashboardData = async () => {

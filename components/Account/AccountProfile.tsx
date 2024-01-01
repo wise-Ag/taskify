@@ -16,7 +16,6 @@ const AccountProfile = () => {
     defaultValues: { email: "", nickname: "" },
     mode: "onBlur",
   });
-
   const handleCloseModal = () => {
     closeModalFunc();
   };
