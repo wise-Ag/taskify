@@ -74,7 +74,7 @@ const AddTaskModal = ({ closeModalFunc }: AddTaskModalProps) => {
   return (
     <Wrapper ref={modalRef}>
       <TodoTitle>할 일 생성</TodoTitle>
-      <ContactDropdown members={membersData} />
+      <ContactDropdown dashboardId={dashboardId} />
       <ModalInput $inputType="제목" label="제목" value={title} onChange={handleTitleChange} />
       <ModalInput $inputType="설명" label="설명" value={description} onChange={handleDescriptionChange} />
       <ModalInput $inputType="마감일" label="마감일" value={dueDate} onChange={handleDueDateChange} />

@@ -122,8 +122,6 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
     closeModalFunc();
   };
 
-  const handleConfirmEdit = async () => {};
-
   if (!cardData) {
     return <div>Loading...</div>;
   }
@@ -214,7 +212,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
       </CommentWrapper>
       {isEditModalOpen && (
         <ModalWrapper>
-          <EditTaskModal cardId={cardData.id} onCancel={closeEditModal} onEdit={handleConfirmEdit} />
+          <EditTaskModal cardId={cardData.id} onCancel={closeEditModal} />
         </ModalWrapper>
       )}
       {isDeleteModalOpen && (
