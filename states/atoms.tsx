@@ -14,3 +14,5 @@ export const columnsAtom = atom<Columns[]>([]);
 export const dashboardColorAtom = atom<string>(`${DASHBOARD_COLOR[0]}`);
 
 export const cardsAtom = atom<{ [columnId: number]: Card[] }>({});
+
+export const commentScrollAtom = atom<boolean>(false);

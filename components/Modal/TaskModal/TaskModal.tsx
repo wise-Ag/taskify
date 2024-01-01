@@ -10,19 +10,24 @@ import TaskDropdown from "@/components/Modal/TaskDropdown";
 import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
 import { useModal } from "@/hooks/useModal";
-import { cardsAtom } from "@/states/atoms";
+import { cardsAtom, commentScrollAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import NoProfileImage from "../../common/NoProfileImage/ProfileImage";
 import Comments from "./Comments";
+import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
+import { FaArrowUpWideShort } from "react-icons/fa6";
 
 const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: () => void }> = ({ cardData, columnId, closeModalFunc }) => {
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModal, closeModalFunc: closeEditModal } = useModal();
   const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModal, closeModalFunc: closeDeleteModal } = useModal();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const scrollContainerRef = useRef(null);
+  const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
   const [cards, setCards] = useAtom(cardsAtom);
+  const [isScrollActive, setIsScrollActive] = useAtom(commentScrollAtom);
   const token = localStorage.getItem("accessToken");
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -51,7 +56,8 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
   const handleConfirmEdit = async () => {};
   return (
     <>
-      <Wrapper>
+      <Wrapper ref={scrollContainerRef}>
+        <div ref={startRef} />
         <TitleWrapper>
           <Title>{cardData.title}</Title>
           <IconContainer>
@@ -59,7 +65,17 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
               <Kebab alt="kebab" width={28} height={28} onClick={toggleDropdown} />
               {isDropdownOpen && <TaskDropdown onEdit={handleDropdownEditClick} onCreate={handleDropdownDeleteClick} />}
             </KebabIconContainer>
-            <Close alt="close" width={28} height={28} onClick={() => closeModalFunc()} />
+            <div style={{ cursor: "pointer" }}>
+              <Close
+                alt="close"
+                width={28}
+                height={28}
+                onClick={() => {
+                  closeModalFunc();
+                  setIsScrollActive(false);
+                }}
+              />
+            </div>
           </IconContainer>
         </TitleWrapper>
         <ContactDeadLineWrapper>
@@ -93,6 +109,12 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
         <Description>{cardData.description}</Description>
         {cardData.imageUrl && <Image src={cardData.imageUrl} alt="Task Image" />}
         <Comments cardData={cardData} />
+        <div ref={endRef} />
+        {isScrollActive && (
+          <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
+            <ScrollNavigateIcon $isScrollingUp={isScrollingUp} />
+          </ScrollNavigateButton>
+        )}
       </Wrapper>
       {isEditModalOpen && (
         <ModalWrapper>
@@ -331,4 +353,31 @@ const NoProfileImageWrapper = styled.div`
 
     line-height: 2.4rem;
   }
+`;
+const ScrollNavigateButton = styled.div`
+  position: sticky;
+  bottom: 0;
+  left: 100rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 4rem;
+  height: 4rem;
+
+  border-radius: 1.5rem;
+
+  cursor: pointer;
+
+  background-color: var(--MainHover);
+`;
+
+const ScrollNavigateIcon = styled(FaArrowUpWideShort)<{ $isScrollingUp: boolean }>`
+  width: 2.5rem;
+  height: 3.5rem;
+
+  ${(props) => props.$isScrollingUp && " transform: scaleY(-1)"};
+
+  fill: var(--Main);
 `;

@@ -9,6 +9,8 @@ import { Card } from "@/api/cards/cards.types";
 import { Comment } from "@/api/comments/comments.types";
 import { formatUpdatedAt } from "@/utils/FormatDate";
 import NoProfileImage from "../../common/NoProfileImage/ProfileImage";
+import { useAtom } from "jotai";
+import { commentScrollAtom } from "@/states/atoms";
 
 const Comments = ({ cardData }: { cardData: Card }) => {
   const [inputValue, setInputValue] = useState("");
@@ -17,6 +19,7 @@ const Comments = ({ cardData }: { cardData: Card }) => {
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [newCommentContent, setNewCommentContent] = useState("");
   const [cursorId, setCursorId] = useState<number | null>(null);
+  const [, setIsScrollActive] = useAtom(commentScrollAtom);
   const router = useRouter();
   const { boardid } = router.query;
   const token = localStorage.getItem("accessToken");
@@ -39,11 +42,16 @@ const Comments = ({ cardData }: { cardData: Card }) => {
       });
       setCursorId(res.cursorId);
     }
+    watchCommentCount();
     setIsLoading(false);
   };
 
   const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCommentsData });
 
+  const watchCommentCount = () => {
+    //댓글이 10개가 넘으면 스크롤 네비게이션 버튼 보이게
+    commentsData.length > 10 ? setIsScrollActive(true) : setIsScrollActive(false);
+  };
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
@@ -66,6 +74,7 @@ const Comments = ({ cardData }: { cardData: Card }) => {
 
     if (res && commentsData.length == 0) setCommentsData([res].splice(0));
     if (res && commentsData.length > 0) setCommentsData([res, ...commentsData]);
+    watchCommentCount();
   };
 
   const handleEditClick = (commentId: number, currentContent: string) => {
@@ -77,6 +86,7 @@ const Comments = ({ cardData }: { cardData: Card }) => {
   const handleDeleteClick = async (commentId: number) => {
     await deleteComments({ commentId, token });
     setCommentsData([...commentsData.filter((v) => v.id !== commentId)]);
+    watchCommentCount();
   };
 
   const handleUpdateComment = async (commentId: number) => {
