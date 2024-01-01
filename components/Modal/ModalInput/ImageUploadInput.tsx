@@ -8,11 +8,12 @@ import styled, { css } from "styled-components";
 
 interface ImageUploadInputProps {
   type: "modal" | "account";
+  initialImageUrl?: string;
 }
 
-const ImageUploadInput = ({ type, className }: ImageUploadInputProps & { className?: string }) => {
+const ImageUploadInput = ({ type, className, initialImageUrl }: ImageUploadInputProps & { className?: string }) => {
   const [selectedImage, setSelectedImage] = useAtom(cardImageAtom);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(initialImageUrl ?? null);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {

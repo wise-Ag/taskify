@@ -15,6 +15,8 @@ export const dashboardColorAtom = atom<string>(`${DASHBOARD_COLOR[0]}`);
 
 export const cardsAtom = atom<{ [columnId: number]: Card[] }>({});
 
+export const commentScrollAtom = atom<boolean>(false);
+
 export const dueDateAtom = atom<string>("");
 
 export const cardImageAtom = atom<File | null>(null);

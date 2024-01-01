@@ -4,7 +4,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { useAtom } from "jotai";
 import React, { forwardRef, useState } from "react";
 import styled from "styled-components";
@@ -12,7 +12,7 @@ import styled from "styled-components";
 interface ModalInputProps {
   $inputType: "댓글" | "제목" | "마감일" | "설명";
   label: string;
-  value?: string;
+  value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
@@ -20,25 +20,15 @@ interface InputAreaProps {
   $inputType: "댓글" | "제목" | "마감일" | "설명";
 }
 
+interface DateInputProps {
+  placeholder?: string;
+  value?: string;
+  onChange: (value: string) => void;
+}
+
 const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInputProps & { onSubmitComment?: (comment: string) => void }>(
-  ({ label, $inputType, value, onChange, onSubmitComment }, ref) => {
+  ({ label, $inputType, onSubmitComment, value, onChange }, ref) => {
     const [inputValue, setInputValue] = useState(value || "");
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setInputValue(e.target.value);
-      if (onChange) {
-        onChange(e);
-      }
-    };
-
-    const effectiveOnChange = onChange || handleInputChange;
-
-    const handleCommentSubmit = () => {
-      if (onSubmitComment && inputValue.trim()) {
-        onSubmitComment(inputValue);
-        setInputValue("");
-      }
-    };
 
     const renderInput = () => {
       switch ($inputType) {
@@ -49,14 +39,14 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
               <StyledTextArea
                 ref={ref as React.Ref<HTMLTextAreaElement>}
                 value={value}
-                onChange={effectiveOnChange}
+                onChange={onChange}
                 placeholder={$inputType === "댓글" ? "댓글 작성하기" : "설명을 입력해 주세요"}
                 $inputType={$inputType}
                 required={$inputType === "설명"}
               />
               {$inputType === "댓글" && (
                 <PositionedButton>
-                  <Button type="modalInput" onClick={handleCommentSubmit} disabled={!inputValue.trim()}>
+                  <Button type="modalInput" onClick={onSubmitComment} disabled={!value.trim()}>
                     입력
                   </Button>
                 </PositionedButton>
@@ -70,7 +60,7 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
                 ref={ref as React.Ref<HTMLInputElement>}
                 type="text"
                 value={value}
-                onChange={effectiveOnChange}
+                onChange={onChange}
                 placeholder={"제목을 입력해 주세요"}
                 $inputType={$inputType}
                 required

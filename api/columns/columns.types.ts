@@ -1,6 +1,7 @@
 export interface Columns {
   id: number;
   title: string;
+  dashboardId: number;
   createdAt: string;
   updatedAt: string;
 }

@@ -1,56 +1,80 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import styled from "styled-components";
 import DropdownIcon from "@/assets/icons/arrow-drop-down.svg";
 import CheckIcon from "@/assets/icons/check.svg";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
 import { cardAssigneeIdAtom } from "@/states/atoms";
-
-interface Member {
-  id: number;
-  userId: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string;
-  createdAt: string;
-  updatedAt: string;
-  isOwner: boolean;
-}
+import { Member } from "@/api/members/members.types";
+import { getMembers } from "@/api/members";
 
 interface ContactDropdownProps {
-  members: Member[];
+  dashboardId: number;
+  assigneeNickname?: string | null;
+  assigneeProfileImageUrl?: string | null;
+  onSelectMember: (userId: number) => void;
 }
 
-const ContactDropdown = ({ members }: ContactDropdownProps) => {
+const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUrl, onSelectMember }: ContactDropdownProps) => {
+  const [membersData, setMembersData] = useState<Member[]>([]);
   const [filter, setFilter] = useState("");
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [showList, setShowList] = useState(false);
   const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+  const token = localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const memberData = await getMembers({ dashboardId, token });
+        if (memberData) {
+          setMembersData(memberData.members);
+
+          if (assigneeNickname) {
+            const assignee = memberData.members.find((member) => member.nickname === assigneeNickname);
+            if (assignee) {
+              setSelectedMember(assignee);
+              setFilter(assigneeNickname); // 여기서 필터 상태를 업데이트
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch members", error);
+      }
+    };
+
+    fetchMembers();
+  }, [dashboardId, token]);
+  
   const [, setAssigneeId] = useAtom(cardAssigneeIdAtom);
   const toggleList = () => {
     setShowList(!showList);
     if (!showList) {
-      setFilteredMembers(members);
+      setFilteredMembers(membersData);
     }
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
     setFilter(input);
-    if (!input) {
-      setSelectedMember(null);
-      setFilteredMembers(members);
+    const matchedMembers = membersData.filter((membersData) => membersData.nickname.toLowerCase().includes(input.toLowerCase()));
+
+    setFilteredMembers(matchedMembers);
+
+    if (input) {
+      setShowList(true);
     } else {
-      const matchedMembers = members.filter((member) => member.nickname.toLowerCase().includes(input.toLowerCase()));
-      setFilteredMembers(matchedMembers);
+      setSelectedMember(null);
+      setShowList(false);
     }
   };
 
-  const handleSelect = (member: Member) => {
-    setSelectedMember(member);
-    setFilter(member.nickname);
+  const handleSelect = (membersData: Member) => {
+    setSelectedMember(membersData);
+    setFilter(membersData.nickname);
     setShowList(false);
-    setAssigneeId(member.userId);
+    onSelectMember(membersData.userId);
+    setAssigneeId(membersData.userId);
   };
 
   return (
@@ -61,7 +85,7 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
           {selectedMember && <SelectProfileIcon src={selectedMember.profileImageUrl} alt="Profile" />}
           <Input
             type="text"
-            value={selectedMember ? selectedMember.nickname : filter}
+            value={filter}
             onChange={handleChange}
             placeholder="이름을 입력해 주세요"
             style={{
@@ -73,10 +97,10 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
 
         {showList && (
           <List>
-            {filteredMembers.map((member) => (
-              <ListItem key={member.id} onClick={() => handleSelect(member)}>
-                <ProfileIcon src={member.profileImageUrl} alt="Profile" />
-                {member.nickname}
+            {filteredMembers.map((membersData) => (
+              <ListItem key={membersData.id} onClick={() => handleSelect(membersData)}>
+                <ProfileIcon src={membersData.profileImageUrl} alt="Profile" />
+                {membersData.nickname}
                 <CheckIconStyled />
               </ListItem>
             ))}

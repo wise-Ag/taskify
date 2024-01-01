@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { Card } from "@/api/cards/cards.types";
 import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
-import TaskModal from "@/components/Modal/TaskModal";
+import TaskModal from "@/components/Modal/TaskModal/TaskModal";
 
 const Card = ({ cardData, columnId }: { cardData: Card; columnId: number }) => {
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
@@ -45,7 +45,7 @@ const Card = ({ cardData, columnId }: { cardData: Card; columnId: number }) => {
           <TaskModal cardData={cardData} columnId={columnId} closeModalFunc={closeModalFunc} />
         </ModalWrapper>
       )}
-    </Wrapper>
+    </>
   );
 };
 

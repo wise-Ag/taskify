@@ -11,6 +11,7 @@ export interface Card {
   };
   imageUrl: string;
   teamId: string;
+  dashboardId: number;
   columnId: number;
   createdAt: string;
   updatedAt: string;

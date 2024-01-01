@@ -18,10 +18,13 @@ import ImageUploadInput from "./ModalInput/ImageUploadInput";
 interface AddTaskModalProps {
   closeModalFunc: () => void;
   columnId: number;
+  columnId: number;
 }
 
 const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
+const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
+  const [assigneeUserId, setAssigneeUserId] = useState<number>(0);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const token = localStorage.getItem("accessToken");
@@ -34,6 +37,9 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [dueDate, setDueDate] = useAtom(dueDateAtom);
   const [cardImage, setCardImage] = useAtom(cardImageAtom);
   const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
+  const handleSelectMember = (userId: number) => {
+    setAssigneeUserId(userId);
+  };
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
 
@@ -84,7 +90,7 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   return (
     <Wrapper ref={modalRef}>
       <TodoTitle>할 일 생성</TodoTitle>
-      <ContactDropdown members={membersData} />
+      <ContactDropdown onSelectMember={handleSelectMember} dashboardId={dashboardId} />
       <ModalInput $inputType="제목" label="제목" value={title} onChange={handleTitleChange} />
       <ModalInput $inputType="설명" label="설명" value={description} onChange={handleDescriptionChange} />
       <ModalInput $inputType="마감일" label="마감일" value={dueDate} />
