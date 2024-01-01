@@ -18,13 +18,10 @@ import ImageUploadInput from "./ModalInput/ImageUploadInput";
 interface AddTaskModalProps {
   closeModalFunc: () => void;
   columnId: number;
-  columnId: number;
 }
 
 const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
-const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
-  const [assigneeUserId, setAssigneeUserId] = useState<number>(0);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const token = localStorage.getItem("accessToken");

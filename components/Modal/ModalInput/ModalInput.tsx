@@ -26,10 +26,8 @@ interface DateInputProps {
   onChange: (value: string) => void;
 }
 
-const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInputProps & { onSubmitComment?: (comment: string) => void }>(
+const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInputProps & { onSubmitComment?: () => void }>(
   ({ label, $inputType, onSubmitComment, value, onChange }, ref) => {
-    const [inputValue, setInputValue] = useState(value || "");
-
     const renderInput = () => {
       switch ($inputType) {
         case "댓글":

@@ -13,33 +13,36 @@ const Card = ({ cardData, columnId }: { cardData: Card; columnId: number }) => {
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
 
   return (
-    <Wrapper
-      onClick={() => {
-        openModalFunc();
-      }}
-    >
-      {cardData.imageUrl && <CardImage $cardimage={cardData.imageUrl || null} />}
-      <Title $imageurl={cardData.imageUrl}>{cardData.title}</Title>
-      {cardData.tags[0] && (
-        <Tags>
-          {cardData.tags.map((tag, idx) => {
-            return <Tag key={idx} tag={tag} />;
-          })}
-        </Tags>
-      )}
-      <Date>
-        <CalenderIcon /> {formatDate(cardData.createdAt)}
-      </Date>
-      {cardData.assignee && 
-      <div style={{ position: "absolute", right: "2rem", bottom: "2rem" }}>
-        {cardData.assignee.profileImageUrl ? (
-          <ProfileImage url={cardData.assignee.profileImageUrl} />
-        ) : (
-          <NoProfileImageWrapper>
-            <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
-          </NoProfileImageWrapper>
+    <>
+      <Wrapper
+        onClick={() => {
+          openModalFunc();
+        }}
+      >
+        {cardData.imageUrl && <CardImage $cardimage={cardData.imageUrl || null} />}
+        <Title $imageurl={cardData.imageUrl}>{cardData.title}</Title>
+        {cardData.tags[0] && (
+          <Tags>
+            {cardData.tags.map((tag, idx) => {
+              return <Tag key={idx} tag={tag} />;
+            })}
+          </Tags>
         )}
-      </div>}
+        <Date>
+          <CalenderIcon /> {formatDate(cardData.createdAt)}
+        </Date>
+        {cardData.assignee && (
+          <div style={{ position: "absolute", right: "2rem", bottom: "2rem" }}>
+            {cardData.assignee.profileImageUrl ? (
+              <ProfileImage url={cardData.assignee.profileImageUrl} />
+            ) : (
+              <NoProfileImageWrapper>
+                <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
+              </NoProfileImageWrapper>
+            )}
+          </div>
+        )}
+      </Wrapper>
       {isModalOpen && (
         <ModalWrapper>
           <TaskModal cardData={cardData} columnId={columnId} closeModalFunc={closeModalFunc} />
