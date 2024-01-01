@@ -70,6 +70,7 @@ const InvitedDashboard = () => {
           </Header>
           {invitationData.map((invitation) => (
             <InvitationItem key={invitation.id}>
+              {cursorId === invitation.id && <div ref={targetRef} />}
               <Info>
                 <MobileTableTitle>이름</MobileTableTitle>
                 <TableBody>{invitation.dashboard.title}</TableBody>
@@ -87,7 +88,6 @@ const InvitedDashboard = () => {
               </Info>
             </InvitationItem>
           ))}
-          <div ref={targetRef} />
           <div ref={endRef} />
           {PAGE_SIZE < invitationData.length && (
             <ScrollNavigateButton onClick={() => handleScrollNavClick()}>

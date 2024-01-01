@@ -10,8 +10,8 @@ import styled from "styled-components";
 interface ModalInputProps {
   $inputType: "댓글" | "제목" | "마감일" | "설명";
   label: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 interface InputAreaProps {
@@ -24,7 +24,7 @@ interface DateInputProps {
 }
 
 const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInputProps & { onSubmitComment?: (comment: string) => void }>(
-  ({ label, $inputType, onSubmitComment }, ref) => {
+  ({ label, $inputType, value, onChange, onSubmitComment }, ref) => {
     const [inputValue, setInputValue] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
 
@@ -51,8 +51,8 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
             <>
               <StyledTextArea
                 ref={ref as React.Ref<HTMLTextAreaElement>}
-                value={inputValue}
-                onChange={handleInputChange}
+                value={value}
+                onChange={onChange}
                 placeholder={$inputType === "댓글" ? "댓글 작성하기" : "설명을 입력해 주세요"}
                 $inputType={$inputType}
                 required={$inputType === "설명"}
@@ -72,8 +72,8 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
               <StyledInput
                 ref={ref as React.Ref<HTMLInputElement>}
                 type="text"
-                value={inputValue}
-                onChange={handleInputChange}
+                value={value}
+                onChange={onChange}
                 placeholder={"제목을 입력해 주세요"}
                 $inputType={$inputType}
                 required
@@ -197,7 +197,6 @@ const StyledTextArea = styled.textarea<InputAreaProps>`
   resize: none;
 
   font-size: ${(props) => (props.$inputType === "댓글" ? "1.4rem" : "1.6rem")};
-  color: var(--Gray9f);
 
   background-color: var(--White);
 
@@ -237,7 +236,6 @@ const StyledInput = styled.input<InputAreaProps>`
   flex-grow: 1;
 
   font-size: 1.6rem;
-  color: var(--Gray9f);
 
   &:focus {
     outline: none;
