@@ -19,7 +19,7 @@ interface ContactDropdownProps {
   members: Member[];
 }
 
-const ContactDropdown = ({ members }: ContactDropdownProps) => {
+const ContactDropdown = ({ members, onSelectMember }: ContactDropdownProps & { onSelectMember: (userId: number) => void }) => {
   const [filter, setFilter] = useState("");
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [showList, setShowList] = useState(false);
@@ -52,6 +52,7 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
     setSelectedMember(member);
     setFilter(member.nickname);
     setShowList(false);
+    onSelectMember(member.userId);
   };
 
   return (
