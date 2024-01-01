@@ -1,7 +1,7 @@
 import { DeviceSize } from "@/styles/DeviceSize";
 import { styled } from "styled-components";
 import ModalInput from "../ModalInput/ModalInput";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { deleteComments, getComments, postComments, putComments } from "@/api/comments";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
@@ -11,6 +11,7 @@ import { formatUpdatedAt } from "@/utils/FormatDate";
 import NoProfileImage from "../../common/NoProfileImage/ProfileImage";
 
 const Comments = ({ cardData }: { cardData: Card }) => {
+  const [inputValue, setInputValue] = useState("");
   const [commentsData, setCommentsData] = useState<Comment[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
@@ -43,8 +44,18 @@ const Comments = ({ cardData }: { cardData: Card }) => {
 
   const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCommentsData });
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleCommentSubmit = () => {
+    if (inputValue.trim()) {
+      submitComment(inputValue);
+      setInputValue("");
+    }
+  };
+
   const submitComment = async (comment: string) => {
-    console.log("submit");
     const res = await postComments({
       token,
       content: comment,
@@ -52,7 +63,7 @@ const Comments = ({ cardData }: { cardData: Card }) => {
       columnId: cardData.columnId,
       dashboardId: Number(boardid),
     });
-    console.log(res);
+
     if (res && commentsData.length == 0) setCommentsData([res].splice(0));
     if (res && commentsData.length > 0) setCommentsData([res, ...commentsData]);
   };
@@ -85,7 +96,7 @@ const Comments = ({ cardData }: { cardData: Card }) => {
   }, [boardid]);
   return (
     <>
-      <ModalInput label="댓글" $inputType="댓글" onSubmitComment={() => console.log("?")} />
+      <ModalInput label="댓글" $inputType="댓글" value={inputValue} onChange={handleInputChange} onSubmitComment={handleCommentSubmit} />
       <CommentWrapper>
         {commentsData.map((comment) => (
           <CommentItem key={comment.id}>
