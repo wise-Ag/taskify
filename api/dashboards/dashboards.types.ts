@@ -38,10 +38,10 @@ export interface GetDashboardProps {
 }
 
 export interface GetDashboardInvitationsProps {
-  dashboardId: string;
+  dashboardId: number;
   page?: number;
   size?: number;
-  token: string;
+  token: string | null;
 }
 
 export interface GetDashboardListProps {
@@ -53,8 +53,9 @@ export interface GetDashboardListProps {
 }
 
 export interface PostDashboardInvitationsProps {
-  dashboardId: string;
-  token: string;
+  email: string;
+  dashboardId: number;
+  token: string | null;
 }
 
 export interface PutDashboardProps {

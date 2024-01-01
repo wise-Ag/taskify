@@ -1,9 +1,13 @@
-import { getDashboardInvitations } from "@/api/dashboards";
+import { getDashboardInvitations, postDashboardInvitations } from "@/api/dashboards";
 import { Invitation } from "@/api/invitations/invitations.types";
+import ModalContainer, { FormData } from "@/components/Modal/ModalContainer";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { useModal } from "@/hooks/useModal";
 import { usePagination } from "@/hooks/usePagination";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -14,63 +18,102 @@ const InvitationHistory = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [totalPageNum, setTotalPageNum] = useState(1);
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
+  const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const router = useRouter();
+  const { boardid } = router.query;
+
+  const isUserExist = (titleToCheck: string) => {
+    return invitations.some((invitaion) => invitaion.invitee.email === titleToCheck);
+  };
+
+  const rules = {
+    required: "초대할 사람의 이메일을 입력해 주세요.",
+    validate: (v: string) => {
+      if (isUserExist(v)) return "이미 초대된 유저입니다!";
+    },
+  };
 
   const fetchData = async () => {
-    const result = await getDashboardInvitations({
-      dashboardId: "217",
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM2NjkxMzIsImlzcyI6InNwLXRhc2tpZnkifQ.LeUg_4YGwaXk9IZTAhi21uz_oqbByLOdrN3qXTyvVEc",
-      size: PAGE_SIZE,
-      page: currentPage,
-    });
+    if (!isNaN(Number(boardid))) {
+      const result = await getDashboardInvitations({
+        dashboardId: Number(boardid),
+        token: localStorage.getItem("accessToken"),
+        size: PAGE_SIZE,
+        page: currentPage,
+      });
 
-    if (result !== null) {
-      const { invitations, totalCount } = result;
-      setInvitations(invitations);
-      setTotalCount(totalCount);
-      setTotalPageNum(Math.ceil(totalCount / PAGE_SIZE)); // 페이지 수 업데이트
+      if (result !== null) {
+        const { invitations, totalCount } = result;
+        setInvitations(invitations);
+        setTotalCount(totalCount);
+        setTotalPageNum(Math.ceil(totalCount / PAGE_SIZE)); // 페이지 수 업데이트
+      }
     }
+  };
+
+  // 페이지네이션 반영 안되는 문제 해결해야함
+  const handleOnSubmit = async (data: FormData) => {
+    const res = await postDashboardInvitations({ email: data.inputData, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
+
+    if (res === null) {
+      alert("존재하지 않는 유저입니다.");
+      return;
+    }
+
+    setInvitations([res, ...invitations]);
+
+    closeModalFunc();
   };
 
   useEffect(() => {
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, boardid]);
 
   return (
-    <Container>
-      <Section1>
-        <Title>초대 내역</Title>
-        <Button type="invite" children="초대하기" />
-      </Section1>
+    <>
+      <Container>
+        <Section1>
+          <Title>초대 내역</Title>
+          <Button type="invite" children="초대하기" onClick={openModalFunc} />
+        </Section1>
 
-      <Section2>
-        {totalCount === 0 ? (
-          "초대 내역이 존재하지 않습니다."
-        ) : (
-          <>
-            <EmailList>이메일</EmailList>
-            <PageInfo>
-              {totalPageNum} 페이지 중 {currentPage}
-            </PageInfo>
-            <ButtonInfo>
-              <PageButton
-                type="forwardAndBackward"
-                // 페이지수가 1이면 button disabled로 설정
-                isDisabled={totalPageNum === 1}
-                onClickRight={() => handlePageChange(1)}
-                onClickLeft={() => handlePageChange(-1)}
-              />
-            </ButtonInfo>
-          </>
-        )}
-      </Section2>
+        <Section2>
+          {totalCount === 0 ? (
+            "초대 내역이 존재하지 않습니다."
+          ) : (
+            <>
+              <EmailList>이메일</EmailList>
+              <PageInfo>
+                {totalPageNum} 페이지 중 {currentPage}
+              </PageInfo>
+              <ButtonInfo>
+                <PageButton
+                  type="forwardAndBackward"
+                  // 페이지수가 1이면 button disabled로 설정
+                  isLeftDisabled={totalPageNum === 1}
+                  isRightDisabled={totalPageNum === 1}
+                  onClickRight={() => handlePageChange(1)}
+                  onClickLeft={() => handlePageChange(-1)}
+                />
+              </ButtonInfo>
+            </>
+          )}
+        </Section2>
 
-      {invitations.map((invitation: Invitation) => (
-        <InvitationItem key={invitation.id}>
-          <Email>{invitation.invitee.email}</Email>
-          <Button type="delete" children="취소" />
-        </InvitationItem>
-      ))}
-    </Container>
+        {invitations.map((invitation: Invitation) => (
+          <InvitationItem key={invitation.id}>
+            <Email>{invitation.invitee.email}</Email>
+            <Button type="delete" children="취소" />
+          </InvitationItem>
+        ))}
+      </Container>
+
+      {isModalOpen && (
+        <ModalWrapper>
+          <ModalContainer title="초대하기" label="이메일" buttonType="초대" onClose={closeModalFunc} onSubmit={handleOnSubmit} rules={rules} />
+        </ModalWrapper>
+      )}
+    </>
   );
 };
 
