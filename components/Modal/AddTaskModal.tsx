@@ -6,7 +6,7 @@ import TagInput from "@/components/Modal/ModalInput/TagInput";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ContactDropdown from "./ModalInput/ContactDropdown";
 import ImageUploadInput from "./ModalInput/ImageUploadInput";
@@ -31,11 +31,6 @@ const AddTaskModal = ({ closeModalFunc }: AddTaskModalProps) => {
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
   const handleDueDateChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDueDate(event.target.value);
-  const handleClickOutside = (event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      closeModalFunc();
-    }
-  };
 
   const handleSubmit = async () => {
     try {
@@ -75,14 +70,6 @@ const AddTaskModal = ({ closeModalFunc }: AddTaskModalProps) => {
 
     fetchMembers();
   }, [dashboardId, token]);
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <Wrapper ref={modalRef}>
