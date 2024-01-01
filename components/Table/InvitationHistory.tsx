@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-const PAGE_SIZE = 5; // 임의로 추가
+const PAGE_SIZE = 5;
 
 const InvitationHistory = () => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
@@ -22,8 +22,8 @@ const InvitationHistory = () => {
   const router = useRouter();
   const { boardid } = router.query;
 
-  const isUserExist = (titleToCheck: string) => {
-    return invitations.some((invitaion) => invitaion.invitee.email === titleToCheck);
+  const isUserExist = (userToCheck: string) => {
+    return invitations.some((invitaion) => invitaion.invitee.email === userToCheck);
   };
 
   const rules = {
@@ -56,7 +56,7 @@ const InvitationHistory = () => {
     const res = await postDashboardInvitations({ email: data.inputData, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
 
     if (res === null) {
-      alert("존재하지 않는 유저입니다.");
+      alert("존재하지 않는 유저입니다."); // alert 말고 수정하고싶은데.. 방법을 모르겠음 ㅠㅠ
       return;
     }
 
