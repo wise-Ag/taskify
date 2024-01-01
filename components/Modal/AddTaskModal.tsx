@@ -13,10 +13,12 @@ import ImageUploadInput from "./ModalInput/ImageUploadInput";
 
 interface AddTaskModalProps {
   closeModalFunc: () => void;
+  columnId: number;
 }
 
-const AddTaskModal = ({ closeModalFunc }: AddTaskModalProps) => {
+const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
+  const [assigneeUserId, setAssigneeUserId] = useState<number>(0);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -28,6 +30,9 @@ const AddTaskModal = ({ closeModalFunc }: AddTaskModalProps) => {
   const dashboardId = Number(boardid);
   const modalRef = useRef(null);
 
+  const handleSelectMember = (userId: number) => {
+    setAssigneeUserId(userId);
+  };
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
   const handleDueDateChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDueDate(event.target.value);
@@ -35,9 +40,9 @@ const AddTaskModal = ({ closeModalFunc }: AddTaskModalProps) => {
   const handleSubmit = async () => {
     try {
       const card = await postCards({
-        assigneeUserId: 209, // 수정 필요
+        assigneeUserId,
         dashboardId,
-        columnId: 1242, // 수정 필요
+        columnId,
         title,
         description,
         dueDate,
@@ -74,7 +79,7 @@ const AddTaskModal = ({ closeModalFunc }: AddTaskModalProps) => {
   return (
     <Wrapper ref={modalRef}>
       <TodoTitle>할 일 생성</TodoTitle>
-      <ContactDropdown members={membersData} />
+      <ContactDropdown members={membersData} onSelectMember={handleSelectMember} />
       <ModalInput $inputType="제목" label="제목" value={title} onChange={handleTitleChange} />
       <ModalInput $inputType="설명" label="설명" value={description} onChange={handleDescriptionChange} />
       <ModalInput $inputType="마감일" label="마감일" value={dueDate} onChange={handleDueDateChange} />

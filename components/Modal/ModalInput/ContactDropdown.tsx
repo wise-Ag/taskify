@@ -19,7 +19,7 @@ interface ContactDropdownProps {
   members: Member[];
 }
 
-const ContactDropdown = ({ members }: ContactDropdownProps) => {
+const ContactDropdown = ({ members, onSelectMember }: ContactDropdownProps & { onSelectMember: (userId: number) => void }) => {
   const [filter, setFilter] = useState("");
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [showList, setShowList] = useState(false);
@@ -35,12 +35,16 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
     setFilter(input);
-    if (!input) {
-      setSelectedMember(null);
-      setFilteredMembers(members);
+
+    const matchedMembers = members.filter((member) => member.nickname.toLowerCase().includes(input.toLowerCase()));
+
+    setFilteredMembers(matchedMembers);
+
+    if (input) {
+      setShowList(true);
     } else {
-      const matchedMembers = members.filter((member) => member.nickname.toLowerCase().includes(input.toLowerCase()));
-      setFilteredMembers(matchedMembers);
+      setSelectedMember(null);
+      setShowList(false);
     }
   };
 
@@ -48,6 +52,7 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
     setSelectedMember(member);
     setFilter(member.nickname);
     setShowList(false);
+    onSelectMember(member.userId);
   };
 
   return (
@@ -58,7 +63,7 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
           {selectedMember && <SelectProfileIcon src={selectedMember.profileImageUrl} alt="Profile" />}
           <Input
             type="text"
-            value={selectedMember ? selectedMember.nickname : filter}
+            value={filter} // selectedMember.nickname 대신 filter 상태를 사용합니다.
             onChange={handleChange}
             placeholder="이름을 입력해 주세요"
             style={{
