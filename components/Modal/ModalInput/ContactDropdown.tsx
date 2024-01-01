@@ -2,6 +2,7 @@ import { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import DropdownIcon from "@/assets/icons/arrow-drop-down.svg";
 import CheckIcon from "@/assets/icons/check.svg";
+import { Z_INDEX } from "@/styles/ZindexStyles";
 
 interface Member {
   id: number;
@@ -20,25 +21,33 @@ interface ContactDropdownProps {
 
 const ContactDropdown = ({ members }: ContactDropdownProps) => {
   const [filter, setFilter] = useState("");
-  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+  const [showList, setShowList] = useState(false);
+  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+
+  const toggleList = () => {
+    setShowList(!showList);
+    if (!showList) {
+      setFilteredMembers(members);
+    }
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
     setFilter(input);
-    setSelectedMember(null);
-    if (input) {
-      const matchedMembers = members.filter((member) => member.nickname.toLowerCase().startsWith(input.toLowerCase()));
-      setFilteredMembers(matchedMembers);
+    if (!input) {
+      setSelectedMember(null);
+      setFilteredMembers(members);
     } else {
-      setFilteredMembers([]);
+      const matchedMembers = members.filter((member) => member.nickname.toLowerCase().includes(input.toLowerCase()));
+      setFilteredMembers(matchedMembers);
     }
   };
 
   const handleSelect = (member: Member) => {
     setSelectedMember(member);
     setFilter(member.nickname);
-    setFilteredMembers([]);
+    setShowList(false);
   };
 
   return (
@@ -56,9 +65,10 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
               paddingLeft: selectedMember ? "4.5rem" : "1.6rem",
             }}
           />
+          <ArrowDownIcon onClick={toggleList} style={{ pointerEvents: "auto" }} />
         </InputContainer>
-        {filter && <ArrowDownIcon />}
-        {filteredMembers.length > 0 && (
+
+        {showList && (
           <List>
             {filteredMembers.map((member) => (
               <ListItem key={member.id} onClick={() => handleSelect(member)}>
@@ -77,7 +87,7 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
 export default ContactDropdown;
 
 const Text = styled.h3`
-  margin-bottom: 1rem;
+  margin-bottom: -2.2rem;
 
   color: var(--Black33);
   font-size: 1.8rem;
@@ -98,10 +108,6 @@ const InputContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-
-  border-radius: 6px;
-  border: 1px solid var(--Grayd9);
-  background: var(--White);
 `;
 
 const SelectProfileIcon = styled.img`
@@ -132,6 +138,8 @@ const Input = styled.input`
   border: 1px solid var(--Grayd9);
   background: var(--White);
 
+  font-size: 1.6rem;
+
   &:focus {
     border: 1.4px solid var(--Main);
     outline: none;
@@ -156,6 +164,9 @@ const List = styled.ul`
   border: 1px solid var(--Grayd9);
   background: var(--White);
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+
+  position: relative;
+  z-index: ${Z_INDEX.ContactDropdown_List};
 `;
 
 const ListItem = styled.li`

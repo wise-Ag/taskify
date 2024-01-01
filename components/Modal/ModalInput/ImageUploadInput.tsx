@@ -1,8 +1,8 @@
-import React, { useState, ChangeEvent } from "react";
-import styled, { css } from "styled-components";
-import { DeviceSize } from "@/styles/DeviceSize";
 import AddIcon from "@/assets/icons/add-fillo.svg";
 import EditIcon from "@/assets/icons/edit.svg";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { ChangeEvent, useState } from "react";
+import styled, { css } from "styled-components";
 
 interface ImageUploadInputProps {
   type: "modal" | "account";
@@ -85,6 +85,7 @@ const HoverOverlay = styled.div`
   justify-content: center;
   align-items: center;
 
+  border-radius: 6px;
   position: absolute;
   top: 0;
   left: 0;
@@ -109,8 +110,8 @@ const ImageInputWrapper = styled.div<{ $previewUrl: string | null; type: "modal"
   justify-content: center;
   align-items: center;
 
-  background-color: var(--MainLight);
-  background-image: url(${(props) => props.previewUrl});
+  background-color: var(--White);
+  background-image: url(${(props) => props.$previewUrl});
   background-size: cover;
   background-position: center;
 
