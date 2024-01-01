@@ -15,6 +15,9 @@ import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import ModalContainer from "@/components/Modal/ModalContainer";
 import { useParams } from "next/navigation";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
+import { FaArrowUpWideShort } from "react-icons/fa6";
 
 interface DashboardProps {
   boardId: number;
@@ -24,10 +27,12 @@ interface DashboardProps {
   closePopup?: () => void;
 }
 
+const PAGE_SIZE = 10;
+
 const Dashboard = ({ color, title, createdByMe, boardId }: DashboardProps) => {
   const param = useParams();
   const isActive = boardId === Number(param.boardid);
-  console.log(isActive);
+
   return (
     <Container href={`/dashboard/${boardId}`} $isActive={isActive}>
       <Color color={color} />
@@ -41,9 +46,12 @@ const SideMenu = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [cursorId, setCursorId] = useState(1);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
-  const [invitations] = useAtom(invitationsAtom); // 초대 목록!!
+  const [invitations, setInvitations] = useAtom(invitationsAtom); // 초대 목록!!
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const wrapperRef = useRef(null);
+
+  const scrollContainerRef = useRef(null);
+  const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
 
   const handleClickOutside = (event: { target: string }) => {
     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -55,18 +63,44 @@ const SideMenu = () => {
     setIsPopupVisible((prev) => !prev);
   };
 
+  const loadDashboards = async () => {
+    if (dashboards.length > 0 && cursorId == null) {
+      return;
+    }
+    setIsLoading(true);
+    const data = await getDashboardList({
+      cursorId,
+      size: PAGE_SIZE,
+      token: localStorage.getItem("accessToken"),
+      navigationMethod: "infiniteScroll",
+    });
+
+    if (data !== null) {
+      setDashboards([...data.dashboards]);
+      // setInvitations([data.dashboards]);
+      setCursorId(data.cursorId);
+      setIsLoading(false);
+    }
+  };
+
+  const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadDashboards });
+
   useEffect(() => {
-    const loadDashboardList = async () => {
-      const res = await getDashboardList({
-        token: localStorage.getItem("accessToken"),
-        navigationMethod: "infiniteScroll",
-      });
-      if (res && res.dashboards) {
-        setDashboards(...[res.dashboards]);
-      }
-    };
-    loadDashboardList();
-  }, [invitations]);
+    loadDashboards();
+  }, []);
+
+  // useEffect(() => {
+  //   const loadDashboardList = async () => {
+  //     const res = await getDashboardList({
+  //       token: localStorage.getItem("accessToken"),
+  //       navigationMethod: "infiniteScroll",
+  //     });
+  //     if (res && res.dashboards) {
+  //       setDashboards(...[res.dashboards]);
+  //     }
+  //   };
+  //   loadDashboardList();
+  // }, [invitations]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -89,7 +123,7 @@ const SideMenu = () => {
           </DashboardList>
         </Popup>
       )}
-      <HeaderWrapper>
+      <HeaderWrapper ref={scrollContainerRef}>
         <Title>Dash Boards</Title>
         <StyledAddButton
           alt="추가 버튼"
@@ -100,15 +134,24 @@ const SideMenu = () => {
           }}
         />
       </HeaderWrapper>
-      <DashboardList>
+      <DashboardList ref={startRef}>
         {dashboards.map((dashboard) => {
           return <Dashboard key={dashboard.id} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
+          {
+            cursorId === dashboard.id && <div ref={targetRef} />;
+          }
         })}
       </DashboardList>
       {isModalOpen && (
         <ModalWrapper>
           <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} />
         </ModalWrapper>
+      )}
+      <div ref={endRef} />
+      {PAGE_SIZE < dashboards.length && (
+        <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
+          <ScrollNavigateIcon $isScrollingUp={isScrollingUp} />
+        </ScrollNavigateButton>
       )}
     </Wrapper>
   );
@@ -338,4 +381,32 @@ const Popup = styled.div`
       display: block;
     }
   }
+`;
+
+const ScrollNavigateButton = styled.div`
+  position: sticky;
+  bottom: 0;
+  left: 100rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 4rem;
+  height: 4rem;
+
+  border-radius: 1.5rem;
+
+  cursor: pointer;
+
+  background-color: var(--MainHover);
+`;
+
+const ScrollNavigateIcon = styled(FaArrowUpWideShort)<{ $isScrollingUp: boolean }>`
+  width: 2.5rem;
+  height: 2.5rem;
+
+  ${(props) => props.$isScrollingUp && " transform: scaleY(-1)"};
+
+  fill: var(--Main);
 `;
