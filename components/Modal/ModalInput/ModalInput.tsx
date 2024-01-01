@@ -3,12 +3,13 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import React, { ChangeEvent, forwardRef, useState } from "react";
 import styled from "styled-components";
 
 interface ModalInputProps {
   $inputType: "댓글" | "제목" | "마감일" | "설명";
+  label: string;
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
@@ -19,11 +20,13 @@ interface InputAreaProps {
 
 interface DateInputProps {
   placeholder?: string;
+  value?: string;
   onChange: (value: string) => void;
 }
 
-const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInputProps & { onSubmitComment?: () => void }>(
-  ({ label, $inputType, value, onChange, onSubmitComment }, ref) => {
+const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInputProps & { onSubmitComment?: (comment: string) => void }>(
+  ({ label, $inputType, onSubmitComment, value, onChange }, ref) => {
+    const [inputValue, setInputValue] = useState(value || "");
     const [selectedDate, setSelectedDate] = useState("");
 
     const handleDateChange = (dateStr: string) => {
@@ -39,7 +42,7 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
               <StyledTextArea
                 ref={ref as React.Ref<HTMLTextAreaElement>}
                 value={value}
-                onChange={effectiveOnChange}
+                onChange={onChange}
                 placeholder={$inputType === "댓글" ? "댓글 작성하기" : "설명을 입력해 주세요"}
                 $inputType={$inputType}
                 required={$inputType === "설명"}
@@ -60,7 +63,7 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
                 ref={ref as React.Ref<HTMLInputElement>}
                 type="text"
                 value={value}
-                onChange={effectiveOnChange}
+                onChange={onChange}
                 placeholder={"제목을 입력해 주세요"}
                 $inputType={$inputType}
                 required
@@ -70,7 +73,7 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
         case "마감일":
           return (
             <>
-              <CustomDatePicker onChange={handleDateChange} />
+              <CustomDatePicker value={value} onChange={handleDateChange} />
             </>
           );
         default:
@@ -92,17 +95,14 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
 
 export default ModalInput;
 
-const CustomDatePicker = ({ placeholder = "날짜를 입력해 주세요.", onChange }: DateInputProps) => {
-  const [dates, setDates] = useState<Dayjs | null>(null);
+const CustomDatePicker = ({ placeholder = "날짜를 입력해 주세요.", onChange, value }: DateInputProps) => {
+  const [dates, setDates] = useState<Dayjs | null>(value ? dayjs(value) : null);
 
   const handleDateChange = (newVal: Dayjs | null) => {
     setDates(newVal);
     if (newVal) {
-      console.log(newVal);
       const formattedDate = newVal.format("YYYY-MM-DD HH:mm");
-      console.log("Formatted Date:", formattedDate);
-      console.log(typeof formattedDate);
-      onChange(formattedDate);
+      onChange(formattedDate); // 변환된 날짜 문자열을 'onChange' 핸들러로 전달
     } else {
       onChange("");
     }
