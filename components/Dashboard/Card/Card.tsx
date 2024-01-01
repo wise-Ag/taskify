@@ -30,6 +30,7 @@ const Card = ({ cardData, columnId }: { cardData: Card; columnId: number }) => {
       <Date>
         <CalenderIcon /> {formatDate(cardData.createdAt)}
       </Date>
+      {cardData.assignee && 
       <div style={{ position: "absolute", right: "2rem", bottom: "2rem" }}>
         {cardData.assignee.profileImageUrl ? (
           <ProfileImage url={cardData.assignee.profileImageUrl} />
@@ -38,7 +39,7 @@ const Card = ({ cardData, columnId }: { cardData: Card; columnId: number }) => {
             <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
           </NoProfileImageWrapper>
         )}
-      </div>
+      </div>}
       {isModalOpen && (
         <ModalWrapper>
           <TaskModal cardData={cardData} columnId={columnId} closeModalFunc={closeModalFunc} />

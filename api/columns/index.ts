@@ -1,6 +1,6 @@
 import instance from "@/api/axios";
+import { CardImage, Columns, DeleteColumnsProps, GetColumnsData, GetColumnsProps, PostCardImageProps, PostColumnsProps, PutColumnsProps } from "@/api/columns/columns.types";
 import { ENDPOINTS } from "@/api/config";
-import { Columns, GetColumnsProps, GetColumnsData, PutColumnsProps, DeleteColumnsProps, PostCardImageProps, CardImage, PostColumnsProps } from "@/api/columns/columns.types";
 
 export const postColumns = async ({ title, dashboardId, token }: PostColumnsProps): Promise<Columns | null> => {
   try {
@@ -71,20 +71,14 @@ export const deleteColumns = async ({ columnId, token }: DeleteColumnsProps) => 
   }
 };
 
-export const postCardImage = async ({
-  columnId = "16",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: PostCardImageProps): Promise<CardImage | null> => {
+export const postCardImage = async ({ columnId, formData, token }: PostCardImageProps): Promise<CardImage | null> => {
   try {
-    const res = await instance.post(
-      ENDPOINTS.COLUMNS.POST_CARDIMAGE(columnId),
-      { image: "test" }, // 추후 수정
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+    const res = await instance.post(ENDPOINTS.COLUMNS.POST_CARDIMAGE(columnId), formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
       },
-    );
+    });
     return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);

@@ -3,6 +3,8 @@ import styled from "styled-components";
 import DropdownIcon from "@/assets/icons/arrow-drop-down.svg";
 import CheckIcon from "@/assets/icons/check.svg";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useAtom } from "jotai";
+import { cardAssigneeIdAtom } from "@/states/atoms";
 
 interface Member {
   id: number;
@@ -24,7 +26,7 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [showList, setShowList] = useState(false);
   const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
-
+  const [, setAssigneeId] = useAtom(cardAssigneeIdAtom);
   const toggleList = () => {
     setShowList(!showList);
     if (!showList) {
@@ -48,6 +50,7 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
     setSelectedMember(member);
     setFilter(member.nickname);
     setShowList(false);
+    setAssigneeId(member.id);
   };
 
   return (

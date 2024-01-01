@@ -144,17 +144,19 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
         <Contact>담당자</Contact>
         <DeadLine>마감일</DeadLine>
         <ContactName>
-          <ProfileImageWrapper>
-            {cardData.assignee.profileImageUrl ? (
-              <ProfileImage url={cardData.assignee.profileImageUrl} />
-            ) : (
-              <NoProfileImageWrapper>
-                <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
-              </NoProfileImageWrapper>
-            )}
-          </ProfileImageWrapper>
+          {cardData.assignee && (
+            <ProfileImageWrapper>
+              {cardData.assignee.profileImageUrl ? (
+                <ProfileImage url={cardData.assignee.profileImageUrl} />
+              ) : (
+                <NoProfileImageWrapper>
+                  <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
+                </NoProfileImageWrapper>
+              )}
+            </ProfileImageWrapper>
+          )}
 
-          {cardData.assignee.nickname}
+          {cardData.assignee?.nickname}
         </ContactName>
         <DeadLineDate>{cardData.dueDate}</DeadLineDate>
       </ContactDeadLineWrapper>

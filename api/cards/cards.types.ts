@@ -35,7 +35,7 @@ export interface GetCardListProps {
 }
 
 export interface CardProps {
-  assigneeUserId: number;
+  assigneeUserId?: number;
   dashboardId: number;
   columnId: number;
   title: string;

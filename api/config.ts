@@ -19,7 +19,7 @@ export const ENDPOINTS = {
     GET: `/columns`,
     PUT: (columnId: number) => `/columns/${columnId}`,
     DELETE: (columnId: number) => `/columns/${columnId}`,
-    POST_CARDIMAGE: (columnId: string) => `/columns/${columnId}/card-image`,
+    POST_CARDIMAGE: (columnId: number) => `/columns/${columnId}/card-image`,
   },
 
   COMMENT: {

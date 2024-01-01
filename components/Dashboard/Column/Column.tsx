@@ -27,7 +27,6 @@ const Column = ({ columnId, title }: ColumnProps) => {
   useEffect(() => {
     const loadCardList = async () => {
       const res = await getCardList({
-        size: 10,
         cursorId: null,
         columnId,
         token: localStorage.getItem("accessToken"),
@@ -58,7 +57,7 @@ const Column = ({ columnId, title }: ColumnProps) => {
         />
         {isModalOpen && (
           <ModalWrapper>
-            <AddTaskModal closeModalFunc={closeModalFunc} />
+            <AddTaskModal closeModalFunc={closeModalFunc} columnId={columnId} />
           </ModalWrapper>
         )}
         {columnCards.map((card) => (
