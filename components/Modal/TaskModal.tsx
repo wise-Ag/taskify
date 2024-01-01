@@ -1,35 +1,89 @@
 import { Card } from "@/api/cards/cards.types";
-import { getCard } from "@/api/cards/index";
 import { Comment } from "@/api/comments/comments.types";
-import { deleteComments, getComments, putComments } from "@/api/comments/index";
+import { deleteComments, getComments, postComments, putComments } from "@/api/comments";
 import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
 import Kebab from "@/assets/icons/kebab.svg";
-import KebabModal from "@/components/Modal/KebabModal";
 import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { Z_INDEX } from "@/styles/ZindexStyles";
 import { formatUpdatedAt } from "@/utils/FormatDate";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import NoProfileImage from "../common/NoProfileImage/ProfileImage";
+import TaskDropdown from "@/components/Modal/TaskDropdown";
+import AlertModal from "@/components/Modal/AlertModal";
+import { useModal } from "@/hooks/useModal";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
+import { deleteCard } from "@/api/cards";
+import { useAtom } from "jotai";
+import { cardsAtom } from "@/states/atoms";
+import EditTaskModal from "@/components/Modal/EditTaskModal";
 
-const TaskModal: React.FC = () => {
-  const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [cardData, setCardData] = useState<Card | null>(null);
+const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: () => void }> = ({ cardData, columnId, closeModalFunc }) => {
   const [commentsData, setCommentsData] = useState<Comment[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [newCommentContent, setNewCommentContent] = useState("");
+  const [cursorId, setCursorId] = useState<number | null>(null);
+  const router = useRouter();
+  const { boardid } = router.query;
+  const token = localStorage.getItem("accessToken");
 
-  const handleKebabClick = () => {
-    setIsKebabModalOpen(!isKebabModalOpen);
+  const { isModalOpen: isEditModalOpen, openModalFunc: openEditModal, closeModalFunc: closeEditModal } = useModal();
+  const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModal, closeModalFunc: closeDeleteModal } = useModal();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const [cards, setCards] = useAtom(cardsAtom);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleCloseClick = () => {
-    setIsModalOpen(false);
+  const handleDropdownDeleteClick = () => {
+    openDeleteModal();
+  };
+
+  const handleDropdownEditClick = () => {
+    openEditModal();
+  };
+
+  const loadCommentsData = async () => {
+    setIsLoading(true);
+    if (commentsData.length > 0 && cursorId === null) {
+      return;
+    }
+    const res = await getComments({
+      cardId: cardData.id,
+      size: 2,
+      cursorId,
+      token,
+    });
+
+    if (res) {
+      setCommentsData((prev) => {
+        return [...prev, ...res.comments];
+      });
+      setCursorId(res.cursorId);
+    }
+    setIsLoading(false);
+  };
+
+  const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCommentsData });
+
+  const submitComment = async (comment: string) => {
+    const res = await postComments({
+      token,
+      content: comment,
+      cardId: cardData.id,
+      columnId: cardData.columnId,
+      dashboardId: Number(boardid),
+    });
+    if (res && commentsData.length == 0) setCommentsData([res]);
+    if (res && commentsData.length > 0) setCommentsData([res, ...commentsData]);
   };
 
   const handleEditClick = (commentId: number, currentContent: string) => {
@@ -39,67 +93,39 @@ const TaskModal: React.FC = () => {
   };
 
   const handleDeleteClick = async (commentId: number) => {
-    await deleteComments({ commentId, token: "YOUR_TOKEN" });
-    await commentsData;
-  };
-
-  const handleKeyDown = async (event: React.KeyboardEvent, commentId: number) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      await handleUpdateComment(commentId);
-    }
+    await deleteComments({ commentId, token });
+    setCommentsData([...commentsData.filter((v) => v.id !== commentId)]);
   };
 
   const handleUpdateComment = async (commentId: number) => {
-    if (commentId) {
-      await putComments({
-        commentId: commentId,
-        token: "YOUR_TOKEN",
-        content: newCommentContent,
-      });
+    const res = await putComments({
+      commentId,
+      token,
+      content: newCommentContent,
+    });
+    if (res) {
+      setCommentsData([...commentsData.map((v) => (v.id === commentId ? res : v))]);
       setIsEditing(false);
-      setEditingCommentId(null);
-      setNewCommentContent("");
-      await commentsData;
     }
   };
 
   useEffect(() => {
-    const loadCardData = async () => {
-      const data = await getCard({
-        cardId: "159",
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc",
-      });
-      if (data) {
-        setCardData(data);
-      }
-    };
-
-    const loadCommentsData = async () => {
-      try {
-        const commentsData = await getComments({
-          cardId: 159,
-          size: 10,
-          cursorId: undefined,
-          token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjA5LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzI2OTIzLCJpc3MiOiJzcC10YXNraWZ5In0.YC0RG8_8Xoe8uEjPtqFEdCGilAlOonBG5x47GGJiOLc",
-        });
-
-        if (commentsData) {
-          setCommentsData(commentsData.comments);
-        }
-      } catch (error) {
-        console.error("Error loading comments:", error);
-      }
-    };
-
-    loadCardData();
     loadCommentsData();
-  }, []);
+  }, [boardid]);
 
-  if (!cardData || commentsData.length === 0) {
-    return <div>Loading...</div>; // 데이터 로딩 중 또는 데이터가 없는 경우 처리
+  const handleConfirmDelete = async () => {
+    await deleteCard({ cardId: cardData.id, token });
+    setCards((prevCards) => {
+      const updatedCards = prevCards[columnId].filter((card) => card.id !== cardData.id);
+      return { ...prevCards, [columnId]: updatedCards };
+    });
+    closeModalFunc();
+  };
+
+  const handleConfirmEdit = async () => {};
+
+  if (!cardData) {
+    return <div>Loading...</div>;
   }
 
   return (
@@ -108,10 +134,10 @@ const TaskModal: React.FC = () => {
         <Title>{cardData.title}</Title>
         <IconContainer>
           <KebabIconContainer>
-            <Kebab alt="kebab" width={28} height={28} onClick={handleKebabClick} />
-            {isKebabModalOpen && <StyledKebabModal />}
+            <Kebab alt="kebab" width={28} height={28} onClick={toggleDropdown} />
+            {isDropdownOpen && <TaskDropdown onEdit={handleDropdownEditClick} onCreate={handleDropdownDeleteClick} />}
           </KebabIconContainer>
-          <Close alt="close" width={28} height={28} onClick={handleCloseClick} />
+          <Close alt="close" width={28} height={28} onClick={() => closeModalFunc()} />
         </IconContainer>
       </TitleWrapper>
       <ContactDeadLineWrapper>
@@ -119,8 +145,15 @@ const TaskModal: React.FC = () => {
         <DeadLine>마감일</DeadLine>
         <ContactName>
           <ProfileImageWrapper>
-            <img src={cardData.assignee.profileImageUrl} alt="Profile Image" />
+            {cardData.assignee.profileImageUrl ? (
+              <ProfileImage url={cardData.assignee.profileImageUrl} />
+            ) : (
+              <NoProfileImageWrapper>
+                <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
+              </NoProfileImageWrapper>
+            )}
           </ProfileImageWrapper>
+
           {cardData.assignee.nickname}
         </ContactName>
         <DeadLineDate>{cardData.dueDate}</DeadLineDate>
@@ -132,39 +165,63 @@ const TaskModal: React.FC = () => {
         </DivisionWrapper>
         <Tags>
           {cardData.tags.map((tag, idx) => (
-            <Tag key={idx} $bgColor="--Pinkf7" $textColor="--Pinkd5">
-              {tag}
-            </Tag>
+            <Tag key={idx} tag={tag} />
           ))}
         </Tags>
       </CategoryWrapper>
       <Description>{cardData.description}</Description>
       <Image src={cardData.imageUrl} alt="Task Image" />
-      <ModalInput label="댓글" $inputType="댓글" />
+      <ModalInput label="댓글" $inputType="댓글" onSubmitComment={submitComment} />
       <CommentWrapper>
         {commentsData.map((comment) => (
           <CommentItem key={comment.id}>
+            {comment.id === cursorId && <div ref={targetRef} />}
             <LeftWrapper>
-              <img src={comment.author.profileImageUrl} alt="nickname" />
+              {comment.author.profileImageUrl ? (
+                <ProfileImage url={comment.author.profileImageUrl} />
+              ) : (
+                <NoProfileImageWrapper>
+                  <NoProfileImage id={comment.author.id} nickname={comment.author.nickname} />
+                </NoProfileImageWrapper>
+              )}
             </LeftWrapper>
             <RightWrapper>
               <InfoWrapper>
                 {comment.author.nickname}
+
                 <CommentDate>{formatUpdatedAt(comment.updatedAt)}</CommentDate>
               </InfoWrapper>
               {isEditing && editingCommentId === comment.id ? (
-                <input type="text" value={newCommentContent} onChange={(e) => setNewCommentContent(e.target.value)} onKeyDown={(e) => handleKeyDown(e, comment.id)} />
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleUpdateComment(comment.id);
+                  }}
+                >
+                  <CommentTextarea value={newCommentContent} onChange={(e) => setNewCommentContent(e.target.value)} rows={2} />
+                  <Edit type="submit">저장</Edit>
+                </form>
               ) : (
                 <CommentContent>{comment.content}</CommentContent>
               )}
               <FunctionWrapper>
-                <Edit onClick={() => handleEditClick(comment.id, comment.content)}>수정</Edit>
-                <Delete onClick={() => handleDeleteClick(comment.id)}>삭제</Delete>
+                {!isEditing || editingCommentId !== comment.id ? <Edit onClick={() => handleEditClick(comment.id, comment.content)}>수정</Edit> : null}
+                {!isEditing || editingCommentId !== comment.id ? <Delete onClick={() => handleDeleteClick(comment.id)}>삭제</Delete> : null}
               </FunctionWrapper>
             </RightWrapper>
           </CommentItem>
         ))}
       </CommentWrapper>
+      {isEditModalOpen && (
+        <ModalWrapper>
+          <EditTaskModal cardId={cardData.id} onCancel={closeEditModal} onEdit={handleConfirmEdit} />
+        </ModalWrapper>
+      )}
+      {isDeleteModalOpen && (
+        <ModalWrapper>
+          <AlertModal type="confirm" onCancel={closeDeleteModal} onConfirm={handleConfirmDelete} />
+        </ModalWrapper>
+      )}
     </Wrapper>
   );
 };
@@ -173,17 +230,20 @@ export default TaskModal;
 
 const Wrapper = styled.div`
   width: 73rem;
+  height: 76.3rem;
+  overflow-y: auto;
+
   padding: 3.2rem 2.8rem 2.8rem 2.8rem;
 
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
 
   border-radius: 8px;
   background: var(--White);
 
   @media (max-width: ${DeviceSize.mobile}) {
     width: 32.7rem;
+    height: 70.8rem;
 
     padding: 2.8rem 2rem 2.8rem 2rem;
 
@@ -193,6 +253,7 @@ const Wrapper = styled.div`
 
 const TitleWrapper = styled.div`
   width: 100%;
+  height: 8.5rem;
 
   display: flex;
   justify-content: space-between;
@@ -217,13 +278,6 @@ const KebabIconContainer = styled.div`
   position: relative;
   align-items: center;
   gap: 2.4rem;
-`;
-
-const StyledKebabModal = styled(KebabModal)`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: ${Z_INDEX.TaskModal_StyledKebabModal};
 `;
 
 const ContactDeadLineWrapper = styled.div`
@@ -326,7 +380,7 @@ const Tags = styled.div`
 
     margin-right: 1.6rem;
 
-    align-items: end;
+    align-items: center;
     float: left;
   }
   @media (max-width: ${DeviceSize.mobile}) {
@@ -335,7 +389,13 @@ const Tags = styled.div`
 `;
 
 const DivisionWrapper = styled.div`
-  margin: 0 1rem;
+  margin-left: 2rem;
+  margin-right: 1rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    margin-left: 1.2rem;
+    margin-right: 0.2rem;
+  }
 `;
 
 const Description = styled.div`
@@ -378,12 +438,26 @@ const LeftWrapper = styled.div`
     width: 3.2rem;
     height: 3.2rem;
 
-    margin-right: 1rem;
-
     border-radius: 50%;
   }
 `;
-const RightWrapper = styled.div``;
+
+const RightWrapper = styled.div`
+  margin-left: 1rem;
+`;
+
+const CommentTextarea = styled.textarea`
+  margin-top: 1rem;
+  margin-right: 1rem;
+  padding: 1rem;
+
+  border: 1px solid var(--Grayd9);
+  border-radius: 6px;
+
+  &:focus {
+    border-color: var(--Main);
+  }
+`;
 
 const InfoWrapper = styled.div`
   display: flex;
@@ -437,7 +511,7 @@ const FunctionWrapper = styled.div`
   gap: 1.2rem;
 `;
 
-const Edit = styled.div`
+const Edit = styled.button`
   color: var(--Gray9f);
   font-size: 1.2rem;
   text-decoration-line: underline;
@@ -447,12 +521,34 @@ const Edit = styled.div`
   }
 `;
 
-const Delete = styled.div`
+const Delete = styled.button`
   color: var(--Gray9f);
   font-size: 1.2rem;
   text-decoration-line: underline;
 
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1rem;
+  }
+`;
+const ProfileImage = styled.div<{ url: string }>`
+  width: 2.7rem;
+  height: 2.7rem;
+
+  border-radius: 4.4rem;
+
+  background-image: url(${(props) => props.url});
+  background-size: cover;
+`;
+
+const NoProfileImageWrapper = styled.div`
+  width: 2.7rem;
+
+  line-height: 2.7rem;
+  font-size: 1.3rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 2.4rem;
+
+    line-height: 2.4rem;
   }
 `;

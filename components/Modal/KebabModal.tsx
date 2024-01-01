@@ -1,15 +1,48 @@
-import styled from "styled-components";
-import { DeviceSize } from "@/styles/DeviceSize";
-import { useEffect } from "react";
-import TodoModal from "@/components/Modal/TodoModal";
+import { deleteColumns, putColumns } from "@/api/columns";
 import AlertModal from "@/components/Modal/AlertModal";
-import { Z_INDEX } from "@/styles/ZindexStyles";
-import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
+import { useModal } from "@/hooks/useModal";
+import { columnsAtom } from "@/states/atoms";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
+import styled from "styled-components";
+import ModalContainer, { FormData } from "./ModalContainer";
 
-const KebabModal = () => {
+const KebabModal = ({ columnId }: { columnId: number }) => {
+  const [columns, setColumns] = useAtom(columnsAtom);
   const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModalFunc, closeModalFunc: closeEditModalFunc } = useModal();
+
+  const isTitleExist = (titleToCheck: string) => {
+    return columns.some((column) => column.title === titleToCheck);
+  };
+
+  const rules = {
+    required: "변경할 이름을 입력해주세요",
+    validate: (v: string) => {
+      if (isTitleExist(v)) return "이름이 중복되었습니다. 다시 입력해주세요!";
+    },
+  };
+
+  const handleChangeColumnName = async (data: FormData) => {
+    const res = await putColumns({ title: data.newTitle, columnId: columnId, token: localStorage.getItem("accessToken") });
+    if (res == null) {
+      alert("컬럼 이름 변경에 실피했습니다.");
+      closeEditModalFunc();
+      return;
+    }
+    const newUpdatedAt = new Date();
+    setColumns(columns.map((v) => (v.id == columnId ? { title: data.newTitle, id: v.id, createdAt: v.createdAt, updatedAt: newUpdatedAt.toISOString() } : v)));
+    closeEditModalFunc();
+  };
+
+  const handleDeleteColumn = async () => {
+    await deleteColumns({ columnId, token: localStorage.getItem("accessToken") });
+    setColumns([...columns.filter((v) => v.id !== columnId)]);
+    closeDeleteModalFunc();
+  };
 
   useEffect(() => {
     const handleKeyDown = (event: { key: string }) => {
@@ -32,15 +65,15 @@ const KebabModal = () => {
     <Wrapper>
       <KebabListWrapper>
         <KebabList onClick={openEditModalFunc}>수정하기</KebabList>
+        <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
         {isEditModalOpen && (
           <ModalWrapper>
-            <TodoModal type="edit" />
+            <ModalContainer title="컬럼 관리" label="컬럼 이름" buttonType="변경" onClose={closeEditModalFunc} onSubmit={handleChangeColumnName} rules={rules} />
           </ModalWrapper>
         )}
-        <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
         {isDeleteModalOpen && (
           <ModalWrapper>
-            <AlertModal type="delete" />
+            <AlertModal type="deleteColumn" onCancel={closeDeleteModalFunc} onConfirm={handleDeleteColumn} />
           </ModalWrapper>
         )}
       </KebabListWrapper>

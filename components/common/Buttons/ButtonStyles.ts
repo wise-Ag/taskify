@@ -3,7 +3,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 
 const TYPES = {
   login: css`
-    width: 52rem;
+    width: 100%;
 
     padding: 1.4rem 0;
 
@@ -20,8 +20,6 @@ const TYPES = {
     }
 
     @media (max-width: ${DeviceSize.mobile}) {
-      width: 35.1rem;
-
       padding: 1.4rem 0;
 
       border: none;
@@ -29,12 +27,6 @@ const TYPES = {
       color: var(--White);
       font-size: 1.8rem;
       font-weight: 500;
-
-      &:disabled {
-        border: none;
-        background-color: var(--Gray9f);
-        cursor: not-allowed;
-      }
     }
   `,
 
@@ -139,6 +131,12 @@ const TYPES = {
 
     font-size: 1.6rem;
     font-weight: 600;
+
+    /* 디자인은 추후 변경 */
+    &:disabled {
+      /* color: var(--Grayfa); */
+      cursor: default;
+    }
 
     @media (max-width: ${DeviceSize.tablet}) {
       width: 24.7rem;

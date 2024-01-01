@@ -5,12 +5,14 @@ export interface Card {
   tags: [string];
   dueDate: string;
   assignee: {
-    profileImageUrl: string;
+    profileImageUrl?: string;
     nickname: string;
     id: number;
   };
   imageUrl: string;
+  teamId: string;
   columnId: number;
+  dashboardId: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -22,23 +24,34 @@ export interface GetCardListData {
 }
 
 export interface GetCardProps {
-  cardId: string;
-  token?: string;
+  cardId: number;
+  token?: string | null;
 }
 
 export interface GetCardListProps {
   size?: number;
   cursorId: number | null;
   columnId: number;
-  token?: string;
+  token: string | null;
 }
 
-export interface PutCardProps {
-  cardId: string;
-  token: string;
+export interface CardProps {
+  assigneeUserId: number;
+  dashboardId: number;
+  columnId: number;
+  title: string;
+  description: string;
+  dueDate: string;
+  tags: [string];
+  imageUrl?: string;
+  token: string | null;
+}
+
+export interface PutCardProps extends CardProps {
+  cardId: number;
 }
 
 export interface DeleteCardProps {
-  cardId: string;
-  token?: string;
+  cardId: number;
+  token: string | null;
 }

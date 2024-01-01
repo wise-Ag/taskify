@@ -1,7 +1,7 @@
-import { styled } from "styled-components";
 import Columns from "@/components/Dashboard/Column/Columns";
-import SideMenu from "@/components/common/SideMenu/SideMenu";
+import { styled } from "styled-components";
 import DashboardNav from "@/components/common/Nav/DashboardNav";
+import SideMenu from "@/components/common/SideMenu/SideMenu";
 
 const DashBoardPage = () => {
   return (

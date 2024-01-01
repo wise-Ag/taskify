@@ -14,19 +14,26 @@ export interface CardImage {
   imageUrl: string;
 }
 
+export interface PostColumnsProps {
+  title: string;
+  dashboardId: number;
+  token: string | null;
+}
+
 export interface GetColumnsProps {
-  dashboardId?: number;
-  token?: string;
+  dashboardId: number;
+  token: string | null;
 }
 
 export interface PutColumnsProps {
-  columnId: string;
-  token: string;
+  title: string;
+  columnId: number;
+  token: string | null;
 }
 
 export interface DeleteColumnsProps {
-  columnId: string;
-  token: string;
+  columnId: number;
+  token: string | null;
 }
 
 export interface PostCardImageProps {

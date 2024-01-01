@@ -4,7 +4,7 @@
  */
 export const Z_INDEX = {
   Profile_DropdownMenu: 1000,
-  ProfileImages_NumberWrapper: 5,
+  ProfileImages_NumberWrapper: 3,
   SettingSideMenu_Wrapper: 3,
   SideMenu_Wrapper: 3,
   SideMenu_Popup: 999,

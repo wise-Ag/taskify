@@ -14,9 +14,7 @@ const Tags = ({ handleOnClick, tagValue }: TagsProps) => {
       {tagValue.map((tag) => {
         return (
           <div key={tag} style={{ cursor: "pointer" }} onClick={handleOnClick}>
-            <Tag $bgColor="--Pinkf7" $textColor="--Pinkd5">
-              {tag}
-            </Tag>
+            <Tag tag={tag} />
           </div>
         );
       })}

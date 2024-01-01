@@ -16,6 +16,7 @@ const Profile = () => {
   const [user, setUser] = useState<UserData>();
   const [activeDropdown, setActiveDropdown] = useAtom(activeDropdownAtom);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const path = router.pathname;
 
   const toggleKebabMenu = (event: MouseEvent) => {
     event.stopPropagation();
@@ -62,19 +63,24 @@ const Profile = () => {
           <StyledArrowIcon $active={activeDropdown === "profile"} onClick={toggleKebabMenu} />
           {activeDropdown === "profile" && (
             <DropdownMenu>
-              <MenuItem onClick={() => navigateTo("/mydashboard")}>
+              <MenuItem $location={path === "/mydashboard" ? true : false} onClick={() => navigateTo("/mydashboard")}>
                 <ItemContent>
                   <FaHome />
                   <span>홈</span>
                 </ItemContent>
               </MenuItem>
-              <MenuItem onClick={() => navigateTo("/mypage")}>
+              <MenuItem $location={path === "/mypage" ? true : false} onClick={() => navigateTo("/mypage")}>
                 <ItemContent>
                   <FaUserCog />
                   <span>계정 관리</span>
                 </ItemContent>
               </MenuItem>
-              <MenuItem onClick={() => navigateTo("/")}>
+              <MenuItem
+                onClick={() => {
+                  localStorage.removeItem("accessToken");
+                  navigateTo("/");
+                }}
+              >
                 <ItemContent>
                   <FaSignOutAlt />
                   <span>로그아웃</span>
@@ -158,9 +164,13 @@ const DropdownMenu = styled.div`
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
 
   z-index: ${Z_INDEX.Profile_DropdownMenu};
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 16rem;
+  }
 `;
 
-const MenuItem = styled.div`
+const MenuItem = styled.div<{ $location?: boolean }>`
   padding: 1.8rem;
 
   position: relative;
@@ -174,12 +184,29 @@ const MenuItem = styled.div`
 
   cursor: pointer;
 
+  ${({ $location }) =>
+    $location &&
+    ` border-radius: 16px;
+    
+      font-weight: 500;
+      
+      background-color: var(--MainBG);
+      
+      box-shadow: 0 0 0 6px white inset;
+    `}
+
   &:hover {
     border-radius: 16px;
 
-    background-color: #eef2e6;
+    background-color: var(--MainHover);
+
+    color: var(--Main);
 
     box-shadow: 0 0 0 6px white inset;
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.4rem;
   }
 `;
 
@@ -190,5 +217,5 @@ const ItemContent = styled.span`
 `;
 
 const StyledArrowIcon = styled(ArrowIcon)`
-  transform: ${({ active }) => (active ? "scaleY(-1)" : "none")};
+  transform: ${({ $active }) => ($active ? "scaleY(-1)" : "none")};
 `;

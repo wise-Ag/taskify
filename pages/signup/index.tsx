@@ -1,26 +1,31 @@
 import MainLogo from "@/assets/icons/main-logo.svg";
 import SignUpForm from "@/components/Sign/SignForm/SignUpForm";
-import Button from "@/components/common/Buttons/Button";
+import { useIsSignin } from "@/hooks/useIsSignin";
 import Link from "next/link";
 import styled from "styled-components";
 
 const SignUpPage = () => {
+  const { isSignin } = useIsSignin("/mydashboard");
   return (
-    <Container>
-      <Link href="/">
-        <MainLogo />
-      </Link>
-      <Greeting>첫 방문을 환영합니다!</Greeting>
-      <SignUpFormWrapper>
-        <SignUpForm />
-      </SignUpFormWrapper>
-      <CheckMembership>
-        {"이미 가입하셨나요? "}
-        <Link href="/signin">
-          <GoToSignUp>로그인하기</GoToSignUp>
-        </Link>
-      </CheckMembership>
-    </Container>
+    <>
+      {isSignin || (
+        <Container>
+          <Link href="/">
+            <MainLogo />
+          </Link>
+          <Greeting>첫 방문을 환영합니다!</Greeting>
+          <SignUpFormWrapper>
+            <SignUpForm />
+          </SignUpFormWrapper>
+          <CheckMembership>
+            이미 가입하셨나요?
+            <Link href="/signin">
+              <GoToSignUp>로그인하기</GoToSignUp>
+            </Link>
+          </CheckMembership>
+        </Container>
+      )}{" "}
+    </>
   );
 };
 
@@ -56,6 +61,8 @@ const CheckMembership = styled.p`
 `;
 
 const GoToSignUp = styled.span`
+  margin-left: 0.5rem;
+
   color: var(--Main);
   text-decoration-line: underline;
 `;

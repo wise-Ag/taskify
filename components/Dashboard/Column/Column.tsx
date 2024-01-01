@@ -6,6 +6,11 @@ import Button from "@/components/common/Buttons/Button";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { getCardList } from "@/api/cards";
 import { Card as CardData } from "@/api/cards/cards.types";
+import TodoModal from "@/components/Modal/TodoModal";
+import { useModal } from "@/hooks/useModal";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
+import { useAtom } from "jotai";
+import { cardsAtom } from "@/states/atoms";
 
 interface ColumnProps {
   columnId: number;
@@ -13,7 +18,12 @@ interface ColumnProps {
 }
 
 const Column = ({ columnId, title }: ColumnProps) => {
-  const [cards, setCards] = useState<CardData[]>([]);
+  const [cards, setCards] = useAtom(cardsAtom);
+  const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+
+  const handleCloseModal = () => {
+    closeModalFunc();
+  };
 
   useEffect(() => {
     const loadCardList = async () => {
@@ -21,26 +31,40 @@ const Column = ({ columnId, title }: ColumnProps) => {
         size: 10,
         cursorId: null,
         columnId,
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjE2LCJ0ZWFtSWQiOiIxLTA4IiwiaWF0IjoxNzAzNzQxODYxLCJpc3MiOiJzcC10YXNraWZ5In0.onJAVE-0l39MjS77mTbfnS6UMU5bWMkVgBKlA-rs03U",
+        token: localStorage.getItem("accessToken"),
       });
 
-      if (res !== null) {
-        setCards(res?.cards);
+      if (res) {
+        setCards((prevCards) => ({
+          ...prevCards,
+          [columnId]: res.cards,
+        }));
       }
     };
 
     loadCardList();
-  }, []);
+  }, [columnId, isModalOpen]);
+
+  const columnCards = cards[columnId] || [];
 
   return (
     <Wrapper>
-      <ColumnHeader title={title} columnId={columnId} count={cards.length} />
+      <ColumnHeader title={title} columnId={columnId} count={columnCards.length} />
       <Container>
-        <Button type="plus" disabled />
-        {cards.map((card) => {
-          return <Card key={card.id} cardData={card} />;
-        })}
+        <Button
+          type="plus"
+          onClick={() => {
+            openModalFunc();
+          }}
+        />
+        {isModalOpen && (
+          <ModalWrapper>
+            <TodoModal type="create" />
+          </ModalWrapper>
+        )}
+        {columnCards.map((card) => (
+          <Card key={card.id} columnId={columnId} cardData={card} />
+        ))}
       </Container>
     </Wrapper>
   );

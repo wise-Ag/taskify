@@ -3,17 +3,18 @@ import Input from "@/components/Sign/SignInput/Input";
 import PasswordInput from "@/components/Sign/SignInput/PasswordInput";
 import Button from "@/components/common/Buttons/Button";
 import { EMAIL_RULES, ERROR_MESSAGE, PLACEHOLDER, SIGNIN_PASSWORD_RULES } from "@/constants/InputConstant";
+import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
 const SignInForm = () => {
-  const { control, handleSubmit, setError } = useForm({
+  const { control, handleSubmit, setError, formState } = useForm({
     defaultValues: { email: "", password: "" },
     mode: "onBlur",
   });
   const router = useRouter();
-  
+
   return (
     <StyledForm
       onSubmit={handleSubmit(async (data) => {
@@ -44,7 +45,9 @@ const SignInForm = () => {
         )}
       />
       <ButtonWrapper>
-        <Button type="login">로그인</Button>
+        <Button disabled={!formState.isValid} type="login">
+          로그인
+        </Button>
       </ButtonWrapper>
     </StyledForm>
   );
@@ -58,6 +61,10 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   row-gap: 1.6rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 35.1rem;
+  }
 `;
 const ButtonWrapper = styled.div`
   margin-top: 2rem;
