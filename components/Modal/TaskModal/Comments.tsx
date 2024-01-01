@@ -44,6 +44,7 @@ const Comments = ({ cardData }: { cardData: Card }) => {
   const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCommentsData });
 
   const submitComment = async (comment: string) => {
+    console.log("submit");
     const res = await postComments({
       token,
       content: comment,
@@ -51,7 +52,8 @@ const Comments = ({ cardData }: { cardData: Card }) => {
       columnId: cardData.columnId,
       dashboardId: Number(boardid),
     });
-    if (res && commentsData.length == 0) setCommentsData([res]);
+    console.log(res);
+    if (res && commentsData.length == 0) setCommentsData([res].splice(0));
     if (res && commentsData.length > 0) setCommentsData([res, ...commentsData]);
   };
 
@@ -83,7 +85,7 @@ const Comments = ({ cardData }: { cardData: Card }) => {
   }, [boardid]);
   return (
     <>
-      <ModalInput label="댓글" $inputType="댓글" onSubmitComment={submitComment} />
+      <ModalInput label="댓글" $inputType="댓글" onSubmitComment={() => console.log("?")} />
       <CommentWrapper>
         {commentsData.map((comment) => (
           <CommentItem key={comment.id}>

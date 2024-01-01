@@ -1,72 +1,110 @@
+import { deleteCard } from "@/api/cards";
 import { Card } from "@/api/cards/cards.types";
 import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
 import Kebab from "@/assets/icons/kebab.svg";
-import KebabModal from "@/components/Modal/KebabModal";
+import AlertModal from "@/components/Modal/AlertModal";
+import EditTaskModal from "@/components/Modal/EditTaskModal";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
+import TaskDropdown from "@/components/Modal/TaskDropdown";
 import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
+import { useModal } from "@/hooks/useModal";
+import { cardsAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useAtom } from "jotai";
 import React, { useState } from "react";
 import styled from "styled-components";
 import NoProfileImage from "../../common/NoProfileImage/ProfileImage";
 import Comments from "./Comments";
 
-const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ cardData, closeModalFunc }) => {
-  const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
-
-  const handleKebabClick = () => {
-    setIsKebabModalOpen(!isKebabModalOpen);
+const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: () => void }> = ({ cardData, columnId, closeModalFunc }) => {
+  const { isModalOpen: isEditModalOpen, openModalFunc: openEditModal, closeModalFunc: closeEditModal } = useModal();
+  const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModal, closeModalFunc: closeDeleteModal } = useModal();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [cards, setCards] = useAtom(cardsAtom);
+  const token = localStorage.getItem("accessToken");
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleKebabClose = () => {
-    setIsKebabModalOpen(false);
+  const handleDropdownDeleteClick = () => {
+    openDeleteModal();
   };
 
+  const handleDropdownEditClick = () => {
+    openEditModal();
+  };
+
+  const handleDropdownClose = () => {
+    setIsDropdownOpen(false);
+  };
+  const handleConfirmDelete = async () => {
+    await deleteCard({ cardId: cardData.id, token });
+    setCards((prevCards) => {
+      const updatedCards = prevCards[columnId].filter((card) => card.id !== cardData.id);
+      return { ...prevCards, [columnId]: updatedCards };
+    });
+    closeModalFunc();
+  };
+
+  const handleConfirmEdit = async () => {};
   return (
-    <Wrapper>
-      <TitleWrapper>
-        <Title>{cardData.title}</Title>
-        <IconContainer>
-          <KebabIconContainer tabIndex={0} onBlur={handleKebabClose}>
-            <Kebab alt="kebab" width={28} height={28} onClick={handleKebabClick} />
-            {isKebabModalOpen && <StyledKebabModal columnId={cardData.columnId} />}
-          </KebabIconContainer>
-          <Close alt="close" width={28} height={28} onClick={() => closeModalFunc()} />
-        </IconContainer>
-      </TitleWrapper>
-      <ContactDeadLineWrapper>
-        <Contact>담당자</Contact>
-        <DeadLine>마감일</DeadLine>
-        <ContactName>
-          <ProfileImageWrapper>
-            {cardData.assignee.profileImageUrl ? (
-              <ProfileImage url={cardData.assignee.profileImageUrl} />
-            ) : (
-              <NoProfileImageWrapper>
-                <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
-              </NoProfileImageWrapper>
-            )}
-          </ProfileImageWrapper>
-          {cardData.assignee.nickname}
-        </ContactName>
-        <DeadLineDate>{cardData.dueDate}</DeadLineDate>
-      </ContactDeadLineWrapper>
-      <CategoryWrapper>
-        <ColumnName status="To do" />
-        <DivisionWrapper>
-          <Division alt="category-division" width={10} height={20} />
-        </DivisionWrapper>
-        <Tags>
-          {cardData.tags.map((tag, idx) => (
-            <Tag key={idx} tag={tag} />
-          ))}
-        </Tags>
-      </CategoryWrapper>
-      <Description>{cardData.description}</Description>
-      {cardData.imageUrl && <Image src={cardData.imageUrl} alt="Task Image" />}
-      <Comments cardData={cardData} />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <TitleWrapper>
+          <Title>{cardData.title}</Title>
+          <IconContainer>
+            <KebabIconContainer tabIndex={0} onBlur={handleDropdownClose}>
+              <Kebab alt="kebab" width={28} height={28} onClick={toggleDropdown} />
+              {isDropdownOpen && <TaskDropdown onEdit={handleDropdownEditClick} onCreate={handleDropdownDeleteClick} />}
+            </KebabIconContainer>
+            <Close alt="close" width={28} height={28} onClick={() => closeModalFunc()} />
+          </IconContainer>
+        </TitleWrapper>
+        <ContactDeadLineWrapper>
+          <Contact>담당자</Contact>
+          <DeadLine>마감일</DeadLine>
+          <ContactName>
+            <ProfileImageWrapper>
+              {cardData.assignee.profileImageUrl ? (
+                <ProfileImage url={cardData.assignee.profileImageUrl} />
+              ) : (
+                <NoProfileImageWrapper>
+                  <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
+                </NoProfileImageWrapper>
+              )}
+            </ProfileImageWrapper>
+            {cardData.assignee.nickname}
+          </ContactName>
+          <DeadLineDate>{cardData.dueDate}</DeadLineDate>
+        </ContactDeadLineWrapper>
+        <CategoryWrapper>
+          <ColumnName status="To do" />
+          <DivisionWrapper>
+            <Division alt="category-division" width={10} height={20} />
+          </DivisionWrapper>
+          <Tags>
+            {cardData.tags.map((tag, idx) => (
+              <Tag key={idx} tag={tag} />
+            ))}
+          </Tags>
+        </CategoryWrapper>
+        <Description>{cardData.description}</Description>
+        {cardData.imageUrl && <Image src={cardData.imageUrl} alt="Task Image" />}
+        <Comments cardData={cardData} />
+      </Wrapper>
+      {isEditModalOpen && (
+        <ModalWrapper>
+          <EditTaskModal cardId={cardData.id} onCancel={closeEditModal} onEdit={handleConfirmEdit} />
+        </ModalWrapper>
+      )}
+      {isDeleteModalOpen && (
+        <ModalWrapper>
+          <AlertModal type="confirm" onCancel={closeDeleteModal} onConfirm={handleConfirmDelete} />
+        </ModalWrapper>
+      )}
+    </>
   );
 };
 
@@ -124,13 +162,6 @@ const KebabIconContainer = styled.div`
   gap: 2.4rem;
 
   cursor: pointer;
-`;
-
-const StyledKebabModal = styled(KebabModal)`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: ${Z_INDEX.TaskModal_StyledKebabModal};
 `;
 
 const ContactDeadLineWrapper = styled.div`
@@ -279,110 +310,6 @@ const Image = styled.img`
   }
 `;
 
-const CommentWrapper = styled.div`
-  margin-top: 1.6rem;
-`;
-
-const LeftWrapper = styled.div`
-  display: flex;
-  align-items: top;
-
-  img {
-    width: 3.2rem;
-    height: 3.2rem;
-
-    border-radius: 50%;
-  }
-`;
-
-const RightWrapper = styled.div`
-  margin-left: 1rem;
-`;
-
-const CommentTextarea = styled.textarea`
-  margin-top: 1rem;
-  margin-right: 1rem;
-  padding: 1rem;
-
-  border: 1px solid var(--Grayd9);
-  border-radius: 6px;
-
-  &:focus {
-    border-color: var(--Main);
-  }
-`;
-
-const InfoWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  gap: 0.8rem;
-
-  font-size: 1.4rem;
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1.2rem;
-  }
-`;
-
-const CommentDate = styled.div`
-  display: flex;
-  align-items: center;
-
-  font-size: 1.2rem;
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1rem;
-  }
-`;
-
-const CommentItem = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  padding: 0.8rem;
-  margin-bottom: 0.8rem;
-
-  font-size: 1.4rem;
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1.2rem;
-  }
-`;
-
-const CommentContent = styled.div`
-  margin: 0.6rem 0 1.2rem 0;
-
-  display: flex;
-  justify-content: flex-start;
-`;
-
-const FunctionWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  gap: 1.2rem;
-`;
-
-const Edit = styled.button`
-  color: var(--Gray9f);
-  font-size: 1.2rem;
-  text-decoration-line: underline;
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1rem;
-  }
-`;
-
-const Delete = styled.button`
-  color: var(--Gray9f);
-  font-size: 1.2rem;
-  text-decoration-line: underline;
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1rem;
-  }
-`;
 const ProfileImage = styled.div<{ url: string }>`
   width: 2.7rem;
   height: 2.7rem;
