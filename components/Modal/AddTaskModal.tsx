@@ -27,9 +27,9 @@ const AddTaskModal = ({ onCancel }: AddTaskModalProps) => {
   const { boardid } = router.query;
   const dashboardId = Number(boardid);
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => setTitle(event.target.value);
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => setDescription(event.target.value);
-  const handleDueDateChange = (event: React.ChangeEvent<HTMLInputElement>) => setDueDate(event.target.value);
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
+  const handleDueDateChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDueDate(event.target.value);
 
   const handleSubmit = async () => {
     console.log(title);

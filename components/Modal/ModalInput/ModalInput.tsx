@@ -25,12 +25,17 @@ interface DateInputProps {
 
 const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInputProps & { onSubmitComment?: (comment: string) => void }>(
   ({ label, $inputType, value, onChange, onSubmitComment }, ref) => {
-    const [inputValue, setInputValue] = useState("");
+    const [inputValue, setInputValue] = useState(value || "");
     const [selectedDate, setSelectedDate] = useState("");
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setInputValue(e.target.value);
+      if (onChange) {
+        onChange(e);
+      }
     };
+
+    const effectiveOnChange = onChange || handleInputChange;
 
     const handleDateChange = (dateStr: string) => {
       setSelectedDate(dateStr);
@@ -52,7 +57,7 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
               <StyledTextArea
                 ref={ref as React.Ref<HTMLTextAreaElement>}
                 value={value}
-                onChange={onChange}
+                onChange={effectiveOnChange}
                 placeholder={$inputType === "댓글" ? "댓글 작성하기" : "설명을 입력해 주세요"}
                 $inputType={$inputType}
                 required={$inputType === "설명"}
@@ -73,7 +78,7 @@ const ModalInput = forwardRef<HTMLInputElement | HTMLTextAreaElement, ModalInput
                 ref={ref as React.Ref<HTMLInputElement>}
                 type="text"
                 value={value}
-                onChange={onChange}
+                onChange={effectiveOnChange}
                 placeholder={"제목을 입력해 주세요"}
                 $inputType={$inputType}
                 required

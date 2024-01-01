@@ -1,19 +1,15 @@
 import { getCardList } from "@/api/cards";
-import { Card as CardData } from "@/api/cards/cards.types";
 import Card from "@/components/Dashboard/Card/Card";
 import ColumnHeader from "@/components/Dashboard/Column/ColumnHeader";
 import AddTaskModal from "@/components/Modal/AddTaskModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
 import { useModal } from "@/hooks/useModal";
-import { DeviceSize } from "@/styles/DeviceSize";
-import { getCardList } from "@/api/cards";
-import { Card as CardData } from "@/api/cards/cards.types";
-import TodoModal from "@/components/Modal/TodoModal";
-import { useModal } from "@/hooks/useModal";
-import ModalWrapper from "@/components/Modal/ModalWrapper";
-import { useAtom } from "jotai";
 import { cardsAtom } from "@/states/atoms";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
+import styled from "styled-components";
 
 interface ColumnProps {
   columnId: number;
