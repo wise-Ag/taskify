@@ -83,8 +83,8 @@ const SideMenu = () => {
       {isPopupVisible && (
         <Popup>
           <DashboardList>
-            {dashboards.map((dashboard, key) => {
-              return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
+            {dashboards.map((dashboard) => {
+              return <Dashboard key={dashboard.id} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
             })}
           </DashboardList>
         </Popup>
@@ -101,8 +101,8 @@ const SideMenu = () => {
         />
       </HeaderWrapper>
       <DashboardList>
-        {dashboards.map((dashboard, key) => {
-          return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
+        {dashboards.map((dashboard) => {
+          return <Dashboard key={dashboard.id} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
         })}
       </DashboardList>
       {isModalOpen && (
