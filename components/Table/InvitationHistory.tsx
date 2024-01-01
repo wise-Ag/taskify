@@ -9,7 +9,11 @@ import styled from "styled-components";
 
 const PAGE_SIZE = 5; // 임의로 추가
 
-const InvitationHistory = () => {
+interface InvitationHistoryProps {
+  boardid: string;
+}
+
+const InvitationHistory = ({ boardid }: InvitationHistoryProps) => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPageNum, setTotalPageNum] = useState(1);
@@ -17,8 +21,8 @@ const InvitationHistory = () => {
 
   const fetchData = async () => {
     const result = await getDashboardInvitations({
-      dashboardId: "217",
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM2NjkxMzIsImlzcyI6InNwLXRhc2tpZnkifQ.LeUg_4YGwaXk9IZTAhi21uz_oqbByLOdrN3qXTyvVEc",
+      dashboardId: boardid,
+      token: String(localStorage.getItem("accessToken")),
       size: PAGE_SIZE,
       page: currentPage,
     });

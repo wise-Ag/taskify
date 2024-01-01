@@ -1,22 +1,37 @@
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DashBoardColor from "@/components/common/Chip/DashBoardColor";
 import { DeviceSize } from "@/styles/DeviceSize";
 import ToastModal from "@/components/Modal/ToastModal";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { getDashboard } from "@/api/dashboards";
+import { Dashboard } from "@/api/dashboards/dashboards.types";
+interface DashBoardProps {
+  boardid: string | string[] | undefined;
+}
 
-const EditDashboard = () => {
+const EditDashboard = ({ boardid }: DashBoardProps) => {
   const [toastVisible, setToastVisible] = useState(false);
+  const [dashboard, setDashboard] = useState<Dashboard>();
 
   const handleClick = () => {
     toast("변경이 완료되었습니다.");
     setToastVisible((prev) => !prev);
   };
 
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      const res = await getDashboard({ dashboardId: String(boardid), token: localStorage.getItem("accessToken") });
+      if (res !== null) setDashboard(res);
+    };
+    loadDashboardData();
+  }, [boardid]);
+
   return (
     <Wrapper>
       <Header>
-        <Title>비브리지</Title>
+        <Title>{dashboard?.title}</Title>
         <DashBoardColor />
       </Header>
       <Form>

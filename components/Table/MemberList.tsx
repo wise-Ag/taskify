@@ -9,7 +9,11 @@ import styled from "styled-components";
 
 const PAGE_SIZE = 4; // 임의로 추가
 
-const MembersList = () => {
+interface MemberListProps {
+  boardid: number;
+}
+
+const MembersList = ({ boardid }: MemberListProps) => {
   const [members, setMembers] = useState<Member[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPageNum, setTotalPageNum] = useState(1);
@@ -17,8 +21,8 @@ const MembersList = () => {
 
   const fetchData = async () => {
     const result = await getMembers({
-      dashboardId: 217,
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM2NjUxNTAsImlzcyI6InNwLXRhc2tpZnkifQ.4XSplk_xKaSQ-CTt2m99I70IKie4Mb2G5a-UmD_bPmk",
+      dashboardId: boardid,
+      token: localStorage.getItem("accessToken"),
       size: PAGE_SIZE,
       page: currentPage,
     });
