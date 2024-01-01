@@ -1,24 +1,29 @@
 import { Card } from "@/api/cards/cards.types";
 import { Comment } from "@/api/comments/comments.types";
-import { deleteComments, getComments, postComments, putComments } from "@/api/comments/index";
+import { deleteComments, getComments, postComments, putComments } from "@/api/comments";
 import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
 import Kebab from "@/assets/icons/kebab.svg";
-import KebabModal from "@/components/Modal/KebabModal";
 import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { Z_INDEX } from "@/styles/ZindexStyles";
 import { formatUpdatedAt } from "@/utils/FormatDate";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import NoProfileImage from "../common/NoProfileImage/ProfileImage";
+import TaskDropdown from "@/components/Modal/TaskDropdown";
+import AlertModal from "@/components/Modal/AlertModal";
+import { useModal } from "@/hooks/useModal";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
+import { deleteCard } from "@/api/cards";
+import { useAtom } from "jotai";
+import { cardsAtom } from "@/states/atoms";
+import EditTaskModal from "@/components/Modal/EditTaskModal";
 
-const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ cardData, closeModalFunc }) => {
-  const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
+const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: () => void }> = ({ cardData, columnId, closeModalFunc }) => {
   const [commentsData, setCommentsData] = useState<Comment[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
@@ -27,6 +32,24 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
   const router = useRouter();
   const { boardid } = router.query;
   const token = localStorage.getItem("accessToken");
+
+  const { isModalOpen: isEditModalOpen, openModalFunc: openEditModal, closeModalFunc: closeEditModal } = useModal();
+  const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModal, closeModalFunc: closeDeleteModal } = useModal();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const [cards, setCards] = useAtom(cardsAtom);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleDropdownDeleteClick = () => {
+    openDeleteModal();
+  };
+
+  const handleDropdownEditClick = () => {
+    openEditModal();
+  };
 
   const loadCommentsData = async () => {
     setIsLoading(true);
@@ -86,13 +109,20 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
     }
   };
 
-  const handleKebabClick = () => {
-    setIsKebabModalOpen(!isKebabModalOpen);
-  };
-
   useEffect(() => {
     loadCommentsData();
   }, [boardid]);
+
+  const handleConfirmDelete = async () => {
+    await deleteCard({ cardId: cardData.id, token });
+    setCards((prevCards) => {
+      const updatedCards = prevCards[columnId].filter((card) => card.id !== cardData.id);
+      return { ...prevCards, [columnId]: updatedCards };
+    });
+    closeModalFunc();
+  };
+
+  const handleConfirmEdit = async () => {};
 
   if (!cardData) {
     return <div>Loading...</div>;
@@ -104,8 +134,8 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
         <Title>{cardData.title}</Title>
         <IconContainer>
           <KebabIconContainer>
-            <Kebab alt="kebab" width={28} height={28} onClick={handleKebabClick} />
-            {isKebabModalOpen && <StyledKebabModal columnId={cardData.columnId} />}
+            <Kebab alt="kebab" width={28} height={28} onClick={toggleDropdown} />
+            {isDropdownOpen && <TaskDropdown onEdit={handleDropdownEditClick} onCreate={handleDropdownDeleteClick} />}
           </KebabIconContainer>
           <Close alt="close" width={28} height={28} onClick={() => closeModalFunc()} />
         </IconContainer>
@@ -182,6 +212,16 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
           </CommentItem>
         ))}
       </CommentWrapper>
+      {isEditModalOpen && (
+        <ModalWrapper>
+          <EditTaskModal cardId={cardData.id} onCancel={closeEditModal} onEdit={handleConfirmEdit} />
+        </ModalWrapper>
+      )}
+      {isDeleteModalOpen && (
+        <ModalWrapper>
+          <AlertModal type="confirm" onCancel={closeDeleteModal} onConfirm={handleConfirmDelete} />
+        </ModalWrapper>
+      )}
     </Wrapper>
   );
 };
@@ -238,13 +278,6 @@ const KebabIconContainer = styled.div`
   position: relative;
   align-items: center;
   gap: 2.4rem;
-`;
-
-const StyledKebabModal = styled(KebabModal)`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: ${Z_INDEX.TaskModal_StyledKebabModal};
 `;
 
 const ContactDeadLineWrapper = styled.div`
