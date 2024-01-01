@@ -245,6 +245,7 @@ const Color = styled.div<{ color: string }>`
 `;
 
 const DashboardTitle = styled.div`
+  width: 80%;
   margin-right: 0.6rem;
 
   color: var(--Gray78);
@@ -255,6 +256,7 @@ const DashboardTitle = styled.div`
   position: relative;
 
   @media (max-width: ${DeviceSize.tablet}) {
+    width: 60%;
     font-size: 1.6rem;
   }
 
@@ -264,9 +266,9 @@ const DashboardTitle = styled.div`
 `;
 
 const StyledCrown = styled(Crown)`
-  display: flex;
+  /* display: flex;
   position: absolute;
-  right: 10px;
+  right: 10px; */
 
   @media (max-width: ${DeviceSize.mobile}) {
     display: none;
