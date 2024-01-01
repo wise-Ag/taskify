@@ -1,20 +1,19 @@
 import { postCards } from "@/api/cards";
+import { CardProps } from "@/api/cards/cards.types";
+import { postCardImage } from "@/api/columns";
 import { getMembers } from "@/api/members";
 import { Member } from "@/api/members/members.types";
 import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import TagInput from "@/components/Modal/ModalInput/TagInput";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { cardAssigneeIdAtom, cardImageAtom, cardsAtom, dueDateAtom, tagAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ContactDropdown from "./ModalInput/ContactDropdown";
 import ImageUploadInput from "./ModalInput/ImageUploadInput";
-import { useAtom } from "jotai";
-import { cardAssigneeIdAtom, cardImageAtom, cardsAtom, dueDateAtom } from "@/states/atoms";
-import { postCardImage } from "@/api/columns";
-import { set } from "react-hook-form";
-import { CardProps } from "@/api/cards/cards.types";
 
 interface AddTaskModalProps {
   closeModalFunc: () => void;
@@ -25,24 +24,23 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
-  const [imageUrl, setImageUrl] = useState<string>();
   const token = localStorage.getItem("accessToken");
   const router = useRouter();
   const { boardid } = router.query;
   const dashboardId = Number(boardid);
   const modalRef = useRef(null);
   const [cards, setCards] = useAtom(cardsAtom);
-  const [dueDate] = useAtom(dueDateAtom);
-  const [cardImage] = useAtom(cardImageAtom);
-  const [assigneeUserId] = useAtom(cardAssigneeIdAtom);
+  const [tags, setTags] = useAtom(tagAtom);
+  const [dueDate, setDueDate] = useAtom(dueDateAtom);
+  const [cardImage, setCardImage] = useAtom(cardImageAtom);
+  const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
 
   const handleSubmit = async () => {
     const postCardsParams: CardProps = { dashboardId, columnId, title, description, dueDate, tags, token };
 
-    // if (assigneeUserId) postCardsParams.assigneeUserId = assigneeUserId;
+    if (assigneeUserId) postCardsParams.assigneeUserId = assigneeUserId;
 
     if (cardImage) {
       const formData = new FormData();
@@ -50,10 +48,7 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
 
       const cardImageRes = await postCardImage({ columnId, token, formData });
       if (cardImageRes === null) return alert("이미지 저장에 실패했습니다");
-      setImageUrl(cardImageRes.imageUrl);
-      console.log("image", cardImageRes?.imageUrl);
-      postCardsParams.imageUrl = imageUrl;
-      console.log("prop", postCardsParams);
+      postCardsParams.imageUrl = cardImageRes.imageUrl;
     }
     const postCardsRes = await postCards(postCardsParams);
     if (postCardsRes === null) return alert("할 일 생성에 실패했습니다.");
@@ -63,6 +58,11 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
         return { ...prevCards, [columnId]: updatedCards };
       });
     }
+    console.log(postCardsRes);
+    setDueDate(""); //atom전역변수 초기화
+    setAssigneeUserId(null);
+    setCardImage(null);
+    setTags([]);
     closeModalFunc();
   };
 
@@ -91,7 +91,7 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
       <TagInput />
       <ImageUploadInput type="modal" />
       <ButtonWrapper>
-        <ButtonSet type="modalSet" onClickLeft={closeModalFunc} onClickRight={handleSubmit}>
+        <ButtonSet type="modalSet" onClickLeft={closeModalFunc} onClickRight={handleSubmit} isRightDisabled={!title || !description}>
           생성
         </ButtonSet>
       </ButtonWrapper>

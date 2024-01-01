@@ -1,5 +1,7 @@
 import Tag from "@/components/common/Chip/Tag";
+import { tagAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
 import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 
@@ -25,7 +27,7 @@ const Tags = ({ handleOnClick, tagValue }: TagsProps) => {
 const TagInput = () => {
   const [inputValue, setInputValue] = useState("");
   const [tagValue, setTagValue] = useState<string[]>([]);
-
+  const [tag, setTag] = useAtom(tagAtom);
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
@@ -34,13 +36,17 @@ const TagInput = () => {
     const target = event.target as HTMLElement; // HTMLElement로 타입 단언
     const tagText = target.textContent; // 이제 textContent 사용 가능
     setTagValue((prev) => prev.filter((v) => v !== tagText));
+    setTag(tagValue);
   };
 
   const handlePressEnter = (event: React.KeyboardEvent) => {
     if (event.key !== "Enter") return;
     if (event.nativeEvent.isComposing) return;
     if (!inputValue) return;
-    if (tagValue.filter((v) => v == inputValue).length === 0) setTagValue((prev) => [...prev, inputValue]);
+    if (tagValue.filter((v) => v == inputValue).length === 0) {
+      setTagValue((prev) => [...prev, inputValue]);
+      setTag(tagValue);
+    }
     setInputValue(() => "");
   };
 

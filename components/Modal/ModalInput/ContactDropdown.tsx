@@ -50,7 +50,7 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
     setSelectedMember(member);
     setFilter(member.nickname);
     setShowList(false);
-    setAssigneeId(member.id);
+    setAssigneeId(member.userId);
   };
 
   return (
