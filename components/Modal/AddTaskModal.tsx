@@ -1,21 +1,21 @@
+import { postCards } from "@/api/cards";
 import { getMembers } from "@/api/members";
 import { Member } from "@/api/members/members.types";
-import { postCards } from "@/api/cards";
 import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import TagInput from "@/components/Modal/ModalInput/TagInput";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import ContactDropdown from "./ModalInput/ContactDropdown";
 import ImageUploadInput from "./ModalInput/ImageUploadInput";
-import React, { useState, useEffect } from "react";
 
 interface AddTaskModalProps {
-  onCancel?: () => void;
+  closeModalFunc: () => void;
 }
 
-const AddTaskModal = ({ onCancel }: AddTaskModalProps) => {
+const AddTaskModal = ({ closeModalFunc }: AddTaskModalProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -26,10 +26,16 @@ const AddTaskModal = ({ onCancel }: AddTaskModalProps) => {
   const router = useRouter();
   const { boardid } = router.query;
   const dashboardId = Number(boardid);
+  const modalRef = useRef(null);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
   const handleDueDateChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDueDate(event.target.value);
+  const handleClickOutside = (event: MouseEvent) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      closeModalFunc();
+    }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -47,7 +53,7 @@ const AddTaskModal = ({ onCancel }: AddTaskModalProps) => {
 
       if (card) {
         console.log("Card created successfully", card);
-        // 성공적으로 생성된 경우 처리 로직
+        closeModalFunc();
       }
     } catch (error) {
       console.error("Failed to create card", error);
@@ -70,8 +76,16 @@ const AddTaskModal = ({ onCancel }: AddTaskModalProps) => {
     fetchMembers();
   }, [dashboardId, token]);
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <Wrapper>
+    <Wrapper ref={modalRef}>
       <TodoTitle>할 일 생성</TodoTitle>
       <ContactDropdown members={membersData} />
       <ModalInput $inputType="제목" label="제목" value={title} onChange={handleTitleChange} />
@@ -80,7 +94,7 @@ const AddTaskModal = ({ onCancel }: AddTaskModalProps) => {
       <TagInput />
       <ImageUploadInput type="modal" />
       <ButtonWrapper>
-        <ButtonSet type="modalSet" onClickLeft={onCancel} onClickRight={handleSubmit}>
+        <ButtonSet type="modalSet" onClickLeft={closeModalFunc} onClickRight={handleSubmit}>
           생성
         </ButtonSet>
       </ButtonWrapper>

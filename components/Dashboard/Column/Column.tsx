@@ -58,7 +58,7 @@ const Column = ({ columnId, title }: ColumnProps) => {
         />
         {isModalOpen && (
           <ModalWrapper>
-            <AddTaskModal />
+            <AddTaskModal closeModalFunc={closeModalFunc} />
           </ModalWrapper>
         )}
         {columnCards.map((card) => (
