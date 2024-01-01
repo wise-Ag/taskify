@@ -10,9 +10,10 @@ interface ContactDropdownProps {
   dashboardId: number;
   assigneeNickname?: string | null;
   assigneeProfileImageUrl?: string | null;
+  onSelectMember: (userId: number) => void;
 }
 
-const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUrl }: ContactDropdownProps) => {
+const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUrl, onSelectMember }: ContactDropdownProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
   const [filter, setFilter] = useState("");
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
@@ -69,6 +70,7 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUr
     setSelectedMember(membersData);
     setFilter(membersData.nickname);
     setShowList(false);
+    onSelectMember(membersData.userId);
   };
 
   return (
