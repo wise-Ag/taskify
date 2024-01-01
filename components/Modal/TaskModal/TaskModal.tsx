@@ -1,109 +1,34 @@
 import { Card } from "@/api/cards/cards.types";
-import { Comment } from "@/api/comments/comments.types";
-import { deleteComments, getComments, postComments, putComments } from "@/api/comments/index";
 import Division from "@/assets/icons/category-division.svg";
 import Close from "@/assets/icons/close.svg";
 import Kebab from "@/assets/icons/kebab.svg";
 import KebabModal from "@/components/Modal/KebabModal";
-import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
-import { formatUpdatedAt } from "@/utils/FormatDate";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import NoProfileImage from "../common/NoProfileImage/ProfileImage";
+import NoProfileImage from "../../common/NoProfileImage/ProfileImage";
+import Comments from "./Comments";
 
 const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ cardData, closeModalFunc }) => {
   const [isKebabModalOpen, setIsKebabModalOpen] = useState(false);
-  const [commentsData, setCommentsData] = useState<Comment[]>([]);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
-  const [newCommentContent, setNewCommentContent] = useState("");
-  const [cursorId, setCursorId] = useState<number | null>(null);
-  const router = useRouter();
-  const { boardid } = router.query;
-  const token = localStorage.getItem("accessToken");
-
-  const loadCommentsData = async () => {
-    setIsLoading(true);
-    if (commentsData.length > 0 && cursorId === null) {
-      return;
-    }
-    const res = await getComments({
-      cardId: cardData.id,
-      size: 2,
-      cursorId,
-      token,
-    });
-
-    if (res) {
-      setCommentsData((prev) => {
-        return [...prev, ...res.comments];
-      });
-      setCursorId(res.cursorId);
-    }
-    setIsLoading(false);
-  };
-
-  const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCommentsData });
-
-  const submitComment = async (comment: string) => {
-    const res = await postComments({
-      token,
-      content: comment,
-      cardId: cardData.id,
-      columnId: cardData.columnId,
-      dashboardId: Number(boardid),
-    });
-    if (res && commentsData.length == 0) setCommentsData([res]);
-    if (res && commentsData.length > 0) setCommentsData([res, ...commentsData]);
-  };
-
-  const handleEditClick = (commentId: number, currentContent: string) => {
-    setIsEditing(true);
-    setEditingCommentId(commentId);
-    setNewCommentContent(currentContent);
-  };
-
-  const handleDeleteClick = async (commentId: number) => {
-    await deleteComments({ commentId, token });
-    setCommentsData([...commentsData.filter((v) => v.id !== commentId)]);
-  };
-
-  const handleUpdateComment = async (commentId: number) => {
-    const res = await putComments({
-      commentId,
-      token,
-      content: newCommentContent,
-    });
-    if (res) {
-      setCommentsData([...commentsData.map((v) => (v.id === commentId ? res : v))]);
-      setIsEditing(false);
-    }
-  };
 
   const handleKebabClick = () => {
     setIsKebabModalOpen(!isKebabModalOpen);
   };
 
-  useEffect(() => {
-    loadCommentsData();
-  }, [boardid]);
-
-  if (!cardData) {
-    return <div>Loading...</div>;
-  }
+  const handleKebabClose = () => {
+    setIsKebabModalOpen(false);
+  };
 
   return (
     <Wrapper>
       <TitleWrapper>
         <Title>{cardData.title}</Title>
         <IconContainer>
-          <KebabIconContainer>
+          <KebabIconContainer tabIndex={0} onBlur={handleKebabClose}>
             <Kebab alt="kebab" width={28} height={28} onClick={handleKebabClick} />
             {isKebabModalOpen && <StyledKebabModal columnId={cardData.columnId} />}
           </KebabIconContainer>
@@ -123,7 +48,6 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
               </NoProfileImageWrapper>
             )}
           </ProfileImageWrapper>
-
           {cardData.assignee.nickname}
         </ContactName>
         <DeadLineDate>{cardData.dueDate}</DeadLineDate>
@@ -140,48 +64,8 @@ const TaskModal: React.FC<{ cardData: Card; closeModalFunc: () => void }> = ({ c
         </Tags>
       </CategoryWrapper>
       <Description>{cardData.description}</Description>
-      <Image src={cardData.imageUrl} alt="Task Image" />
-      <ModalInput label="댓글" $inputType="댓글" onSubmitComment={submitComment} />
-      <CommentWrapper>
-        {commentsData.map((comment) => (
-          <CommentItem key={comment.id}>
-            {comment.id === cursorId && <div ref={targetRef} />}
-            <LeftWrapper>
-              {comment.author.profileImageUrl ? (
-                <ProfileImage url={comment.author.profileImageUrl} />
-              ) : (
-                <NoProfileImageWrapper>
-                  <NoProfileImage id={comment.author.id} nickname={comment.author.nickname} />
-                </NoProfileImageWrapper>
-              )}
-            </LeftWrapper>
-            <RightWrapper>
-              <InfoWrapper>
-                {comment.author.nickname}
-
-                <CommentDate>{formatUpdatedAt(comment.updatedAt)}</CommentDate>
-              </InfoWrapper>
-              {isEditing && editingCommentId === comment.id ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleUpdateComment(comment.id);
-                  }}
-                >
-                  <CommentTextarea value={newCommentContent} onChange={(e) => setNewCommentContent(e.target.value)} rows={2} />
-                  <Edit type="submit">저장</Edit>
-                </form>
-              ) : (
-                <CommentContent>{comment.content}</CommentContent>
-              )}
-              <FunctionWrapper>
-                {!isEditing || editingCommentId !== comment.id ? <Edit onClick={() => handleEditClick(comment.id, comment.content)}>수정</Edit> : null}
-                {!isEditing || editingCommentId !== comment.id ? <Delete onClick={() => handleDeleteClick(comment.id)}>삭제</Delete> : null}
-              </FunctionWrapper>
-            </RightWrapper>
-          </CommentItem>
-        ))}
-      </CommentWrapper>
+      {cardData.imageUrl && <Image src={cardData.imageUrl} alt="Task Image" />}
+      <Comments cardData={cardData} />
     </Wrapper>
   );
 };
@@ -238,6 +122,8 @@ const KebabIconContainer = styled.div`
   position: relative;
   align-items: center;
   gap: 2.4rem;
+
+  cursor: pointer;
 `;
 
 const StyledKebabModal = styled(KebabModal)`
