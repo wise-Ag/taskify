@@ -9,7 +9,7 @@ import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import TaskModal from "@/components/Modal/TaskModal";
 
-const Card = ({ cardData }: { cardData: Card }) => {
+const Card = ({ cardData, columnId }: { cardData: Card; columnId: number }) => {
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
 
   return (
@@ -41,7 +41,7 @@ const Card = ({ cardData }: { cardData: Card }) => {
       </div>
       {isModalOpen && (
         <ModalWrapper>
-          <TaskModal cardData={cardData} closeModalFunc={closeModalFunc} />
+          <TaskModal cardData={cardData} columnId={columnId} closeModalFunc={closeModalFunc} />
         </ModalWrapper>
       )}
     </Wrapper>

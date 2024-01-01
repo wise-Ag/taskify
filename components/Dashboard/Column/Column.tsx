@@ -9,6 +9,8 @@ import { Card as CardData } from "@/api/cards/cards.types";
 import TodoModal from "@/components/Modal/TodoModal";
 import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
+import { useAtom } from "jotai";
+import { cardsAtom } from "@/states/atoms";
 
 interface ColumnProps {
   columnId: number;
@@ -16,7 +18,7 @@ interface ColumnProps {
 }
 
 const Column = ({ columnId, title }: ColumnProps) => {
-  const [cards, setCards] = useState<CardData[]>([]);
+  const [cards, setCards] = useAtom(cardsAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
 
   const handleCloseModal = () => {
@@ -32,17 +34,22 @@ const Column = ({ columnId, title }: ColumnProps) => {
         token: localStorage.getItem("accessToken"),
       });
 
-      if (res !== null) {
-        setCards(res?.cards);
+      if (res) {
+        setCards((prevCards) => ({
+          ...prevCards,
+          [columnId]: res.cards,
+        }));
       }
     };
 
     loadCardList();
   }, [columnId, isModalOpen]);
 
+  const columnCards = cards[columnId] || [];
+
   return (
     <Wrapper>
-      <ColumnHeader title={title} columnId={columnId} count={cards.length} />
+      <ColumnHeader title={title} columnId={columnId} count={columnCards.length} />
       <Container>
         <Button
           type="plus"
@@ -55,9 +62,9 @@ const Column = ({ columnId, title }: ColumnProps) => {
             <TodoModal type="create" />
           </ModalWrapper>
         )}
-        {cards.map((card) => {
-          return <Card key={card.id} cardData={card} />;
-        })}
+        {columnCards.map((card) => (
+          <Card key={card.id} columnId={columnId} cardData={card} />
+        ))}
       </Container>
     </Wrapper>
   );
