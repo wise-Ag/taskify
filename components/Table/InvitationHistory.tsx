@@ -10,6 +10,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import AlertModal from "../Modal/AlertModal";
 
 const PAGE_SIZE = 5;
 
@@ -18,7 +19,8 @@ const InvitationHistory = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [totalPageNum, setTotalPageNum] = useState(1);
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
-  const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const { isModalOpen: isInvitaionModalOpen, openModalFunc: openInvitationModalFunc, closeModalFunc: closeInvitationModalFunc } = useModal();
+  const { isModalOpen: isAlertModalOpen, openModalFunc: openAlertModalFunc, closeModalFunc: closeAlertModalFunc } = useModal();
   const router = useRouter();
   const { boardid } = router.query;
 
@@ -56,13 +58,13 @@ const InvitationHistory = () => {
     const res = await postDashboardInvitations({ email: data.inputData, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
 
     if (res === null) {
-      alert("존재하지 않는 유저입니다."); // alert 말고 수정하고싶은데.. 방법을 모르겠음 ㅠㅠ
+      openAlertModalFunc();
       return;
     }
 
     setInvitations([res, ...invitations]);
 
-    closeModalFunc();
+    closeInvitationModalFunc();
   };
 
   useEffect(() => {
@@ -74,7 +76,7 @@ const InvitationHistory = () => {
       <Container>
         <Section1>
           <Title>초대 내역</Title>
-          <Button type="invite" children="초대하기" onClick={openModalFunc} />
+          <Button type="invite" children="초대하기" onClick={openInvitationModalFunc} />
         </Section1>
 
         <Section2>
@@ -108,9 +110,15 @@ const InvitationHistory = () => {
         ))}
       </Container>
 
-      {isModalOpen && (
+      {isInvitaionModalOpen && (
         <ModalWrapper>
-          <ModalContainer title="초대하기" label="이메일" buttonType="초대" onClose={closeModalFunc} onSubmit={handleOnSubmit} rules={rules} />
+          <ModalContainer title="초대하기" label="이메일" buttonType="초대" onClose={closeInvitationModalFunc} onSubmit={handleOnSubmit} rules={rules} />
+        </ModalWrapper>
+      )}
+
+      {isAlertModalOpen && (
+        <ModalWrapper>
+          <AlertModal type="invalid" onClick={closeAlertModalFunc} />
         </ModalWrapper>
       )}
     </>

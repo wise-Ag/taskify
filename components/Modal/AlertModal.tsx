@@ -4,7 +4,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 
 interface AlertProps {
-  type: "signupComplete" | "deleteColumn" | "confirm" | "cancel" | "passwordChangeComplete" | "profileChangeComplete";
+  type: "signupComplete" | "deleteColumn" | "confirm" | "cancel" | "passwordChangeComplete" | "profileChangeComplete" | "invalid";
   onClick?: () => void;
   onCancel?: () => void;
   onConfirm?: () => void;
@@ -20,6 +20,7 @@ const AlertModal = ({ type, onClick, onCancel, onConfirm }: AlertProps) => {
         {type === "cancel" && "요청이 취소됩니다."}
         {type === "passwordChangeComplete" && "비밀번호 변경이 완료되었습니다!"}
         {type === "profileChangeComplete" && "프로필 변경이 완료되었습니다!"}
+        {type === "invalid" && "존재하지 않는 유저입니다!"}
       </Contents>
       <ButtonWrapper>
         {type === "deleteColumn" || type === "confirm" ? (
