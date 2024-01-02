@@ -19,17 +19,20 @@ const MembersList = () => {
   const { boardid } = router.query;
 
   const fetchData = async () => {
-    const result = await getMembers({
-      dashboardId: Number(boardid),
-      token: localStorage.getItem("accessToken"),
-      size: PAGE_SIZE,
-      page: currentPage,
-    });
-    if (result) {
-      const { members, totalCount } = result;
-      setMembers(members);
-      setTotalCount(totalCount);
-      setTotalPageNum(Math.ceil(totalCount / PAGE_SIZE)); // 페이지 수 업데이트
+    if (!isNaN(Number(boardid))) {
+      const result = await getMembers({
+        dashboardId: Number(boardid),
+        token: localStorage.getItem("accessToken"),
+        size: PAGE_SIZE,
+        page: currentPage,
+      });
+
+      if (result !== null) {
+        const { members, totalCount } = result;
+        setMembers(members);
+        setTotalCount(totalCount);
+        setTotalPageNum(Math.ceil(totalCount / PAGE_SIZE)); // 페이지 수 업데이트
+      }
     }
   };
 
@@ -48,7 +51,8 @@ const MembersList = () => {
           <ButtonSet
             type="forwardAndBackward"
             // 페이지수가 1이면 button disabled로 설정
-            isDisabled={totalPageNum === 1}
+            isLeftDisabled={totalPageNum === 1}
+            isRightDisabled={totalPageNum === 1}
             onClickRight={() => handlePageChange(1)}
             onClickLeft={() => handlePageChange(-1)}
           />

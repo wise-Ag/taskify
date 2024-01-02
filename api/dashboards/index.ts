@@ -60,12 +60,7 @@ export const getDashboard = async ({ dashboardId, token }: GetDashboardProps): P
   }
 };
 
-export const getDashboardInvitations = async ({
-  dashboardId = "198",
-  size = 5,
-  page,
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzgsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzQ1NTAsImlzcyI6InNwLXRhc2tpZnkifQ.DEJkd2VERk0YaMWoRJzQ3cEdw8I7v_P3fpyqAaGeKK8",
-}: GetDashboardInvitationsProps): Promise<GetDashboardInvitationsData | null> => {
+export const getDashboardInvitations = async ({ dashboardId, size = 5, page, token }: GetDashboardInvitationsProps): Promise<GetDashboardInvitationsData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.DASHBOARDS.GET_INVITATION(dashboardId), {
       params: {
@@ -125,16 +120,11 @@ export const postDashboard = async ({ token, title, color }: PostDashboardProps)
   }
 };
 
-export const postDashboardInvitations = async ({
-  dashboardId = "198",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: PostDashboardInvitationsProps): Promise<Invitation | null> => {
+export const postDashboardInvitations = async ({ email, dashboardId, token }: PostDashboardInvitationsProps): Promise<Invitation | null> => {
   try {
     const res = await instance.post(
       ENDPOINTS.DASHBOARDS.POST_INVITATION(dashboardId),
-      {
-        email: "jieun2@codeit.com",
-      },
+      { email },
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -4,12 +4,13 @@ import TagInput from "@/components/Modal/ModalInput/TagInput";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
-import ImageUploadInput from "./ModalInput/ImageUploadInput";
-import React, { useState, useEffect } from "react";
+import ImageUploadInput from "@/components/Modal/ModalInput/ImageUploadInput";
+import { useState, useEffect } from "react";
 import { getCard } from "@/api/cards";
 import ModalInput from "./ModalInput/ModalInput";
 import { Card } from "@/api/cards/cards.types";
-import ContactDropdown from "./ModalInput/ContactDropdown";
+import ContactDropdown from "@/components/Modal/ModalInput/ContactDropdown";
+import StateDropdown from "@/components/Modal/ModalInput/StateDropdown";
 
 interface EditTaskModalProps {
   cardId: number;
@@ -17,7 +18,7 @@ interface EditTaskModalProps {
   onEdit?: () => void;
 }
 
-const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
+const EditTaskModal = ({ cardId, onCancel }: EditTaskModalProps) => {
   const [cardData, setCardData] = useState<Card | null>(null);
   const token = localStorage.getItem("accessToken");
 
@@ -25,7 +26,7 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
     const fetchCardData = async () => {
       const data = await getCard({ cardId, token });
       if (data) {
-        setCardData(data); // 여기에 데이터를 설정합니다.
+        setCardData(data);
       }
     };
 
@@ -44,17 +45,29 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
     setCardData({ ...cardData, description: e.target.value });
   };
 
+  const handleTagsChange = (newTags: string[]) => {
+    if (cardData) {
+      setCardData({ ...cardData, tags: newTags });
+    }
+  };
+
+  const handleEdit = () => {
+    console.log("수정된 카드 데이터:", cardData);
+    // 여기에 서버로 데이터를 보내는 코드를 추가...
+  };
+
   return (
     <Wrapper>
       <TodoTitle>할 일 수정</TodoTitle>
-      {/* <ContactDropdown members={membersData} /> */}
+      <StateDropdown dashboardId={cardData.dashboardId} defaultColumnId={cardData.columnId} />
+      <ContactDropdown dashboardId={cardData.dashboardId} assigneeProfileImageUrl={cardData.assignee.profileImageUrl} assigneeNickname={cardData.assignee.nickname} />
       <ModalInput label="제목" $inputType="제목" value={cardData.title} onChange={handleTitleChange} />
       <ModalInput $inputType="설명" label="설명" value={cardData.description} onChange={handleDescriptionChange} />
-      {/* <ModalInput $inputType="마감일" label="마감일" value={cardData.dueDate} onChange={handleDueDateChange} /> */}
-      <TagInput />
-      <ImageUploadInput type="modal" />
+      <ModalInput $inputType="마감일" label="마감일" value={cardData.dueDate} />
+      <TagInput initialTags={cardData.tags} onTagsChange={handleTagsChange} />
+      <ImageUploadInput type="modal" initialImageUrl={cardData.imageUrl} />
       <ButtonWrapper>
-        <ButtonSet type="modalSet" onClickLeft={onCancel} onClickRight={onEdit}>
+        <ButtonSet type="modalSet" onClickLeft={onCancel} onClickRight={handleEdit}>
           수정
         </ButtonSet>
       </ButtonWrapper>
@@ -72,7 +85,7 @@ const Wrapper = styled.div`
 
   display: flex;
   flex-direction: column;
-  gap: 3.2rem;
+  //gap: 3.2rem;
 
   background: var(--White);
 

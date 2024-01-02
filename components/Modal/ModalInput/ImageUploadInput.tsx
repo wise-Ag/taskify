@@ -1,16 +1,19 @@
-import React, { useState, ChangeEvent } from "react";
-import styled, { css } from "styled-components";
-import { DeviceSize } from "@/styles/DeviceSize";
 import AddIcon from "@/assets/icons/add-fillo.svg";
 import EditIcon from "@/assets/icons/edit.svg";
+import { cardImageAtom } from "@/states/atoms";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
+import { ChangeEvent, useState } from "react";
+import styled, { css } from "styled-components";
 
 interface ImageUploadInputProps {
   type: "modal" | "account";
+  initialImageUrl?: string;
 }
 
-const ImageUploadInput = ({ type, className }: ImageUploadInputProps & { className?: string }) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+const ImageUploadInput = ({ type, className, initialImageUrl }: ImageUploadInputProps & { className?: string }) => {
+  const [selectedImage, setSelectedImage] = useAtom(cardImageAtom);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(initialImageUrl ?? null);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -85,6 +88,7 @@ const HoverOverlay = styled.div`
   justify-content: center;
   align-items: center;
 
+  border-radius: 6px;
   position: absolute;
   top: 0;
   left: 0;
@@ -109,8 +113,8 @@ const ImageInputWrapper = styled.div<{ $previewUrl: string | null; type: "modal"
   justify-content: center;
   align-items: center;
 
-  background-color: var(--MainLight);
-  background-image: url(${(props) => props.previewUrl});
+  background-color: var(--White);
+  background-image: url(${(props) => props.$previewUrl});
   background-size: cover;
   background-position: center;
 

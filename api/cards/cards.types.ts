@@ -2,7 +2,7 @@ export interface Card {
   id: number;
   title: string;
   description: string;
-  tags: [string];
+  tags: string[];
   dueDate: string;
   assignee: {
     profileImageUrl?: string;
@@ -11,8 +11,8 @@ export interface Card {
   };
   imageUrl: string;
   teamId: string;
-  columnId: number;
   dashboardId: number;
+  columnId: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -36,13 +36,13 @@ export interface GetCardListProps {
 }
 
 export interface CardProps {
-  assigneeUserId: number;
+  assigneeUserId?: number;
   dashboardId: number;
   columnId: number;
   title: string;
   description: string;
   dueDate: string;
-  tags: [string];
+  tags: string[];
   imageUrl?: string;
   token: string | null;
 }

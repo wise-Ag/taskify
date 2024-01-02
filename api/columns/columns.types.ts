@@ -1,6 +1,7 @@
 export interface Columns {
   id: number;
   title: string;
+  dashboardId: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -37,6 +38,7 @@ export interface DeleteColumnsProps {
 }
 
 export interface PostCardImageProps {
-  columnId: string;
-  token: string;
+  formData: FormData;
+  columnId: number;
+  token: string | null;
 }

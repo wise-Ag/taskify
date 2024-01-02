@@ -19,7 +19,7 @@ export const ENDPOINTS = {
     GET: `/columns`,
     PUT: (columnId: number) => `/columns/${columnId}`,
     DELETE: (columnId: number) => `/columns/${columnId}`,
-    POST_CARDIMAGE: (columnId: string) => `/columns/${columnId}/card-image`,
+    POST_CARDIMAGE: (columnId: number) => `/columns/${columnId}/card-image`,
   },
 
   COMMENT: {
@@ -35,8 +35,8 @@ export const ENDPOINTS = {
     GET: (dashboardid: string) => `/dashboards/${dashboardid}`,
     PUT: (dashboardid: string) => `/dashboards/${dashboardid}`,
     DELETE: (dashboardid: string) => `/dashboards/${dashboardid}`,
-    POST_INVITATION: (dashboardid: string) => `/dashboards/${dashboardid}/invitations`,
-    GET_INVITATION: (dashboardid: string) => `/dashboards/${dashboardid}/invitations`,
+    POST_INVITATION: (dashboardid: number) => `/dashboards/${dashboardid}/invitations`,
+    GET_INVITATION: (dashboardid: number) => `/dashboards/${dashboardid}/invitations`,
     DELETE_INVITATION: (dashboardId: string, invitationId: string) => `/dashboards/${dashboardId}/invitations/${invitationId}`,
   },
 

@@ -45,7 +45,7 @@ const MyDashboardList = () => {
   };
 
   const handleAddModal = async (data: FormData) => {
-    const res = await postDashboard({ token: localStorage.getItem("accessToken"), title: data.newTitle, color: dashboardColor });
+    const res = await postDashboard({ token: localStorage.getItem("accessToken"), title: data.inputData, color: dashboardColor });
     setDashboardColor(`${DASHBOARD_COLOR[0]}`);
 
     if (res == null) {

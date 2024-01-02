@@ -1,3 +1,4 @@
+import { Columns } from "@/api/columns/columns.types";
 import CheckIcon from "@/assets/icons/check.svg";
 import ColumnName from "@/components/common/Chip/ColumnName";
 import { SetStateAction } from "jotai";
@@ -7,19 +8,15 @@ import styled from "styled-components";
 interface DropDownMenuProps {
   $isOpen: boolean;
   setStatus: Dispatch<SetStateAction<string>>;
+  columnData: Columns[];
 }
 
-const DropdownList = ({ $isOpen, setStatus }: DropDownMenuProps) => {
-  const columnData = [
-    { id: 0, status: "To Do" },
-    { id: 1, status: "On Progress" },
-    { id: 2, status: "Done" },
-  ];
-
+const DropdownList = ({ $isOpen, setStatus, columnData }: DropDownMenuProps) => {
   const [selectedId, setSelectedId] = useState(0);
-  const handleSelected = (id: number, stauts: string) => {
+
+  const handleSelected = (id: number, title: string) => {
     setSelectedId(id);
-    setStatus(stauts);
+    setStatus(title);
   };
 
   return (
@@ -29,8 +26,8 @@ const DropdownList = ({ $isOpen, setStatus }: DropDownMenuProps) => {
           {columnData.map((column) => (
             <ButtonWraper key={column.id}>
               {selectedId === column.id && <StyledCheckIcon alt="Check Icon" />}
-              <Button onClick={() => handleSelected(column.id, column.status)}>
-                <ColumnName status={column.status} />
+              <Button onClick={() => handleSelected(column.id, column.title)}>
+                <ColumnName status={column.title} />
               </Button>
             </ButtonWraper>
           ))}

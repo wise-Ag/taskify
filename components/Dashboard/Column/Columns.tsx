@@ -31,7 +31,7 @@ const Columns = () => {
   };
 
   const handleOnSubmit = async (data: FormData) => {
-    const res = await postColumns({ title: data.newTitle, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
+    const res = await postColumns({ title: data.inputData, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
     if (res == null) {
       alert("컬럼 생성에 실패했습니다.");
       closeModalFunc();
@@ -119,6 +119,3 @@ const ButtonWrapper = styled.div`
     bottom: 0;
   }
 `;
-function setError(arg0: string, arg1: { message: string }) {
-  throw new Error("Function not implemented.");
-}

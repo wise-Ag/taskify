@@ -1,12 +1,39 @@
 import DropdownButton from "@/assets/icons/arrow-drop-down.svg";
 import ColumnName from "@/components/common/Chip/ColumnName";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import DropdownList from "@/components/Modal/ModalInput/DropdownList";
+import { getColumns } from "@/api/columns";
+import { Columns } from "@/api/columns/columns.types";
 
-const Dropdown = () => {
+interface StateDropdownProps {
+  dashboardId: number;
+  defaultColumnId?: number;
+}
+
+const Dropdown = ({ dashboardId, defaultColumnId }: StateDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [status, setStatus] = useState("To Do");
+  const [status, setStatus] = useState("로딩 중");
+  const [columns, setColumns] = useState<Columns[]>([]);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const token = localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getColumns({ dashboardId, token });
+      if (data && data.result === "SUCCESS") {
+        setColumns(data.data);
+        // defaultColumnId와 일치하는 컬럼의 이름을 초기 상태로 설정
+        const defaultColumn = data.data.find((column) => column.id === defaultColumnId);
+        if (defaultColumn) {
+          setStatus(defaultColumn.title);
+        }
+      }
+    };
+
+    fetchData();
+  }, [dashboardId, token]);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
@@ -19,7 +46,7 @@ const Dropdown = () => {
         <ColumnName status={status} />
         <StyledDropdownButton alt="드롭다운 버튼" onClick={toggleDropdown} />
       </DropdownBox>
-      <DropdownList $isOpen={isOpen} setStatus={setStatus} />
+      <DropdownList $isOpen={isOpen} setStatus={setStatus} columnData={columns} />
     </Wrapper>
   );
 };

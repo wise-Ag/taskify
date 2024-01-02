@@ -1,16 +1,15 @@
-import Card from "@/components/Dashboard/Card/Card";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import ColumnHeader from "@/components/Dashboard/Column/ColumnHeader";
-import Button from "@/components/common/Buttons/Button";
-import { DeviceSize } from "@/styles/DeviceSize";
 import { getCardList } from "@/api/cards";
-import { Card as CardData } from "@/api/cards/cards.types";
-import TodoModal from "@/components/Modal/TodoModal";
-import { useModal } from "@/hooks/useModal";
+import Card from "@/components/Dashboard/Card/Card";
+import ColumnHeader from "@/components/Dashboard/Column/ColumnHeader";
+import AddTaskModal from "@/components/Modal/AddTaskModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
+import Button from "@/components/common/Buttons/Button";
+import { useModal } from "@/hooks/useModal";
+import { cardsAtom, columnTitleAtom } from "@/states/atoms";
+import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { cardsAtom } from "@/states/atoms";
+import { useEffect } from "react";
+import styled from "styled-components";
 
 interface ColumnProps {
   columnId: number;
@@ -28,7 +27,6 @@ const Column = ({ columnId, title }: ColumnProps) => {
   useEffect(() => {
     const loadCardList = async () => {
       const res = await getCardList({
-        size: 10,
         cursorId: null,
         columnId,
         token: localStorage.getItem("accessToken"),
@@ -59,11 +57,11 @@ const Column = ({ columnId, title }: ColumnProps) => {
         />
         {isModalOpen && (
           <ModalWrapper>
-            <TodoModal type="create" />
+            <AddTaskModal closeModalFunc={closeModalFunc} columnId={columnId} />
           </ModalWrapper>
         )}
         {columnCards.map((card) => (
-          <Card key={card.id} columnId={columnId} cardData={card} />
+          <Card key={card.id} columnId={columnId} cardData={card} columnTitle={title} />
         ))}
       </Container>
     </Wrapper>
