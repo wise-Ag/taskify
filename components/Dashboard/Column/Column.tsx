@@ -1,14 +1,15 @@
-import Card from "@/components/Dashboard/Card/Card";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import ColumnHeader from "@/components/Dashboard/Column/ColumnHeader";
-import Button from "@/components/common/Buttons/Button";
-import { DeviceSize } from "@/styles/DeviceSize";
 import { getCardList } from "@/api/cards";
-import { Card as CardData } from "@/api/cards/cards.types";
-import TodoModal from "@/components/Modal/TodoModal";
-import { useModal } from "@/hooks/useModal";
+import Card from "@/components/Dashboard/Card/Card";
+import ColumnHeader from "@/components/Dashboard/Column/ColumnHeader";
+import AddTaskModal from "@/components/Modal/AddTaskModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
+import Button from "@/components/common/Buttons/Button";
+import { useModal } from "@/hooks/useModal";
+import { cardsAtom } from "@/states/atoms";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
+import styled from "styled-components";
 
 interface ColumnProps {
   columnId: number;
@@ -16,7 +17,7 @@ interface ColumnProps {
 }
 
 const Column = ({ columnId, title }: ColumnProps) => {
-  const [cards, setCards] = useState<CardData[]>([]);
+  const [cards, setCards] = useAtom(cardsAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
 
   const handleCloseModal = () => {
@@ -32,17 +33,22 @@ const Column = ({ columnId, title }: ColumnProps) => {
         token: localStorage.getItem("accessToken"),
       });
 
-      if (res !== null) {
-        setCards(res?.cards);
+      if (res) {
+        setCards((prevCards) => ({
+          ...prevCards,
+          [columnId]: res.cards,
+        }));
       }
     };
 
     loadCardList();
   }, [columnId, isModalOpen]);
 
+  const columnCards = cards[columnId] || [];
+
   return (
     <Wrapper>
-      <ColumnHeader title={title} columnId={columnId} count={cards.length} />
+      <ColumnHeader title={title} columnId={columnId} count={columnCards.length} />
       <Container>
         <Button
           type="plus"
@@ -52,12 +58,12 @@ const Column = ({ columnId, title }: ColumnProps) => {
         />
         {isModalOpen && (
           <ModalWrapper>
-            <TodoModal type="create" />
+            <AddTaskModal closeModalFunc={closeModalFunc} columnId={columnId} />
           </ModalWrapper>
         )}
-        {cards.map((card) => {
-          return <Card key={card.id} cardData={card} />;
-        })}
+        {columnCards.map((card) => (
+          <Card key={card.id} columnId={columnId} cardData={card} />
+        ))}
       </Container>
     </Wrapper>
   );

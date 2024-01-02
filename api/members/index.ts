@@ -21,10 +21,7 @@ export const getMembers = async ({ dashboardId, size = 5, page, token }: GetMemb
   }
 };
 
-export const deleteMembers = async ({
-  memberId = "241",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
-}: DeleteMembersProps) => {
+export const deleteMembers = async ({ memberId, token }: DeleteMembersProps) => {
   try {
     const res = await instance.delete(ENDPOINTS.MEMBERS.DELETE(memberId), {
       headers: {

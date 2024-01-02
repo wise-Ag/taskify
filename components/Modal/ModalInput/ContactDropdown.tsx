@@ -1,44 +1,76 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import styled from "styled-components";
 import DropdownIcon from "@/assets/icons/arrow-drop-down.svg";
 import CheckIcon from "@/assets/icons/check.svg";
-
-interface Member {
-  id: number;
-  userId: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string;
-  createdAt: string;
-  updatedAt: string;
-  isOwner: boolean;
-}
+import { Z_INDEX } from "@/styles/ZindexStyles";
+import { Member } from "@/api/members/members.types";
+import { getMembers } from "@/api/members";
 
 interface ContactDropdownProps {
-  members: Member[];
+  dashboardId: number;
+  assigneeNickname?: string | null;
+  assigneeProfileImageUrl?: string | null;
+  onSelectMember: (userId: number) => void;
 }
 
-const ContactDropdown = ({ members }: ContactDropdownProps) => {
+const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUrl, onSelectMember }: ContactDropdownProps) => {
+  const [membersData, setMembersData] = useState<Member[]>([]);
   const [filter, setFilter] = useState("");
-  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
+  const [showList, setShowList] = useState(false);
+  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+  const token = localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const memberData = await getMembers({ dashboardId, token });
+        if (memberData) {
+          setMembersData(memberData.members);
+
+          if (assigneeNickname) {
+            const assignee = memberData.members.find((member) => member.nickname === assigneeNickname);
+            if (assignee) {
+              setSelectedMember(assignee);
+              setFilter(assigneeNickname); // 여기서 필터 상태를 업데이트
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch members", error);
+      }
+    };
+
+    fetchMembers();
+  }, [dashboardId, token]);
+
+  const toggleList = () => {
+    setShowList(!showList);
+    if (!showList) {
+      setFilteredMembers(membersData);
+    }
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
     setFilter(input);
-    setSelectedMember(null);
+    const matchedMembers = membersData.filter((membersData) => membersData.nickname.toLowerCase().includes(input.toLowerCase()));
+
+    setFilteredMembers(matchedMembers);
+
     if (input) {
-      const matchedMembers = members.filter((member) => member.nickname.toLowerCase().startsWith(input.toLowerCase()));
-      setFilteredMembers(matchedMembers);
+      setShowList(true);
     } else {
-      setFilteredMembers([]);
+      setSelectedMember(null);
+      setShowList(false);
     }
   };
 
-  const handleSelect = (member: Member) => {
-    setSelectedMember(member);
-    setFilter(member.nickname);
-    setFilteredMembers([]);
+  const handleSelect = (membersData: Member) => {
+    setSelectedMember(membersData);
+    setFilter(membersData.nickname);
+    setShowList(false);
+    onSelectMember(membersData.userId);
   };
 
   return (
@@ -49,21 +81,22 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
           {selectedMember && <SelectProfileIcon src={selectedMember.profileImageUrl} alt="Profile" />}
           <Input
             type="text"
-            value={selectedMember ? selectedMember.nickname : filter}
+            value={filter}
             onChange={handleChange}
             placeholder="이름을 입력해 주세요"
             style={{
               paddingLeft: selectedMember ? "4.5rem" : "1.6rem",
             }}
           />
+          <ArrowDownIcon onClick={toggleList} style={{ pointerEvents: "auto" }} />
         </InputContainer>
-        {filter && <ArrowDownIcon />}
-        {filteredMembers.length > 0 && (
+
+        {showList && (
           <List>
-            {filteredMembers.map((member) => (
-              <ListItem key={member.id} onClick={() => handleSelect(member)}>
-                <ProfileIcon src={member.profileImageUrl} alt="Profile" />
-                {member.nickname}
+            {filteredMembers.map((membersData) => (
+              <ListItem key={membersData.id} onClick={() => handleSelect(membersData)}>
+                <ProfileIcon src={membersData.profileImageUrl} alt="Profile" />
+                {membersData.nickname}
                 <CheckIconStyled />
               </ListItem>
             ))}
@@ -77,7 +110,7 @@ const ContactDropdown = ({ members }: ContactDropdownProps) => {
 export default ContactDropdown;
 
 const Text = styled.h3`
-  margin-bottom: 1rem;
+  margin-bottom: -2.2rem;
 
   color: var(--Black33);
   font-size: 1.8rem;
@@ -98,10 +131,6 @@ const InputContainer = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-
-  border-radius: 6px;
-  border: 1px solid var(--Grayd9);
-  background: var(--White);
 `;
 
 const SelectProfileIcon = styled.img`
@@ -132,6 +161,8 @@ const Input = styled.input`
   border: 1px solid var(--Grayd9);
   background: var(--White);
 
+  font-size: 1.6rem;
+
   &:focus {
     border: 1.4px solid var(--Main);
     outline: none;
@@ -156,6 +187,9 @@ const List = styled.ul`
   border: 1px solid var(--Grayd9);
   background: var(--White);
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
+
+  position: relative;
+  z-index: ${Z_INDEX.ContactDropdown_List};
 `;
 
 const ListItem = styled.li`

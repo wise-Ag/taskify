@@ -4,7 +4,7 @@ import LogoButton from "@/components/common/Buttons/LogoButton";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 import ArrowButton from "@/assets/icons/arrow-forward.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { getDashboardList } from "@/api/dashboards";
@@ -14,6 +14,10 @@ import { Dashboard } from "@/api/dashboards/dashboards.types";
 import { useModal } from "@/hooks/useModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import ModalContainer from "@/components/Modal/ModalContainer";
+import { useParams } from "next/navigation";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
+import { FaArrowUpWideShort } from "react-icons/fa6";
 
 interface DashboardProps {
   boardId: number;
@@ -23,9 +27,14 @@ interface DashboardProps {
   closePopup?: () => void;
 }
 
+const PAGE_SIZE = 10;
+
 const Dashboard = ({ color, title, createdByMe, boardId }: DashboardProps) => {
+  const param = useParams();
+  const isActive = boardId === Number(param.boardid);
+
   return (
-    <Container href={`/dashboard/${boardId}`}>
+    <Container href={`/dashboard/${boardId}`} $isActive={isActive}>
       <Color color={color} />
       <DashboardTitle>{title}</DashboardTitle>
       {createdByMe && <StyledCrown alt="왕관" />}
@@ -37,53 +46,84 @@ const SideMenu = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [cursorId, setCursorId] = useState(1);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
-  const [invitations] = useAtom(invitationsAtom); // 초대 목록!!
+  const [invitations, setInvitations] = useAtom(invitationsAtom); // 초대 목록!!
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const wrapperRef = useRef(null);
+
+  const scrollContainerRef = useRef(null);
+  const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
+
+  const handleClickOutside = (event: { target: string }) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      setIsPopupVisible(false);
+    }
+  };
 
   const togglePopup = () => {
     setIsPopupVisible((prev) => !prev);
   };
 
-  const closePopup = () => {
-    setIsPopupVisible(false);
+  const loadDashboards = async () => {
+    if (dashboards.length > 0 && cursorId == null) {
+      return;
+    }
+    setIsLoading(true);
+    const data = await getDashboardList({
+      cursorId,
+      size: PAGE_SIZE,
+      token: localStorage.getItem("accessToken"),
+      navigationMethod: "infiniteScroll",
+    });
+
+    if (data !== null) {
+      setDashboards([...data.dashboards]);
+      // setInvitations([data.dashboards]);
+      setCursorId(data.cursorId);
+      setIsLoading(false);
+    }
   };
 
-  const handleModalClose = () => {};
+  const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadDashboards });
 
   useEffect(() => {
-    const loadDashboardList = async () => {
-      const res = await getDashboardList({
-        token: localStorage.getItem("accessToken"),
-        navigationMethod: "infiniteScroll",
-      });
-      if (res && res.dashboards) {
-        setDashboards(...[res.dashboards]);
-      }
-    };
-    loadDashboardList();
-  }, [invitations]);
+    loadDashboards();
+  }, []);
 
   // useEffect(() => {
-  //   document.addEventListener("click", closePopup);
-  //   return () => {
-  //     document.removeEventListener("click", closePopup);
+  //   const loadDashboardList = async () => {
+  //     const res = await getDashboardList({
+  //       token: localStorage.getItem("accessToken"),
+  //       navigationMethod: "infiniteScroll",
+  //     });
+  //     if (res && res.dashboards) {
+  //       setDashboards(...[res.dashboards]);
+  //     }
   //   };
-  // });
+  //   loadDashboardList();
+  // }, [invitations]);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
 
   return (
-    <Wrapper>
+    <Wrapper ref={wrapperRef}>
       <LogoButton />
       <StyledArrowButton onClick={togglePopup} $isPopupVisible={isPopupVisible} />
       {isPopupVisible && (
-        <Popup>
+        <Popup isPopupVisible={isPopupVisible}>
           <DashboardList>
-            {dashboards.map((dashboard, key) => {
-              return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
+            {dashboards.map((dashboard) => {
+              return <Dashboard key={dashboard.id} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
             })}
           </DashboardList>
         </Popup>
       )}
-      <HeaderWrapper>
+      <HeaderWrapper ref={scrollContainerRef}>
         <Title>Dash Boards</Title>
         <StyledAddButton
           alt="추가 버튼"
@@ -94,15 +134,24 @@ const SideMenu = () => {
           }}
         />
       </HeaderWrapper>
-      <DashboardList>
-        {dashboards.map((dashboard, key) => {
-          return <Dashboard key={key} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
+      <DashboardList ref={startRef}>
+        {dashboards.map((dashboard) => {
+          return <Dashboard key={dashboard.id} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
+          {
+            cursorId === dashboard.id && <div ref={targetRef} />;
+          }
         })}
       </DashboardList>
       {isModalOpen && (
         <ModalWrapper>
           <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} />
         </ModalWrapper>
+      )}
+      <div ref={endRef} />
+      {PAGE_SIZE < dashboards.length && (
+        <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
+          <ScrollNavigateIcon $isScrollingUp={isScrollingUp} />
+        </ScrollNavigateButton>
       )}
     </Wrapper>
   );
@@ -113,7 +162,6 @@ export default SideMenu;
 const Wrapper = styled.div`
   width: 30rem;
   height: 155rem;
-  /* height: 100vh; */
 
   padding: 2rem 1.2rem;
 
@@ -174,7 +222,7 @@ const StyledAddButton = styled(AddButton)`
 `;
 
 const DashboardList = styled.div`
-  width: 27.6rem;
+  width: 100%;
 
   margin-top: 1.8rem;
 
@@ -182,7 +230,6 @@ const DashboardList = styled.div`
   flex-direction: column;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    width: 13.4rem;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
@@ -192,7 +239,8 @@ const DashboardList = styled.div`
   }
 `;
 
-const Container = styled(Link)`
+const Container = styled(Link)<{ $isActive: boolean }>`
+  width: 100%;
   height: 4.5rem;
 
   padding-left: 1.2rem;
@@ -203,6 +251,7 @@ const Container = styled(Link)`
   flex-shrink: 0;
 
   border-radius: 0.4rem;
+  background: ${({ $isActive }) => ($isActive ? `var(--MainHover)` : "")};
 
   &:hover {
     background-color: var(--MainHover);
@@ -210,7 +259,7 @@ const Container = styled(Link)`
 
   @media (max-width: ${DeviceSize.tablet}) {
     height: 4.3rem;
-
+    width: 100%;
     padding-left: 1rem;
   }
 
@@ -239,13 +288,18 @@ const Color = styled.div<{ color: string }>`
 `;
 
 const DashboardTitle = styled.div`
+  width: 80%;
   margin-right: 0.6rem;
 
   color: var(--Gray78);
   font-size: 1.8rem;
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
 
   @media (max-width: ${DeviceSize.tablet}) {
+    width: 55%;
     font-size: 1.6rem;
   }
 
@@ -278,6 +332,7 @@ const StyledArrowButton = styled(ArrowButton)<{ $isPopupVisible: boolean }>`
 `;
 
 const Popup = styled.div`
+  padding: 0.5rem;
   display: none;
 
   position: absolute;
@@ -294,9 +349,11 @@ const Popup = styled.div`
 
   @media (max-width: ${DeviceSize.mobile}) {
     display: block;
+    opacity: ${({ isPopupVisible }) => (isPopupVisible ? 1 : 0)};
+    transition: opacity 0.3s ease;
 
     ${DashboardList} {
-      width: 13.4rem;
+      width: 18rem;
 
       margin: 0.8rem 0;
     }
@@ -324,4 +381,32 @@ const Popup = styled.div`
       display: block;
     }
   }
+`;
+
+const ScrollNavigateButton = styled.div`
+  position: sticky;
+  bottom: 0;
+  left: 100rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 4rem;
+  height: 4rem;
+
+  border-radius: 1.5rem;
+
+  cursor: pointer;
+
+  background-color: var(--MainHover);
+`;
+
+const ScrollNavigateIcon = styled(FaArrowUpWideShort)<{ $isScrollingUp: boolean }>`
+  width: 2.5rem;
+  height: 2.5rem;
+
+  ${(props) => props.$isScrollingUp && " transform: scaleY(-1)"};
+
+  fill: var(--Main);
 `;

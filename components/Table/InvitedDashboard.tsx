@@ -1,5 +1,4 @@
 import { getInvitations, putInvitations } from "@/api/invitations";
-import { Invitation } from "@/api/invitations/invitations.types";
 import NoInvitation from "@/components/Table/NoInvite";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
@@ -16,13 +15,12 @@ const PAGE_SIZE = 6;
 const InvitedDashboard = () => {
   const tableTitles = ["이름", "초대자", "수락 여부"];
   const [invitations, setInvitations] = useAtom(invitationsAtom);
-  const [invitationData, setInvitationData] = useState<Invitation[]>([]);
   const [cursorId, setCursorId] = useState<number | null>(null);
   const scrollContainerRef = useRef(null);
   const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
 
   const loadInvitations = async () => {
-    if (invitationData.length > 0 && cursorId == null) {
+    if (invitations.length > 0 && cursorId == null) {
       return;
     }
     setIsLoading(true);
@@ -33,8 +31,7 @@ const InvitedDashboard = () => {
     });
 
     if (data && data.invitations) {
-      setInvitationData((prev) => [...prev, ...data.invitations]);
-      setInvitations(invitationData);
+      setInvitations((prev) => [...prev, ...data.invitations]);
       setCursorId(data.cursorId);
       setIsLoading(false);
     }
@@ -49,8 +46,7 @@ const InvitedDashboard = () => {
       inviteAccepted: accept,
     });
     if (updatedInvitation) {
-      setInvitationData([...invitationData.filter((v) => v.id !== invitationId)]);
-      setInvitations([...invitationData]);
+      setInvitations([...invitations.filter((v) => v.id !== invitationId)]);
     }
   };
 
@@ -60,7 +56,7 @@ const InvitedDashboard = () => {
 
   return (
     <>
-      {invitationData.length > 0 ? (
+      {invitations.length > 0 ? (
         <Container ref={scrollContainerRef}>
           <Title ref={startRef}>초대받은 대시보드</Title>
           <Header>
@@ -68,8 +64,9 @@ const InvitedDashboard = () => {
               <TableTitle key={title}>{title}</TableTitle>
             ))}
           </Header>
-          {invitationData.map((invitation) => (
+          {invitations.map((invitation) => (
             <InvitationItem key={invitation.id}>
+              {cursorId === invitation.id && <div ref={targetRef} />}
               <Info>
                 <MobileTableTitle>이름</MobileTableTitle>
                 <TableBody>{invitation.dashboard.title}</TableBody>
@@ -87,9 +84,8 @@ const InvitedDashboard = () => {
               </Info>
             </InvitationItem>
           ))}
-          <div ref={targetRef} />
           <div ref={endRef} />
-          {PAGE_SIZE < invitationData.length && (
+          {PAGE_SIZE < invitations.length && (
             <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
               <ScrollNavigateIcon $isScrollingUp={isScrollingUp} />
             </ScrollNavigateButton>

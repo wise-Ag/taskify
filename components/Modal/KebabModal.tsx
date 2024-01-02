@@ -14,6 +14,7 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
   const [columns, setColumns] = useAtom(columnsAtom);
   const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModalFunc, closeModalFunc: closeEditModalFunc } = useModal();
+  const token = localStorage.getItem("accessToken");
 
   const isTitleExist = (titleToCheck: string) => {
     return columns.some((column) => column.title === titleToCheck);
@@ -33,13 +34,14 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
       closeEditModalFunc();
       return;
     }
+    
     const newUpdatedAt = new Date();
     setColumns(columns.map((v) => (v.id == columnId ? { title: data.inputData, id: v.id, createdAt: v.createdAt, updatedAt: newUpdatedAt.toISOString() } : v)));
     closeEditModalFunc();
   };
 
   const handleDeleteColumn = async () => {
-    await deleteColumns({ columnId, token: localStorage.getItem("accessToken") });
+    await deleteColumns({ columnId, token });
     setColumns([...columns.filter((v) => v.id !== columnId)]);
     closeDeleteModalFunc();
   };

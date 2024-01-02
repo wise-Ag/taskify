@@ -22,9 +22,21 @@ const Tags = ({ handleOnClick, tagValue }: TagsProps) => {
   );
 };
 
-const TagInput = () => {
+interface TagInputProps {
+  initialTags?: string[]; // 여기에 initialTags prop의 타입을 추가
+  onTagsChange?: (tags: string[]) => void;
+}
+
+const TagInput = ({ initialTags = [], onTagsChange }: TagInputProps) => {
   const [inputValue, setInputValue] = useState("");
-  const [tagValue, setTagValue] = useState<string[]>([]);
+  const [tagValue, setTagValue] = useState<string[]>(initialTags);
+
+  const updateTags = (newTags: string[]) => {
+    setTagValue(newTags);
+    if (onTagsChange) {
+      onTagsChange(newTags);
+    }
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
@@ -34,6 +46,7 @@ const TagInput = () => {
     const target = event.target as HTMLElement; // HTMLElement로 타입 단언
     const tagText = target.textContent; // 이제 textContent 사용 가능
     setTagValue((prev) => prev.filter((v) => v !== tagText));
+    updateTags(tagValue.filter((v) => v !== tagText));
   };
 
   const handlePressEnter = (event: React.KeyboardEvent) => {
@@ -42,6 +55,8 @@ const TagInput = () => {
     if (!inputValue) return;
     if (tagValue.filter((v) => v == inputValue).length === 0) setTagValue((prev) => [...prev, inputValue]);
     setInputValue(() => "");
+    updateTags([...tagValue, inputValue]);
+    setInputValue("");
   };
 
   return (
