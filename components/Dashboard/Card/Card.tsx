@@ -21,7 +21,7 @@ const Card = ({ cardData, columnId, columnTitle }: { cardData: Card; columnId: n
       >
         {cardData.imageUrl && <CardImage $cardimage={cardData.imageUrl || null} />}
         <Title $imageurl={cardData.imageUrl}>{cardData.title}</Title>
-        {cardData.tags[0] && (
+        {cardData.tags.length > 0 && cardData.tags[0] && (
           <Tags>
             {cardData.tags.map((tag, idx) => {
               return <Tag key={idx} tag={tag} />;
