@@ -1,31 +1,67 @@
-import React, { useEffect } from "react";
-import { DeviceSize } from "@/styles/DeviceSize";
-import styled from "styled-components";
+import { getUsers, postProfileImage, putUsers } from "@/api/users";
+import AlertModal from "@/components/Modal/AlertModal";
 import ImageUploadInput from "@/components/Modal/ModalInput/ImageUploadInput";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Input from "@/components/Sign/SignInput/Input";
-import { useModal } from "@/hooks/useModal";
-import { Controller, useForm } from "react-hook-form";
 import { NICKNAME_RULES, PLACEHOLDER } from "@/constants/InputConstant";
-import { getUsers, putUsers } from "@/api/users";
-import ModalWrapper from "../Modal/ModalWrapper";
-import AlertModal from "../Modal/AlertModal";
+import { useModal } from "@/hooks/useModal";
+import { cardImageAtom } from "@/states/atoms";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import styled from "styled-components";
+
+interface ProfileFormData {
+  email: string;
+  nickname: string;
+}
 
 const AccountProfile = () => {
+  const [profileImage, setProfileImage] = useAtom(cardImageAtom);
+  const [token, setToken] = useState<string | null>(null);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const { control, handleSubmit, watch, setError, setValue, formState } = useForm({
     defaultValues: { email: "", nickname: "" },
     mode: "onBlur",
   });
+
   const handleCloseModal = () => {
     closeModalFunc();
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("accessToken");
+  const handleProfileSubmit = async (data: ProfileFormData) => {
+    let imageUrl = null;
 
-      if (token) {
-        const userData = await getUsers({ token });
+    if (profileImage) {
+      const formData = new FormData();
+      formData.append("image", profileImage);
+
+      const profileImageRes = await postProfileImage({ formData, token });
+      if (profileImageRes === null) {
+        alert("이미지 저장에 실패했습니다");
+        return;
+      }
+      imageUrl = profileImageRes.profileImageUrl;
+    }
+
+    const userUpdateRes = await putUsers({ nickname: data.nickname, profileImageUrl: imageUrl, token });
+    if (userUpdateRes !== null) {
+      openModalFunc();
+    } else {
+      // setError를 사용하여 오류 처리
+    }
+  };
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("accessToken");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+
+    const fetchUserData = async () => {
+      if (storedToken) {
+        const userData = await getUsers({ token: storedToken });
         if (userData) {
           setValue("email", userData.email);
           setValue("nickname", userData.nickname);
@@ -40,15 +76,7 @@ const AccountProfile = () => {
     <>
       <Wrapper>
         <Title>프로필</Title>
-        <StyledForm
-          onSubmit={handleSubmit(async (data) => {
-            const res = await putUsers({ nickname: data.nickname, token: localStorage.getItem("accessToken") });
-            if (res !== null) {
-              return openModalFunc();
-            }
-            // setError("currentPassword", { message: ERROR_MESSAGE.currentPasswordDifferent });
-          })}
-        >
+        <StyledForm onSubmit={handleSubmit(handleProfileSubmit)}>
           <Container>
             <StyledImageUploadInput type="account" />
             <InputWrapper>
@@ -63,7 +91,7 @@ const AccountProfile = () => {
               />
             </InputWrapper>
           </Container>
-          <SaveButton>저장</SaveButton>
+          <SaveButton type="submit">저장</SaveButton>
         </StyledForm>
       </Wrapper>
       {isModalOpen && (
