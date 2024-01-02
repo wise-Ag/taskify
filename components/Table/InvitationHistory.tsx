@@ -1,5 +1,8 @@
 import { deleteDashboardInvitations, getDashboardInvitations, postDashboardInvitations } from "@/api/dashboards";
 import { Invitation } from "@/api/invitations/invitations.types";
+import { getMembers } from "@/api/members";
+import { Member } from "@/api/members/members.types";
+import AlertModal from "@/components/Modal/AlertModal";
 import ModalContainer, { FormData } from "@/components/Modal/ModalContainer";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
@@ -10,35 +13,52 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import AlertModal from "../Modal/AlertModal";
 
 const PAGE_SIZE = 5;
 
-// interface InvitationHistoryProps {
-//   boardid: string;
-// }
-
 const InvitationHistory = () => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPageNum, setTotalPageNum] = useState(1);
+  const [selectedInvitationId, setSelectedInvitationId] = useState<number>(0);
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
   const { isModalOpen: isInvitaionModalOpen, openModalFunc: openInvitationModalFunc, closeModalFunc: closeInvitationModalFunc } = useModal();
   const { isModalOpen: isAlertModalOpen, openModalFunc: openAlertModalFunc, closeModalFunc: closeAlertModalFunc } = useModal();
   const { isModalOpen: isCancelModalOpen, openModalFunc: openCancelModalFunc, closeModalFunc: closeCancelModalFunc } = useModal();
   const router = useRouter();
   const { boardid } = router.query;
-  const [selectedInvitationId, setSelectedInvitationId] = useState<number>(0); // 추가된 부분
+
+  const isAlreadySent = (userToCheck: string) => {
+    return invitations.some((invitaion) => invitaion.invitee.email === userToCheck);
+  };
 
   const isUserExist = (userToCheck: string) => {
-    return invitations.some((invitaion) => invitaion.invitee.email === userToCheck);
+    return members.some((member) => member.email === userToCheck);
   };
 
   const rules = {
     required: "초대할 사람의 이메일을 입력해 주세요.",
-    validate: (v: string) => {
-      if (isUserExist(v)) return "이미 초대된 유저입니다!";
+    validate: (invitaion: string) => {
+      if (isAlreadySent(invitaion)) return "이미 초대 요청을 보낸 유저입니다!";
+      if (isUserExist(invitaion)) return "이미 초대된 유저입니다!";
     },
+  };
+
+  const getInvitedUsers = async () => {
+    if (!isNaN(Number(boardid))) {
+      const result = await getMembers({
+        dashboardId: Number(boardid),
+        token: localStorage.getItem("accessToken"),
+        size: PAGE_SIZE,
+        page: currentPage,
+      });
+
+      if (result !== null) {
+        const { members } = result;
+        setMembers(members);
+      }
+    }
   };
 
   const fetchData = async () => {
@@ -85,6 +105,7 @@ const InvitationHistory = () => {
   };
 
   useEffect(() => {
+    getInvitedUsers();
     fetchData();
   }, [currentPage, boardid, isInvitaionModalOpen]);
 
