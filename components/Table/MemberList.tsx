@@ -10,10 +10,6 @@ import styled from "styled-components";
 
 const PAGE_SIZE = 4; // 임의로 추가
 
-// interface MemberListProps {
-//   boardid: number;
-// }
-
 const MembersList = () => {
   const [members, setMembers] = useState<Member[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -21,7 +17,6 @@ const MembersList = () => {
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
   const router = useRouter();
   const { boardid } = router.query;
-  console.log(boardid);
 
   const fetchData = async () => {
     const result = await getMembers({
@@ -40,7 +35,7 @@ const MembersList = () => {
 
   useEffect(() => {
     fetchData();
-  }, [boardid]);
+  }, [currentPage, boardid]);
 
   return (
     <Container>
