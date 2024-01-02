@@ -18,6 +18,7 @@ import { useParams } from "next/navigation";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
 import { FaArrowUpWideShort } from "react-icons/fa6";
+import { useRouter } from "next/router";
 
 interface DashboardProps {
   boardId: number;
@@ -27,11 +28,13 @@ interface DashboardProps {
   closePopup?: () => void;
 }
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 2;
 
 const Dashboard = ({ color, title, createdByMe, boardId }: DashboardProps) => {
-  const param = useParams();
-  const isActive = boardId === Number(param.boardid);
+  // const param = useParams();
+  const router = useRouter();
+  const { boardid } = router.query;
+  const isActive = boardId === Number(boardid);
 
   return (
     <Container href={`/dashboard/${boardId}`} $isActive={isActive}>
@@ -44,7 +47,7 @@ const Dashboard = ({ color, title, createdByMe, boardId }: DashboardProps) => {
 
 const SideMenu = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [cursorId, setCursorId] = useState(1);
+  const [cursorId, setCursorId] = useState<number | null>(null);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [invitations, setInvitations] = useAtom(invitationsAtom); // 초대 목록!!
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
@@ -75,19 +78,20 @@ const SideMenu = () => {
       navigationMethod: "infiniteScroll",
     });
 
-    if (data !== null) {
-      setDashboards([...data.dashboards]);
+    if (data) {
+      setDashboards((prev) => [...prev, ...data.dashboards]);
       // setInvitations([data.dashboards]);
       setCursorId(data.cursorId);
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadDashboards });
 
   useEffect(() => {
+    console.log(cursorId);
     loadDashboards();
-  }, []);
+  }, [cursorId]);
 
   // useEffect(() => {
   //   const loadDashboardList = async () => {
@@ -111,11 +115,11 @@ const SideMenu = () => {
   }, [wrapperRef]);
 
   return (
-    <Wrapper ref={wrapperRef}>
+    <Wrapper>
       <LogoButton />
       <StyledArrowButton onClick={togglePopup} $isPopupVisible={isPopupVisible} />
       {isPopupVisible && (
-        <Popup isPopupVisible={isPopupVisible}>
+        <Popup $isPopupVisible={isPopupVisible}>
           <DashboardList>
             {dashboards.map((dashboard) => {
               return <Dashboard key={dashboard.id} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
@@ -123,7 +127,7 @@ const SideMenu = () => {
           </DashboardList>
         </Popup>
       )}
-      <HeaderWrapper ref={scrollContainerRef}>
+      <HeaderWrapper>
         <Title>Dash Boards</Title>
         <StyledAddButton
           alt="추가 버튼"
@@ -134,12 +138,14 @@ const SideMenu = () => {
           }}
         />
       </HeaderWrapper>
-      <DashboardList ref={startRef}>
+      <DashboardList>
         {dashboards.map((dashboard) => {
-          return <Dashboard key={dashboard.id} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
-          {
-            cursorId === dashboard.id && <div ref={targetRef} />;
-          }
+          return (
+            <div key={dashboard.id}>
+              <Dashboard color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />
+              {cursorId == dashboard.id && <div ref={targetRef}>얍뽕짠</div>}
+            </div>
+          );
         })}
       </DashboardList>
       {isModalOpen && (
@@ -223,6 +229,9 @@ const StyledAddButton = styled(AddButton)`
 
 const DashboardList = styled.div`
   width: 100%;
+  height: 10rem;
+
+  overflow: auto;
 
   margin-top: 1.8rem;
 
@@ -331,7 +340,7 @@ const StyledArrowButton = styled(ArrowButton)<{ $isPopupVisible: boolean }>`
   }
 `;
 
-const Popup = styled.div`
+const Popup = styled.div<{ $isPopupVisible: boolean }>`
   padding: 0.5rem;
   display: none;
 
@@ -349,7 +358,7 @@ const Popup = styled.div`
 
   @media (max-width: ${DeviceSize.mobile}) {
     display: block;
-    opacity: ${({ isPopupVisible }) => (isPopupVisible ? 1 : 0)};
+    opacity: ${({ $isPopupVisible }) => ($isPopupVisible ? 1 : 0)};
     transition: opacity 0.3s ease;
 
     ${DashboardList} {

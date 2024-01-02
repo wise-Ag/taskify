@@ -46,7 +46,7 @@ export interface GetDashboardInvitationsProps {
 
 export interface GetDashboardListProps {
   navigationMethod: string;
-  cursorId?: number;
+  cursorId?: number | null;
   page?: number;
   size?: number;
   token: string | null;

@@ -6,11 +6,17 @@ import { columnsAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 import ModalContainer, { FormData } from "./ModalContainer";
 
-const KebabModal = ({ columnId }: { columnId: number }) => {
+interface KebabModalProps {
+  columnId: number;
+  setIsClicked: Dispatch<SetStateAction<boolean>>;
+  handleClick?: () => void;
+}
+
+const KebabModal = ({ columnId, setIsClicked, handleClick }: KebabModalProps) => {
   const [columns, setColumns] = useAtom(columnsAtom);
   const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModalFunc, closeModalFunc: closeEditModalFunc } = useModal();
@@ -34,7 +40,7 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
       closeEditModalFunc();
       return;
     }
-    
+
     const newUpdatedAt = new Date();
     setColumns(columns.map((v) => (v.id == columnId ? { title: data.inputData, id: v.id, createdAt: v.createdAt, updatedAt: newUpdatedAt.toISOString() } : v)));
     closeEditModalFunc();
@@ -64,22 +70,24 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
   }, [closeDeleteModalFunc, closeEditModalFunc]);
 
   return (
-    <Wrapper>
-      <KebabListWrapper>
-        <KebabList onClick={openEditModalFunc}>수정하기</KebabList>
-        <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
-        {isEditModalOpen && (
-          <ModalWrapper>
-            <ModalContainer title="컬럼 관리" label="컬럼 이름" buttonType="변경" onClose={closeEditModalFunc} onSubmit={handleChangeColumnName} rules={rules} />
-          </ModalWrapper>
-        )}
-        {isDeleteModalOpen && (
-          <ModalWrapper>
-            <AlertModal type="deleteColumn" onCancel={closeDeleteModalFunc} onConfirm={handleDeleteColumn} />
-          </ModalWrapper>
-        )}
-      </KebabListWrapper>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <KebabListWrapper onBlur={() => setIsClicked} tabIndex={0}>
+          <KebabList onClick={openEditModalFunc}>수정하기</KebabList>
+          <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
+        </KebabListWrapper>
+      </Wrapper>
+      {isEditModalOpen && (
+        <ModalWrapper>
+          <ModalContainer title="컬럼 관리" label="컬럼 이름" buttonType="변경" onClose={closeEditModalFunc} onSubmit={handleChangeColumnName} rules={rules} />
+        </ModalWrapper>
+      )}
+      {isDeleteModalOpen && (
+        <ModalWrapper>
+          <AlertModal type="deleteColumn" onCancel={closeDeleteModalFunc} onConfirm={handleDeleteColumn} />
+        </ModalWrapper>
+      )}
+    </>
   );
 };
 
