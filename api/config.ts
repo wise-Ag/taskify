@@ -35,8 +35,8 @@ export const ENDPOINTS = {
     GET: (dashboardid: string) => `/dashboards/${dashboardid}`,
     PUT: (dashboardid: string) => `/dashboards/${dashboardid}`,
     DELETE: (dashboardid: string) => `/dashboards/${dashboardid}`,
-    POST_INVITATION: (dashboardid: string) => `/dashboards/${dashboardid}/invitations`,
-    GET_INVITATION: (dashboardid: string) => `/dashboards/${dashboardid}/invitations`,
+    POST_INVITATION: (dashboardid: number) => `/dashboards/${dashboardid}/invitations`,
+    GET_INVITATION: (dashboardid: number) => `/dashboards/${dashboardid}/invitations`,
     DELETE_INVITATION: (dashboardId: string, invitationId: string) => `/dashboards/${dashboardId}/invitations/${invitationId}`,
   },
 

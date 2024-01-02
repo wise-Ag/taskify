@@ -28,13 +28,15 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
   };
 
   const handleChangeColumnName = async (data: FormData) => {
-    const res = await putColumns({ title: data.newTitle, columnId: columnId, token });
+    const res = await putColumns({ title: data.inputData, columnId: columnId, token: localStorage.getItem("accessToken") });
     if (res == null) {
       alert("컬럼 이름 변경에 실패했습니다.");
       closeEditModalFunc();
       return;
     }
-    setColumns(columns.map((v) => (v.id == columnId ? res : v)));
+    
+    const newUpdatedAt = new Date();
+    setColumns(columns.map((v) => (v.id == columnId ? { title: data.inputData, id: v.id, createdAt: v.createdAt, updatedAt: newUpdatedAt.toISOString() } : v)));
     closeEditModalFunc();
   };
 

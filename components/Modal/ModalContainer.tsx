@@ -6,9 +6,9 @@ import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
 interface ModalProps {
-  title: "새 컬럼 생성" | "컬럼 관리" | "새로운 대시보드";
-  label: "이름" | "대시보드 이름" | "컬럼 이름";
-  buttonType: "생성" | "변경";
+  title: "새 컬럼 생성" | "컬럼 관리" | "새로운 대시보드" | "초대하기";
+  label: "이름" | "대시보드 이름" | "컬럼 이름" | "이메일";
+  buttonType: "생성" | "변경" | "초대";
   boardid?: number;
   columnId?: number;
   onClose?: () => void;
@@ -18,12 +18,12 @@ interface ModalProps {
 }
 
 export interface FormData {
-  newTitle: string;
+  inputData: string;
 }
 
 const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, rules }: ModalProps) => {
   const { control, handleSubmit, formState } = useForm({
-    defaultValues: { newTitle: "" },
+    defaultValues: { inputData: "" },
     mode: "onBlur",
   });
 
@@ -34,7 +34,7 @@ const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, ru
         <InputWrapper>
           <Controller
             control={control}
-            name="newTitle"
+            name="inputData"
             rules={rules}
             render={({ field, fieldState }) => (
               <Input label={label} {...field} placeholder={`${label}을 입력하세요`} hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
