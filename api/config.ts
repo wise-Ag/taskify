@@ -47,7 +47,7 @@ export const ENDPOINTS = {
 
   MEMBERS: {
     GET: `/members`,
-    DELETE: (memberId: string) => `/members/${memberId}`,
+    DELETE: (memberId: number) => `/members/${memberId}`,
   },
 
   USERS: {
