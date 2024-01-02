@@ -1,20 +1,28 @@
-import { getMembers } from "@/api/members";
+import { deleteMembers, getMembers } from "@/api/members";
 import { Member } from "@/api/members/members.types";
+import AlertModal from "@/components/Modal/AlertModal";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { useModal } from "@/hooks/useModal";
 import { usePagination } from "@/hooks/usePagination";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import NoProfileImage from "../common/NoProfileImage/ProfileImage";
+import { getUsers } from "@/api/users";
+import { UserData } from "@/api/users/users.types";
 
-const PAGE_SIZE = 4; // 임의로 추가
+const PAGE_SIZE = 4;
 
 const MembersList = () => {
   const [members, setMembers] = useState<Member[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPageNum, setTotalPageNum] = useState(1);
+  const [selectedMemberId, setSelectedMemberId] = useState(0);
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
+  const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const router = useRouter();
   const { boardid } = router.query;
 
@@ -36,39 +44,65 @@ const MembersList = () => {
     }
   };
 
+  const handleOnCancel = async (memberId: number) => {
+    await deleteMembers({ memberId: memberId, token: localStorage.getItem("accessToken") });
+
+    setMembers([...members.filter((v) => v.id !== memberId)]);
+    closeModalFunc();
+  };
+
+  const handleDeleteButtonClick = (memberId: number) => {
+    setSelectedMemberId(memberId);
+    openModalFunc();
+  };
+
   useEffect(() => {
     fetchData();
   }, [currentPage, boardid]);
 
   return (
-    <Container>
-      <Header>
-        <Title>구성원</Title>
-        <PageInfo>
-          <PageText>
-            {totalPageNum} 페이지 중 {currentPage}
-          </PageText>
-          <ButtonSet
-            type="forwardAndBackward"
-            // 페이지수가 1이면 button disabled로 설정
-            isLeftDisabled={totalPageNum === 1}
-            isRightDisabled={totalPageNum === 1}
-            onClickRight={() => handlePageChange(1)}
-            onClickLeft={() => handlePageChange(-1)}
-          />
-        </PageInfo>
-      </Header>
-      <NameList>{totalCount === 0 ? "멤버가 없습니다" : "이름"}</NameList>
-      {members.map((member) => (
-        <MemberItem key={member.id}>
-          <MemberInfo>
-            <Profile src={member.profileImageUrl} alt={member.nickname} />
-            <Name>{member.nickname}</Name>
-          </MemberInfo>
-          <Button type="delete" children="삭제" />
-        </MemberItem>
-      ))}
-    </Container>
+    <>
+      <Container>
+        <Header>
+          <Title>구성원</Title>
+          <PageInfo>
+            <PageText>
+              {totalPageNum} 페이지 중 {currentPage}
+            </PageText>
+            <ButtonSet
+              type="forwardAndBackward"
+              // 페이지수가 1이면 button disabled로 설정
+              isLeftDisabled={totalPageNum === 1}
+              isRightDisabled={totalPageNum === 1}
+              onClickRight={() => handlePageChange(1)}
+              onClickLeft={() => handlePageChange(-1)}
+            />
+          </PageInfo>
+        </Header>
+        <NameList>{totalCount === 0 ? "멤버가 없습니다" : "이름"}</NameList>
+        {members.map((member) => (
+          <MemberItem key={member.id}>
+            <MemberInfo>
+              {member.profileImageUrl ? (
+              <Profile $url={member.profileImageUrl} />
+            ) : (
+              <NoProfileImageWrapper>
+                <NoProfileImage id={member.userId} nickname={member.nickname} />
+              </NoProfileImageWrapper>
+            )}
+              <Name>{member.nickname}</Name>
+            </MemberInfo>
+            {!member.isOwner && <Button type="delete" children="삭제" onClick={() => handleDeleteButtonClick(member.id)} />}
+          </MemberItem>
+        ))}
+      </Container>
+
+      {isModalOpen && (
+        <ModalWrapper>
+          <AlertModal type="confirm" onCancel={closeModalFunc} onConfirm={() => handleOnCancel(selectedMemberId)} />
+        </ModalWrapper>
+      )}
+    </>
   );
 };
 
@@ -181,7 +215,7 @@ const MemberInfo = styled.div`
   flex-grow: 1;
 `;
 
-const Profile = styled.img`
+const Profile = styled.div<{ $url: string }>`
   width: 3.8rem;
   height: 3.8rem;
 
@@ -190,6 +224,8 @@ const Profile = styled.img`
   border-radius: 50%;
 
   object-fit: cover;
+  background-image: url(${(props) => props.$url});
+  background-size: cover;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 3.4rem;
@@ -198,7 +234,23 @@ const Profile = styled.img`
     margin-right: 0.8rem;
   }
 `;
+const NoProfileImageWrapper = styled.div`
+  width: 3.8rem;
 
+  line-height: 3.8rem;
+  font-size: 1.5rem;
+
+  margin-right: 1.2rem;
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    width: 3.4rem;
+
+    line-height: 3.4rem;
+    font-size: 1.3rem;
+
+    margin-right: 0.8rem;
+  }
+`;
 const Name = styled.div`
   color: var(--Black33);
   font-size: 1.6rem;

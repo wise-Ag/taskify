@@ -2,16 +2,23 @@ import { deleteColumns, putColumns } from "@/api/columns";
 import AlertModal from "@/components/Modal/AlertModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import { useModal } from "@/hooks/useModal";
-import { columnsAtom } from "@/states/atoms";
+import { columnsAtom, totalColumnsAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
 import ModalContainer, { FormData } from "./ModalContainer";
 
-const KebabModal = ({ columnId }: { columnId: number }) => {
+interface KebabModalProps {
+  columnId: number;
+  setIsClicked: Dispatch<SetStateAction<boolean>>;
+  handleClick?: () => void;
+}
+
+const KebabModal = ({ columnId, setIsClicked, handleClick }: KebabModalProps) => {
   const [columns, setColumns] = useAtom(columnsAtom);
+  const [totalColumns, setTotalColumns] = useAtom(totalColumnsAtom);
   const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModalFunc, closeModalFunc: closeEditModalFunc } = useModal();
   const token = localStorage.getItem("accessToken");
@@ -34,15 +41,15 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
       closeEditModalFunc();
       return;
     }
-    
-    const newUpdatedAt = new Date();
-    setColumns(columns.map((v) => (v.id == columnId ? { title: data.inputData, id: v.id, createdAt: v.createdAt, updatedAt: newUpdatedAt.toISOString() } : v)));
+
+    setColumns(columns.map((v) => (v.id == columnId ? res : v)));
     closeEditModalFunc();
   };
 
   const handleDeleteColumn = async () => {
     await deleteColumns({ columnId, token });
     setColumns([...columns.filter((v) => v.id !== columnId)]);
+    setTotalColumns(totalColumns - 1);
     closeDeleteModalFunc();
   };
 
@@ -64,22 +71,24 @@ const KebabModal = ({ columnId }: { columnId: number }) => {
   }, [closeDeleteModalFunc, closeEditModalFunc]);
 
   return (
-    <Wrapper>
-      <KebabListWrapper>
-        <KebabList onClick={openEditModalFunc}>수정하기</KebabList>
-        <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
-        {isEditModalOpen && (
-          <ModalWrapper>
-            <ModalContainer title="컬럼 관리" label="컬럼 이름" buttonType="변경" onClose={closeEditModalFunc} onSubmit={handleChangeColumnName} rules={rules} />
-          </ModalWrapper>
-        )}
-        {isDeleteModalOpen && (
-          <ModalWrapper>
-            <AlertModal type="deleteColumn" onCancel={closeDeleteModalFunc} onConfirm={handleDeleteColumn} />
-          </ModalWrapper>
-        )}
-      </KebabListWrapper>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <KebabListWrapper onBlur={() => setIsClicked} tabIndex={0}>
+          <KebabList onClick={openEditModalFunc}>수정하기</KebabList>
+          <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
+        </KebabListWrapper>
+      </Wrapper>
+      {isEditModalOpen && (
+        <ModalWrapper>
+          <ModalContainer title="컬럼 관리" label="컬럼 이름" buttonType="변경" onClose={closeEditModalFunc} onSubmit={handleChangeColumnName} rules={rules} />
+        </ModalWrapper>
+      )}
+      {isDeleteModalOpen && (
+        <ModalWrapper>
+          <AlertModal type="deleteColumn" onCancel={closeDeleteModalFunc} onConfirm={handleDeleteColumn} />
+        </ModalWrapper>
+      )}
+    </>
   );
 };
 
@@ -89,6 +98,7 @@ const Wrapper = styled.div`
   position: absolute;
   width: 9.3rem;
   height: 8.2rem;
+  left: -7rem;
 
   padding: 0.6rem;
 

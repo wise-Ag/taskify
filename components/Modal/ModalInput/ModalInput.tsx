@@ -93,19 +93,25 @@ export default ModalInput;
 const CustomDatePicker = () => {
   const [dates, setDates] = useState<Dayjs | null>(null);
   const [dueDate, setDueDate] = useAtom(dueDateAtom);
+  const [isError, setIsError] = useState(false);
 
   const handleDateChange = (newVal: Dayjs | null) => {
     setDates(newVal);
+
     if (newVal) {
       const formattedDate = newVal.format("YYYY-MM-DD HH:mm");
       setDueDate(formattedDate);
+      if (formattedDate !== "Invalid Date") setIsError(false);
     } else {
       setDueDate("");
     }
   };
 
+  const handleOnblur = () => {
+    dueDate == "Invalid Date" ? setIsError(true) : setIsError(false);
+  };
   return (
-    <DatePickerWrapper>
+    <DatePickerWrapper onBlur={handleOnblur}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateTimePicker
           sx={{
@@ -133,6 +139,7 @@ const CustomDatePicker = () => {
           slotProps={{ textField: { placeholder: "날짜를 입력해 주세요." } }}
         />
       </LocalizationProvider>
+      {isError && <Error>마감일이 형식에 맞지 않습니다.</Error>}
     </DatePickerWrapper>
   );
 };
@@ -236,4 +243,10 @@ const StyledInput = styled.input<InputAreaProps>`
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.4rem;
   }
+`;
+const Error = styled.span`
+  padding-top: 1rem;
+
+  font-size: 1.5rem;
+  color: red;
 `;

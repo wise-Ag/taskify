@@ -37,6 +37,16 @@ const ImageUploadInput = ({ type, className, initialImageUrl }: ImageUploadInput
           <StyledEditIcon />
         </HoverOverlay>
       </ImageInputWrapper>
+      {previewUrl && (
+        <DeleteImage
+          onClick={() => {
+            setPreviewUrl(null);
+            setSelectedImage(null);
+          }}
+        >
+          삭제
+        </DeleteImage>
+      )}
     </InputBox>
   );
 };
@@ -130,4 +140,14 @@ const ImageInputWrapper = styled.div<{ $previewUrl: string | null; type: "modal"
   &:hover ${HoverOverlay} {
     display: ${(props) => (props.$previewUrl ? "flex" : "none")};
   }
+`;
+
+const DeleteImage = styled.span`
+  margin-top: 0.7rem;
+
+  cursor: pointer;
+
+  text-decoration: underline;
+  font-size: 1.6rem;
+  color: var(--Gray78);
 `;

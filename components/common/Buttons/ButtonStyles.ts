@@ -16,7 +16,7 @@ const TYPES = {
     &:disabled {
       border: none;
       background-color: var(--Gray9f);
-      cursor: not-allowed;
+      cursor: default;
     }
 
     @media (max-width: ${DeviceSize.mobile}) {
@@ -57,6 +57,11 @@ const TYPES = {
 
     font-size: 1.8rem;
     font-weight: 700;
+
+    &:disabled {
+      color: var(--Gray9f);
+      cursor: default;
+    }
 
     @media (max-width: ${DeviceSize.tablet}) {
       width: 54.4rem;

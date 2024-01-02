@@ -22,18 +22,18 @@ export interface GetDashboardInvitationsData {
 }
 
 export interface DeleteDashboardProps {
-  dashboardId: string;
-  token: string;
+  dashboardId: number;
+  token: string | null;
 }
 
 export interface DeleteDashboardInvitationsProps {
-  dashboardId: string;
-  invitationId: string;
-  token?: string;
+  dashboardId: number;
+  invitationId: number;
+  token: string | null;
 }
 
 export interface GetDashboardProps {
-  dashboardId: string;
+  dashboardId: number;
   token: string | null;
 }
 
@@ -46,7 +46,7 @@ export interface GetDashboardInvitationsProps {
 
 export interface GetDashboardListProps {
   navigationMethod: string;
-  cursorId?: number;
+  cursorId?: number | null;
   page?: number;
   size?: number;
   token: string | null;

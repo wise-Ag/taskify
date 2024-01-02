@@ -10,10 +10,13 @@ export const activeDropdownAtom = atom<string | null>(null);
 export const invitationsAtom = atom<Invitation[]>([]);
 
 export const columnsAtom = atom<Columns[]>([]);
+export const totalColumnsAtom = atom(0);
 
 export const dashboardColorAtom = atom<string>(`${DASHBOARD_COLOR[0]}`);
 
 export const cardsAtom = atom<{ [columnId: number]: Card[] }>({});
+
+export const cardsTotalCountAtom = atom<{ [columnId: number]: number }>({});
 
 export const commentScrollAtom = atom<boolean>(false);
 

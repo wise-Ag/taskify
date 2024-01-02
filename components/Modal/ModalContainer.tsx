@@ -2,12 +2,13 @@ import Input from "@/components/Sign/SignInput/Input";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import ColorSelector from "@/components/common/Chip/DashBoardColor";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { ChangeEvent, ChangeEventHandler, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
 interface ModalProps {
-  title: "새 컬럼 생성" | "컬럼 관리" | "새로운 대시보드" | "초대하기";
-  label: "이름" | "대시보드 이름" | "컬럼 이름" | "이메일";
+  title: string;
+  label: string;
   buttonType: "생성" | "변경" | "초대";
   boardid?: number;
   columnId?: number;
@@ -27,17 +28,38 @@ const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, ru
     mode: "onBlur",
   });
 
+  // const [inputValue, setInputValue] = useState("");
+
+  // const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+  //   setInputValue(event.target.value);
+  // };
+
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(() => {
+  //     onSubmit({ inputData: inputValue });
+  //   }, 1000);
+  //   return () => clearTimeout(timeoutId);
+  // }, [inputValue]);
+
   return (
     <Wrapper>
       <Title>{title}</Title>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <FormSection onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
           <Controller
             control={control}
             name="inputData"
             rules={rules}
             render={({ field, fieldState }) => (
-              <Input label={label} {...field} placeholder={`${label}을 입력하세요`} hasError={Boolean(fieldState.error)} errorText={fieldState.error?.message} />
+              <Input
+                label={label}
+                {...field}
+                placeholder={`${label}을 입력하세요`}
+                hasError={Boolean(fieldState.error)}
+                errorText={fieldState.error?.message}
+                // onChange={handleInputChange}
+                // value={inputValue}
+              />
             )}
           />
         </InputWrapper>
@@ -51,7 +73,7 @@ const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, ru
             {buttonType}
           </ButtonSet>
         </ButtonWrapper>
-      </form>
+      </FormSection>
     </Wrapper>
   );
 };
@@ -86,6 +108,10 @@ const Title = styled.div`
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 2rem;
   }
+`;
+
+const FormSection = styled.form`
+  width: 100%;
 `;
 
 const InputWrapper = styled.div`

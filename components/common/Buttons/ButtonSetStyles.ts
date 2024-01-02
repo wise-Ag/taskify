@@ -106,7 +106,6 @@ const TYPES = {
 
     &:disabled {
       border: none;
-      background-color: var(--Gray9f);
       cursor: default;
     }
 

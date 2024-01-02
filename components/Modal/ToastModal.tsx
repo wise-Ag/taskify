@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 function ToastModal() {
   return (
     <div>
-      <StyledContainer position="bottom-center" limit={1} closeButton={true} autoClose={4000} hideProgressBar />
+      <StyledContainer position="bottom-center" limit={1} closeButton={true} autoClose={3000} hideProgressBar />
     </div>
   );
 }

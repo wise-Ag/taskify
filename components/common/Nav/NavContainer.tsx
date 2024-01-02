@@ -1,4 +1,4 @@
-import Crown from "@/assets/icons/crown.svg";
+import CrownIcon from "@/assets/icons/crown.svg";
 import SettingButton from "@/components/common/Nav/DashboardButtons";
 import Profile from "@/components/common/Nav/Profile";
 import ProfileImages from "@/components/common/Nav/ProfileImages";
@@ -15,8 +15,8 @@ const NavContainer = ({ title, $isDashboard = false, createdByMe = false }: NavC
   return (
     <Wrapper>
       <Title>
+        {createdByMe && <StyledCrown alt="왕관" width={20} height={16} />}
         {title}
-        {createdByMe && <Crown alt="왕관" width={20} height={16} />}
       </Title>
       <Content>
         {createdByMe && <SettingButton />}
@@ -60,17 +60,28 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
+  width: 20rem;
+
   color: var(--Black33);
   font-size: 2rem;
   font-weight: 700;
 
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    text-overflow: clip;
+    overflow: auto;
+  }
 
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.8rem;
   }
+`;
+
+const StyledCrown = styled(CrownIcon)`
+  margin-right: 0.5rem; // 오른쪽 마진 추가
 `;
 
 const Content = styled.div`

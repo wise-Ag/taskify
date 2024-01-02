@@ -15,10 +15,7 @@ import {
 } from "@/api/dashboards/dashboards.types";
 import { Invitation } from "@/api/invitations/invitations.types";
 
-export const deleteDashboard = async ({
-  dashboardId = "193",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: DeleteDashboardProps) => {
+export const deleteDashboard = async ({ dashboardId, token }: DeleteDashboardProps) => {
   try {
     const res = await instance.delete(ENDPOINTS.DASHBOARDS.DELETE(dashboardId), {
       headers: {
@@ -30,13 +27,9 @@ export const deleteDashboard = async ({
   }
 };
 
-export const deleteDashboardInvitations = async ({
-  dashboardId = "198",
-  invitationId = "38",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzQ3MzEsImlzcyI6InNwLXRhc2tpZnkifQ.S8Lvf7DmFuMC3gMvNt1eJylk5oW0hFxHhbXAcQTDP2E",
-}: DeleteDashboardInvitationsProps) => {
+export const deleteDashboardInvitations = async ({ dashboardId, invitationId, token }: DeleteDashboardInvitationsProps) => {
   try {
-    const res = await instance.delete(ENDPOINTS.DASHBOARDS.DELETE_INVITATION(dashboardId, invitationId), {
+    await instance.delete(ENDPOINTS.DASHBOARDS.DELETE_INVITATION(dashboardId, invitationId), {
       headers: {
         Authorization: `Bearer ${token}`,
       },
