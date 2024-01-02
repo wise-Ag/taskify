@@ -141,7 +141,7 @@ const InvitationHistory = () => {
 
       {isCancelModalOpen && (
         <ModalWrapper>
-          <AlertModal type="cancel" onClick={() => handleOnCancel(selectedInvitationId)} />
+          <AlertModal type="cancel" onCancel={closeCancelModalFunc} onConfirm={() => handleOnCancel(selectedInvitationId)} />
         </ModalWrapper>
       )}
     </>

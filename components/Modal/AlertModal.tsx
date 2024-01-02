@@ -17,15 +17,15 @@ const AlertModal = ({ type, onClick, onCancel, onConfirm }: AlertProps) => {
         {type === "signupComplete" && "가입이 완료되었습니다!"}
         {type === "deleteColumn" && "칼럼을 삭제하시겠습니까?"}
         {type === "confirm" && "정말 삭제하시겠습니까?"}
-        {type === "cancel" && "요청이 취소됩니다."}
+        {type === "cancel" && "초대 요청을 취소하시겠습니까?"}
         {type === "passwordChangeComplete" && "비밀번호 변경이 완료되었습니다!"}
         {type === "profileChangeComplete" && "프로필 변경이 완료되었습니다!"}
         {type === "invalid" && "존재하지 않는 유저입니다!"}
       </Contents>
       <ButtonWrapper>
-        {type === "deleteColumn" || type === "confirm" ? (
+        {type === "deleteColumn" || type === "confirm" || type === "cancel" ? (
           <ButtonSet type="modalSet" onClickLeft={onCancel} onClickRight={onConfirm}>
-            삭제
+            확인
           </ButtonSet>
         ) : (
           <Button onClick={onClick} type="modalConfirm">
