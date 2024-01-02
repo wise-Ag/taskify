@@ -40,18 +40,19 @@ const TagInput = ({ initialTags = [], onTagsChange }: TagInputProps) => {
     }
   };
 
-
   const [tag, setTag] = useAtom(tagAtom);
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
   const handleDeleteTag = (event: React.MouseEvent) => {
-    const target = event.target as HTMLElement; // HTMLElement로 타입 단언
-    const tagText = target.textContent; // 이제 textContent 사용 가능
-    setTagValue((prev) => prev.filter((v) => v !== tagText));
-    updateTags(tagValue.filter((v) => v !== tagText));
-    setTag(tagValue);
+    const target = event.target as HTMLElement;
+    const tagText = target.textContent;
+
+    const newTagValue = tagValue.filter((v) => v !== tagText);
+    setTagValue(newTagValue);
+    updateTags(newTagValue);
+    setTag(newTagValue);
   };
 
   const handlePressEnter = (event: React.KeyboardEvent) => {

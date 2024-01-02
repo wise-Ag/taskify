@@ -9,7 +9,7 @@ import styled from "styled-components";
 
 interface StateDropdownProps {
   dashboardId: number;
-  defaultColumnId?: number;
+  defaultColumnId: number;
   onColumnSelect?: (columnId: number) => void;
 }
 
@@ -26,7 +26,6 @@ const StateDropdown = ({ dashboardId, defaultColumnId, onColumnSelect }: StateDr
       const data = await getColumns({ dashboardId, token });
       if (data && data.result === "SUCCESS") {
         setColumns(data.data);
-        // defaultColumnId와 일치하는 컬럼의 이름을 초기 상태로 설정
         const defaultColumn = data.data.find((column) => column.id === defaultColumnId);
         if (defaultColumn) {
           setStatus(defaultColumn.title);
@@ -55,7 +54,7 @@ const StateDropdown = ({ dashboardId, defaultColumnId, onColumnSelect }: StateDr
         <ColumnName status={status} />
         <StyledDropdownButton alt="드롭다운 버튼" onClick={toggleDropdown} />
       </DropdownBox>
-      <DropdownList $isOpen={isOpen} setStatus={setStatus} columnData={columns} />
+      <DropdownList $isOpen={isOpen} setStatus={setStatus} columnData={columns} selectedId={selectedId} onColumnSelect={handleColumnSelect} />
     </Wrapper>
   );
 };
