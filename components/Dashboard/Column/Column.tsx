@@ -5,7 +5,7 @@ import AddTaskModal from "@/components/Modal/AddTaskModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
 import { useModal } from "@/hooks/useModal";
-import { cardsAtom, columnTitleAtom } from "@/states/atoms";
+import { cardsAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
