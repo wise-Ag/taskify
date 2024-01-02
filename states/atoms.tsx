@@ -10,6 +10,7 @@ export const activeDropdownAtom = atom<string | null>(null);
 export const invitationsAtom = atom<Invitation[]>([]);
 
 export const columnsAtom = atom<Columns[]>([]);
+export const totalColumnsAtom = atom(0);
 
 export const dashboardColorAtom = atom<string>(`${DASHBOARD_COLOR[0]}`);
 
@@ -23,4 +24,4 @@ export const cardImageAtom = atom<File | null>(null);
 
 export const cardAssigneeIdAtom = atom<number | null>(null);
 
-export const tagAtom = atom<string[] >([]);
+export const tagAtom = atom<string[]>([]);
