@@ -3,6 +3,8 @@ import styled from "styled-components";
 import DropdownIcon from "@/assets/icons/arrow-drop-down.svg";
 import CheckIcon from "@/assets/icons/check.svg";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useAtom } from "jotai";
+import { cardAssigneeIdAtom } from "@/states/atoms";
 import { Member } from "@/api/members/members.types";
 import { getMembers } from "@/api/members";
 
@@ -10,7 +12,7 @@ interface ContactDropdownProps {
   dashboardId: number;
   assigneeNickname?: string | null;
   assigneeProfileImageUrl?: string | null;
-  onSelectMember: (userId: number) => void;
+  onSelectMember?: (userId: number) => void;
 }
 
 const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUrl, onSelectMember }: ContactDropdownProps) => {
@@ -44,6 +46,7 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUr
     fetchMembers();
   }, [dashboardId, token]);
 
+  const [, setAssigneeId] = useAtom(cardAssigneeIdAtom);
   const toggleList = () => {
     setShowList(!showList);
     if (!showList) {
@@ -70,7 +73,8 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUr
     setSelectedMember(membersData);
     setFilter(membersData.nickname);
     setShowList(false);
-    onSelectMember(membersData.userId);
+    if (onSelectMember) onSelectMember(membersData.userId);
+    setAssigneeId(membersData.userId);
   };
 
   return (

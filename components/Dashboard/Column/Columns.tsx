@@ -119,6 +119,3 @@ const ButtonWrapper = styled.div`
     bottom: 0;
   }
 `;
-function setError(arg0: string, arg1: { message: string }) {
-  throw new Error("Function not implemented.");
-}

@@ -1,6 +1,8 @@
 import AddIcon from "@/assets/icons/add-fillo.svg";
 import EditIcon from "@/assets/icons/edit.svg";
+import { cardImageAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
 import { ChangeEvent, useState } from "react";
 import styled, { css } from "styled-components";
 
@@ -10,7 +12,7 @@ interface ImageUploadInputProps {
 }
 
 const ImageUploadInput = ({ type, className, initialImageUrl }: ImageUploadInputProps & { className?: string }) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedImage, setSelectedImage] = useAtom(cardImageAtom);
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialImageUrl ?? null);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {

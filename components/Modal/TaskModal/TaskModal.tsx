@@ -9,18 +9,18 @@ import ModalWrapper from "@/components/Modal/ModalWrapper";
 import TaskDropdown from "@/components/Modal/TaskDropdown";
 import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
+import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
 import { useModal } from "@/hooks/useModal";
 import { cardsAtom, commentScrollAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import React, { useRef, useState } from "react";
+import { FaArrowUpWideShort } from "react-icons/fa6";
 import styled from "styled-components";
 import NoProfileImage from "../../common/NoProfileImage/ProfileImage";
 import Comments from "./Comments";
-import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
-import { FaArrowUpWideShort } from "react-icons/fa6";
 
-const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: () => void }> = ({ cardData, columnId, closeModalFunc }) => {
+const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: () => void; columnTitle: string }> = ({ cardData, columnId, closeModalFunc, columnTitle }) => {
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModal, closeModalFunc: closeEditModal } = useModal();
   const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModal, closeModalFunc: closeDeleteModal } = useModal();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -82,21 +82,23 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
           <Contact>담당자</Contact>
           <DeadLine>마감일</DeadLine>
           <ContactName>
-            <ProfileImageWrapper>
-              {cardData.assignee.profileImageUrl ? (
-                <ProfileImage url={cardData.assignee.profileImageUrl} />
-              ) : (
-                <NoProfileImageWrapper>
-                  <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
-                </NoProfileImageWrapper>
-              )}
-            </ProfileImageWrapper>
-            {cardData.assignee.nickname}
+            {cardData.assignee && (
+              <ProfileImageWrapper>
+                {cardData.assignee.profileImageUrl ? (
+                  <ProfileImage url={cardData.assignee.profileImageUrl} />
+                ) : (
+                  <NoProfileImageWrapper>
+                    <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
+                  </NoProfileImageWrapper>
+                )}
+              </ProfileImageWrapper>
+            )}
+            {cardData.assignee?.nickname}
           </ContactName>
           <DeadLineDate>{cardData.dueDate}</DeadLineDate>
         </ContactDeadLineWrapper>
         <CategoryWrapper>
-          <ColumnName status="To do" />
+          <ColumnName status={columnTitle} />
           <DivisionWrapper>
             <Division alt="category-division" width={10} height={20} />
           </DivisionWrapper>

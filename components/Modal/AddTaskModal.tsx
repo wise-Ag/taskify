@@ -1,10 +1,14 @@
 import { postCards } from "@/api/cards";
+import { CardProps } from "@/api/cards/cards.types";
+import { postCardImage } from "@/api/columns";
 import { getMembers } from "@/api/members";
 import { Member } from "@/api/members/members.types";
 import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import TagInput from "@/components/Modal/ModalInput/TagInput";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { cardAssigneeIdAtom, cardImageAtom, cardsAtom, dueDateAtom, tagAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
@@ -18,47 +22,51 @@ interface AddTaskModalProps {
 
 const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
-  const [assigneeUserId, setAssigneeUserId] = useState<number>(0);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
-  const [imageUrl, setImageUrl] = useState("");
   const token = localStorage.getItem("accessToken");
   const router = useRouter();
   const { boardid } = router.query;
   const dashboardId = Number(boardid);
   const modalRef = useRef(null);
-
+  const [cards, setCards] = useAtom(cardsAtom);
+  const [tags, setTags] = useAtom(tagAtom);
+  const [dueDate, setDueDate] = useAtom(dueDateAtom);
+  const [cardImage, setCardImage] = useAtom(cardImageAtom);
+  const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
   const handleSelectMember = (userId: number) => {
     setAssigneeUserId(userId);
   };
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
-  const handleDueDateChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDueDate(event.target.value);
 
   const handleSubmit = async () => {
-    try {
-      const card = await postCards({
-        assigneeUserId,
-        dashboardId,
-        columnId,
-        title,
-        description,
-        dueDate,
-        tags,
-        imageUrl,
-        token,
-      });
+    const postCardsParams: CardProps = { dashboardId, columnId, title, description, dueDate, tags, token };
 
-      if (card) {
-        console.log("Card created successfully", card);
-        closeModalFunc();
-      }
-    } catch (error) {
-      console.error("Failed to create card", error);
-      // 에러 처리 로직
+    if (assigneeUserId) postCardsParams.assigneeUserId = assigneeUserId;
+
+    if (cardImage) {
+      const formData = new FormData();
+      formData.append("image", cardImage);
+
+      const cardImageRes = await postCardImage({ columnId, token, formData });
+      if (cardImageRes === null) return alert("이미지 저장에 실패했습니다");
+      postCardsParams.imageUrl = cardImageRes.imageUrl;
     }
+    const postCardsRes = await postCards(postCardsParams);
+    if (postCardsRes === null) return alert("할 일 생성에 실패했습니다.");
+    if (postCardsRes) {
+      setCards((prevCards) => {
+        const updatedCards = [postCardsRes, ...prevCards[columnId]];
+        return { ...prevCards, [columnId]: updatedCards };
+      });
+    }
+    console.log(postCardsRes);
+    setDueDate(""); //atom전역변수 초기화
+    setAssigneeUserId(null);
+    setCardImage(null);
+    setTags([]);
+    closeModalFunc();
   };
 
   useEffect(() => {
@@ -82,11 +90,11 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
       <ContactDropdown onSelectMember={handleSelectMember} dashboardId={dashboardId} />
       <ModalInput $inputType="제목" label="제목" value={title} onChange={handleTitleChange} />
       <ModalInput $inputType="설명" label="설명" value={description} onChange={handleDescriptionChange} />
-      <ModalInput $inputType="마감일" label="마감일" value={dueDate} onChange={handleDueDateChange} />
+      <ModalInput $inputType="마감일" label="마감일" value={dueDate} />
       <TagInput />
       <ImageUploadInput type="modal" />
       <ButtonWrapper>
-        <ButtonSet type="modalSet" onClickLeft={closeModalFunc} onClickRight={handleSubmit}>
+        <ButtonSet type="modalSet" onClickLeft={closeModalFunc} onClickRight={handleSubmit} isRightDisabled={!title || !description}>
           생성
         </ButtonSet>
       </ButtonWrapper>

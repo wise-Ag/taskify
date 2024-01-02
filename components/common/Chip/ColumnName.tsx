@@ -2,11 +2,7 @@ import CircleIcon from "@/assets/icons/circle.svg";
 import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 
-interface ColumnNameProps {
-  status: string;
-}
-
-const ColumnName = ({ status }: ColumnNameProps) => {
+const ColumnName = ({ status }: { status: string }) => {
   return (
     <Container>
       <CircleIcon alt="circle" width={6} height={6} />

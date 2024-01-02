@@ -38,6 +38,7 @@ export interface DeleteColumnsProps {
 }
 
 export interface PostCardImageProps {
-  columnId: string;
-  token: string;
+  formData: FormData;
+  columnId: number;
+  token: string | null;
 }

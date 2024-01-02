@@ -15,6 +15,7 @@ import StateDropdown from "@/components/Modal/ModalInput/StateDropdown";
 interface EditTaskModalProps {
   cardId: number;
   onCancel?: () => void;
+  onEdit?: () => void;
 }
 
 const EditTaskModal = ({ cardId, onCancel }: EditTaskModalProps) => {
