@@ -5,7 +5,7 @@ import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Input from "@/components/Sign/SignInput/Input";
 import { NICKNAME_RULES, PLACEHOLDER } from "@/constants/InputConstant";
 import { useModal } from "@/hooks/useModal";
-import { cardImageAtom } from "@/states/atoms";
+import { profileImageAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
@@ -18,7 +18,7 @@ interface ProfileFormData {
 }
 
 const AccountProfile = () => {
-  const [profileImage, setProfileImage] = useAtom(cardImageAtom);
+  const [profileImage, setProfileImage] = useAtom(profileImageAtom);
   const [token, setToken] = useState<string | null>(null);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const { control, handleSubmit, watch, setError, setValue, formState } = useForm({
@@ -78,7 +78,7 @@ const AccountProfile = () => {
         <Title>프로필</Title>
         <StyledForm onSubmit={handleSubmit(handleProfileSubmit)}>
           <Container>
-            <StyledImageUploadInput type="account" />
+            <StyledImageUploadInput type="account" atomtype="profileImage" />
             <InputWrapper>
               <Controller control={control} name="email" render={({ field }) => <StyledInput label="이메일" {...field} disabled />} />
               <Controller
