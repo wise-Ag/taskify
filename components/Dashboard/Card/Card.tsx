@@ -28,9 +28,12 @@ const Card = ({ cardData, columnId, columnTitle }: { cardData: Card; columnId: n
             })}
           </Tags>
         )}
-        <Date>
-          <CalenderIcon /> {formatDate(cardData.createdAt)}
-        </Date>
+        {cardData.dueDate && (
+          <Date>
+            <CalenderIcon /> {formatDate(cardData.dueDate)}
+          </Date>
+        )}
+
         {cardData.assignee && (
           <div style={{ position: "absolute", right: "2rem", bottom: "2rem" }}>
             {cardData.assignee.profileImageUrl ? (
