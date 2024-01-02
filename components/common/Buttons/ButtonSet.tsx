@@ -9,6 +9,7 @@ interface ButtonProps {
   $buttonType: keyof typeof TYPES;
   onClickLeft?: () => void;
   onClickRight?: () => void;
+  isDisabled?: boolean;
 }
 
 type ButtonCommonProps = Omit<ButtonProps, "$buttonType">;
@@ -18,7 +19,7 @@ interface ButtonSetProps extends ButtonCommonProps {
   children?: ReactNode;
 }
 
-const ButtonSet = ({ type, isLeftDisabled, isRightDisabled, children, onClickLeft, onClickRight }: ButtonSetProps) => {
+const ButtonSet = ({ type, isLeftDisabled, isRightDisabled, children, onClickLeft, onClickRight, isDisabled }: ButtonSetProps) => {
   return (
     <ButtonSetContainer type={type}>
       {type === "forwardAndBackward" && (

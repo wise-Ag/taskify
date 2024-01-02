@@ -14,6 +14,10 @@ import AlertModal from "../Modal/AlertModal";
 
 const PAGE_SIZE = 5;
 
+// interface InvitationHistoryProps {
+//   boardid: string;
+// }
+
 const InvitationHistory = () => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -53,7 +57,6 @@ const InvitationHistory = () => {
     }
   };
 
-  // 페이지네이션 반영 안되는 문제 해결해야함
   const handleOnSubmit = async (data: FormData) => {
     const res = await postDashboardInvitations({ email: data.inputData, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
 
