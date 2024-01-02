@@ -5,8 +5,20 @@ import InvitedDashboard from "@/components/Table/InvitedDashboard";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { styled } from "styled-components";
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 const MyDashboard = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      router.push("/404");
+    }
+  }, [router]);
+
   return (
     <>
       <MyDashboardNav />

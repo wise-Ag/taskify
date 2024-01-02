@@ -5,11 +5,20 @@ import SettingNav from "@/components/common/Nav/SettingNav";
 import SettingSideMenu from "@/components/common/SideMenu/SettingSideMenu";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 const Mypage = () => {
   const router = useRouter();
   const { tab } = router.query;
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      router.push("/404");
+    }
+  }, [router]);
 
   return (
     <Wrapper>
