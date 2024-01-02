@@ -58,7 +58,7 @@ const ProfileImages = () => {
               <ProfileImg key={member.id} $index={index} $image={member.profileImageUrl} />
             ) : (
               <NoProfileImageWrapper key={member.id} $index={index}>
-                <NoProfileImage id={member.id} nickname={member.nickname} isBorder={true} />
+                <NoProfileImage id={member.userId} nickname={member.nickname} isBorder={true} />
               </NoProfileImageWrapper>
             ),
           )}

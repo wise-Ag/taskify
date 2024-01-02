@@ -11,7 +11,7 @@ import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
 import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
 import { useModal } from "@/hooks/useModal";
-import { cardsAtom, commentScrollAtom } from "@/states/atoms";
+import { cardsAtom, cardsTotalCountAtom, commentScrollAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import React, { useRef, useState } from "react";
@@ -28,6 +28,8 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
   const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
   const [cards, setCards] = useAtom(cardsAtom);
   const [isScrollActive, setIsScrollActive] = useAtom(commentScrollAtom);
+  const [, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
+
   const token = localStorage.getItem("accessToken");
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -49,6 +51,10 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
     setCards((prevCards) => {
       const updatedCards = prevCards[columnId].filter((card) => card.id !== cardData.id);
       return { ...prevCards, [columnId]: updatedCards };
+    });
+    setCardsTotalCount((prev) => {
+      const updatedCardsCount = prev[columnId] - 1;
+      return { ...prev, [columnId]: updatedCardsCount };
     });
     closeModalFunc();
   };
@@ -85,7 +91,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
             {cardData.assignee && (
               <ProfileImageWrapper>
                 {cardData.assignee.profileImageUrl ? (
-                  <ProfileImage url={cardData.assignee.profileImageUrl} />
+                  <ProfileImage $image={cardData.assignee.profileImageUrl} />
                 ) : (
                   <NoProfileImageWrapper>
                     <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
@@ -334,13 +340,13 @@ const Image = styled.img`
   }
 `;
 
-const ProfileImage = styled.div<{ url: string }>`
+const ProfileImage = styled.div<{ $image: string }>`
   width: 2.7rem;
   height: 2.7rem;
 
   border-radius: 4.4rem;
 
-  background-image: url(${(props) => props.url});
+  background-image: url(${(props) => props.$image});
   background-size: cover;
 `;
 

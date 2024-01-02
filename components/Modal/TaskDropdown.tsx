@@ -12,6 +12,9 @@ const TaskDropdown = ({ onEdit, onCreate }: any) => {
 export default TaskDropdown;
 
 const DropdownMenu = styled.div`
+  width: 9.3rem;
+  height: 8.2rem;
+
   border-radius: 6px;
   border: 1px solid var(--Grayd9);
 
@@ -24,6 +27,9 @@ const DropdownMenu = styled.div`
 `;
 
 const List = styled.div`
+  width: 8.1rem;
+  height: 3.2rem;
+
   margin: 0.6rem;
   padding: 0.8rem;
   border-radius: 6px;
@@ -33,6 +39,7 @@ const List = styled.div`
 
   font-size: 1.4rem;
   color: #163020;
+  text-align: center;
 
   cursor: pointer;
 

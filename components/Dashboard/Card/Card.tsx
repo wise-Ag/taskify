@@ -21,20 +21,23 @@ const Card = ({ cardData, columnId, columnTitle }: { cardData: Card; columnId: n
       >
         {cardData.imageUrl && <CardImage $cardimage={cardData.imageUrl || null} />}
         <Title $imageurl={cardData.imageUrl}>{cardData.title}</Title>
-        {cardData.tags[0] && (
+        {cardData.tags.length > 0 && cardData.tags[0] && (
           <Tags>
             {cardData.tags.map((tag, idx) => {
               return <Tag key={idx} tag={tag} />;
             })}
           </Tags>
         )}
-        <Date>
-          <CalenderIcon /> {formatDate(cardData.createdAt)}
-        </Date>
+        {cardData.dueDate && (
+          <Date>
+            <CalenderIcon /> {formatDate(cardData.dueDate)}
+          </Date>
+        )}
+
         {cardData.assignee && (
           <div style={{ position: "absolute", right: "2rem", bottom: "2rem" }}>
             {cardData.assignee.profileImageUrl ? (
-              <ProfileImage url={cardData.assignee.profileImageUrl} />
+              <ProfileImage $url={cardData.assignee.profileImageUrl} />
             ) : (
               <NoProfileImageWrapper>
                 <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
@@ -56,6 +59,8 @@ export default Card;
 
 const Wrapper = styled.div`
   width: 31.4rem;
+
+  overflow: hidden;
 
   padding: 2rem;
   border-radius: 6px;
@@ -180,13 +185,13 @@ const Date = styled.div`
   }
 `;
 
-const ProfileImage = styled.div<{ url: string }>`
+const ProfileImage = styled.div<{ $url: string }>`
   width: 2.7rem;
   height: 2.7rem;
 
   border-radius: 4.4rem;
 
-  background-image: url(${(props) => props.url});
+  background-image: url(${(props) => props.$url});
   background-size: cover;
 `;
 

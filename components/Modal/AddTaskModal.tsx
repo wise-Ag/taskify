@@ -1,16 +1,14 @@
 import { postCards } from "@/api/cards";
 import { CardProps } from "@/api/cards/cards.types";
 import { postCardImage } from "@/api/columns";
-import { getMembers } from "@/api/members";
-import { Member } from "@/api/members/members.types";
 import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import TagInput from "@/components/Modal/ModalInput/TagInput";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
-import { cardAssigneeIdAtom, cardImageAtom, cardsAtom, dueDateAtom, tagAtom } from "@/states/atoms";
+import { cardAssigneeIdAtom, cardImageAtom, cardsAtom, cardsTotalCountAtom, dueDateAtom, tagAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import ContactDropdown from "./ModalInput/ContactDropdown";
 import ImageUploadInput from "./ModalInput/ImageUploadInput";
@@ -21,7 +19,6 @@ interface AddTaskModalProps {
 }
 
 const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
-  const [membersData, setMembersData] = useState<Member[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const token = localStorage.getItem("accessToken");
@@ -34,17 +31,13 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [dueDate, setDueDate] = useAtom(dueDateAtom);
   const [cardImage, setCardImage] = useAtom(cardImageAtom);
   const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
-  const handleSelectMember = (userId: number) => {
-    setAssigneeUserId(userId);
-  };
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
+  const [, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
 
   const handleSubmit = async () => {
-    const postCardsParams: CardProps = { dashboardId, columnId, title, description, dueDate, tags, token };
+    const postCardsParams: CardProps = { dashboardId, columnId, title, description, tags, token };
 
     if (assigneeUserId) postCardsParams.assigneeUserId = assigneeUserId;
-
+    if (dueDate) postCardsParams.dueDate = dueDate;
     if (cardImage) {
       const formData = new FormData();
       formData.append("image", cardImage);
@@ -60,8 +53,12 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
         const updatedCards = [postCardsRes, ...prevCards[columnId]];
         return { ...prevCards, [columnId]: updatedCards };
       });
+      setCardsTotalCount((prev) => {
+        const updatedCardsCount = prev[columnId] + 1;
+        return { ...prev, [columnId]: updatedCardsCount };
+      });
     }
-    console.log(postCardsRes);
+
     setDueDate(""); //atom전역변수 초기화
     setAssigneeUserId(null);
     setCardImage(null);
@@ -69,20 +66,13 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
     closeModalFunc();
   };
 
-  useEffect(() => {
-    const fetchMembers = async () => {
-      try {
-        const memberData = await getMembers({ dashboardId, token });
-        if (memberData) {
-          setMembersData(memberData.members);
-        }
-      } catch (error) {
-        console.error("Failed to fetch members", error);
-      }
-    };
+  const handleSelectMember = (userId: number) => setAssigneeUserId(userId);
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
 
-    fetchMembers();
-  }, [dashboardId, token]);
+  const isSubmitDisable = () => {
+    return dueDate == "Invalid Date" || !title || !description;
+  };
 
   return (
     <Wrapper ref={modalRef}>
@@ -94,7 +84,7 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
       <TagInput />
       <ImageUploadInput type="modal" />
       <ButtonWrapper>
-        <ButtonSet type="modalSet" onClickLeft={closeModalFunc} onClickRight={handleSubmit} isRightDisabled={!title || !description}>
+        <ButtonSet type="modalSet" onClickLeft={closeModalFunc} onClickRight={handleSubmit} isRightDisabled={isSubmitDisable()}>
           생성
         </ButtonSet>
       </ButtonWrapper>

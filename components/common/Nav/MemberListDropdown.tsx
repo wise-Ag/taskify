@@ -9,10 +9,10 @@ const MemberListDropdown = ({ members }: { members: Member[] }) => {
       {members.map((member) => (
         <Item key={member.id}>
           {member.profileImageUrl ? (
-            <Profile src={member.profileImageUrl} alt={member.nickname} />
+            <Profile $url={member.profileImageUrl} />
           ) : (
             <NoProfileImageWrapper>
-              <NoProfileImage id={member.id} nickname={member.nickname} />
+              <NoProfileImage id={member.userId} nickname={member.nickname} />
             </NoProfileImageWrapper>
           )}
 
@@ -62,7 +62,7 @@ const Item = styled.div`
   }
 `;
 
-const Profile = styled.img`
+const Profile = styled.div<{ $url: string }>`
   width: 3rem;
   height: 3rem;
 
@@ -71,6 +71,8 @@ const Profile = styled.img`
   border-radius: 50%;
 
   object-fit: cover;
+  background-image: url(${(props) => props.$url});
+  background-size: cover;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 3.4rem;

@@ -53,7 +53,7 @@ const Profile = () => {
       {user && (
         <Wrapper onClick={toggleKebabMenu} ref={dropdownRef}>
           {user.profileImageUrl ? (
-            <ProfileIcon image={user.profileImageUrl} />
+            <ProfileIcon $image={user.profileImageUrl} />
           ) : (
             <NoProfileImageWrapper>
               <NoProfileImage id={user.id} nickname={user.nickname} isBorder={true} />
@@ -106,13 +106,13 @@ const Wrapper = styled.div`
   cursor: pointer;
 `;
 
-const ProfileIcon = styled.div<{ image: string }>`
+const ProfileIcon = styled.div<{ $image: string }>`
   width: 3.8rem;
   height: 3.8rem;
 
   border-radius: 100%;
 
-  background-image: url(${(props) => props.image});
+  background-image: url(${(props) => props.$image});
   background-size: cover;
   background-repeat: no-repeat;
 
