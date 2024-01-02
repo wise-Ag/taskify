@@ -30,7 +30,7 @@ const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, ru
   return (
     <Wrapper>
       <Title>{title}</Title>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <FormSection onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
           <Controller
             control={control}
@@ -51,7 +51,7 @@ const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, ru
             {buttonType}
           </ButtonSet>
         </ButtonWrapper>
-      </form>
+      </FormSection>
     </Wrapper>
   );
 };
@@ -86,6 +86,10 @@ const Title = styled.div`
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 2rem;
   }
+`;
+
+const FormSection = styled.form`
+  width: 100%;
 `;
 
 const InputWrapper = styled.div`

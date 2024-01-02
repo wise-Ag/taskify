@@ -8,6 +8,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import NoProfileImage from "../common/NoProfileImage/ProfileImage";
+import { getUsers } from "@/api/users";
+import { UserData } from "@/api/users/users.types";
 
 const PAGE_SIZE = 4; // 임의로 추가
 
@@ -18,6 +20,22 @@ const MembersList = () => {
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
   const router = useRouter();
   const { boardid } = router.query;
+  const [loggedInUser, setLoggedInUser] = useState<UserData | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("accessToken");
+
+      if (token) {
+        const userData = await getUsers({ token });
+        if (userData) {
+          setLoggedInUser(userData);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const fetchData = async () => {
     if (!isNaN(Number(boardid))) {
@@ -72,7 +90,7 @@ const MembersList = () => {
             )}
             <Name>{member.nickname}</Name>
           </MemberInfo>
-          <Button type="delete" children="삭제" />
+          {loggedInUser?.email !== member.email && <Button type="delete" children="삭제" />}
         </MemberItem>
       ))}
     </Container>

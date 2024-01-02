@@ -169,10 +169,15 @@ const LeftWrapper = styled.div`
 `;
 
 const RightWrapper = styled.div`
+  width: 100%;
+
   margin-left: 1rem;
 `;
 
 const CommentTextarea = styled.textarea`
+  width: 100%;
+  height: 10rem;
+
   margin-top: 1rem;
   margin-right: 1rem;
   padding: 1rem;
@@ -213,7 +218,6 @@ const CommentItem = styled.div`
   display: flex;
   flex-direction: row;
 
-  padding: 0.8rem;
   margin-bottom: 0.8rem;
 
   font-size: 1.4rem;
