@@ -4,11 +4,14 @@ import ColumnHeader from "@/components/Dashboard/Column/ColumnHeader";
 import AddTaskModal from "@/components/Modal/AddTaskModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
 import { useModal } from "@/hooks/useModal";
-import { cardsAtom, columnTitleAtom } from "@/states/atoms";
+import { cardsAtom, cardsTotalCountAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { FaArrowUpWideShort } from "react-icons/fa6";
 import styled from "styled-components";
 
 interface ColumnProps {
@@ -16,39 +19,61 @@ interface ColumnProps {
   title: string;
 }
 
+const PAGE_SIZE = 10;
+
 const Column = ({ columnId, title }: ColumnProps) => {
   const [cards, setCards] = useAtom(cardsAtom);
+  const [cursorId, setCursorId] = useState<number | null>(null);
+  const [cardsTotalCount, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
+  const columnCards = cards[columnId] || [];
+  const [isHovered, setIsHovered] = useState(false); //스크롤바 커스텀
+  const scrollContainerRef = useRef(null);
+  const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
 
-  const handleCloseModal = () => {
-    closeModalFunc();
+  const loadCardList = async () => {
+    if (columnCards.length > 0 && cursorId == null) return;
+
+    setIsLoading(true);
+
+    const res = await getCardList({
+      cursorId,
+      columnId,
+      size: PAGE_SIZE,
+      token: localStorage.getItem("accessToken"),
+    });
+
+    if (res) {
+      setCursorId(res.cursorId);
+      setCards((prevCards) => ({
+        ...prevCards,
+        [columnId]: [...columnCards, ...res.cards],
+      }));
+      setCardsTotalCount((prev) => {
+        return { ...prev, [columnId]: res.totalCount };
+      });
+    }
+    setIsLoading(false);
+  };
+  const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCardList });
+
+  //스크롤바 커스텀
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
   };
 
   useEffect(() => {
-    const loadCardList = async () => {
-      const res = await getCardList({
-        cursorId: null,
-        columnId,
-        token: localStorage.getItem("accessToken"),
-      });
-
-      if (res) {
-        setCards((prevCards) => ({
-          ...prevCards,
-          [columnId]: res.cards,
-        }));
-      }
-    };
-
     loadCardList();
-  }, [columnId, isModalOpen]);
-
-  const columnCards = cards[columnId] || [];
+  }, []);
 
   return (
-    <Wrapper>
-      <ColumnHeader title={title} columnId={columnId} count={columnCards.length} />
-      <Container>
+    <Wrapper ref={scrollContainerRef} className={`${isHovered ? "show-scrollbar" : ""}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <ColumnHeader title={title} columnId={columnId} count={cardsTotalCount[columnId]} />
+      <Container ref={startRef}>
         <Button
           type="plus"
           onClick={() => {
@@ -61,9 +86,18 @@ const Column = ({ columnId, title }: ColumnProps) => {
           </ModalWrapper>
         )}
         {columnCards.map((card) => (
-          <Card key={card.id} columnId={columnId} cardData={card} columnTitle={title} />
+          <div key={card.id}>
+            <Card columnId={columnId} cardData={card} columnTitle={title} />
+            {card.id === cursorId && <div ref={targetRef} />}
+          </div>
         ))}
       </Container>
+      <div ref={endRef} />
+      {PAGE_SIZE < columnCards.length && (
+        <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
+          <ScrollNavigateIcon $isScrollingUp={isScrollingUp} />
+        </ScrollNavigateButton>
+      )}
     </Wrapper>
   );
 };
@@ -74,11 +108,29 @@ const Wrapper = styled.div`
   padding: 2rem;
   border-right: 1px solid var(--Grayd9);
 
+  min-width: fit-content;
+  height: 100vh;
+
+  overflow: hidden;
+
   display: flex;
   flex-direction: column;
 
   @media (max-width: ${DeviceSize.tablet}) {
     border-bottom: 1px solid var(--Grayd9);
+  }
+
+  &.show-scrollbar {
+    overflow-y: auto;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.2rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #8db877;
+    border-radius: 5rem;
   }
 `;
 
@@ -86,4 +138,32 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+`;
+
+const ScrollNavigateButton = styled.div`
+  position: sticky;
+  bottom: 0;
+  left: 100rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 4rem;
+  height: 4rem;
+
+  border-radius: 1.5rem;
+
+  cursor: pointer;
+
+  background-color: var(--MainHover);
+`;
+
+const ScrollNavigateIcon = styled(FaArrowUpWideShort)<{ $isScrollingUp: boolean }>`
+  width: 2.5rem;
+  height: 3.5rem;
+
+  ${(props) => props.$isScrollingUp && " transform: scaleY(-1)"};
+
+  fill: var(--Main);
 `;

@@ -41,8 +41,7 @@ const KebabModal = ({ columnId, setIsClicked, handleClick }: KebabModalProps) =>
       return;
     }
 
-    const newUpdatedAt = new Date();
-    setColumns(columns.map((v) => (v.id == columnId ? { title: data.inputData, id: v.id, createdAt: v.createdAt, updatedAt: newUpdatedAt.toISOString() } : v)));
+    setColumns(columns.map((v) => (v.id == columnId ? res : v)));
     closeEditModalFunc();
   };
 
@@ -97,6 +96,7 @@ const Wrapper = styled.div`
   position: absolute;
   width: 9.3rem;
   height: 8.2rem;
+  left: -7rem;
 
   padding: 0.6rem;
 
