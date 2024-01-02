@@ -65,13 +65,14 @@ const Wrapper = styled.div`
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1rem;
 `;
 
 const Title = styled.div`
   color: var(--Black33);
   font-size: 1.8rem;
   font-weight: 500;
+
+  margin-bottom: 1rem;
 `;
 
 const DropdownBox = styled.div<{ $isOpen: boolean }>`
