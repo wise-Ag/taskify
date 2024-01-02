@@ -34,7 +34,6 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
 
   const handleSubmit = async () => {
-    console.log(dueDate == "Invalid Date");
     const postCardsParams: CardProps = { dashboardId, columnId, title, description, tags, token };
 
     if (assigneeUserId) postCardsParams.assigneeUserId = assigneeUserId;
