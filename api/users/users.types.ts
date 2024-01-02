@@ -12,8 +12,8 @@ export interface PostImageData {
 }
 
 export interface PostProfileImageProps {
-  image: string;
-  token?: string;
+  formData: FormData;
+  token: string | null;
 }
 
 export interface PostUsersProps {
