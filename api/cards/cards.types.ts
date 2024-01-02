@@ -41,7 +41,7 @@ export interface CardProps {
   columnId: number;
   title: string;
   description: string;
-  dueDate: string;
+  dueDate?: string;
   tags: string[];
   imageUrl?: string;
   token: string | null;

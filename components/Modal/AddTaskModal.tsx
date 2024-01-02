@@ -34,17 +34,12 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [dueDate, setDueDate] = useAtom(dueDateAtom);
   const [cardImage, setCardImage] = useAtom(cardImageAtom);
   const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
-  const handleSelectMember = (userId: number) => {
-    setAssigneeUserId(userId);
-  };
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
 
   const handleSubmit = async () => {
-    const postCardsParams: CardProps = { dashboardId, columnId, title, description, dueDate, tags, token };
-
+    const postCardsParams: CardProps = { dashboardId, columnId, title, description, tags, token };
+  
     if (assigneeUserId) postCardsParams.assigneeUserId = assigneeUserId;
-
+    if (dueDate) postCardsParams.dueDate = dueDate;
     if (cardImage) {
       const formData = new FormData();
       formData.append("image", cardImage);
@@ -68,6 +63,10 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
     setTags([]);
     closeModalFunc();
   };
+
+  const handleSelectMember = (userId: number) => setAssigneeUserId(userId);
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
 
   useEffect(() => {
     const fetchMembers = async () => {
