@@ -7,6 +7,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import NoProfileImage from "../common/NoProfileImage/ProfileImage";
 
 const PAGE_SIZE = 4; // 임의로 추가
 
@@ -62,7 +63,13 @@ const MembersList = () => {
       {members.map((member) => (
         <MemberItem key={member.id}>
           <MemberInfo>
-            <Profile src={member.profileImageUrl} alt={member.nickname} />
+            {member.profileImageUrl ? (
+              <Profile $url={member.profileImageUrl} />
+            ) : (
+              <NoProfileImageWrapper>
+                <NoProfileImage id={member.userId} nickname={member.nickname} />
+              </NoProfileImageWrapper>
+            )}
             <Name>{member.nickname}</Name>
           </MemberInfo>
           <Button type="delete" children="삭제" />
@@ -181,7 +188,7 @@ const MemberInfo = styled.div`
   flex-grow: 1;
 `;
 
-const Profile = styled.img`
+const Profile = styled.div<{ $url: string }>`
   width: 3.8rem;
   height: 3.8rem;
 
@@ -190,6 +197,8 @@ const Profile = styled.img`
   border-radius: 50%;
 
   object-fit: cover;
+  background-image: url(${(props) => props.$url});
+  background-size: cover;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 3.4rem;
@@ -198,7 +207,23 @@ const Profile = styled.img`
     margin-right: 0.8rem;
   }
 `;
+const NoProfileImageWrapper = styled.div`
+  width: 3.8rem;
 
+  line-height: 3.8rem;
+  font-size: 1.5rem;
+
+  margin-right: 1.2rem;
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    width: 3.4rem;
+
+    line-height: 3.4rem;
+    font-size: 1.3rem;
+
+    margin-right: 0.8rem;
+  }
+`;
 const Name = styled.div`
   color: var(--Black33);
   font-size: 1.6rem;

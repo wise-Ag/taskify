@@ -55,10 +55,10 @@ const ProfileImages = () => {
         <Contents>
           {members.slice(0, 4).map((member, index) =>
             member.profileImageUrl ? (
-              <ProfileImg key={member.id} $index={index} image={member.profileImageUrl} />
+              <ProfileImg key={member.id} $index={index} $image={member.profileImageUrl} />
             ) : (
               <NoProfileImageWrapper key={member.id} $index={index}>
-                <NoProfileImage id={member.id} nickname={member.nickname} isBorder={true} />
+                <NoProfileImage id={member.userId} nickname={member.nickname} isBorder={true} />
               </NoProfileImageWrapper>
             ),
           )}
@@ -107,7 +107,7 @@ const Contents = styled.div`
   }
 `;
 
-const ProfileImg = styled.div<{ $index: number; image: string }>`
+const ProfileImg = styled.div<{ $index: number; $image: string }>`
   width: 3.8rem;
   height: 3.8rem;
 
@@ -121,7 +121,7 @@ const ProfileImg = styled.div<{ $index: number; image: string }>`
   border-radius: 100%;
   border: 2px solid var(--White);
 
-  background-image: url(${(props) => props.image});
+  background-image: url(${(props) => props.$image});
   background-size: cover;
   background-repeat: no-repeat;
 

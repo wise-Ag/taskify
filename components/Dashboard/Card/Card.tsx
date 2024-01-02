@@ -34,7 +34,7 @@ const Card = ({ cardData, columnId, columnTitle }: { cardData: Card; columnId: n
         {cardData.assignee && (
           <div style={{ position: "absolute", right: "2rem", bottom: "2rem" }}>
             {cardData.assignee.profileImageUrl ? (
-              <ProfileImage url={cardData.assignee.profileImageUrl} />
+              <ProfileImage $url={cardData.assignee.profileImageUrl} />
             ) : (
               <NoProfileImageWrapper>
                 <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
@@ -180,13 +180,13 @@ const Date = styled.div`
   }
 `;
 
-const ProfileImage = styled.div<{ url: string }>`
+const ProfileImage = styled.div<{ $url: string }>`
   width: 2.7rem;
   height: 2.7rem;
 
   border-radius: 4.4rem;
 
-  background-image: url(${(props) => props.url});
+  background-image: url(${(props) => props.$url});
   background-size: cover;
 `;
 
