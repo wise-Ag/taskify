@@ -9,7 +9,7 @@ import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
-import { cardAssigneeIdAtom, cardImageAtom, cardsAtom, dueDateAtom, tagAtom } from "@/states/atoms";
+import { cardAssigneeIdAtom, cardAtom, cardImageAtom, cardsAtom, dueDateAtom, isCardUpdatedAtom, tagAtom } from "@/states/atoms";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ModalInput from "./ModalInput/ModalInput";
@@ -27,6 +27,8 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
   const [dueDate, setDueDate] = useAtom(dueDateAtom);
   const [cardImage, setCardImage] = useAtom(cardImageAtom);
   const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
+  const [updatedCard, setUpdatedCard] = useAtom(cardAtom); //바로 업데이트를 위한 조타이
+  const [isCardUpdated, setIsCardUpdated] = useAtom(isCardUpdatedAtom);
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
   const { boardid } = router.query;
@@ -85,6 +87,9 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
 
     if (updatedCard) {
       console.log("Card updated successfully:", updatedCard);
+      setUpdatedCard({ ...updatedCard });
+      setIsCardUpdated(true);
+
       if (onEdit) onEdit();
     } else {
       console.error("Failed to update card");
@@ -108,7 +113,7 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
       if (data) {
         setCardData(data);
         setDueDate(data.dueDate);
-        setAssigneeUserId(data.assignee.id);
+        if (data.assignee) setAssigneeUserId(data.assignee.id);
         setTags(data.tags);
       }
     };
@@ -122,7 +127,11 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
           <TodoTitle>할 일 수정</TodoTitle>
           <DropdownWrapper>
             <StateDropdown dashboardId={cardData.dashboardId} defaultColumnId={cardData.columnId} onColumnSelect={handleColumnChange} />
-            <ContactDropdown onSelectMember={handleSelectMember} dashboardId={cardData.dashboardId} assigneeNickname={cardData.assignee.nickname} />
+            {cardData.assignee ? (
+              <ContactDropdown onSelectMember={handleSelectMember} dashboardId={cardData.dashboardId} assigneeNickname={cardData.assignee.nickname} />
+            ) : (
+              <ContactDropdown onSelectMember={handleSelectMember} dashboardId={cardData.dashboardId} />
+            )}
           </DropdownWrapper>
           <ModalInput label="제목" $inputType="제목" value={cardData.title} onChange={handleTitleChange} />
           <ModalInput $inputType="설명" label="설명" value={cardData.description} onChange={handleDescriptionChange} />
