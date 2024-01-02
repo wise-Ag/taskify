@@ -9,14 +9,14 @@ interface DropDownMenuProps {
   $isOpen: boolean;
   setStatus: Dispatch<SetStateAction<string>>;
   columnData: Columns[];
+  selectedId: number | null;
+  onColumnSelect: (id: number) => void;
 }
 
-const DropdownList = ({ $isOpen, setStatus, columnData }: DropDownMenuProps) => {
-  const [selectedId, setSelectedId] = useState(0);
-
+const DropdownList = ({ $isOpen, setStatus, columnData, selectedId, onColumnSelect }: DropDownMenuProps) => {
   const handleSelected = (id: number, title: string) => {
-    setSelectedId(id);
     setStatus(title);
+    onColumnSelect(id);
   };
 
   return (

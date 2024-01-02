@@ -130,7 +130,8 @@ const CustomDatePicker = () => {
             width: 1,
             border: "none",
           }}
-          value={dates}
+          // value={dates}
+          value={dueDate ? dayjs(dueDate) : null}
           disablePast
           closeOnSelect
           format="YYYY-MM-DD HH:mm"

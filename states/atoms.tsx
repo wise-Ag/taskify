@@ -27,3 +27,9 @@ export const cardImageAtom = atom<File | null>(null);
 export const cardAssigneeIdAtom = atom<number | null>(null);
 
 export const tagAtom = atom<string[]>([]);
+
+export const isOpenAtom = atom(false);
+
+export const statusAtom = atom("로딩 중");
+
+export const selectedIdAtom = atom<number | null>(null);

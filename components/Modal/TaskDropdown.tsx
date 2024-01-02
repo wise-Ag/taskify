@@ -35,6 +35,7 @@ const List = styled.div`
   border-radius: 6px;
   outline: none;
 
+  display: flex;
   justify-content: center;
 
   font-size: 1.4rem;

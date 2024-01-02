@@ -1,21 +1,23 @@
-import DropdownButton from "@/assets/icons/arrow-drop-down.svg";
-import ColumnName from "@/components/common/Chip/ColumnName";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import DropdownList from "@/components/Modal/ModalInput/DropdownList";
 import { getColumns } from "@/api/columns";
-import { Columns } from "@/api/columns/columns.types";
+import DropdownButton from "@/assets/icons/arrow-drop-down.svg";
+import DropdownList from "@/components/Modal/ModalInput/DropdownList";
+import ColumnName from "@/components/common/Chip/ColumnName";
+import { columnsAtom, isOpenAtom, selectedIdAtom, statusAtom } from "@/states/atoms";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
+import styled from "styled-components";
 
 interface StateDropdownProps {
   dashboardId: number;
-  defaultColumnId?: number;
+  defaultColumnId: number;
+  onColumnSelect?: (columnId: number) => void;
 }
 
-const Dropdown = ({ dashboardId, defaultColumnId }: StateDropdownProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [status, setStatus] = useState("로딩 중");
-  const [columns, setColumns] = useState<Columns[]>([]);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+const StateDropdown = ({ dashboardId, defaultColumnId, onColumnSelect }: StateDropdownProps) => {
+  const [isOpen, setIsOpen] = useAtom(isOpenAtom);
+  const [status, setStatus] = useAtom(statusAtom);
+  const [columns, setColumns] = useAtom(columnsAtom);
+  const [selectedId, setSelectedId] = useAtom(selectedIdAtom);
 
   const token = localStorage.getItem("accessToken");
 
@@ -24,7 +26,6 @@ const Dropdown = ({ dashboardId, defaultColumnId }: StateDropdownProps) => {
       const data = await getColumns({ dashboardId, token });
       if (data && data.result === "SUCCESS") {
         setColumns(data.data);
-        // defaultColumnId와 일치하는 컬럼의 이름을 초기 상태로 설정
         const defaultColumn = data.data.find((column) => column.id === defaultColumnId);
         if (defaultColumn) {
           setStatus(defaultColumn.title);
@@ -39,6 +40,13 @@ const Dropdown = ({ dashboardId, defaultColumnId }: StateDropdownProps) => {
     setIsOpen((prev) => !prev);
   };
 
+  const handleColumnSelect = (columnId: number) => {
+    setSelectedId(columnId);
+    if (onColumnSelect) {
+      onColumnSelect(columnId);
+    }
+  };
+
   return (
     <Wrapper>
       <Title>상태</Title>
@@ -46,24 +54,25 @@ const Dropdown = ({ dashboardId, defaultColumnId }: StateDropdownProps) => {
         <ColumnName status={status} />
         <StyledDropdownButton alt="드롭다운 버튼" onClick={toggleDropdown} />
       </DropdownBox>
-      <DropdownList $isOpen={isOpen} setStatus={setStatus} columnData={columns} />
+      <DropdownList $isOpen={isOpen} setStatus={setStatus} columnData={columns} selectedId={selectedId} onColumnSelect={handleColumnSelect} />
     </Wrapper>
   );
 };
 
-export default Dropdown;
+export default StateDropdown;
 
 const Wrapper = styled.div`
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1rem;
 `;
 
 const Title = styled.div`
   color: var(--Black33);
   font-size: 1.8rem;
   font-weight: 500;
+
+  margin-bottom: 1rem;
 `;
 
 const DropdownBox = styled.div<{ $isOpen: boolean }>`

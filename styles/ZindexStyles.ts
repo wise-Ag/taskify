@@ -13,4 +13,5 @@ export const Z_INDEX = {
   TaskModal_StyledKebabModal: 1500,
   KebabModal_Wrapper: 1500,
   ContactDropdown_List: 1500,
+  StateDropdown_List: 1500,
 };

@@ -126,7 +126,13 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
       </Wrapper>
       {isEditModalOpen && (
         <ModalWrapper>
-          <EditTaskModal cardId={cardData.id} onCancel={closeEditModal} onEdit={handleConfirmEdit} />
+          <EditTaskModal
+            cardId={cardData.id}
+            onCancel={closeEditModal}
+            onEdit={() => {
+              closeEditModal();
+            }}
+          />
         </ModalWrapper>
       )}
       {isDeleteModalOpen && (
@@ -142,7 +148,7 @@ export default TaskModal;
 
 const Wrapper = styled.div`
   width: 73rem;
-  height: 76.3rem;
+  max-height: 76.3rem;
   overflow-y: auto;
 
   padding: 3.2rem 2.8rem 2.8rem 2.8rem;
@@ -165,7 +171,6 @@ const Wrapper = styled.div`
 
 const TitleWrapper = styled.div`
   width: 100%;
-  height: 8.5rem;
 
   display: flex;
   justify-content: space-between;

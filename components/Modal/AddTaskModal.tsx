@@ -98,12 +98,12 @@ const Wrapper = styled.div`
   width: 50.6rem;
 
   padding: 3.2rem 2.8rem 2.8rem 2.8rem;
+  border-radius: 8px;
 
   display: flex;
   flex-direction: column;
   gap: 3.2rem;
 
-  border-radius: 8px;
   background: var(--MainLight);
 
   @media (max-width: ${DeviceSize.mobile}) {
