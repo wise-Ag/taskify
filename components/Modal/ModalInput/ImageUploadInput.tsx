@@ -3,15 +3,16 @@ import EditIcon from "@/assets/icons/edit.svg";
 import { cardImageAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import styled, { css } from "styled-components";
 
 interface ImageUploadInputProps {
   type: "modal" | "account";
   initialImageUrl?: string;
+  handleDeleteClick?: Dispatch<SetStateAction<boolean>>;
 }
 
-const ImageUploadInput = ({ type, className, initialImageUrl }: ImageUploadInputProps & { className?: string }) => {
+const ImageUploadInput = ({ type, className, initialImageUrl, handleDeleteClick }: ImageUploadInputProps & { className?: string }) => {
   const [selectedImage, setSelectedImage] = useAtom(cardImageAtom);
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialImageUrl ?? null);
 
@@ -42,6 +43,7 @@ const ImageUploadInput = ({ type, className, initialImageUrl }: ImageUploadInput
           onClick={() => {
             setPreviewUrl(null);
             setSelectedImage(null);
+            if (handleDeleteClick) handleDeleteClick(true);
           }}
         >
           삭제
