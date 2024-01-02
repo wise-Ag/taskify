@@ -59,7 +59,6 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
     closeModalFunc();
   };
 
-  const handleConfirmEdit = async () => {};
   return (
     <>
       <Wrapper ref={scrollContainerRef}>

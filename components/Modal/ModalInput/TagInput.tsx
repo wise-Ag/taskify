@@ -2,7 +2,7 @@ import Tag from "@/components/common/Chip/Tag";
 import { tagAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 
 interface TagsProps {
@@ -26,21 +26,12 @@ const Tags = ({ handleOnClick, tagValue }: TagsProps) => {
 
 interface TagInputProps {
   initialTags?: string[]; // 여기에 initialTags prop의 타입을 추가
-  onTagsChange?: (tags: string[]) => void;
 }
 
-const TagInput = ({ initialTags = [], onTagsChange }: TagInputProps) => {
+const TagInput = ({ initialTags = [] }: TagInputProps) => {
   const [inputValue, setInputValue] = useState("");
-  const [tagValue, setTagValue] = useState<string[]>(initialTags);
+  const [tagValue, setTagValue] = useAtom(tagAtom);
 
-  const updateTags = (newTags: string[]) => {
-    setTagValue(newTags);
-    if (onTagsChange) {
-      onTagsChange(newTags);
-    }
-  };
-
-  const [tag, setTag] = useAtom(tagAtom);
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
@@ -51,8 +42,6 @@ const TagInput = ({ initialTags = [], onTagsChange }: TagInputProps) => {
 
     const newTagValue = tagValue.filter((v) => v !== tagText);
     setTagValue(newTagValue);
-    updateTags(newTagValue);
-    setTag(newTagValue);
   };
 
   const handlePressEnter = (event: React.KeyboardEvent) => {
@@ -61,12 +50,13 @@ const TagInput = ({ initialTags = [], onTagsChange }: TagInputProps) => {
     if (!inputValue) return;
     if (tagValue.filter((v) => v == inputValue).length === 0) {
       setTagValue((prev) => [...prev, inputValue]);
-      setTag(tagValue);
     }
-    setInputValue(() => "");
-    updateTags([...tagValue, inputValue]);
     setInputValue("");
   };
+
+  useEffect(() => {
+    setTagValue(initialTags);
+  }, []);
 
   return (
     <InputBox>

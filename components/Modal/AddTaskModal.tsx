@@ -59,11 +59,16 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
       });
     }
 
-    setDueDate(""); //atom전역변수 초기화
+    deleteAtomData();
+    closeModalFunc();
+  };
+
+  //atom전역변수 초기화
+  const deleteAtomData = () => {
+    setDueDate("");
     setAssigneeUserId(null);
     setCardImage(null);
     setTags([]);
-    closeModalFunc();
   };
 
   const handleSelectMember = (userId: number) => setAssigneeUserId(userId);
@@ -84,7 +89,15 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
       <TagInput />
       <ImageUploadInput type="modal" />
       <ButtonWrapper>
-        <ButtonSet type="modalSet" onClickLeft={closeModalFunc} onClickRight={handleSubmit} isRightDisabled={isSubmitDisable()}>
+        <ButtonSet
+          type="modalSet"
+          onClickLeft={() => {
+            closeModalFunc();
+            deleteAtomData();
+          }}
+          onClickRight={handleSubmit}
+          isRightDisabled={isSubmitDisable()}
+        >
           생성
         </ButtonSet>
       </ButtonWrapper>
