@@ -92,7 +92,7 @@ export default ModalInput;
 
 const CustomDatePicker = () => {
   const [dates, setDates] = useState<Dayjs | null>(null);
-  const [, setDueDate] = useAtom(dueDateAtom);
+  const [dueDate, setDueDate] = useAtom(dueDateAtom);
 
   const handleDateChange = (newVal: Dayjs | null) => {
     setDates(newVal);
@@ -124,7 +124,8 @@ const CustomDatePicker = () => {
             width: 1,
             border: "none",
           }}
-          value={dates}
+          // value={dates}
+          value={dueDate ? dayjs(dueDate) : null}
           disablePast
           closeOnSelect
           format="YYYY-MM-DD HH:mm"

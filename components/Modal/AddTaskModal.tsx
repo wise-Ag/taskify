@@ -34,10 +34,13 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [dueDate, setDueDate] = useAtom(dueDateAtom);
   const [cardImage, setCardImage] = useAtom(cardImageAtom);
   const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
+
   const handleSelectMember = (userId: number) => {
     setAssigneeUserId(userId);
   };
+
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
+
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
 
   const handleSubmit = async () => {
@@ -108,12 +111,12 @@ const Wrapper = styled.div`
   width: 50.6rem;
 
   padding: 3.2rem 2.8rem 2.8rem 2.8rem;
+  border-radius: 8px;
 
   display: flex;
   flex-direction: column;
   gap: 3.2rem;
 
-  border-radius: 8px;
   background: var(--MainLight);
 
   @media (max-width: ${DeviceSize.mobile}) {

@@ -78,7 +78,7 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUr
   };
 
   return (
-    <>
+    <Wrapper>
       <Text>담당자</Text>
       <Container>
         <InputContainer>
@@ -107,14 +107,19 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUr
           </List>
         )}
       </Container>
-    </>
+    </Wrapper>
   );
 };
 
 export default ContactDropdown;
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const Text = styled.h3`
-  margin-bottom: -2.2rem;
+  margin-bottom: 1rem;
 
   color: var(--Black33);
   font-size: 1.8rem;
