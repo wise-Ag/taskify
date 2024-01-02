@@ -69,7 +69,7 @@ const Wrapper = styled.div`
 `;
 
 const Header = styled.div`
-  margin-bottom: 3.4rem;
+  margin-bottom: 2.4rem;
 
   display: flex;
   justify-content: space-between;
@@ -80,6 +80,8 @@ const Header = styled.div`
 `;
 
 const Title = styled.h1`
+  margin-bottom: 1rem;
+
   width: 20rem;
 
   color: var(--Black33);
