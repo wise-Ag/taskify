@@ -11,7 +11,7 @@ import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
 import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
 import { useModal } from "@/hooks/useModal";
-import { cardAtom, cardsAtom, cardsTotalCountAtom, commentScrollAtom, isCardUpdatedAtom } from "@/states/atoms";
+import { cardAtom, cardsAtom, cardsTotalCountAtom, commentScrollAtom, isCardUpdatedAtom, statusAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import React, { useEffect, useRef, useState } from "react";
@@ -28,6 +28,8 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
   const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
   const [cards, setCards] = useAtom(cardsAtom);
   const [card, setCard] = useAtom(cardAtom);
+  const [updatedColumnTitle] = useAtom(statusAtom);
+  const [columnTitleData, setColumnTitle] = useState(columnTitle);
   const [isCardUpdated, setIsCardUpdated] = useAtom(isCardUpdatedAtom);
   const [isScrollActive, setIsScrollActive] = useAtom(commentScrollAtom);
   const [, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
@@ -63,6 +65,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
 
   useEffect(() => {
     if (!isCardUpdated) setCard(cardData);
+    else setColumnTitle(updatedColumnTitle);
   });
 
   return (
@@ -110,7 +113,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
           <DeadLineDate>{card.dueDate}</DeadLineDate>
         </ContactDeadLineWrapper>
         <CategoryWrapper>
-          <ColumnName status={columnTitle} />
+          <ColumnName status={columnTitleData} />
           <DivisionWrapper>
             <Division alt="category-division" width={10} height={20} />
           </DivisionWrapper>

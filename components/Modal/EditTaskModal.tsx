@@ -9,7 +9,7 @@ import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
-import { cardAssigneeIdAtom, cardAtom, cardImageAtom, cardsAtom, dueDateAtom, isCardUpdatedAtom, tagAtom } from "@/states/atoms";
+import { cardAssigneeIdAtom, cardAtom, cardImageAtom, cardsAtom, dueDateAtom, isCardUpdatedAtom, statusAtom, tagAtom } from "@/states/atoms";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ModalInput from "./ModalInput/ModalInput";
@@ -26,9 +26,11 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
   const [tags, setTags] = useAtom(tagAtom);
   const [dueDate, setDueDate] = useAtom(dueDateAtom);
   const [cardImage, setCardImage] = useAtom(cardImageAtom);
+  const [status, setStatus] = useAtom(statusAtom);
   const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
   const [updatedCard, setUpdatedCard] = useAtom(cardAtom); //바로 업데이트를 위한 조타이
   const [isCardUpdated, setIsCardUpdated] = useAtom(isCardUpdatedAtom);
+  const [firstColumnId, setFirstColumnId] = useState<number>(0);
   const [isImageDeleteClick, setIsImageDeleteClick] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
@@ -57,7 +59,6 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
 
   const handleSubmit = async () => {
     if (!cardData) return;
-
     let newDuedate = dueDate == "" ? null : dueDate;
 
     let imageUrl: string | null = cardData.imageUrl;
@@ -70,7 +71,7 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
         imageUrl = cardImageRes.imageUrl;
       }
     } else {
-       if(isImageDeleteClick)imageUrl=null;
+      if (isImageDeleteClick) imageUrl = null;
     }
     const updatedCardData = {
       cardId: cardData.id,
@@ -87,11 +88,22 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
     const updatedCard = await putCard(updatedCardData);
 
     if (updatedCard) {
-      console.log("Card updated successfully:", updatedCard);
       setUpdatedCard({ ...updatedCard });
       setIsCardUpdated(true);
-
       if (onEdit) onEdit();
+      //status를 다른 칼럼으로 옮겼을 시 즉시 반영
+      if (firstColumnId !== updatedCard.columnId) {
+        setCards((prev) => {
+          //바뀐 컬럼에 우선 추가
+
+          const updatedCardList = [updatedCard, ...cards[updatedCard.columnId]];
+          return { ...prev, [updatedCard.columnId]: updatedCardList };
+        });
+        setCards((prev) => {
+          const updatedCardList = [...prev[firstColumnId].filter((v) => v.id !== updatedCard.id)];
+          return { ...prev, [firstColumnId]: updatedCardList };
+        });
+      }
     } else {
       console.error("Failed to update card");
     }
@@ -116,6 +128,7 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
         setDueDate(data.dueDate);
         if (data.assignee) setAssigneeUserId(data.assignee.id);
         setTags(data.tags);
+        setFirstColumnId(data.columnId);
       }
     };
 
@@ -138,7 +151,7 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
           <ModalInput $inputType="설명" label="설명" value={cardData.description} onChange={handleDescriptionChange} />
           <ModalInput label="마감일" $inputType="마감일" value={cardData.dueDate} />
           <TagInput initialTags={cardData.tags} />
-          <ImageUploadInput type="modal" initialImageUrl={cardData.imageUrl} handleDeleteClick = {setIsImageDeleteClick}/>
+          <ImageUploadInput type="modal" initialImageUrl={cardData.imageUrl} handleDeleteClick={setIsImageDeleteClick} />
           <ButtonWrapper>
             <ButtonSet
               type="modalSet"
