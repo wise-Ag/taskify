@@ -1,16 +1,14 @@
 import { postCards } from "@/api/cards";
 import { CardProps } from "@/api/cards/cards.types";
 import { postCardImage } from "@/api/columns";
-import { getMembers } from "@/api/members";
-import { Member } from "@/api/members/members.types";
 import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import TagInput from "@/components/Modal/ModalInput/TagInput";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
-import { cardAssigneeIdAtom, cardImageAtom, cardsAtom, dueDateAtom, tagAtom } from "@/states/atoms";
+import { cardAssigneeIdAtom, cardImageAtom, cardsAtom, cardsTotalCountAtom, dueDateAtom, tagAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import ContactDropdown from "./ModalInput/ContactDropdown";
 import ImageUploadInput from "./ModalInput/ImageUploadInput";
@@ -21,7 +19,6 @@ interface AddTaskModalProps {
 }
 
 const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
-  const [membersData, setMembersData] = useState<Member[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const token = localStorage.getItem("accessToken");
@@ -34,6 +31,7 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const [dueDate, setDueDate] = useAtom(dueDateAtom);
   const [cardImage, setCardImage] = useAtom(cardImageAtom);
   const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
+  const [, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
 
   const handleSubmit = async () => {
     console.log(dueDate == "Invalid Date");
@@ -56,8 +54,12 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
         const updatedCards = [postCardsRes, ...prevCards[columnId]];
         return { ...prevCards, [columnId]: updatedCards };
       });
+      setCardsTotalCount((prev) => {
+        const updatedCardsCount = prev[columnId] + 1;
+        return { ...prev, [columnId]: updatedCardsCount };
+      });
     }
-    console.log(postCardsRes);
+
     setDueDate(""); //atom전역변수 초기화
     setAssigneeUserId(null);
     setCardImage(null);
@@ -72,20 +74,6 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   const isSubmitDisable = () => {
     return dueDate == "Invalid Date" || !title || !description;
   };
-  useEffect(() => {
-    const fetchMembers = async () => {
-      try {
-        const memberData = await getMembers({ dashboardId, token });
-        if (memberData) {
-          setMembersData(memberData.members);
-        }
-      } catch (error) {
-        console.error("Failed to fetch members", error);
-      }
-    };
-
-    fetchMembers();
-  }, [dashboardId, token]);
 
   return (
     <Wrapper ref={modalRef}>

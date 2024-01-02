@@ -15,6 +15,8 @@ export const dashboardColorAtom = atom<string>(`${DASHBOARD_COLOR[0]}`);
 
 export const cardsAtom = atom<{ [columnId: number]: Card[] }>({});
 
+export const cardsTotalCountAtom = atom<{ [columnId: number]: number }>({});
+
 export const commentScrollAtom = atom<boolean>(false);
 
 export const dueDateAtom = atom<string>("");
@@ -23,4 +25,4 @@ export const cardImageAtom = atom<File | null>(null);
 
 export const cardAssigneeIdAtom = atom<number | null>(null);
 
-export const tagAtom = atom<string[] >([]);
+export const tagAtom = atom<string[]>([]);

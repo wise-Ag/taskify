@@ -11,7 +11,7 @@ import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
 import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
 import { useModal } from "@/hooks/useModal";
-import { cardsAtom, commentScrollAtom } from "@/states/atoms";
+import { cardsAtom, cardsTotalCountAtom, commentScrollAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import React, { useRef, useState } from "react";
@@ -28,6 +28,8 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
   const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
   const [cards, setCards] = useAtom(cardsAtom);
   const [isScrollActive, setIsScrollActive] = useAtom(commentScrollAtom);
+  const [, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
+
   const token = localStorage.getItem("accessToken");
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -49,6 +51,10 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
     setCards((prevCards) => {
       const updatedCards = prevCards[columnId].filter((card) => card.id !== cardData.id);
       return { ...prevCards, [columnId]: updatedCards };
+    });
+    setCardsTotalCount((prev) => {
+      const updatedCardsCount = prev[columnId] - 1;
+      return { ...prev, [columnId]: updatedCardsCount };
     });
     closeModalFunc();
   };

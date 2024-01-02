@@ -5,7 +5,7 @@ import AddTaskModal from "@/components/Modal/AddTaskModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
 import { useModal } from "@/hooks/useModal";
-import { cardsAtom, columnTitleAtom } from "@/states/atoms";
+import { cardsAtom, cardsTotalCountAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
@@ -18,6 +18,7 @@ interface ColumnProps {
 
 const Column = ({ columnId, title }: ColumnProps) => {
   const [cards, setCards] = useAtom(cardsAtom);
+  const [cardsTotalCount, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
 
   const handleCloseModal = () => {
@@ -37,17 +38,20 @@ const Column = ({ columnId, title }: ColumnProps) => {
           ...prevCards,
           [columnId]: res.cards,
         }));
+        setCardsTotalCount((prev) => {
+          return { ...prev, [columnId]: res.totalCount };
+        });
       }
     };
 
     loadCardList();
-  }, [columnId, isModalOpen]);
+  }, []);
 
   const columnCards = cards[columnId] || [];
 
   return (
     <Wrapper>
-      <ColumnHeader title={title} columnId={columnId} count={columnCards.length} />
+      <ColumnHeader title={title} columnId={columnId} count={cardsTotalCount[columnId]} />
       <Container>
         <Button
           type="plus"
