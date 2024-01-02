@@ -35,8 +35,11 @@ const Container = styled.div`
   gap: 1rem;
 
   display: inline-flex;
-  justify-content: center;
   align-items: center;
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    gap: 0.7rem;
+  }
 `;
 
 const ColorCircle = styled.div.attrs((props) => ({ style: { backgroundColor: props.color } }))`

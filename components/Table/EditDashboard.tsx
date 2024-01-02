@@ -63,7 +63,6 @@ const Wrapper = styled.div`
 
   @media (max-width: ${DeviceSize.mobile}) {
     width: 28.4rem;
-    height: 21.1rem;
 
     padding: 2rem 2.1rem;
   }
@@ -76,14 +75,25 @@ const Header = styled.div`
   justify-content: space-between;
 
   @media (max-width: ${DeviceSize.mobile}) {
-    margin-bottom: 2.4rem;
+    display: block;
   }
 `;
 
 const Title = styled.h1`
+  width: 20rem;
+
   color: var(--Black33);
   font-size: 2rem;
   font-weight: 700;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    text-overflow: clip;
+    overflow: auto;
+  }
 `;
 
 const Form = styled.form`

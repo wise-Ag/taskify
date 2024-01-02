@@ -1,7 +1,16 @@
 import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useEffect } from "react";
 import { styled } from "styled-components";
 
 const ModalWrapper = ({ children }: { children: React.ReactNode }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
   return (
     <Wrapper>
       <Container>{children}</Container>

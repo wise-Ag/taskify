@@ -30,7 +30,6 @@ const MembersList = () => {
         const userData = await getUsers({ token });
         if (userData) {
           setLoggedInUser(userData);
-          console.log(userData.id);
         }
       }
     };
