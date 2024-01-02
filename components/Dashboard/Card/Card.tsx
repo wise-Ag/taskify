@@ -60,6 +60,8 @@ export default Card;
 const Wrapper = styled.div`
   width: 31.4rem;
 
+  overflow: hidden;
+
   padding: 2rem;
   border-radius: 6px;
   border: 1px solid var(--Grayd9);
