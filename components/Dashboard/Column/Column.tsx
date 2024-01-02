@@ -25,6 +25,7 @@ const Column = ({ columnId, title }: ColumnProps) => {
   const [cardsTotalCount, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const columnCards = cards[columnId] || [];
+  const [isHovered, setIsHovered] = useState(false); //스크롤바 커스텀
 
   const loadCardList = async () => {
     if (columnCards.length > 0 && cursorId == null) return;
@@ -51,12 +52,22 @@ const Column = ({ columnId, title }: ColumnProps) => {
     setIsLoading(false);
   };
   const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCardList });
+
+  //스크롤바 커스텀
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   useEffect(() => {
     loadCardList();
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper className={`${isHovered ? "show-scrollbar" : ""}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <ColumnHeader title={title} columnId={columnId} count={cardsTotalCount[columnId]} />
       <Container>
         <Button
@@ -90,13 +101,26 @@ const Wrapper = styled.div`
   min-width: fit-content;
   height: 100vh;
 
-  overflow-y: auto;
+  overflow: hidden;
 
   display: flex;
   flex-direction: column;
 
   @media (max-width: ${DeviceSize.tablet}) {
     border-bottom: 1px solid var(--Grayd9);
+  }
+
+  &.show-scrollbar {
+    overflow-y: auto;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.2rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #8db877;
+    border-radius: 5rem;
   }
 `;
 
