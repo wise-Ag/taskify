@@ -85,7 +85,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
             {cardData.assignee && (
               <ProfileImageWrapper>
                 {cardData.assignee.profileImageUrl ? (
-                  <ProfileImage url={cardData.assignee.profileImageUrl} />
+                  <ProfileImage $image={cardData.assignee.profileImageUrl} />
                 ) : (
                   <NoProfileImageWrapper>
                     <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
@@ -334,13 +334,13 @@ const Image = styled.img`
   }
 `;
 
-const ProfileImage = styled.div<{ url: string }>`
+const ProfileImage = styled.div<{ $image: string }>`
   width: 2.7rem;
   height: 2.7rem;
 
   border-radius: 4.4rem;
 
-  background-image: url(${(props) => props.url});
+  background-image: url(${(props) => props.$image});
   background-size: cover;
 `;
 
