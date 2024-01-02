@@ -22,8 +22,8 @@ export interface GetDashboardInvitationsData {
 }
 
 export interface DeleteDashboardProps {
-  dashboardId: string;
-  token: string;
+  dashboardId: number;
+  token: string | null;
 }
 
 export interface DeleteDashboardInvitationsProps {
