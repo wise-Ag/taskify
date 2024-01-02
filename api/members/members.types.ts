@@ -22,6 +22,6 @@ export interface GetMembersProps {
 }
 
 export interface DeleteMembersProps {
-  memberId: string;
-  token?: string;
+  memberId: number;
+  token: string | null;
 }

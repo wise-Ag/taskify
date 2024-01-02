@@ -2,7 +2,7 @@ import { deleteColumns, putColumns } from "@/api/columns";
 import AlertModal from "@/components/Modal/AlertModal";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
 import { useModal } from "@/hooks/useModal";
-import { columnsAtom } from "@/states/atoms";
+import { columnsAtom, totalColumnsAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
@@ -18,6 +18,7 @@ interface KebabModalProps {
 
 const KebabModal = ({ columnId, setIsClicked, handleClick }: KebabModalProps) => {
   const [columns, setColumns] = useAtom(columnsAtom);
+  const [totalColumns, setTotalColumns] = useAtom(totalColumnsAtom);
   const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModalFunc, closeModalFunc: closeEditModalFunc } = useModal();
   const token = localStorage.getItem("accessToken");
@@ -48,6 +49,7 @@ const KebabModal = ({ columnId, setIsClicked, handleClick }: KebabModalProps) =>
   const handleDeleteColumn = async () => {
     await deleteColumns({ columnId, token });
     setColumns([...columns.filter((v) => v.id !== columnId)]);
+    setTotalColumns(totalColumns - 1);
     closeDeleteModalFunc();
   };
 

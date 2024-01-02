@@ -37,7 +37,7 @@ export const ENDPOINTS = {
     DELETE: (dashboardid: number) => `/dashboards/${dashboardid}`,
     POST_INVITATION: (dashboardid: number) => `/dashboards/${dashboardid}/invitations`,
     GET_INVITATION: (dashboardid: number) => `/dashboards/${dashboardid}/invitations`,
-    DELETE_INVITATION: (dashboardId: string, invitationId: string) => `/dashboards/${dashboardId}/invitations/${invitationId}`,
+    DELETE_INVITATION: (dashboardId: number, invitationId: number) => `/dashboards/${dashboardId}/invitations/${invitationId}`,
   },
 
   INVITATIONS: {
@@ -47,7 +47,7 @@ export const ENDPOINTS = {
 
   MEMBERS: {
     GET: `/members`,
-    DELETE: (memberId: string) => `/members/${memberId}`,
+    DELETE: (memberId: number) => `/members/${memberId}`,
   },
 
   USERS: {

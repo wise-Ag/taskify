@@ -1,7 +1,10 @@
-import { getMembers } from "@/api/members";
+import { deleteMembers, getMembers } from "@/api/members";
 import { Member } from "@/api/members/members.types";
+import AlertModal from "@/components/Modal/AlertModal";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Button from "@/components/common/Buttons/Button";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { useModal } from "@/hooks/useModal";
 import { usePagination } from "@/hooks/usePagination";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
@@ -11,31 +14,17 @@ import NoProfileImage from "../common/NoProfileImage/ProfileImage";
 import { getUsers } from "@/api/users";
 import { UserData } from "@/api/users/users.types";
 
-const PAGE_SIZE = 4; // 임의로 추가
+const PAGE_SIZE = 4;
 
 const MembersList = () => {
   const [members, setMembers] = useState<Member[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPageNum, setTotalPageNum] = useState(1);
+  const [selectedMemberId, setSelectedMemberId] = useState(0);
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
+  const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const router = useRouter();
   const { boardid } = router.query;
-  const [loggedInUser, setLoggedInUser] = useState<UserData | null>(null);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem("accessToken");
-
-      if (token) {
-        const userData = await getUsers({ token });
-        if (userData) {
-          setLoggedInUser(userData);
-        }
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   const fetchData = async () => {
     if (!isNaN(Number(boardid))) {
@@ -55,45 +44,65 @@ const MembersList = () => {
     }
   };
 
+  const handleOnCancel = async (memberId: number) => {
+    await deleteMembers({ memberId: memberId, token: localStorage.getItem("accessToken") });
+
+    setMembers([...members.filter((v) => v.id !== memberId)]);
+    closeModalFunc();
+  };
+
+  const handleDeleteButtonClick = (memberId: number) => {
+    setSelectedMemberId(memberId);
+    openModalFunc();
+  };
+
   useEffect(() => {
     fetchData();
   }, [currentPage, boardid]);
 
   return (
-    <Container>
-      <Header>
-        <Title>구성원</Title>
-        <PageInfo>
-          <PageText>
-            {totalPageNum} 페이지 중 {currentPage}
-          </PageText>
-          <ButtonSet
-            type="forwardAndBackward"
-            // 페이지수가 1이면 button disabled로 설정
-            isLeftDisabled={totalPageNum === 1}
-            isRightDisabled={totalPageNum === 1}
-            onClickRight={() => handlePageChange(1)}
-            onClickLeft={() => handlePageChange(-1)}
-          />
-        </PageInfo>
-      </Header>
-      <NameList>{totalCount === 0 ? "멤버가 없습니다" : "이름"}</NameList>
-      {members.map((member) => (
-        <MemberItem key={member.id}>
-          <MemberInfo>
-            {member.profileImageUrl ? (
+    <>
+      <Container>
+        <Header>
+          <Title>구성원</Title>
+          <PageInfo>
+            <PageText>
+              {totalPageNum} 페이지 중 {currentPage}
+            </PageText>
+            <ButtonSet
+              type="forwardAndBackward"
+              // 페이지수가 1이면 button disabled로 설정
+              isLeftDisabled={totalPageNum === 1}
+              isRightDisabled={totalPageNum === 1}
+              onClickRight={() => handlePageChange(1)}
+              onClickLeft={() => handlePageChange(-1)}
+            />
+          </PageInfo>
+        </Header>
+        <NameList>{totalCount === 0 ? "멤버가 없습니다" : "이름"}</NameList>
+        {members.map((member) => (
+          <MemberItem key={member.id}>
+            <MemberInfo>
+              {member.profileImageUrl ? (
               <Profile $url={member.profileImageUrl} />
             ) : (
               <NoProfileImageWrapper>
                 <NoProfileImage id={member.userId} nickname={member.nickname} />
               </NoProfileImageWrapper>
             )}
-            <Name>{member.nickname}</Name>
-          </MemberInfo>
-          {loggedInUser?.email !== member.email && <Button type="delete" children="삭제" />}
-        </MemberItem>
-      ))}
-    </Container>
+              <Name>{member.nickname}</Name>
+            </MemberInfo>
+            {!member.isOwner && <Button type="delete" children="삭제" onClick={() => handleDeleteButtonClick(member.id)} />}
+          </MemberItem>
+        ))}
+      </Container>
+
+      {isModalOpen && (
+        <ModalWrapper>
+          <AlertModal type="confirm" onCancel={closeModalFunc} onConfirm={() => handleOnCancel(selectedMemberId)} />
+        </ModalWrapper>
+      )}
+    </>
   );
 };
 
