@@ -30,13 +30,9 @@ export const deleteDashboard = async ({
   }
 };
 
-export const deleteDashboardInvitations = async ({
-  dashboardId = "198",
-  invitationId = "38",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzQ3MzEsImlzcyI6InNwLXRhc2tpZnkifQ.S8Lvf7DmFuMC3gMvNt1eJylk5oW0hFxHhbXAcQTDP2E",
-}: DeleteDashboardInvitationsProps) => {
+export const deleteDashboardInvitations = async ({ dashboardId, invitationId, token }: DeleteDashboardInvitationsProps) => {
   try {
-    const res = await instance.delete(ENDPOINTS.DASHBOARDS.DELETE_INVITATION(dashboardId, invitationId), {
+    await instance.delete(ENDPOINTS.DASHBOARDS.DELETE_INVITATION(dashboardId, invitationId), {
       headers: {
         Authorization: `Bearer ${token}`,
       },

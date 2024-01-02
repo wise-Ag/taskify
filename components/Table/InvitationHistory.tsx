@@ -1,4 +1,4 @@
-import { getDashboardInvitations, postDashboardInvitations } from "@/api/dashboards";
+import { deleteDashboardInvitations, getDashboardInvitations, postDashboardInvitations } from "@/api/dashboards";
 import { Invitation } from "@/api/invitations/invitations.types";
 import ModalContainer, { FormData } from "@/components/Modal/ModalContainer";
 import ModalWrapper from "@/components/Modal/ModalWrapper";
@@ -25,8 +25,10 @@ const InvitationHistory = () => {
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
   const { isModalOpen: isInvitaionModalOpen, openModalFunc: openInvitationModalFunc, closeModalFunc: closeInvitationModalFunc } = useModal();
   const { isModalOpen: isAlertModalOpen, openModalFunc: openAlertModalFunc, closeModalFunc: closeAlertModalFunc } = useModal();
+  const { isModalOpen: isCancelModalOpen, openModalFunc: openCancelModalFunc, closeModalFunc: closeCancelModalFunc } = useModal();
   const router = useRouter();
   const { boardid } = router.query;
+  const [selectedInvitationId, setSelectedInvitationId] = useState<number>(0); // 추가된 부분
 
   const isUserExist = (userToCheck: string) => {
     return invitations.some((invitaion) => invitaion.invitee.email === userToCheck);
@@ -70,6 +72,18 @@ const InvitationHistory = () => {
     closeInvitationModalFunc();
   };
 
+  const handleOnCancel = async (invitationId: number) => {
+    await deleteDashboardInvitations({ dashboardId: Number(boardid), invitationId: invitationId, token: localStorage.getItem("accessToken") });
+
+    setInvitations([...invitations.filter((v) => v.id !== invitationId)]);
+    closeCancelModalFunc();
+  };
+
+  const handleDeleteButtonClick = (invitationId: number) => {
+    setSelectedInvitationId(invitationId); // 삭제할 초대의 id를 설정
+    openCancelModalFunc(); // 모달 열기
+  };
+
   useEffect(() => {
     fetchData();
   }, [currentPage, boardid, isInvitaionModalOpen]);
@@ -108,7 +122,7 @@ const InvitationHistory = () => {
         {invitations.map((invitation: Invitation) => (
           <InvitationItem key={invitation.id}>
             <Email>{invitation.invitee.email}</Email>
-            <Button type="delete" children="취소" />
+            <Button type="delete" children="취소" onClick={() => handleDeleteButtonClick(invitation.id)} />
           </InvitationItem>
         ))}
       </Container>
@@ -122,6 +136,12 @@ const InvitationHistory = () => {
       {isAlertModalOpen && (
         <ModalWrapper>
           <AlertModal type="invalid" onClick={closeAlertModalFunc} />
+        </ModalWrapper>
+      )}
+
+      {isCancelModalOpen && (
+        <ModalWrapper>
+          <AlertModal type="cancel" onClick={() => handleOnCancel(selectedInvitationId)} />
         </ModalWrapper>
       )}
     </>
