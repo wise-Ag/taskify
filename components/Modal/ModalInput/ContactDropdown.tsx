@@ -21,9 +21,10 @@ const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps
   const [showList, setShowList] = useState(false);
   const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
   const [, setAssigneeId] = useAtom(cardAssigneeIdAtom);
-  const token = localStorage.getItem("accessToken");
+  const [isSelected, setIsSelected] = useState(true);
 
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
     const fetchMembers = async () => {
       try {
         const memberData = await getMembers({ dashboardId, token });
@@ -44,7 +45,7 @@ const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps
     };
 
     fetchMembers();
-  }, [dashboardId, token]);
+  }, [dashboardId]);
 
   const toggleList = () => {
     setShowList(!showList);
@@ -59,7 +60,8 @@ const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps
     const matchedMembers = membersData.filter((membersData) => membersData.nickname.toLowerCase().includes(input.toLowerCase()));
 
     setFilteredMembers(matchedMembers);
-
+    setAssigneeId(null); //input에 뭐 타이핑하면 무조건 담당자는 없음, 꼭 list중에서 Select해야함
+    setIsSelected(false); //선택되지 않았음을 사용자에게 보여주기 위해 프로필을 지움
     if (input) {
       setShowList(true);
     } else {
@@ -73,6 +75,7 @@ const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps
     setFilter(membersData.nickname);
     setShowList(false);
     setAssigneeId(membersData.userId);
+    setIsSelected(true);
   };
 
   return (
@@ -80,9 +83,11 @@ const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps
       <Text>담당자</Text>
       <Container>
         <InputContainer>
-          {selectedMember && selectedMember.profileImageUrl && <SelectProfileIcon src={selectedMember.profileImageUrl} alt="Profile" />}
+          {selectedMember && selectedMember.profileImageUrl && (
+            <SelectProfileIcon className={`${isSelected ? "" : "hideProfile"}`} src={selectedMember.profileImageUrl} alt="Profile" />
+          )}
           {selectedMember && !selectedMember.profileImageUrl && (
-            <SelectedNoProfileImage>
+            <SelectedNoProfileImage className={`${isSelected ? "" : "hideProfile"}`}>
               <NoProfileImage id={selectedMember.userId} nickname={selectedMember.nickname} />
             </SelectedNoProfileImage>
           )}
@@ -163,6 +168,10 @@ const SelectProfileIcon = styled.img`
 
   transform: translateY(-50%);
   object-fit: cover;
+
+  &.hideProfile {
+    display: none;
+  }
 `;
 const SelectedNoProfileImage = styled.div`
   width: 2.4rem;
@@ -175,6 +184,9 @@ const SelectedNoProfileImage = styled.div`
   border-radius: 50%;
 
   transform: translateY(-50%);
+  &.hideProfile {
+    display: none;
+  }
 `;
 
 const Input = styled.input`
