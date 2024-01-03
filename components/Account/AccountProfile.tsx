@@ -8,7 +8,7 @@ import { useModal } from "@/hooks/useModal";
 import { profileImageAtom, userProfileImageUrlAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect, useState, SetStateAction } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -21,6 +21,7 @@ const AccountProfile = () => {
   const [profileImage, setProfileImage] = useAtom(profileImageAtom);
   const [userProfileImageUrl, setUserProfileImageUrl] = useAtom(userProfileImageUrlAtom);
   const [initialNickname, setInitialNickname] = useState("");
+  const [isImageDeleted, setIsImageDeleted] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const { control, handleSubmit, watch, setError, setValue, formState } = useForm({
@@ -32,8 +33,12 @@ const AccountProfile = () => {
     closeModalFunc();
   };
 
+  const handleImageDelete = (value: SetStateAction<boolean>) => {
+    setIsImageDeleted(value);
+  };
+
   const handleProfileSubmit = async (data: ProfileFormData) => {
-    let imageUrl = userProfileImageUrl; // 기존 프로필 이미지 URL
+    let imageUrl = isImageDeleted ? null : userProfileImageUrl;
 
     // 프로필 이미지 변경 확인
     if (profileImage && profileImage instanceof File) {
@@ -98,7 +103,7 @@ const AccountProfile = () => {
         <Title>프로필</Title>
         <StyledForm onSubmit={handleSubmit(handleProfileSubmit)}>
           <Container>
-            <StyledImageUploadInput type="account" atomtype="profileImage" initialImageUrl={userProfileImageUrl} />
+            <StyledImageUploadInput type="account" atomtype="profileImage" initialImageUrl={userProfileImageUrl} handleDeleteClick={handleImageDelete} />
             <InputWrapper>
               <Controller control={control} name="email" render={({ field }) => <StyledInput label="이메일" {...field} disabled />} />
               <Controller
