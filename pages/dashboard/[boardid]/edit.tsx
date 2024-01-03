@@ -11,12 +11,14 @@ import { useModal } from "@/hooks/useModal";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { deleteDashboard } from "@/api/dashboards";
+import { deleteDashboard, getDashboard } from "@/api/dashboards";
+import { useEffect, useState } from "react";
+import { Dashboard } from "@/api/dashboards/dashboards.types";
 
 const DashboardEditPage = () => {
   const router = useRouter();
   const { boardid } = router.query;
-  const token = localStorage.getItem("accessToken");
+  const [dashboard, setDashboard] = useState<Dashboard>();
 
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
 
@@ -25,10 +27,27 @@ const DashboardEditPage = () => {
   };
 
   const handleConfirmDelete = async () => {
-    await deleteDashboard({ dashboardId: boardid, token });
+    await deleteDashboard({ dashboardId: boardid, token: localStorage.getItem("accessToken") });
     closeModalFunc();
     router.push(`/mydashboard`);
   };
+
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      const res = await getDashboard({ dashboardId: boardid, token: localStorage.getItem("accessToken") });
+
+      if (res !== null) {
+        setDashboard(res);
+
+        if (!res.createdByMe) {
+          router.push(`/404`);
+          return;
+        }
+      }
+    };
+
+    if (boardid) loadDashboardData();
+  }, [boardid]);
 
   return (
     <Wrapper>

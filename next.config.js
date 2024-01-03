@@ -12,15 +12,6 @@ const nextConfig = {
 
     return config;
   },
-  async redirects() {
-    return [
-      {
-        source: "/dashboard/:boardid/edit",
-        destination: "/404",
-        permanent: false,
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;
