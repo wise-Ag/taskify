@@ -30,7 +30,7 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
   const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
   const [updatedCard, setUpdatedCard] = useAtom(cardAtom); //바로 업데이트를 위한 조타이
   const [isCardUpdated, setIsCardUpdated] = useAtom(isCardUpdatedAtom);
-  const [firstColumnId, setFirstColumnId] = useState<number>(0);
+
   const [isImageDeleteClick, setIsImageDeleteClick] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
@@ -91,19 +91,6 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
       setUpdatedCard({ ...updatedCard });
       setIsCardUpdated(true);
       if (onEdit) onEdit();
-      //status를 다른 칼럼으로 옮겼을 시 즉시 반영
-      if (firstColumnId !== updatedCard.columnId) {
-        setCards((prev) => {
-          //바뀐 컬럼에 우선 추가
-
-          const updatedCardList = [updatedCard, ...cards[updatedCard.columnId]];
-          return { ...prev, [updatedCard.columnId]: updatedCardList };
-        });
-        setCards((prev) => {
-          const updatedCardList = [...prev[firstColumnId].filter((v) => v.id !== updatedCard.id)];
-          return { ...prev, [firstColumnId]: updatedCardList };
-        });
-      }
     } else {
       console.error("Failed to update card");
     }
@@ -128,7 +115,6 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
         setDueDate(data.dueDate);
         if (data.assignee) setAssigneeUserId(data.assignee.id);
         setTags(data.tags);
-        setFirstColumnId(data.columnId);
       }
     };
 

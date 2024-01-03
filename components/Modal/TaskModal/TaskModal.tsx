@@ -28,7 +28,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
   const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
   const [cards, setCards] = useAtom(cardsAtom);
   const [card, setCard] = useAtom(cardAtom);
-  const [updatedColumnTitle] = useAtom(statusAtom);
+  const [updatedColumnTitle, setStatus] = useAtom(statusAtom);
   const [columnTitleData, setColumnTitle] = useState(columnTitle);
   const [isCardUpdated, setIsCardUpdated] = useAtom(isCardUpdatedAtom);
   const [isScrollActive, setIsScrollActive] = useAtom(commentScrollAtom);
@@ -50,6 +50,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
   const handleDropdownClose = () => {
     setIsDropdownOpen(false);
   };
+
   const handleConfirmDelete = async () => {
     await deleteCard({ cardId: card.id, token });
     setCards((prevCards) => {
@@ -63,9 +64,32 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
     closeModalFunc();
   };
 
+  const handleTaskModalClose = () => {
+    if (isCardUpdated) {
+      //status를 다른 칼럼으로 옮겼을 시 즉시 반영
+      if (columnId !== card.columnId) {
+        setCards((prev) => {
+          //바뀐 컬럼에 우선 추가
+          const cardList = [card, ...cards[card.columnId]];
+          return { ...prev, [card.columnId]: cardList };
+        });
+        setCards((prev) => {
+          const cardList = [...cards[columnId].filter((v) => v.id !== card.id)];
+          return { ...prev, [columnId]: cardList };
+        });
+      }
+    }
+    closeModalFunc();
+    setIsScrollActive(false);
+    setIsCardUpdated(false);
+    setStatus("");
+  };
+
   useEffect(() => {
     if (!isCardUpdated) setCard(cardData);
-    else setColumnTitle(updatedColumnTitle);
+    else {
+      setColumnTitle(updatedColumnTitle);
+    }
   });
 
   return (
@@ -80,16 +104,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
               {isDropdownOpen && <TaskDropdown onEdit={handleDropdownEditClick} onCreate={handleDropdownDeleteClick} />}
             </KebabIconContainer>
             <div style={{ cursor: "pointer" }}>
-              <Close
-                alt="close"
-                width={28}
-                height={28}
-                onClick={() => {
-                  closeModalFunc();
-                  setIsScrollActive(false);
-                  setIsCardUpdated(false);
-                }}
-              />
+              <Close alt="close" width={28} height={28} onClick={handleTaskModalClose} />
             </div>
           </IconContainer>
         </TitleWrapper>
