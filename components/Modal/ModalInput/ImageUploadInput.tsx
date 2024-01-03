@@ -1,6 +1,6 @@
 import AddIcon from "@/assets/icons/add-fillo.svg";
 import EditIcon from "@/assets/icons/edit.svg";
-import { cardImageAtom } from "@/states/atoms";
+import { cardImageAtom, profileImageAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
@@ -8,12 +8,14 @@ import styled, { css } from "styled-components";
 
 interface ImageUploadInputProps {
   type: "modal" | "account";
+  atomtype: "cardImage" | "profileImage";
   initialImageUrl?: string;
   handleDeleteClick?: Dispatch<SetStateAction<boolean>>;
 }
 
-const ImageUploadInput = ({ type, className, initialImageUrl, handleDeleteClick }: ImageUploadInputProps & { className?: string }) => {
-  const [selectedImage, setSelectedImage] = useAtom(cardImageAtom);
+const ImageUploadInput = ({ type, className, initialImageUrl, handleDeleteClick, atomtype }: ImageUploadInputProps & { className?: string }) => {
+  const atom = atomtype === "cardImage" ? cardImageAtom : profileImageAtom;
+  const [selectedImage, setSelectedImage] = useAtom(atom);
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialImageUrl ?? null);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {

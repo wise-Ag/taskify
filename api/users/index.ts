@@ -16,22 +16,14 @@ export const getUsers = async ({ token }: { token: string | null }): Promise<Use
   }
 };
 
-export const postProfileImage = async ({
-  image,
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NzU1MjgsImlzcyI6InNwLXRhc2tpZnkifQ.vPTurAcm35kevcT9alVW2SxsjFcaKqnmd_mpgVwWfRU",
-}: PostProfileImageProps): Promise<PostImageData | null> => {
+export const postProfileImage = async ({ formData, token }: PostProfileImageProps): Promise<PostImageData | null> => {
   try {
-    const res = await instance.post(
-      ENDPOINTS.USERS.POST_IMAGE,
-      {
-        image: "test",
+    const res = await instance.post(ENDPOINTS.USERS.POST_IMAGE, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
+    });
     return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);

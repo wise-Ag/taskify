@@ -43,6 +43,8 @@ export const dueDateAtom = atom<string>("");
 
 export const cardImageAtom = atom<File | null>(null);
 
+export const profileImageAtom = atom<File | null>(null);
+
 export const cardAssigneeIdAtom = atom<number | null>(null);
 
 export const tagAtom = atom<string[]>([]);
