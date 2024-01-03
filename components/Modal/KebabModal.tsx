@@ -29,6 +29,7 @@ const KebabModal = ({ columnId, setIsClicked, handleClick }: KebabModalProps) =>
 
   const rules = {
     required: "변경할 이름을 입력해주세요",
+    maxLength: { value: 15, message: "컬럼 이름은 15자를 초과할 수 없습니다." },
     validate: (v: string) => {
       if (isTitleExist(v)) return "이름이 중복되었습니다. 다시 입력해주세요!";
     },
@@ -80,7 +81,7 @@ const KebabModal = ({ columnId, setIsClicked, handleClick }: KebabModalProps) =>
       </Wrapper>
       {isEditModalOpen && (
         <ModalWrapper>
-          <ModalContainer title="컬럼 관리" label="컬럼 이름" buttonType="변경" onClose={closeEditModalFunc} onSubmit={handleChangeColumnName} rules={rules} />
+          <ModalContainer title="컬럼 이름 수정" label="수정할 컬럼 이름" buttonType="변경" onClose={closeEditModalFunc} onSubmit={handleChangeColumnName} rules={rules} />
         </ModalWrapper>
       )}
       {isDeleteModalOpen && (

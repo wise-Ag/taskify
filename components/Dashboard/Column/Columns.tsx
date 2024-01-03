@@ -28,6 +28,7 @@ const Columns = () => {
 
   const rules = {
     required: "생성할 이름을 입력해주세요",
+    maxLength: { value: 15, message: "컬럼 이름은 15자를 초과할 수 없습니다." },
     validate: (v: string) => {
       if (isTitleExist(v)) return "이름이 중복되었습니다. 다시 입력해주세요!";
     },
@@ -35,11 +36,6 @@ const Columns = () => {
 
   const handleOnSubmit = async (data: FormData) => {
     const res = await postColumns({ title: data.inputData, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
-
-    // if (totalColumns >= 10) {
-    //   toast("칼럼의 개수는 10개를 초과할 수 없습니다.");
-    //   setToastVisible((prev) => !prev);
-    // }
 
     if (res == null) {
       toast("칼럼 생성에 실패했습니다.");
@@ -55,7 +51,7 @@ const Columns = () => {
 
   const handleAddColumn = () => {
     if (totalColumns >= 10) {
-      toast("칼럼의 개수는 10개를 초과할 수 없습니다.");
+      toast("컬럼의 개수는 10개를 초과할 수 없습니다.");
       setToastVisible((prev) => !prev);
     } else {
       openModalFunc();
