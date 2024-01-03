@@ -54,3 +54,5 @@ export const isOpenAtom = atom(false);
 export const statusAtom = atom("로딩 중");
 
 export const selectedIdAtom = atom<number | null>(null);
+
+export const profileImageUrlAtom = atom<string>("");
