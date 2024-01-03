@@ -5,7 +5,7 @@ import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Input from "@/components/Sign/SignInput/Input";
 import { NICKNAME_RULES, PLACEHOLDER } from "@/constants/InputConstant";
 import { useModal } from "@/hooks/useModal";
-import { profileImageAtom, profileImageUrlAtom } from "@/states/atoms";
+import { profileImageAtom, userProfileImageUrlAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ interface ProfileFormData {
 
 const AccountProfile = () => {
   const [profileImage, setProfileImage] = useAtom(profileImageAtom);
-  const [profileImageUrl, setProfileImageUrl] = useAtom(profileImageUrlAtom);
+  const [userProfileImageUrl, setUserProfileImageUrl] = useAtom(userProfileImageUrlAtom);
   const [token, setToken] = useState<string | null>(null);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const { control, handleSubmit, watch, setError, setValue, formState } = useForm({
@@ -44,14 +44,14 @@ const AccountProfile = () => {
         return;
       }
       imageUrl = profileImageRes.profileImageUrl;
-      setProfileImageUrl(imageUrl);
+      setUserProfileImageUrl(imageUrl);
     }
 
     const userUpdateRes = await putUsers({ nickname: data.nickname, profileImageUrl: imageUrl, token });
     if (userUpdateRes !== null) {
       openModalFunc();
     } else {
-      // setError를 사용하여 오류 처리
+      console.error("Failed to update profile", Error);
     }
   };
 
@@ -67,8 +67,8 @@ const AccountProfile = () => {
         if (userData) {
           setValue("email", userData.email);
           setValue("nickname", userData.nickname);
-          setProfileImageUrl(userData.profileImageUrl);
-          console.log(profileImageUrl);
+          setUserProfileImageUrl(userData.profileImageUrl);
+          console.log(userProfileImageUrl);
         }
       }
     };
@@ -82,7 +82,7 @@ const AccountProfile = () => {
         <Title>프로필</Title>
         <StyledForm onSubmit={handleSubmit(handleProfileSubmit)}>
           <Container>
-            <StyledImageUploadInput type="account" atomtype="profileImage" initialImageUrl={profileImageUrl} />
+            <StyledImageUploadInput type="account" atomtype="profileImage" initialImageUrl={userProfileImageUrl} />
             <InputWrapper>
               <Controller control={control} name="email" render={({ field }) => <StyledInput label="이메일" {...field} disabled />} />
               <Controller

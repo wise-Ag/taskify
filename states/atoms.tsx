@@ -55,4 +55,4 @@ export const statusAtom = atom("로딩 중");
 
 export const selectedIdAtom = atom<number | null>(null);
 
-export const profileImageUrlAtom = atom<string>("");
+export const userProfileImageUrlAtom = atom<string>("");
