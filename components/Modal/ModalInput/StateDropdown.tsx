@@ -22,6 +22,8 @@ const StateDropdown = ({ dashboardId, defaultColumnId, onColumnSelect }: StateDr
   const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
+    //처음엔 드롭다운 무조건 닫혀있는 상태
+    setIsOpen(false);
     const fetchData = async () => {
       const data = await getColumns({ dashboardId, token });
       if (data && data.result === "SUCCESS") {
@@ -29,6 +31,7 @@ const StateDropdown = ({ dashboardId, defaultColumnId, onColumnSelect }: StateDr
         const defaultColumn = data.data.find((column) => column.id === defaultColumnId);
         if (defaultColumn) {
           setStatus(defaultColumn.title);
+          setSelectedId(defaultColumnId);
         }
       }
     };
@@ -44,6 +47,7 @@ const StateDropdown = ({ dashboardId, defaultColumnId, onColumnSelect }: StateDr
     setSelectedId(columnId);
     if (onColumnSelect) {
       onColumnSelect(columnId);
+      setIsOpen(false); //선택하면 드롭다운 닫아줌
     }
   };
 
