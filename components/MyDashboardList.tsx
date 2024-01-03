@@ -78,6 +78,16 @@ const MyDashboardList = () => {
 
   return (
     <Wrapper>
+      <PageContent>
+        {totalPageCount} 페이지 중 {currentPage}{" "}
+        <ButtonSet
+          type="forwardAndBackward"
+          isLeftDisabled={currentPage === 1}
+          isRightDisabled={currentPage === totalPageCount}
+          onClickLeft={() => handlePageChange(-1)}
+          onClickRight={() => handlePageChange(1)}
+        />
+      </PageContent>
       <Container>
         <Button
           type="newDashboard"
@@ -96,16 +106,6 @@ const MyDashboardList = () => {
             );
           })}
       </Container>
-      <PageContent>
-        {totalPageCount} 페이지 중 {currentPage}{" "}
-        <ButtonSet
-          type="forwardAndBackward"
-          isLeftDisabled={currentPage === 1}
-          isRightDisabled={currentPage === totalPageCount}
-          onClickLeft={() => handlePageChange(-1)}
-          onClickRight={() => handlePageChange(1)}
-        />
-      </PageContent>
       {isModalOpen && (
         <ModalWrapper>
           <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} onSubmit={handleAddModal} rules={rules} />
@@ -117,21 +117,16 @@ const MyDashboardList = () => {
 
 export default MyDashboardList;
 
-const Container = styled.div`
-  width: fit-content;
-  display: grid;
-  grid-template-columns: repeat(3, 33.2rem);
-  grid-template-rows: repeat(2, 7.15rem);
-  gap: 1.2rem;
+const Wrapper = styled.div`
+  max-width: 102rem;
 
-  @media (max-width: ${DeviceSize.tablet}) {
-    grid-template-columns: repeat(2, 24.7rem);
-    grid-template-rows: repeat(3, 6.955rem);
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: end;
 
   @media (max-width: ${DeviceSize.mobile}) {
-    grid-template-columns: repeat(1, 26rem);
-    grid-template-rows: repeat(6, 6.56rem);
+    max-width: 40rem;
   }
 `;
 
@@ -143,11 +138,21 @@ const PageContent = styled.div`
   font-size: 1.4rem;
 `;
 
-const Wrapper = styled.div`
-  width: fit-content;
+const Container = styled.div`
+  width: 100%;
 
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 7.15rem);
   gap: 1.2rem;
-  align-items: end;
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    grid-template-columns: repeat(2, 2fr);
+    grid-template-rows: repeat(3, 6.955rem);
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(6, 6.56rem);
+  }
 `;

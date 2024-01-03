@@ -101,7 +101,7 @@ const InvitedDashboard = () => {
 export default InvitedDashboard;
 
 const Container = styled.div`
-  width: 102rem;
+  max-width: 102rem;
   height: 60rem;
   padding: 3rem;
   border-radius: 8px;
@@ -112,14 +112,10 @@ const Container = styled.div`
 
   background: var(--White);
 
-  @media screen and (max-width: ${DeviceSize.tablet}) {
-    width: 50.4rem;
-  }
-
   @media screen and (max-width: ${DeviceSize.mobile}) {
-    width: 26rem;
+    max-width: 40rem;
 
-    padding: 1.6rem;
+    padding: 2.4rem 1.6rem;
   }
 `;
 

@@ -127,8 +127,9 @@ const TYPES = {
       font-size: 1.6rem;
     }
   `,
+
   newDashboard: css`
-    width: 33.2rem;
+    width: 100%;
 
     padding: 2.4rem 0;
 
@@ -137,15 +138,7 @@ const TYPES = {
     font-size: 1.6rem;
     font-weight: 600;
 
-    /* 디자인은 추후 변경 */
-    &:disabled {
-      /* color: var(--Grayfa); */
-      cursor: default;
-    }
-
     @media (max-width: ${DeviceSize.tablet}) {
-      width: 24.7rem;
-
       padding: 2.3rem 0;
 
       gap: 1.2rem;
@@ -155,8 +148,6 @@ const TYPES = {
     }
 
     @media (max-width: ${DeviceSize.mobile}) {
-      width: 26rem;
-
       padding: 1.9rem 0;
 
       gap: 1.2rem;
@@ -167,7 +158,7 @@ const TYPES = {
   `,
 
   dashboardList: css`
-    width: 33.2rem;
+    width: 100%;
 
     padding: 2.55rem 2rem;
 
@@ -177,8 +168,6 @@ const TYPES = {
     font-weight: 600;
 
     @media (max-width: ${DeviceSize.tablet}) {
-      width: 24.7rem;
-
       padding: 2.45rem 2rem;
 
       justify-content: space-between;
@@ -188,8 +177,6 @@ const TYPES = {
     }
 
     @media (max-width: ${DeviceSize.mobile}) {
-      width: 26rem;
-
       padding: 2rem 2rem;
 
       justify-content: space-between;
