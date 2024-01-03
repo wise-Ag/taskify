@@ -56,8 +56,9 @@ const TagInput = ({ isModify = false }: { isModify?: boolean }) => {
     if (event.key !== "Enter") return;
     if (event.nativeEvent.isComposing) return;
     if (!inputValue) return;
-    if (tagValue.filter((v) => v == inputValue).length === 0) {
-      setTagValue((prev) => [...prev, inputValue]);
+    const trimedValue = inputValue.split(" ").join("");
+    if (tagValue.filter((v) => v == trimedValue).length === 0) {
+      setTagValue((prev) => [...prev, trimedValue]);
     }
     setInputValue("");
   };
