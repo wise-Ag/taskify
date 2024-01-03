@@ -20,6 +20,7 @@ interface ProfileFormData {
 const AccountProfile = () => {
   const [profileImage, setProfileImage] = useAtom(profileImageAtom);
   const [userProfileImageUrl, setUserProfileImageUrl] = useAtom(userProfileImageUrlAtom);
+  const [initialNickname, setInitialNickname] = useState("");
   const [token, setToken] = useState<string | null>(null);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const { control, handleSubmit, watch, setError, setValue, formState } = useForm({
@@ -32,9 +33,10 @@ const AccountProfile = () => {
   };
 
   const handleProfileSubmit = async (data: ProfileFormData) => {
-    let imageUrl = null;
+    let imageUrl = userProfileImageUrl; // 기존 프로필 이미지 URL
 
-    if (profileImage) {
+    // 프로필 이미지 변경 확인
+    if (profileImage && profileImage instanceof File) {
       const formData = new FormData();
       formData.append("image", profileImage);
 
@@ -47,11 +49,25 @@ const AccountProfile = () => {
       setUserProfileImageUrl(imageUrl);
     }
 
-    const userUpdateRes = await putUsers({ nickname: data.nickname, profileImageUrl: imageUrl, token });
-    if (userUpdateRes !== null) {
-      openModalFunc();
+    // 닉네임이 변경되었는지 확인
+    const nicknameChanged = data.nickname !== initialNickname;
+
+    // 닉네임이나 프로필 이미지가 변경되었을 경우에만 업데이트 요청
+    if (nicknameChanged || imageUrl !== userProfileImageUrl) {
+      const userUpdateRes = await putUsers({
+        nickname: data.nickname,
+        profileImageUrl: imageUrl,
+        token,
+      });
+
+      if (userUpdateRes !== null) {
+        openModalFunc();
+      } else {
+        console.error("Failed to update profile", Error);
+      }
     } else {
-      console.error("Failed to update profile", Error);
+      // 변경 사항이 없을 경우
+      alert("변경된 사항이 없습니다.");
     }
   };
 
@@ -67,14 +83,14 @@ const AccountProfile = () => {
         if (userData) {
           setValue("email", userData.email);
           setValue("nickname", userData.nickname);
+          setInitialNickname(userData.nickname); // 초기 닉네임 값 저장
           setUserProfileImageUrl(userData.profileImageUrl);
-          console.log(userProfileImageUrl);
         }
       }
     };
 
     fetchUserData();
-  }, [setValue]);
+  }, [setValue, setToken]);
 
   return (
     <>
