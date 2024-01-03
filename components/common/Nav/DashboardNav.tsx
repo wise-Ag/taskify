@@ -11,10 +11,6 @@ const DashboardNav = () => {
 
   useEffect(() => {
     const loadDashboardData = async () => {
-      if (!boardid) {
-        router.push(`/404`);
-        return;
-      }
       const res = await getDashboard({ dashboardId: String(boardid), token: localStorage.getItem("accessToken") });
       if (res !== null) setDashboard(res);
     };

@@ -89,7 +89,6 @@ const SideMenu = () => {
   const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadDashboards });
 
   useEffect(() => {
-    console.log(cursorId);
     loadDashboards();
   }, [cursorId]);
 
