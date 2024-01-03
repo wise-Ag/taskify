@@ -24,11 +24,7 @@ const Tags = ({ handleOnClick, tagValue }: TagsProps) => {
   );
 };
 
-interface TagInputProps {
-  initialTags?: string[]; // 여기에 initialTags prop의 타입을 추가
-}
-
-const TagInput = ({ initialTags = [] }: TagInputProps) => {
+const TagInput = () => {
   const [inputValue, setInputValue] = useState("");
   const [tagValue, setTagValue] = useAtom(tagAtom);
 
@@ -54,16 +50,12 @@ const TagInput = ({ initialTags = [] }: TagInputProps) => {
     setInputValue("");
   };
 
-  useEffect(() => {
-    setTagValue(initialTags);
-  }, []);
-
   return (
     <InputBox>
       <Label>태그</Label>
       <InputArea>
         {tagValue && <Tags handleOnClick={handleDeleteTag} tagValue={tagValue} />}
-        <StyledInput type="text" value={inputValue} onChange={handleInputChange} placeholder={tagValue.length === 0 ? "입력 후 Enter" : ""} onKeyDown={handlePressEnter} />
+        <StyledInput type="text" value={inputValue} onChange={handleInputChange} placeholder={tagValue.length == 0 ? "입력 후 Enter" : ""} onKeyDown={handlePressEnter} />
       </InputArea>
     </InputBox>
   );

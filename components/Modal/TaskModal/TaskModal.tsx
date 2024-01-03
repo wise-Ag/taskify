@@ -164,7 +164,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
       {isEditModalOpen && (
         <ModalWrapper>
           <EditTaskModal
-            cardId={card.id}
+            card={card}
             onCancel={closeEditModal}
             onEdit={() => {
               closeEditModal();

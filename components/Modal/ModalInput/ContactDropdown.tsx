@@ -1,27 +1,26 @@
-import { useState, ChangeEvent, useEffect } from "react";
-import styled from "styled-components";
+import { getMembers } from "@/api/members";
+import { Member } from "@/api/members/members.types";
 import DropdownIcon from "@/assets/icons/arrow-drop-down.svg";
 import CheckIcon from "@/assets/icons/check.svg";
+import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
+import { cardAssigneeIdAtom } from "@/states/atoms";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
-import { cardAssigneeIdAtom } from "@/states/atoms";
-import { Member } from "@/api/members/members.types";
-import { getMembers } from "@/api/members";
-import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
-import { DeviceSize } from "@/styles/DeviceSize";
+import { ChangeEvent, useEffect, useState } from "react";
+import styled from "styled-components";
 
 interface ContactDropdownProps {
   dashboardId: number;
   assigneeNickname?: string | null;
-  onSelectMember?: (userId: number) => void;
 }
 
-const ContactDropdown = ({ dashboardId, assigneeNickname, onSelectMember }: ContactDropdownProps) => {
+const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
   const [filter, setFilter] = useState("");
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [showList, setShowList] = useState(false);
   const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+  const [, setAssigneeId] = useAtom(cardAssigneeIdAtom);
   const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -47,7 +46,6 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, onSelectMember }: Cont
     fetchMembers();
   }, [dashboardId, token]);
 
-  const [, setAssigneeId] = useAtom(cardAssigneeIdAtom);
   const toggleList = () => {
     setShowList(!showList);
     if (!showList) {
@@ -74,7 +72,6 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, onSelectMember }: Cont
     setSelectedMember(membersData);
     setFilter(membersData.nickname);
     setShowList(false);
-    if (onSelectMember) onSelectMember(membersData.userId);
     setAssigneeId(membersData.userId);
   };
 
