@@ -7,15 +7,16 @@ import { useAtom } from "jotai";
 import { cardAssigneeIdAtom } from "@/states/atoms";
 import { Member } from "@/api/members/members.types";
 import { getMembers } from "@/api/members";
+import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
+import { DeviceSize } from "@/styles/DeviceSize";
 
 interface ContactDropdownProps {
   dashboardId: number;
   assigneeNickname?: string | null;
-  assigneeProfileImageUrl?: string | null;
   onSelectMember?: (userId: number) => void;
 }
 
-const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUrl, onSelectMember }: ContactDropdownProps) => {
+const ContactDropdown = ({ dashboardId, assigneeNickname, onSelectMember }: ContactDropdownProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
   const [filter, setFilter] = useState("");
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
@@ -82,7 +83,12 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUr
       <Text>담당자</Text>
       <Container>
         <InputContainer>
-          {selectedMember && <SelectProfileIcon src={selectedMember.profileImageUrl} alt="Profile" />}
+          {selectedMember && selectedMember.profileImageUrl && <SelectProfileIcon src={selectedMember.profileImageUrl} alt="Profile" />}
+          {selectedMember && !selectedMember.profileImageUrl && (
+            <SelectedNoProfileImage>
+              <NoProfileImage id={selectedMember.userId} nickname={selectedMember.nickname} />
+            </SelectedNoProfileImage>
+          )}
           <Input
             type="text"
             value={filter}
@@ -99,7 +105,13 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, assigneeProfileImageUr
           <List>
             {filteredMembers.map((membersData) => (
               <ListItem key={membersData.id} onClick={() => handleSelect(membersData)}>
-                <ProfileIcon src={membersData.profileImageUrl} alt="Profile" />
+                {membersData.profileImageUrl ? (
+                  <ProfileIcon src={membersData.profileImageUrl} alt="Profile" />
+                ) : (
+                  <NoProfileImageWrapper>
+                    <NoProfileImage id={membersData.userId} nickname={membersData.nickname} />
+                  </NoProfileImageWrapper>
+                )}
                 {membersData.nickname}
                 <CheckIconStyled />
               </ListItem>
@@ -154,6 +166,18 @@ const SelectProfileIcon = styled.img`
 
   transform: translateY(-50%);
   object-fit: cover;
+`;
+const SelectedNoProfileImage = styled.div`
+  width: 2.4rem;
+  line-height: 2.4rem;
+
+  position: absolute;
+  left: 1.6rem;
+  top: 50%;
+
+  border-radius: 50%;
+
+  transform: translateY(-50%);
 `;
 
 const Input = styled.input`
@@ -226,6 +250,15 @@ const ProfileIcon = styled.img`
   border-radius: 50%;
 
   object-fit: cover;
+`;
+
+const NoProfileImageWrapper = styled.div`
+  width: 2.4rem;
+
+  margin-right: 1rem;
+
+  line-height: 2.4rem;
+  font-size: 1.3rem;
 `;
 
 const CheckIconStyled = styled(CheckIcon)`

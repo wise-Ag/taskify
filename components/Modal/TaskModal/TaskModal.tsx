@@ -11,10 +11,10 @@ import ColumnName from "@/components/common/Chip/ColumnName";
 import Tag from "@/components/common/Chip/Tag";
 import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
 import { useModal } from "@/hooks/useModal";
-import { cardsAtom, cardsTotalCountAtom, commentScrollAtom } from "@/states/atoms";
+import { cardAtom, cardsAtom, cardsTotalCountAtom, commentScrollAtom, isCardUpdatedAtom, statusAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaArrowUpWideShort } from "react-icons/fa6";
 import styled from "styled-components";
 import NoProfileImage from "../../common/NoProfileImage/ProfileImage";
@@ -27,6 +27,10 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
   const scrollContainerRef = useRef(null);
   const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
   const [cards, setCards] = useAtom(cardsAtom);
+  const [card, setCard] = useAtom(cardAtom);
+  const [updatedColumnTitle, setStatus] = useAtom(statusAtom);
+  const [columnTitleData, setColumnTitle] = useState(columnTitle);
+  const [isCardUpdated, setIsCardUpdated] = useAtom(isCardUpdatedAtom);
   const [isScrollActive, setIsScrollActive] = useAtom(commentScrollAtom);
   const [, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
 
@@ -46,10 +50,11 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
   const handleDropdownClose = () => {
     setIsDropdownOpen(false);
   };
+
   const handleConfirmDelete = async () => {
-    await deleteCard({ cardId: cardData.id, token });
+    await deleteCard({ cardId: card.id, token });
     setCards((prevCards) => {
-      const updatedCards = prevCards[columnId].filter((card) => card.id !== cardData.id);
+      const updatedCards = prevCards[columnId].filter((v) => v.id !== card.id);
       return { ...prevCards, [columnId]: updatedCards };
     });
     setCardsTotalCount((prev) => {
@@ -59,28 +64,53 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
     closeModalFunc();
   };
 
-  const handleConfirmEdit = async () => {};
+  const handleTaskModalClose = () => {
+    if (isCardUpdated) {
+      setCards((prev) => {
+        const cardIndex = prev[columnId].findIndex((v) => v.id == card.id);
+        const cardList = prev[columnId];
+        cardList[cardIndex] = card;
+        return { ...prev, [card.columnId]: cardList };
+      });
+      //status를 다른 칼럼으로 옮겼을 시 즉시 반영
+      if (columnId !== card.columnId) {
+        setCards((prev) => {
+          //바뀐 컬럼에 우선 추가
+          const cardList = [card, ...cards[card.columnId]];
+          return { ...prev, [card.columnId]: cardList };
+        });
+        setCards((prev) => {
+          const cardList = [...cards[columnId].filter((v) => v.id !== card.id)];
+          return { ...prev, [columnId]: cardList };
+        });
+      }
+    }
+    closeModalFunc();
+    setIsScrollActive(false);
+    setIsCardUpdated(false);
+    setStatus("");
+  };
+
+  useEffect(() => {
+    if (!isCardUpdated) setCard(cardData);
+    else {
+      setColumnTitle(updatedColumnTitle);
+    }
+  });
+
   return (
     <>
       <Wrapper ref={scrollContainerRef}>
         <div ref={startRef} />
         <TitleWrapper>
-          <Title>{cardData.title}</Title>
+          <Title>{card.title}</Title>
           <IconContainer>
             <KebabIconContainer tabIndex={0} onBlur={handleDropdownClose}>
               <Kebab alt="kebab" width={28} height={28} onClick={toggleDropdown} />
               {isDropdownOpen && <TaskDropdown onEdit={handleDropdownEditClick} onCreate={handleDropdownDeleteClick} />}
             </KebabIconContainer>
             <div style={{ cursor: "pointer" }}>
-              <Close
-                alt="close"
-                width={28}
-                height={28}
-                onClick={() => {
-                  closeModalFunc();
-                  setIsScrollActive(false);
-                }}
-              />
+              <Close alt="close" width={28} height={28} onClick={handleTaskModalClose} />
             </div>
           </IconContainer>
         </TitleWrapper>
@@ -88,34 +118,34 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
           <Contact>담당자</Contact>
           <DeadLine>마감일</DeadLine>
           <ContactName>
-            {cardData.assignee && (
+            {card.assignee && (
               <ProfileImageWrapper>
-                {cardData.assignee.profileImageUrl ? (
-                  <ProfileImage $image={cardData.assignee.profileImageUrl} />
+                {card.assignee.profileImageUrl ? (
+                  <ProfileImage $image={card.assignee.profileImageUrl} />
                 ) : (
                   <NoProfileImageWrapper>
-                    <NoProfileImage id={cardData.assignee.id} nickname={cardData.assignee.nickname} />
+                    <NoProfileImage id={card.assignee.id} nickname={card.assignee.nickname} />
                   </NoProfileImageWrapper>
                 )}
               </ProfileImageWrapper>
             )}
-            {cardData.assignee?.nickname}
+            {card.assignee?.nickname}
           </ContactName>
-          <DeadLineDate>{cardData.dueDate}</DeadLineDate>
+          <DeadLineDate>{card.dueDate}</DeadLineDate>
         </ContactDeadLineWrapper>
         <CategoryWrapper>
-          <ColumnName status={columnTitle} />
+          <ColumnName status={columnTitleData} />
           <DivisionWrapper>
             <Division alt="category-division" width={10} height={20} />
           </DivisionWrapper>
           <Tags>
-            {cardData.tags.map((tag, idx) => (
+            {card.tags.map((tag, idx) => (
               <Tag key={idx} tag={tag} />
             ))}
           </Tags>
         </CategoryWrapper>
-        <Description>{cardData.description}</Description>
-        {cardData.imageUrl && <Image src={cardData.imageUrl} alt="Task Image" />}
+        <Description>{card.description}</Description>
+        {card.imageUrl && <Image src={card.imageUrl} alt="Task Image" />}
         <Comments cardData={cardData} />
         <div ref={endRef} />
         {isScrollActive && (
@@ -127,7 +157,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
       {isEditModalOpen && (
         <ModalWrapper>
           <EditTaskModal
-            cardId={cardData.id}
+            cardId={card.id}
             onCancel={closeEditModal}
             onEdit={() => {
               closeEditModal();
