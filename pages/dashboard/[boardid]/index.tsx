@@ -15,9 +15,9 @@ const DashBoardPage = () => {
   useEffect(() => {
     const loadDashboardData = async () => {
       const res = await getDashboardList({ navigationMethod: "infiniteScroll", token: localStorage.getItem("accessToken") });
-      if (res !== null) setDashboards(res);
 
       if (res !== null) {
+        setDashboards(res);
         const index = res.dashboards?.findIndex((v) => v.id == Number(boardid));
 
         if (index === -1) {

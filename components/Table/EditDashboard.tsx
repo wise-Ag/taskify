@@ -19,12 +19,15 @@ const EditDashboard = () => {
     setToastVisible((prev) => !prev);
   };
 
-  const loadDashboardData = async () => {
-    const res = await getDashboard({ dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
-    if (res) setDashboard(res);
-  };
   useEffect(() => {
-    loadDashboardData();
+    const loadDashboardData = async () => {
+      const res = await getDashboard({ dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
+      if (res !== null) {
+        setDashboard(res);
+      }
+    };
+
+    if (boardid) loadDashboardData();
   }, [boardid]);
 
   return (
