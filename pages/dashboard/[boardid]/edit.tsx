@@ -76,7 +76,7 @@ const DashboardEditPage = () => {
 export default DashboardEditPage;
 
 const Wrapper = styled.div`
-  height: 145.3rem;
+  height: 100vh;
 
   background-color: var(--MainLight);
 `;
