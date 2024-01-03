@@ -1,22 +1,23 @@
 import Tag from "@/components/common/Chip/Tag";
-import { tagAtom } from "@/states/atoms";
+import { isTagModifyAtom, tagAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 interface TagsProps {
-  handleOnClick: (event: React.MouseEvent) => void;
+  handleOnClick: (targetValue: string) => void;
   tagValue: string[];
+  isModifyMode?: boolean;
 }
 
-const Tags = ({ handleOnClick, tagValue }: TagsProps) => {
+const Tags = ({ handleOnClick, tagValue, isModifyMode }: TagsProps) => {
   return (
     <TagArea>
       {tagValue.map((tag) => {
         return (
-          <div key={tag} style={{ cursor: "pointer" }} onClick={handleOnClick}>
-            <Tag tag={tag} />
+          <div key={tag} style={{ cursor: "pointer" }}>
+            <Tag tag={tag} handleOnClick={handleOnClick} isModifyMode={isModifyMode} />
           </div>
         );
       })}
@@ -24,19 +25,27 @@ const Tags = ({ handleOnClick, tagValue }: TagsProps) => {
   );
 };
 
-const TagInput = () => {
+const TagInput = ({ isModify = false }: { isModify?: boolean }) => {
   const [inputValue, setInputValue] = useState("");
   const [tagValue, setTagValue] = useAtom(tagAtom);
+  const [isTagModify, setIsTagModify] = useAtom(isTagModifyAtom);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (containerRef.current && !containerRef.current.contains(event.target as Node)) setIsTagModify(false);
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  });
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
-  const handleDeleteTag = (event: React.MouseEvent) => {
-    const target = event.target as HTMLElement;
-    const tagText = target.textContent;
-
-    const newTagValue = tagValue.filter((v) => v !== tagText);
+  const handleDeleteTag = (targetTag: string) => {
+    const newTagValue = tagValue.filter((v) => v !== targetTag);
     setTagValue(newTagValue);
   };
 
@@ -53,8 +62,8 @@ const TagInput = () => {
   return (
     <InputBox>
       <Label>태그</Label>
-      <InputArea>
-        {tagValue && <Tags handleOnClick={handleDeleteTag} tagValue={tagValue} />}
+      <InputArea ref={containerRef} onClick={() => setIsTagModify(true)}>
+        {tagValue && <Tags handleOnClick={handleDeleteTag} tagValue={tagValue} isModifyMode={isModify} />}
         <StyledInput type="text" value={inputValue} onChange={handleInputChange} placeholder={tagValue.length == 0 ? "입력 후 Enter" : ""} onKeyDown={handlePressEnter} />
       </InputArea>
     </InputBox>
