@@ -79,7 +79,7 @@ const MyDashboardList = () => {
   return (
     <Wrapper>
       <PageContent>
-        {totalPageCount} 페이지 중 {currentPage}{" "}
+        {totalPageCount} 페이지 중 {currentPage}
         <ButtonSet
           type="forwardAndBackward"
           isLeftDisabled={currentPage === 1}
@@ -142,12 +142,13 @@ const Container = styled.div`
   width: 100%;
 
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(2, 7.15rem);
   gap: 1.2rem;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    grid-template-columns: repeat(2, 2fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: repeat(3, 6.955rem);
   }
 

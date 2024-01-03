@@ -103,16 +103,16 @@ const Columns = () => {
 export default Columns;
 
 const Wrapper = styled.div`
-  height: 100vh;
   margin-left: 30rem;
 
   display: flex;
 
   @media (max-width: ${DeviceSize.tablet}) {
+    width: 58.5rem;
+
     margin-left: 16rem;
 
     flex-direction: column;
-    width: auto;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
@@ -122,17 +122,27 @@ const Wrapper = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  width: 100%;
-  height: 11rem;
+  min-width: fit-content;
+  height: calc(100vh - 7rem);
 
-  margin-top: 6.3rem;
-  margin-left: 2rem;
+  padding: 2rem;
 
-  z-index: ${Z_INDEX.Column_ButtonWrapper};
+  border-right: 1px solid var(--Grayd9);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    position: sticky;
-    bottom: 0;
+    width: 35.5rem;
+    height: 100%;
+
+    border-bottom: 1px solid var(--Grayd9);
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 30.8rem;
   }
 `;
 

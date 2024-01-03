@@ -105,11 +105,11 @@ const Column = ({ columnId, title }: ColumnProps) => {
 export default Column;
 
 const Wrapper = styled.div`
+  min-width: fit-content;
+  height: calc(100vh - 7rem);
+
   padding: 2rem;
   border-right: 1px solid var(--Grayd9);
-
-  min-width: fit-content;
-  height: 100vh;
 
   overflow: hidden;
 
@@ -117,7 +117,15 @@ const Wrapper = styled.div`
   flex-direction: column;
 
   @media (max-width: ${DeviceSize.tablet}) {
+    width: 35.5rem;
+    height: 100%;
+    max-height: 50rem;
+
     border-bottom: 1px solid var(--Grayd9);
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 30.8rem;
   }
 
   &.show-scrollbar {
@@ -129,7 +137,7 @@ const Wrapper = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #8db877;
+    background-color: var(--ScrollBar);
     border-radius: 5rem;
   }
 `;

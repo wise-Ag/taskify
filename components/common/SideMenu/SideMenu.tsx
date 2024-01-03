@@ -166,7 +166,7 @@ export default SideMenu;
 
 const Wrapper = styled.div`
   width: 30rem;
-  height: 155rem;
+  height: 100vh;
 
   padding: 2rem 1.2rem;
 
@@ -186,12 +186,10 @@ const Wrapper = styled.div`
 
   @media (max-width: ${DeviceSize.tablet}) {
     width: 16rem;
-    height: 166.6rem;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
     width: 6.7rem;
-    height: 185.9rem;
   }
 `;
 

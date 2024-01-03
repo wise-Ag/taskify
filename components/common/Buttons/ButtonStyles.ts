@@ -48,8 +48,11 @@ const TYPES = {
       font-size: 1.2rem;
     }
   `,
+
   addNewColumn: css`
     width: 35.4rem;
+
+    margin-top: 4.3rem;
 
     padding: 2.45rem 0;
 
@@ -65,6 +68,8 @@ const TYPES = {
 
     @media (max-width: ${DeviceSize.tablet}) {
       width: 54.4rem;
+
+      margin-top: 0;
 
       padding: 2.45rem 0;
 

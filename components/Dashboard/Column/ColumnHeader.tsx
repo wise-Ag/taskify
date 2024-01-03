@@ -4,6 +4,7 @@ import CounterCard from "@/components/common/Chip/CounterCard";
 import styled from "styled-components";
 import KebabModal from "@/components/Modal/KebabModal";
 import { useRef, useEffect, useState } from "react";
+import { DeviceSize } from "@/styles/DeviceSize";
 
 interface ColumnHeaderProps {
   title: string;
@@ -65,6 +66,10 @@ const Content = styled.div`
 const Title = styled.div`
   font-size: 1.8rem;
   font-weight: 700;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.6rem;
+  }
 `;
 
 const StyledCircleIcon = styled(CircleIcon)`

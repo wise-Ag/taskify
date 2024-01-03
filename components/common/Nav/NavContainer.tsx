@@ -75,6 +75,10 @@ const Title = styled.div`
     overflow: auto;
   }
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.8rem;
   }
