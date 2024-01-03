@@ -14,12 +14,12 @@ const Tag = ({ tag, handleOnClick, isModifyMode }: { tag: string; handleOnClick:
       {tag}
       {isTagModify && isModifyMode && (
         <div
-          style={{ height: "1.8rem" }}
+          style={{ height: "1.6rem" }}
           onClick={() => {
             handleOnClick(tag);
           }}
         >
-          <TiDelete size={18} />
+          <TiDelete size={16} />
         </div>
       )}
     </Container>
@@ -39,7 +39,7 @@ const Container = styled.span<{ $bgColor: string; $textColor: string }>`
 
   color: ${(props) => props.$textColor};
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     font-size: 1rem;

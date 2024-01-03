@@ -12,8 +12,16 @@ interface TagsProps {
 }
 
 const Tags = ({ handleOnClick, tagValue, isModifyMode }: TagsProps) => {
+  const scrollRef = useRef<HTMLDivElement>(null); //태그가 추가되어 스크롤이 생기면 오른쪽으로 스크롤이 이동하여 항상 최근태그를 보도록함
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+    }
+  }, [tagValue]);
+
   return (
-    <TagArea>
+    <TagArea ref={scrollRef}>
       {tagValue.map((tag) => {
         return (
           <div key={tag} style={{ cursor: "pointer" }}>
@@ -34,12 +42,7 @@ const TagInput = ({ isModify = false }: { isModify?: boolean }) => {
   const handleClickOutside = (event: MouseEvent) => {
     if (containerRef.current && !containerRef.current.contains(event.target as Node)) setIsTagModify(false);
   };
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  });
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
@@ -58,6 +61,14 @@ const TagInput = ({ isModify = false }: { isModify?: boolean }) => {
     }
     setInputValue("");
   };
+
+  useEffect(() => {
+    //태그인풋 외의 다른 곳을 클릭하면 편집모드 off
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  });
 
   return (
     <InputBox>
@@ -89,7 +100,7 @@ const Label = styled.label`
 `;
 
 const InputArea = styled.div`
-  height: 4.8rem;
+  height: 5.3rem;
 
   padding: 1.4rem;
   border: 1px solid var(--Grayd9);
@@ -133,13 +144,13 @@ const TagArea = styled.div`
   display: flex;
   gap: 0.8rem;
 
-  max-width: 70%;
+  max-width: 100%;
   height: 3rem;
   overflow-x: scroll;
   overflow-y: hidden;
 
   &::-webkit-scrollbar {
-    height: 0.4rem;
+    height: 0.7rem;
     border-radius: 0.6rem;
   }
   &::-webkit-scrollbar-thumb {
