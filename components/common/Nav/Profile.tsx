@@ -2,7 +2,7 @@ import { getUsers } from "@/api/users";
 import { UserData } from "@/api/users/users.types";
 import ArrowIcon from "@/assets/icons/arrow-drop-down.svg";
 import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
-import { activeDropdownAtom } from "@/states/atoms";
+import { activeDropdownAtom, userDataAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
@@ -13,8 +13,8 @@ import styled from "styled-components";
 
 const Profile = () => {
   const router = useRouter();
-  const [user, setUser] = useState<UserData>();
   const [activeDropdown, setActiveDropdown] = useAtom(activeDropdownAtom);
+  const [userData, setUserData] = useAtom(userDataAtom);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const path = router.pathname;
 
@@ -29,37 +29,33 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    const loadUserData = async () => {
-      const res = await getUsers({ token: localStorage.getItem("accessToken") });
-      if (res !== null) setUser({ ...res });
-    };
-
-    loadUserData();
-
-    const closeMenu = (event: Event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setActiveDropdown(null);
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        const res = await getUsers({ token });
+        if (res) {
+          setUserData(res);
+        }
       }
     };
 
-    document.addEventListener("click", closeMenu);
-    return () => {
-      document.removeEventListener("click", closeMenu);
-    };
-  }, []);
+    if (!userData) {
+      fetchUserData();
+    }
+  }, [userData, setUserData]);
 
   return (
     <>
-      {user && (
+      {userData && (
         <Wrapper onClick={toggleKebabMenu} ref={dropdownRef}>
-          {user.profileImageUrl ? (
-            <ProfileIcon $image={user.profileImageUrl} />
+          {userData.profileImageUrl ? (
+            <ProfileIcon $image={userData.profileImageUrl} />
           ) : (
             <NoProfileImageWrapper>
-              <NoProfileImage id={user.id} nickname={user.nickname} isBorder={true} />
+              <NoProfileImage id={userData.id} nickname={userData.nickname} isBorder={true} />
             </NoProfileImageWrapper>
           )}
-          <Name>{user?.nickname}</Name>
+          <Name>{userData.nickname}</Name>
           <StyledArrowIcon $active={activeDropdown === "profile"} onClick={toggleKebabMenu} />
           {activeDropdown === "profile" && (
             <DropdownMenu>

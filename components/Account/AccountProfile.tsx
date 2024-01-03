@@ -5,10 +5,10 @@ import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Input from "@/components/Sign/SignInput/Input";
 import { NICKNAME_RULES, PLACEHOLDER } from "@/constants/InputConstant";
 import { useModal } from "@/hooks/useModal";
-import { profileImageAtom, userProfileImageUrlAtom } from "@/states/atoms";
+import { profileImageAtom, userProfileImageUrlAtom, userDataAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { useEffect, useState, SetStateAction } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -20,6 +20,7 @@ interface ProfileFormData {
 const AccountProfile = () => {
   const [profileImage, setProfileImage] = useAtom(profileImageAtom);
   const [userProfileImageUrl, setUserProfileImageUrl] = useAtom(userProfileImageUrlAtom);
+  const [userData, setUserData] = useAtom(userDataAtom);
   const [initialNickname, setInitialNickname] = useState("");
   const [isImageDeleted, setIsImageDeleted] = useState(false);
   const [token, setToken] = useState<string | null>(null);
@@ -40,7 +41,6 @@ const AccountProfile = () => {
   const handleProfileSubmit = async (data: ProfileFormData) => {
     let imageUrl = isImageDeleted ? null : userProfileImageUrl;
 
-    // 프로필 이미지 변경 확인
     if (profileImage && profileImage instanceof File) {
       const formData = new FormData();
       formData.append("image", profileImage);
@@ -54,10 +54,8 @@ const AccountProfile = () => {
       setUserProfileImageUrl(imageUrl);
     }
 
-    // 닉네임이 변경되었는지 확인
     const nicknameChanged = data.nickname !== initialNickname;
 
-    // 닉네임이나 프로필 이미지가 변경되었을 경우에만 업데이트 요청
     if (nicknameChanged || imageUrl !== userProfileImageUrl) {
       const userUpdateRes = await putUsers({
         nickname: data.nickname,
@@ -67,11 +65,11 @@ const AccountProfile = () => {
 
       if (userUpdateRes !== null) {
         openModalFunc();
+        setUserData(userUpdateRes);
       } else {
         console.error("Failed to update profile", Error);
       }
     } else {
-      // 변경 사항이 없을 경우
       alert("변경된 사항이 없습니다.");
     }
   };
@@ -88,7 +86,7 @@ const AccountProfile = () => {
         if (userData) {
           setValue("email", userData.email);
           setValue("nickname", userData.nickname);
-          setInitialNickname(userData.nickname); // 초기 닉네임 값 저장
+          setInitialNickname(userData.nickname);
           setUserProfileImageUrl(userData.profileImageUrl);
         }
       }
