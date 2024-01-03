@@ -66,6 +66,12 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
 
   const handleTaskModalClose = () => {
     if (isCardUpdated) {
+      setCards((prev) => {
+        const cardIndex = prev[columnId].findIndex((v) => v.id == card.id);
+        const cardList = prev[columnId];
+        cardList[cardIndex] = card;
+        return { ...prev, [card.columnId]: cardList };
+      });
       //status를 다른 칼럼으로 옮겼을 시 즉시 반영
       if (columnId !== card.columnId) {
         setCards((prev) => {
