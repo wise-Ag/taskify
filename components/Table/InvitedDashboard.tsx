@@ -74,7 +74,7 @@ const InvitedDashboard = () => {
               </Info>
               <Info>
                 <MobileTableTitle>초대자</MobileTableTitle>
-                <TableBody>{invitation.invitee.nickname}</TableBody>
+                <TableBody>{invitation.inviter.nickname}</TableBody>
               </Info>
               <Info>
                 <ButtonSet
