@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import NoProfileImage from "../NoProfileImage/ProfileImage";
 import { Member } from "@/api/members/members.types";
+import { Z_INDEX } from "@/styles/ZindexStyles";
 
 const MemberListDropdown = ({ members }: { members: Member[] }) => {
   return (
@@ -16,7 +17,7 @@ const MemberListDropdown = ({ members }: { members: Member[] }) => {
             </NoProfileImageWrapper>
           )}
 
-          <div key={member.id}>{member.nickname}</div>
+          <Nickname key={member.id}>{member.nickname}</Nickname>
         </Item>
       ))}
     </Dropdown>
@@ -36,6 +37,8 @@ const Dropdown = styled.div`
   top: 8%;
 
   background-color: white;
+
+  z-index: ${Z_INDEX.MemberListDropdown_Dropdown};
 `;
 
 const Item = styled.div`
@@ -97,5 +100,18 @@ const NoProfileImageWrapper = styled.div`
     height: 3.4rem;
 
     margin-right: 0.8rem;
+  }
+`;
+
+const Nickname = styled.div`
+  width: 7rem;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    text-overflow: clip;
+    overflow: auto;
   }
 `;

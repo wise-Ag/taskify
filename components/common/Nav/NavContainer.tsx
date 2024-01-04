@@ -16,7 +16,7 @@ const NavContainer = ({ title, $isDashboard = false, createdByMe = false }: NavC
     <Wrapper>
       <Title>
         {createdByMe && <StyledCrown alt="왕관" width={20} height={16} />}
-        {title}
+        <TitleText>{title}</TitleText>
       </Title>
       <Content>
         {createdByMe && <SettingButton />}
@@ -49,13 +49,15 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: ${DeviceSize.tablet}) {
-    padding: 1.6rem 4rem 1.6rem 20rem;
+    padding: 1.6rem 1.2rem 1.6rem 20rem;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
     height: 6rem;
 
-    padding: 1.3rem 1.2rem 1.3rem 9.1rem;
+    padding: 1.3rem 1rem 1.3rem 9.1rem;
+
+    gap: 1rem;
   }
 `;
 
@@ -80,23 +82,30 @@ const Title = styled.div`
   }
 `;
 
+const TitleText = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    text-overflow: clip;
+    overflow: auto;
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    display: none;
+  }
+`;
+
 const StyledCrown = styled(CrownIcon)`
-  margin-right: 0.5rem; // 오른쪽 마진 추가
+  margin-right: 0.5rem;
 `;
 
 const Content = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 3.2rem;
-
-  @media (max-width: ${DeviceSize.pc}) {
-    gap: 2rem;
-  }
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    gap: 1.6rem;
-  }
+  gap: 1rem;
 `;
 
 const Line = styled.div`
