@@ -1,5 +1,4 @@
 import { getUsers } from "@/api/users";
-import { UserData } from "@/api/users/users.types";
 import ArrowIcon from "@/assets/icons/arrow-drop-down.svg";
 import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import { activeDropdownAtom, userDataAtom } from "@/states/atoms";
@@ -7,7 +6,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import { MouseEvent, useEffect, useRef } from "react";
 import { FaHome, FaSignOutAlt, FaUserCog } from "react-icons/fa";
 import styled from "styled-components";
 
@@ -44,10 +43,24 @@ const Profile = () => {
     }
   }, [userData, setUserData]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: Event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setActiveDropdown]);
+
   return (
     <>
       {userData && (
-        <Wrapper onClick={toggleKebabMenu} ref={dropdownRef}>
+        <Wrapper ref={dropdownRef} onClick={toggleKebabMenu}>
           {userData.profileImageUrl ? (
             <ProfileIcon $image={userData.profileImageUrl} />
           ) : (
