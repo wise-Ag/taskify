@@ -60,7 +60,7 @@ const Profile = () => {
   return (
     <>
       {userData && (
-        <Wrapper onClick={toggleKebabMenu}>
+        <Wrapper ref={dropdownRef} onClick={toggleKebabMenu}>
           {userData.profileImageUrl ? (
             <ProfileIcon $image={userData.profileImageUrl} />
           ) : (
@@ -71,7 +71,7 @@ const Profile = () => {
           <Name>{userData.nickname}</Name>
           <StyledArrowIcon $active={activeDropdown === "profile"} onClick={toggleKebabMenu} />
           {activeDropdown === "profile" && (
-            <DropdownMenu ref={dropdownRef}>
+            <DropdownMenu>
               <MenuItem $location={path === "/mydashboard" ? true : false} onClick={() => navigateTo("/mydashboard")}>
                 <ItemContent>
                   <FaHome />
