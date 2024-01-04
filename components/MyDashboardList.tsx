@@ -153,7 +153,7 @@ const Container = styled.div`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, minmax(0, 1fr));
     grid-template-rows: repeat(6, 6.56rem);
   }
 `;
