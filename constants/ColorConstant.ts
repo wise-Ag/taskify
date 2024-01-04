@@ -13,4 +13,4 @@ export const TAG_COLOR = [
 
 export const PROFILE_COLOR = ["#A3C4A2", "#FDD446", "#76A5EA", "#0e465d", "#C4B1A2", "#ef823e", "#df8ec1", "#ea3835", "#701cb0", "#137549"];
 
-export const DASHBOARD_COLOR = ["#7ac555", "#760dde", "#ffa500", " #76a5ea", "#e876ea"];
+export const DASHBOARD_COLOR = ["#7ac555", "#760dde", "#ffa500", "#76a5ea", "#e876ea"];

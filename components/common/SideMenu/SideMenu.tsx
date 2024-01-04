@@ -1,25 +1,23 @@
-import AddButton from "@/assets/icons/add-box.svg";
-import Crown from "@/assets/icons/crown.svg";
-import LogoButton from "@/components/common/Buttons/LogoButton";
-import { DeviceSize } from "@/styles/DeviceSize";
-import styled from "styled-components";
-import ArrowButton from "@/assets/icons/arrow-forward.svg";
-import { useEffect, useState, useRef } from "react";
-import Link from "next/link";
-import { Z_INDEX } from "@/styles/ZindexStyles";
-import { getDashboardList } from "@/api/dashboards";
-import { useAtom } from "jotai";
-import { invitationsAtom } from "@/states/atoms";
+import { getDashboardList, postDashboard } from "@/api/dashboards";
 import { Dashboard } from "@/api/dashboards/dashboards.types";
-import { useModal } from "@/hooks/useModal";
-import ModalWrapper from "@/components/Modal/ModalWrapper";
+import AddButton from "@/assets/icons/add-box.svg";
+import ArrowButton from "@/assets/icons/arrow-forward.svg";
+import Crown from "@/assets/icons/crown.svg";
 import ModalContainer from "@/components/Modal/ModalContainer";
-import { useParams } from "next/navigation";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
-import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
-import { FaArrowUpWideShort } from "react-icons/fa6";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
+import LogoButton from "@/components/common/Buttons/LogoButton";
+import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
+import { useModal } from "@/hooks/useModal";
+import { dashboardColorAtom, dashboardListAtom, invitationsAtom, newDashboardAtom } from "@/states/atoms";
+import { DeviceSize } from "@/styles/DeviceSize";
+import { Z_INDEX } from "@/styles/ZindexStyles";
+import { useAtom } from "jotai";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { dashboardListAtom } from "@/states/atoms";
+import { useEffect, useRef, useState } from "react";
+import { FaArrowUpWideShort } from "react-icons/fa6";
+import styled from "styled-components";
+import { FormData } from "@/components/Modal/ModalContainer";
 
 interface DashboardProps {
   boardId: number;
@@ -29,10 +27,7 @@ interface DashboardProps {
   closePopup?: () => void;
 }
 
-const PAGE_SIZE = 2;
-
 const Dashboard = ({ color, title, createdByMe, boardId }: DashboardProps) => {
-  // const param = useParams();
   const router = useRouter();
   const { boardid } = router.query;
   const isActive = boardId === Number(boardid);
@@ -48,16 +43,40 @@ const Dashboard = ({ color, title, createdByMe, boardId }: DashboardProps) => {
 
 const SideMenu = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  // const [cursorId, setCursorId] = useState<number | null>(null);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
+  const [dashboardColor, setDashboardColor] = useAtom(dashboardColorAtom);
   const [invitations, setInvitations] = useAtom(invitationsAtom); // 초대 목록!!
   const [editDashboard, setEditDashboard] = useAtom(dashboardListAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const wrapperRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false); //스크롤바 커스텀
+  const [newDashboard, setNewDashboard] = useAtom(newDashboardAtom);
 
-  const scrollContainerRef = useRef(null);
-  const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
+  const isTitleExist = (titleToCheck: string) => {
+    return dashboards.some((v) => v.title === titleToCheck);
+  };
+
+  const rules = {
+    required: "생성할 이름을 입력해주세요",
+    maxLength: { value: 15, message: "대시보드 이름은 15자를 초과할 수 없습니다." },
+    validate: (v: string) => {
+      if (isTitleExist(v)) return "이름이 중복되었습니다. 다시 입력해주세요!";
+    },
+  };
+
+  const handleAddModal = async (data: FormData) => {
+    const res = await postDashboard({ token: localStorage.getItem("accessToken"), title: data.inputData, color: dashboardColor });
+    setDashboardColor(`${DASHBOARD_COLOR[0]}`); //초기화
+
+    if (res == null) {
+      alert("대시보드 생성에 실패했습니다.");
+      closeModalFunc();
+      return;
+    }
+
+    setNewDashboard(res);
+
+    closeModalFunc();
+  };
 
   const handleClickOutside = (event: { target: string }) => {
     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -67,14 +86,6 @@ const SideMenu = () => {
 
   const togglePopup = () => {
     setIsPopupVisible((prev) => !prev);
-  };
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
   };
 
   useEffect(() => {
@@ -90,6 +101,11 @@ const SideMenu = () => {
     };
     loadDashboardList();
   }, [editDashboard, invitations]);
+
+  useEffect(() => {
+    //대시보드리스트 바뀌면 사이드메뉴도 반영
+    if (newDashboard) setDashboards((prev) => [newDashboard, ...prev]);
+  }, [newDashboard]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -112,7 +128,7 @@ const SideMenu = () => {
           </DashboardList>
         </Popup>
       )}
-      <HeaderWrapper ref={startRef}>
+      <HeaderWrapper>
         <Title>Dash Boards</Title>
         <StyledAddButton
           alt="추가 버튼"
@@ -128,22 +144,15 @@ const SideMenu = () => {
           return (
             <div key={dashboard.id}>
               <Dashboard color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />
-              {/* {cursorId == dashboard.id && <div ref={targetRef}>얍뽕짠</div>} */}
             </div>
           );
         })}
       </DashboardList>
       {isModalOpen && (
         <ModalWrapper>
-          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} />
+          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} rules={rules} onSubmit={handleAddModal} />
         </ModalWrapper>
       )}
-      <div ref={endRef} />
-      {/* {dashboards.length > 17 && (
-        <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
-          <ScrollNavigateIcon $isScrollingUp={isScrollingUp} />
-        </ScrollNavigateButton>
-      )} */}
     </Wrapper>
   );
 };
@@ -292,6 +301,7 @@ const DashboardTitle = styled.div`
   font-size: 1.8rem;
   font-weight: 500;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
   position: relative;
 
@@ -380,6 +390,13 @@ const Popup = styled.div<{ $isPopupVisible: boolean }>`
     ${DashboardTitle} {
       display: block;
 
+      width: 9rem;
+
+      overflow: auto;
+      white-space: nowrap;
+      &::-webkit-scrollbar {
+        display: none;
+      }
       margin-right: 0.6rem;
     }
 

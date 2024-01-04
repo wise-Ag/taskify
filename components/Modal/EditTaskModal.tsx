@@ -115,7 +115,7 @@ const EditTaskModal = ({ card, onCancel, onEdit }: EditTaskModalProps) => {
       <ModalInput label="제목" $inputType="제목" value={cardData.title} onChange={handleTitleChange} />
       <ModalInput $inputType="설명" label="설명" value={cardData.description} onChange={handleDescriptionChange} />
       <ModalInput label="마감일" $inputType="마감일" value={cardData.dueDate} />
-      <TagInput isModify={true} />
+      <TagInput />
       <ImageUploadInput atomtype="cardImage" type="modal" initialImageUrl={cardData.imageUrl} handleDeleteClick={setIsImageDeleteClick} />
       <ButtonWrapper>
         <ButtonSet
