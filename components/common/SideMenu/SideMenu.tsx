@@ -19,6 +19,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { useInfiniteScrollNavigator } from "@/hooks/useInfiniteScrollNavigator";
 import { FaArrowUpWideShort } from "react-icons/fa6";
 import { useRouter } from "next/router";
+import { dashboardListAtom } from "@/states/atoms";
 
 interface DashboardProps {
   boardId: number;
@@ -50,6 +51,7 @@ const SideMenu = () => {
   const [cursorId, setCursorId] = useState<number | null>(null);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [invitations, setInvitations] = useAtom(invitationsAtom); // 초대 목록!!
+  const [editDashboard, setEditDashboard] = useAtom(dashboardListAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const wrapperRef = useRef(null);
 
@@ -66,44 +68,18 @@ const SideMenu = () => {
     setIsPopupVisible((prev) => !prev);
   };
 
-  const loadDashboards = async () => {
-    if (dashboards.length > 0 && cursorId == null) {
-      return;
-    }
-    setIsLoading(true);
-    const data = await getDashboardList({
-      cursorId,
-      size: PAGE_SIZE,
-      token: localStorage.getItem("accessToken"),
-      navigationMethod: "infiniteScroll",
-    });
-
-    if (data) {
-      setDashboards((prev) => [...prev, ...data.dashboards]);
-      // setInvitations([data.dashboards]);
-      setCursorId(data.cursorId);
-    }
-    setIsLoading(false);
-  };
-
-  const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadDashboards });
-
   useEffect(() => {
-    loadDashboards();
-  }, [cursorId]);
-
-  // useEffect(() => {
-  //   const loadDashboardList = async () => {
-  //     const res = await getDashboardList({
-  //       token: localStorage.getItem("accessToken"),
-  //       navigationMethod: "infiniteScroll",
-  //     });
-  //     if (res && res.dashboards) {
-  //       setDashboards(...[res.dashboards]);
-  //     }
-  //   };
-  //   loadDashboardList();
-  // }, [invitations]);
+    const loadDashboardList = async () => {
+      const res = await getDashboardList({
+        token: localStorage.getItem("accessToken"),
+        navigationMethod: "infiniteScroll",
+      });
+      if (res && res.dashboards) {
+        setDashboards(...[res.dashboards]);
+      }
+    };
+    loadDashboardList();
+  }, [editDashboard, invitations]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);

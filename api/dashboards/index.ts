@@ -131,16 +131,13 @@ export const postDashboardInvitations = async ({ email, dashboardId, token }: Po
   }
 };
 
-export const putDashboard = async ({
-  dashboardId = "193",
-  token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInRlYW1JZCI6IjEtMDgiLCJpYXQiOjE3MDM1NjYyOTgsImlzcyI6InNwLXRhc2tpZnkifQ.zNaGd4uESNMzrDDHokuybQNJs_CkFLY7SpYKgafPBl0",
-}: PutDashboardProps): Promise<Dashboard | null> => {
+export const putDashboard = async ({ dashboardId, title, color, token }: PutDashboardProps): Promise<Dashboard | null> => {
   try {
     const res = await instance.put(
       ENDPOINTS.DASHBOARDS.PUT(dashboardId),
       {
-        title: "api 만든 사람 완전히 망해라",
-        color: "#000000",
+        title,
+        color,
       },
       {
         headers: {
