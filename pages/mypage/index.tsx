@@ -59,8 +59,7 @@ const Container = styled.div`
   gap: 1.2rem;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    margin-left: 18rem;
-    margin-right: 2rem;
+    margin-left: 16rem;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {

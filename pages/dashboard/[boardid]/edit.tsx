@@ -27,14 +27,14 @@ const DashboardEditPage = () => {
   };
 
   const handleConfirmDelete = async () => {
-    await deleteDashboard({ dashboardId: boardid, token: localStorage.getItem("accessToken") });
+    await deleteDashboard({ dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
     closeModalFunc();
     router.push(`/mydashboard`);
   };
 
   useEffect(() => {
     const loadDashboardData = async () => {
-      const res = await getDashboard({ dashboardId: boardid, token: localStorage.getItem("accessToken") });
+      const res = await getDashboard({ dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
 
       if (res !== null) {
         setDashboard(res);

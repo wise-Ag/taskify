@@ -1,5 +1,5 @@
 import React from "react";
-import { ToastContainer } from "react-toastify"; // ToastContainer를 추가로 가져옵니다.
+import { ToastContainer } from "react-toastify";
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
 import "react-toastify/dist/ReactToastify.css";

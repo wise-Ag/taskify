@@ -290,12 +290,14 @@ const ProfileImage = styled.div<{ url: string }>`
 
 const NoProfileImageWrapper = styled.div`
   width: 2.7rem;
+  height: 2.7rem;
 
   line-height: 2.7rem;
   font-size: 1.3rem;
 
   @media (max-width: ${DeviceSize.mobile}) {
     width: 2.4rem;
+    height: 2.4rem;
 
     line-height: 2.4rem;
   }

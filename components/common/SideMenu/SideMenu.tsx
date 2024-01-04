@@ -14,7 +14,7 @@ import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { FaArrowUpWideShort } from "react-icons/fa6";
 import styled from "styled-components";
 import { FormData } from "@/components/Modal/ModalContainer";
@@ -24,16 +24,20 @@ interface DashboardProps {
   color: string;
   title: string;
   createdByMe?: boolean;
-  closePopup?: () => void;
+  closePopup: Dispatch<SetStateAction<boolean>>;
 }
 
-const Dashboard = ({ color, title, createdByMe, boardId }: DashboardProps) => {
+const Dashboard = ({ color, title, createdByMe, boardId, closePopup }: DashboardProps) => {
   const router = useRouter();
   const { boardid } = router.query;
   const isActive = boardId === Number(boardid);
 
+  const handleOnClick = () => {
+    closePopup(false);
+    router.push(`/dashboard/${boardId}`);
+  };
   return (
-    <Container href={`/dashboard/${boardId}`} $isActive={isActive}>
+    <Container onClick={handleOnClick} $isActive={isActive}>
       <Color color={color} />
       <DashboardTitle>{title}</DashboardTitle>
       {createdByMe && <StyledCrown alt="왕관" />}
@@ -48,7 +52,7 @@ const SideMenu = () => {
   const [invitations, setInvitations] = useAtom(invitationsAtom); // 초대 목록!!
   const [editDashboard, setEditDashboard] = useAtom(dashboardListAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
-  const wrapperRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [newDashboard, setNewDashboard] = useAtom(newDashboardAtom);
 
   const isTitleExist = (titleToCheck: string) => {
@@ -78,14 +82,15 @@ const SideMenu = () => {
     closeModalFunc();
   };
 
-  const handleClickOutside = (event: { target: string }) => {
-    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-      setIsPopupVisible(false);
-    }
-  };
-
   const togglePopup = () => {
     setIsPopupVisible((prev) => !prev);
+  };
+  const handleClickOutside = (event: MouseEvent) => {
+    if (containerRef.current && !containerRef.current.contains(event.target as Node)) setIsPopupVisible(false);
+  };
+
+  const closePopup = () => {
+    setIsPopupVisible(false);
   };
 
   useEffect(() => {
@@ -103,31 +108,41 @@ const SideMenu = () => {
   }, [editDashboard, invitations]);
 
   useEffect(() => {
+    //태그인풋 외의 다른 곳을 클릭하면 편집모드 off
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  });
+  useEffect(() => {
     //대시보드리스트 바뀌면 사이드메뉴도 반영
     if (newDashboard !== null) setDashboards((prev) => [newDashboard, ...prev]);
   }, [newDashboard]);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [wrapperRef]);
-
   return (
     <Wrapper>
       <LogoButton />
-      <StyledArrowButton onClick={togglePopup} $isPopupVisible={isPopupVisible} />
-      {isPopupVisible && (
-        <Popup $isPopupVisible={isPopupVisible}>
-          <DashboardList>
-            {dashboards.map((dashboard) => {
-              return <Dashboard key={dashboard.id} color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />;
-            })}
-          </DashboardList>
-        </Popup>
-      )}
+      <div ref={containerRef}>
+        <StyledArrowButton onClick={togglePopup} $isPopupVisible={isPopupVisible} />
+        {isPopupVisible && (
+          <Popup $isPopupVisible={isPopupVisible}>
+            <DashboardList>
+              {dashboards.map((dashboard) => {
+                return (
+                  <Dashboard
+                    key={dashboard.id}
+                    color={dashboard.color}
+                    title={dashboard.title}
+                    createdByMe={dashboard.createdByMe}
+                    boardId={dashboard.id}
+                    closePopup={closePopup}
+                  />
+                );
+              })}
+            </DashboardList>
+          </Popup>
+        )}
+      </div>
       <HeaderWrapper>
         <Title>Dash Boards</Title>
         <StyledAddButton
@@ -143,7 +158,7 @@ const SideMenu = () => {
         {dashboards.map((dashboard) => {
           return (
             <div key={dashboard.id}>
-              <Dashboard color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />
+              <Dashboard color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} closePopup={setIsPopupVisible} />
             </div>
           );
         })}
@@ -247,7 +262,7 @@ const DashboardList = styled.div`
   }
 `;
 
-const Container = styled(Link)<{ $isActive: boolean }>`
+const Container = styled.button<{ $isActive: boolean }>`
   width: 100%;
   height: 4.5rem;
 
@@ -306,6 +321,7 @@ const DashboardTitle = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   position: relative;
+  text-align: initial;
 
   &:hover {
     text-overflow: clip;

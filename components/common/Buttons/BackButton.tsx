@@ -15,7 +15,7 @@ const BackButton = ({ href }: { href: string }) => {
 export default BackButton;
 
 const Wrapper = styled(Link)`
-  width: 8rem;
+  width: 10rem;
 
   display: flex;
   align-items: center;
@@ -24,7 +24,7 @@ const Wrapper = styled(Link)`
   margin-bottom: 1.2rem;
 
   @media (max-width: ${DeviceSize.mobile}) {
-    width: 7rem;
+    width: 8rem;
 
     margin-bottom: 1rem;
   }

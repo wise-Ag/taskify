@@ -14,7 +14,7 @@ const DashboardNav = () => {
 
   useEffect(() => {
     const loadDashboardData = async () => {
-      const res = await getDashboard({ dashboardId: String(boardid), token: localStorage.getItem("accessToken") });
+      const res = await getDashboard({ dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
       if (res !== null) setDashboard(res);
     };
     if (boardid) loadDashboardData();

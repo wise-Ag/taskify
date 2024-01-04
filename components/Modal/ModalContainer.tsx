@@ -2,7 +2,6 @@ import Input from "@/components/Sign/SignInput/Input";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import ColorSelector from "@/components/common/Chip/DashBoardColor";
 import { DeviceSize } from "@/styles/DeviceSize";
-import { ChangeEvent, ChangeEventHandler, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -27,19 +26,6 @@ const ModalContainer = ({ title, label, buttonType, onClose, onAdd, onSubmit, ru
     defaultValues: { inputData: "" },
     mode: "onBlur",
   });
-
-  // const [inputValue, setInputValue] = useState("");
-
-  // const handleInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-  //   setInputValue(event.target.value);
-  // };
-
-  // useEffect(() => {
-  //   const timeoutId = setTimeout(() => {
-  //     onSubmit({ inputData: inputValue });
-  //   }, 1000);
-  //   return () => clearTimeout(timeoutId);
-  // }, [inputValue]);
 
   return (
     <Wrapper>
