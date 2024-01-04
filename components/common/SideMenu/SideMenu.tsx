@@ -1,5 +1,7 @@
 import { getDashboardList, postDashboard } from "@/api/dashboards";
 import { Dashboard } from "@/api/dashboards/dashboards.types";
+import { getDashboardList, postDashboard } from "@/api/dashboards";
+import { Dashboard } from "@/api/dashboards/dashboards.types";
 import AddButton from "@/assets/icons/add-box.svg";
 import ArrowButton from "@/assets/icons/arrow-forward.svg";
 import Crown from "@/assets/icons/crown.svg";
@@ -15,7 +17,12 @@ import { useAtom } from "jotai";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 import { FaArrowUpWideShort } from "react-icons/fa6";
+import styled from "styled-components";
+import { FormData } from "@/components/Modal/ModalContainer";
 import styled from "styled-components";
 import { FormData } from "@/components/Modal/ModalContainer";
 
@@ -45,10 +52,36 @@ const SideMenu = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [dashboardColor, setDashboardColor] = useAtom(dashboardColorAtom);
+  const [dashboardColor, setDashboardColor] = useAtom(dashboardColorAtom);
   const [invitations, setInvitations] = useAtom(invitationsAtom); // 초대 목록!!
   const [editDashboard, setEditDashboard] = useAtom(dashboardListAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const wrapperRef = useRef(null);
+  const [newDashboard, setNewDashboard] = useAtom(newDashboardAtom);
+
+  const isTitleExist = (titleToCheck: string) => {
+    return dashboards.some((v) => v.title === titleToCheck);
+  };
+
+  const rules = {
+    required: "생성할 이름을 입력해주세요",
+    maxLength: { value: 15, message: "대시보드 이름은 15자를 초과할 수 없습니다." },
+    validate: (v: string) => {
+      if (isTitleExist(v)) return "이름이 중복되었습니다. 다시 입력해주세요!";
+    },
+  };
+
+  const handleAddModal = async (data: FormData) => {
+    const res = await postDashboard({ token: localStorage.getItem("accessToken"), title: data.inputData, color: dashboardColor });
+    setDashboardColor(`${DASHBOARD_COLOR[0]}`); //초기화
+
+    if (res == null) {
+      alert("대시보드 생성에 실패했습니다.");
+      closeModalFunc();
+      return;
+    }
+
+    setNewDashboard(res);
   const [newDashboard, setNewDashboard] = useAtom(newDashboardAtom);
 
   const isTitleExist = (titleToCheck: string) => {
@@ -150,6 +183,7 @@ const SideMenu = () => {
       </DashboardList>
       {isModalOpen && (
         <ModalWrapper>
+          <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} rules={rules} onSubmit={handleAddModal} />
           <ModalContainer title="새로운 대시보드" label="대시보드 이름" buttonType="생성" onClose={closeModalFunc} rules={rules} onSubmit={handleAddModal} />
         </ModalWrapper>
       )}
@@ -302,6 +336,7 @@ const DashboardTitle = styled.div`
   font-weight: 500;
   overflow: hidden;
   white-space: nowrap;
+  white-space: nowrap;
   text-overflow: ellipsis;
   position: relative;
 
@@ -390,6 +425,13 @@ const Popup = styled.div<{ $isPopupVisible: boolean }>`
     ${DashboardTitle} {
       display: block;
 
+      width: 9rem;
+
+      overflow: auto;
+      white-space: nowrap;
+      &::-webkit-scrollbar {
+        display: none;
+      }
       width: 9rem;
 
       overflow: auto;
