@@ -31,7 +31,7 @@ const InvitedDashboard = () => {
     });
 
     if (data && data.invitations) {
-      setInvitations((prev) => [...prev, ...data.invitations]);
+      setInvitations(() => [...invitations, ...data.invitations]);
       setCursorId(data.cursorId);
       setIsLoading(false);
     }
@@ -51,7 +51,7 @@ const InvitedDashboard = () => {
   };
 
   useEffect(() => {
-    setInvitations([]);
+    setInvitations(invitations.splice(0, invitations.length + 1));
     loadInvitations();
   }, []);
 
