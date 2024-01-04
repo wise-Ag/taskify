@@ -8,8 +8,8 @@ const Point1 = () => {
     <Box>
       <Title>Point 1</Title>
       <Description>
-        일의 우선순위를
-        <br /> 관리하세요
+        다양한 업무들을
+        <br /> 한 곳에서 관리하세요
       </Description>
       <LandingImage src={Landing1} alt="Landing Main" />
     </Box>
@@ -110,13 +110,15 @@ const LandingImage = styled(Image)`
   bottom: 0;
   right: 0;
 
+  border-radius: 8px 0 0 0;
+
   @media screen and (max-width: 1060px) {
     width: 51.9rem;
-    height: 43.5rem;
+    height: 43.4rem;
   }
 
   @media screen and (max-width: 608px) {
-    width: 29.6em;
-    height: 24.8rem;
+    width: 32em;
+    height: 26.8rem;
   }
 `;
