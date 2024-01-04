@@ -88,6 +88,7 @@ const Profile = () => {
                 onClick={() => {
                   localStorage.removeItem("accessToken");
                   navigateTo("/");
+                  setUserData(null);
                 }}
               >
                 <ItemContent>

@@ -1,4 +1,5 @@
 import { PROFILE_COLOR } from "@/constants/ColorConstant";
+import { DeviceSize } from "@/styles/DeviceSize";
 import styled from "styled-components";
 
 interface NoProfileImageProps {
@@ -16,6 +17,9 @@ const NoProfileImage = ({ id, nickname, isBorder = false }: NoProfileImageProps)
 export default NoProfileImage;
 
 const Container = styled.div<{ $bgColor: string; $isBorder: Boolean }>`
+  width: 100%;
+  height: 100%;
+
   background-color: ${(props) => props.$bgColor};
 
   border-radius: 100%;

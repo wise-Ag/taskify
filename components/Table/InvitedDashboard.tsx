@@ -197,7 +197,7 @@ const MobileTableTitle = styled.h3`
 `;
 
 const TableBody = styled.h3`
-  width: 23rem;
+  width: 80%;
 
   color: var(--Black33);
   font-size: 1.6rem;
@@ -216,8 +216,12 @@ const TableBody = styled.h3`
     display: none;
   }
 
-  @media screen and (max-width: ${DeviceSize.mobile}) {
+  @media screen and (max-width: ${DeviceSize.tablet}) {
     width: 70%;
+  }
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    width: 100%;
 
     font-size: 1.4rem;
   }

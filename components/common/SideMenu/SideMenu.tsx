@@ -223,7 +223,10 @@ const DashboardList = styled.div`
   width: 100%;
   height: 100%;
 
-  overflow-y: hidden;
+  overflow-y: auto;
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
 
   margin-top: 1.8rem;
 
@@ -231,10 +234,9 @@ const DashboardList = styled.div`
   flex-direction: column;
 
   &:hover {
-    overflow-y: auto;
-  }
-
-  @media (max-width: ${DeviceSize.tablet}) {
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--ScrollBar);
+    }
   }
 
   @media (max-width: ${DeviceSize.mobile}) {

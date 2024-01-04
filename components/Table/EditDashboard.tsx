@@ -85,7 +85,7 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
-    width: 28.4rem;
+    width: 100%;
 
     padding: 2rem 2.1rem;
   }
@@ -122,6 +122,10 @@ const Title = styled.h1`
 
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 100%;
   }
 `;
 
