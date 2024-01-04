@@ -188,6 +188,10 @@ const CommentTextarea = styled.textarea`
   &:focus {
     border-color: var(--Main);
   }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const InfoWrapper = styled.div`

@@ -57,7 +57,9 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: ${DeviceSize.tablet}) {
-    padding: 1.6rem 1.2rem 1.6rem 20rem;
+    padding: 1.6rem 1.2rem 1.6rem 18rem;
+
+    gap: 2rem;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
@@ -81,7 +83,7 @@ const Title = styled.div`
 `;
 
 const TitleText = styled.span`
-  width: 25rem;
+  width: 20rem;
 
   display: block;
 
@@ -99,6 +101,10 @@ const TitleText = styled.span`
 
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    width: 15rem;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
