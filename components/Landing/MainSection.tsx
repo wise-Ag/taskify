@@ -25,6 +25,9 @@ export default MainSection;
 const Container = styled.div`
   padding: 9.4rem 0;
 
+  position: relative;
+  top: 7rem;
+
   display: flex;
   flex-direction: column;
   align-items: center;
