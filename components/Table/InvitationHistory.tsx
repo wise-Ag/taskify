@@ -192,7 +192,7 @@ const Container = styled.div`
   }
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
-    width: 28.4rem;
+    width: 100%;
 
     padding: 2.2rem 2rem;
   }
@@ -277,9 +277,10 @@ const PageButton = styled(ButtonSet)`
 `;
 
 const InvitationItem = styled.div`
-  width: 62rem;
+  width: 100%;
 
-  padding: 1.6rem 2.8rem;
+  padding-top: 1.6rem;
+  padding-bottom: 1.6rem;
 
   border-bottom: 1px solid var(--Grayee);
 
@@ -292,14 +293,9 @@ const InvitationItem = styled.div`
     border-bottom: 0;
   }
 
-  @media (max-width: ${DeviceSize.tablet}) {
-    width: 54.4rem;
-  }
-
   @media screen and (max-width: ${DeviceSize.mobile}) {
-    width: 28.4rem;
-
-    padding: 1.2rem 2rem;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
   }
 `;
 

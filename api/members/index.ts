@@ -2,7 +2,7 @@ import instance from "@/api/axios";
 import { ENDPOINTS } from "@/api/config";
 import { DeleteMembersProps, GetMembersProps, MemberData } from "@/api/members/members.types";
 
-export const getMembers = async ({ dashboardId, size = 5, page, token }: GetMembersProps): Promise<MemberData | null> => {
+export const getMembers = async ({ dashboardId, size = 100, page, token }: GetMembersProps): Promise<MemberData | null> => {
   try {
     const res = await instance.get(ENDPOINTS.MEMBERS.GET, {
       params: {
