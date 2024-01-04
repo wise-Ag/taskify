@@ -71,7 +71,6 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
     setTags([]);
   };
 
-  const handleSelectMember = (userId: number) => setAssigneeUserId(userId);
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setTitle(event.target.value);
   const handleDescriptionChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDescription(event.target.value);
 
@@ -82,11 +81,11 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
   return (
     <Wrapper ref={modalRef}>
       <TodoTitle>할 일 생성</TodoTitle>
-      <ContactDropdown onSelectMember={handleSelectMember} dashboardId={dashboardId} />
+      <ContactDropdown dashboardId={dashboardId} />
       <ModalInput $inputType="제목" label="제목" value={title} onChange={handleTitleChange} />
       <ModalInput $inputType="설명" label="설명" value={description} onChange={handleDescriptionChange} />
       <ModalInput $inputType="마감일" label="마감일" value={dueDate} />
-      <TagInput />
+      <TagInput isModify={true} />
       <ImageUploadInput type="modal" atomtype="cardImage" />
       <ButtonWrapper>
         <ButtonSet
@@ -109,9 +108,12 @@ export default AddTaskModal;
 
 const Wrapper = styled.div`
   width: 50.6rem;
+  height: 85vh;
 
   padding: 3.2rem 2.8rem 2.8rem 2.8rem;
   border-radius: 8px;
+
+  overflow-y: auto;
 
   display: flex;
   flex-direction: column;

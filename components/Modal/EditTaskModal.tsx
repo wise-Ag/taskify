@@ -1,60 +1,48 @@
-import { getCard, putCard } from "@/api/cards";
+import { putCard } from "@/api/cards";
+import { Card } from "@/api/cards/cards.types";
 import { postCardImage } from "@/api/columns";
-import { Card, CardProps, PutCardProps } from "@/api/cards/cards.types";
 import ContactDropdown from "@/components/Modal/ModalInput/ContactDropdown";
 import ImageUploadInput from "@/components/Modal/ModalInput/ImageUploadInput";
 import StateDropdown from "@/components/Modal/ModalInput/StateDropdown";
 import TagInput from "@/components/Modal/ModalInput/TagInput";
 import ButtonSet from "@/components/common/Buttons/ButtonSet";
+import { cardAssigneeIdAtom, cardAtom, cardImageAtom, dueDateAtom, isCardUpdatedAtom, tagAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { useRouter } from "next/router";
-import { cardAssigneeIdAtom, cardAtom, cardImageAtom, cardsAtom, dueDateAtom, isCardUpdatedAtom, statusAtom, tagAtom } from "@/states/atoms";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ModalInput from "./ModalInput/ModalInput";
 
 interface EditTaskModalProps {
-  cardId: number;
+  card: Card;
   onEdit?: () => void;
   onCancel: () => void;
 }
 
-const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
-  const [cardData, setCardData] = useState<Card | null>(null);
-  const [cards, setCards] = useAtom(cardsAtom);
+const EditTaskModal = ({ card, onCancel, onEdit }: EditTaskModalProps) => {
+  const [cardData, setCardData] = useState<Card>(card);
   const [tags, setTags] = useAtom(tagAtom);
   const [dueDate, setDueDate] = useAtom(dueDateAtom);
   const [cardImage, setCardImage] = useAtom(cardImageAtom);
-  const [status, setStatus] = useAtom(statusAtom);
   const [assigneeUserId, setAssigneeUserId] = useAtom(cardAssigneeIdAtom);
-  const [updatedCard, setUpdatedCard] = useAtom(cardAtom); //바로 업데이트를 위한 조타이
-  const [isCardUpdated, setIsCardUpdated] = useAtom(isCardUpdatedAtom);
-
-  const [isImageDeleteClick, setIsImageDeleteClick] = useState(false);
+  const [, setUpdatedCard] = useAtom(cardAtom); //바로 업데이트를 위한 조타이
+  const [, setIsCardUpdated] = useAtom(isCardUpdatedAtom);
+  const [isImageDeleteClick, setIsImageDeleteClick] = useState(false); //이미지 삭제를 감지
   const [token, setToken] = useState<string | null>(null);
-  const router = useRouter();
-  const { boardid } = router.query;
 
   const handleColumnChange = (newColumnId: number) => {
-    if (cardData) {
-      setCardData({
-        ...cardData,
-        columnId: newColumnId,
-      });
-    }
-  };
-
-  const handleSelectMember = (userId: number) => {
-    setAssigneeUserId(userId);
+    setCardData({
+      ...cardData,
+      columnId: newColumnId,
+    });
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (cardData) setCardData({ ...cardData, title: e.target.value });
+    setCardData({ ...cardData, title: e.target.value });
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    if (cardData) setCardData({ ...cardData, description: e.target.value });
+    setCardData({ ...cardData, description: e.target.value });
   };
 
   const handleSubmit = async () => {
@@ -107,53 +95,42 @@ const EditTaskModal = ({ cardId, onCancel, onEdit }: EditTaskModalProps) => {
 
   useEffect(() => {
     setToken(localStorage.getItem("accessToken"));
-
-    const fetchCardData = async () => {
-      const data = await getCard({ cardId, token });
-      if (data) {
-        setCardData(data);
-        setDueDate(data.dueDate);
-        if (data.assignee) setAssigneeUserId(data.assignee.id);
-        setTags(data.tags);
-      }
-    };
-
-    if (token) fetchCardData();
+    if (token) {
+      if (cardData.assignee) setAssigneeUserId(cardData.assignee.id);
+      setDueDate(cardData.dueDate);
+      setTags(cardData.tags);
+    }
   }, [token]);
   return (
-    <>
-      {cardData && (
-        <Wrapper>
-          <TodoTitle>할 일 수정</TodoTitle>
-          <DropdownWrapper>
-            <StateDropdown dashboardId={cardData.dashboardId} defaultColumnId={cardData.columnId} onColumnSelect={handleColumnChange} />
-            {cardData.assignee ? (
-              <ContactDropdown onSelectMember={handleSelectMember} dashboardId={cardData.dashboardId} assigneeNickname={cardData.assignee.nickname} />
-            ) : (
-              <ContactDropdown onSelectMember={handleSelectMember} dashboardId={cardData.dashboardId} />
-            )}
-          </DropdownWrapper>
-          <ModalInput label="제목" $inputType="제목" value={cardData.title} onChange={handleTitleChange} />
-          <ModalInput $inputType="설명" label="설명" value={cardData.description} onChange={handleDescriptionChange} />
-          <ModalInput label="마감일" $inputType="마감일" value={cardData.dueDate} />
-          <TagInput initialTags={cardData.tags} />
-          <ImageUploadInput atomtype="cardImage" type="modal" initialImageUrl={cardData.imageUrl} handleDeleteClick={setIsImageDeleteClick} />
-          <ButtonWrapper>
-            <ButtonSet
-              type="modalSet"
-              onClickLeft={() => {
-                onCancel();
-                deleteAtomData();
-              }}
-              onClickRight={handleSubmit}
-              isRightDisabled={!cardData.title || !cardData.description}
-            >
-              수정
-            </ButtonSet>
-          </ButtonWrapper>
-        </Wrapper>
-      )}
-    </>
+    <Wrapper>
+      <TodoTitle>할 일 수정</TodoTitle>
+      <DropdownWrapper>
+        <StateDropdown dashboardId={cardData.dashboardId} defaultColumnId={cardData.columnId} onColumnSelect={handleColumnChange} />
+        {cardData.assignee ? (
+          <ContactDropdown dashboardId={cardData.dashboardId} assigneeNickname={cardData.assignee.nickname} />
+        ) : (
+          <ContactDropdown dashboardId={cardData.dashboardId} />
+        )}
+      </DropdownWrapper>
+      <ModalInput label="제목" $inputType="제목" value={cardData.title} onChange={handleTitleChange} />
+      <ModalInput $inputType="설명" label="설명" value={cardData.description} onChange={handleDescriptionChange} />
+      <ModalInput label="마감일" $inputType="마감일" value={cardData.dueDate} />
+      <TagInput isModify={true} />
+      <ImageUploadInput atomtype="cardImage" type="modal" initialImageUrl={cardData.imageUrl} handleDeleteClick={setIsImageDeleteClick} />
+      <ButtonWrapper>
+        <ButtonSet
+          type="modalSet"
+          onClickLeft={() => {
+            onCancel();
+            deleteAtomData();
+          }}
+          onClickRight={handleSubmit}
+          isRightDisabled={!cardData.title || !cardData.description}
+        >
+          수정
+        </ButtonSet>
+      </ButtonWrapper>
+    </Wrapper>
   );
 };
 
@@ -161,9 +138,11 @@ export default EditTaskModal;
 
 const Wrapper = styled.div`
   width: 50.6rem;
-
+  height: 85vh;
   padding: 3.2rem 2.8rem 2.8rem 2.8rem;
   border-radius: 8px;
+
+  overflow-y: auto;
 
   display: flex;
   flex-direction: column;

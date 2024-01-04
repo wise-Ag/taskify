@@ -19,9 +19,8 @@ const StateDropdown = ({ dashboardId, defaultColumnId, onColumnSelect }: StateDr
   const [columns, setColumns] = useAtom(columnsAtom);
   const [selectedId, setSelectedId] = useAtom(selectedIdAtom);
 
-  const token = localStorage.getItem("accessToken");
-
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
     //처음엔 드롭다운 무조건 닫혀있는 상태
     setIsOpen(false);
     const fetchData = async () => {
@@ -37,7 +36,7 @@ const StateDropdown = ({ dashboardId, defaultColumnId, onColumnSelect }: StateDr
     };
 
     fetchData();
-  }, [dashboardId, token]);
+  }, [dashboardId]);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);

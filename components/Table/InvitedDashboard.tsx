@@ -51,6 +51,7 @@ const InvitedDashboard = () => {
   };
 
   useEffect(() => {
+    setInvitations([]);
     loadInvitations();
   }, []);
 

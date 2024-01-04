@@ -1,30 +1,30 @@
-import { useState, ChangeEvent, useEffect } from "react";
-import styled from "styled-components";
+import { getMembers } from "@/api/members";
+import { Member } from "@/api/members/members.types";
 import DropdownIcon from "@/assets/icons/arrow-drop-down.svg";
 import CheckIcon from "@/assets/icons/check.svg";
+import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
+import { cardAssigneeIdAtom } from "@/states/atoms";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
-import { cardAssigneeIdAtom } from "@/states/atoms";
-import { Member } from "@/api/members/members.types";
-import { getMembers } from "@/api/members";
-import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
-import { DeviceSize } from "@/styles/DeviceSize";
+import { ChangeEvent, useEffect, useState } from "react";
+import styled from "styled-components";
 
 interface ContactDropdownProps {
   dashboardId: number;
   assigneeNickname?: string | null;
-  onSelectMember?: (userId: number) => void;
 }
 
-const ContactDropdown = ({ dashboardId, assigneeNickname, onSelectMember }: ContactDropdownProps) => {
+const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
   const [filter, setFilter] = useState("");
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [showList, setShowList] = useState(false);
   const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
-  const token = localStorage.getItem("accessToken");
+  const [, setAssigneeId] = useAtom(cardAssigneeIdAtom);
+  const [isSelected, setIsSelected] = useState(true);
 
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
     const fetchMembers = async () => {
       try {
         const memberData = await getMembers({ dashboardId, token });
@@ -45,9 +45,8 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, onSelectMember }: Cont
     };
 
     fetchMembers();
-  }, [dashboardId, token]);
+  }, [dashboardId]);
 
-  const [, setAssigneeId] = useAtom(cardAssigneeIdAtom);
   const toggleList = () => {
     setShowList(!showList);
     if (!showList) {
@@ -61,7 +60,8 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, onSelectMember }: Cont
     const matchedMembers = membersData.filter((membersData) => membersData.nickname.toLowerCase().includes(input.toLowerCase()));
 
     setFilteredMembers(matchedMembers);
-
+    setAssigneeId(null); //input에 뭐 타이핑하면 무조건 담당자는 없음, 꼭 list중에서 Select해야함
+    setIsSelected(false); //선택되지 않았음을 사용자에게 보여주기 위해 프로필을 지움
     if (input) {
       setShowList(true);
     } else {
@@ -74,8 +74,8 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, onSelectMember }: Cont
     setSelectedMember(membersData);
     setFilter(membersData.nickname);
     setShowList(false);
-    if (onSelectMember) onSelectMember(membersData.userId);
     setAssigneeId(membersData.userId);
+    setIsSelected(true);
   };
 
   return (
@@ -83,9 +83,11 @@ const ContactDropdown = ({ dashboardId, assigneeNickname, onSelectMember }: Cont
       <Text>담당자</Text>
       <Container>
         <InputContainer>
-          {selectedMember && selectedMember.profileImageUrl && <SelectProfileIcon src={selectedMember.profileImageUrl} alt="Profile" />}
+          {selectedMember && selectedMember.profileImageUrl && (
+            <SelectProfileIcon className={`${isSelected ? "" : "hideProfile"}`} src={selectedMember.profileImageUrl} alt="Profile" />
+          )}
           {selectedMember && !selectedMember.profileImageUrl && (
-            <SelectedNoProfileImage>
+            <SelectedNoProfileImage className={`${isSelected ? "" : "hideProfile"}`}>
               <NoProfileImage id={selectedMember.userId} nickname={selectedMember.nickname} />
             </SelectedNoProfileImage>
           )}
@@ -166,6 +168,10 @@ const SelectProfileIcon = styled.img`
 
   transform: translateY(-50%);
   object-fit: cover;
+
+  &.hideProfile {
+    display: none;
+  }
 `;
 const SelectedNoProfileImage = styled.div`
   width: 2.4rem;
@@ -178,6 +184,9 @@ const SelectedNoProfileImage = styled.div`
   border-radius: 50%;
 
   transform: translateY(-50%);
+  &.hideProfile {
+    display: none;
+  }
 `;
 
 const Input = styled.input`
