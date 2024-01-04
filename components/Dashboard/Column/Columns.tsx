@@ -74,7 +74,7 @@ const Columns = () => {
         }
       }
     };
-    loadColumnsData();
+    if (boardid) loadColumnsData();
   }, [boardid]);
 
   return (

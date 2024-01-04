@@ -190,6 +190,9 @@ const InputArea = styled.div<InputAreaProps>`
 const StyledTextArea = styled.textarea<InputAreaProps>`
   border: none;
 
+  height: 100%;
+  width: 100%;
+
   flex-grow: 1;
   resize: none;
 
