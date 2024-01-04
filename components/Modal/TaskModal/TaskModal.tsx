@@ -83,6 +83,13 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
           const cardList = [...cards[columnId].filter((v) => v.id !== card.id)];
           return { ...prev, [columnId]: cardList };
         });
+        //컬럼 개수 조정
+        setCardsTotalCount((prev) => {
+          return { ...prev, [columnId]: prev[columnId] - 1 };
+        });
+        setCardsTotalCount((prev) => {
+          return { ...prev, [card.columnId]: prev[card.columnId] + 1 };
+        });
       }
     }
     closeModalFunc();
@@ -157,7 +164,7 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
       {isEditModalOpen && (
         <ModalWrapper>
           <EditTaskModal
-            cardId={card.id}
+            card={card}
             onCancel={closeEditModal}
             onEdit={() => {
               closeEditModal();

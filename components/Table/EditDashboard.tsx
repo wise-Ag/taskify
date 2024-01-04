@@ -5,18 +5,38 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import ToastModal from "@/components/Modal/ToastModal";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { getDashboard } from "@/api/dashboards";
+import { getDashboard, putDashboard } from "@/api/dashboards";
 import { Dashboard } from "@/api/dashboards/dashboards.types";
+import { useAtom } from "jotai";
+import { dashboardListAtom, dashboardColorAtom } from "@/states/atoms";
 
 const EditDashboard = () => {
   const [toastVisible, setToastVisible] = useState(false);
   const [dashboard, setDashboard] = useState<Dashboard>();
   const router = useRouter();
   const { boardid } = router.query;
+  const [, setEditDashboard] = useAtom(dashboardListAtom);
+  const [newTitle, setNewTitle] = useState("");
+  const [dashboardColor, setDashboardColor] = useAtom(dashboardColorAtom);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     toast("변경이 완료되었습니다.");
     setToastVisible((prev) => !prev);
+
+    if (boardid && newTitle) {
+      const updatedDashboard = await putDashboard({
+        dashboardId: Number(boardid),
+        token: localStorage.getItem("accessToken"),
+        title: newTitle,
+        color: dashboardColor,
+      });
+
+      if (updatedDashboard) {
+        setDashboard(updatedDashboard);
+        setEditDashboard(updatedDashboard);
+        setDashboardColor(updatedDashboard.color);
+      }
+    }
   };
 
   useEffect(() => {
@@ -38,7 +58,7 @@ const EditDashboard = () => {
       </Header>
       <Form>
         <Label>대시보드 이름</Label>
-        <Input placeholder="변경할 이름을 입력해 주세요." />
+        <Input onChange={(e) => setNewTitle(e.target.value)} placeholder="변경할 이름을 입력해 주세요." />
       </Form>
       <ButtonWrapper>
         <Button onClick={handleClick}> 변경</Button>

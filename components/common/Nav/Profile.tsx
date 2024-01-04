@@ -119,9 +119,20 @@ const ProfileIcon = styled.div<{ $image: string }>`
 `;
 
 const Name = styled.div`
+  width: 9rem;
+
   color: var(--Black33);
   font-size: 1.6rem;
   font-weight: 500;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    text-overflow: clip;
+    overflow: auto;
+  }
 
   @media (max-width: ${DeviceSize.mobile}) {
     display: none;

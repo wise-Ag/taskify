@@ -62,11 +62,11 @@ const ProfileImages = () => {
               </NoProfileImageWrapper>
             ),
           )}
-          {totalCount > 4 && (
+          {totalCount >= 4 && (
             <NumberWrapper onClick={toggleDropdown}>
               <NumberBackground />
-              <NumberPc>+{totalCount - 4}</NumberPc>
-              <NumberTabletOrMobile>+{totalCount - 2}</NumberTabletOrMobile>
+              <NumberPc>+{totalCount - 3}</NumberPc>
+              <NumberTabletOrMobile>+{totalCount - 1}</NumberTabletOrMobile>
             </NumberWrapper>
           )}
         </Contents>
@@ -78,12 +78,15 @@ const ProfileImages = () => {
 
 export default ProfileImages;
 
-const Container = styled.div``;
+const Container = styled.div`
+  width: 13rem;
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    width: 9.8rem;
+  }
+`;
 
 const Contents = styled.div`
-  min-width: 8rem;
-  max-width: 15.8rem;
-
   position: relative;
 
   display: flex;
@@ -116,7 +119,7 @@ const ProfileImg = styled.div<{ $index: number; $image: string }>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: ${({ $index: index }) => `${(index + 1) * 3}rem`};
+  right: ${({ $index: index }) => `${index * 3}rem`};
 
   border-radius: 100%;
   border: 2px solid var(--White);
@@ -143,7 +146,7 @@ const NoProfileImageWrapper = styled.div<{ $index: number }>`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: ${({ $index: index }) => `${(index + 1) * 3}rem`};
+  right: ${({ $index: index }) => `${index * 3}rem`};
 
   z-index: ${({ $index: index }) => `${3 - index}`};
 
@@ -152,7 +155,7 @@ const NoProfileImageWrapper = styled.div<{ $index: number }>`
     width: 3.4rem;
     line-height: 3rem;
 
-    right: ${({ $index: index }) => `${(index + 1) * 2.4}rem`};
+    right: ${({ $index: index }) => `${index * 2.4}rem`};
   }
 `;
 
