@@ -77,6 +77,53 @@ const Label = styled.label`
   }
 `;
 
+const HoverOverlay = styled.div`
+  width: 100%;
+  height: 100%;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 6px;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  background: rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+`;
+
+const ImageInputWrapper = styled.div<{ $previewUrl: string | null; type: "modal" | "account" }>`
+  width: 7.6rem;
+  height: 7.6rem;
+
+  border-radius: 6px;
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--Grayfa);
+  background-image: url(${(props) => props.$previewUrl});
+  background-size: cover;
+  background-position: center;
+
+  cursor: pointer;
+
+  ${(props) =>
+    props.type === "account" &&
+    css`
+      width: 17.5rem;
+      height: 17.5rem;
+    `}
+
+  &:hover ${HoverOverlay} {
+    display: ${(props) => (props.$previewUrl ? "flex" : "none")};
+  }
+`;
+
 const ImageInput = styled.input`
   width: 100%;
   height: 100%;
@@ -98,56 +145,9 @@ const StyledAddIcon = styled(AddIcon)`
   height: auto;
 `;
 
-const HoverOverlay = styled.div`
-  width: 100%;
-  height: 100%;
-
-  display: none;
-  justify-content: center;
-  align-items: center;
-
-  border-radius: 6px;
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  background: rgba(0, 0, 0, 0.6);
-  pointer-events: none;
-`;
-
 const StyledEditIcon = styled(EditIcon)`
   width: 2.8rem;
   height: 2.8rem;
-`;
-
-const ImageInputWrapper = styled.div<{ $previewUrl: string | null; type: "modal" | "account" }>`
-  width: 7.6rem;
-  height: 7.6rem;
-
-  border-radius: 6px;
-  position: relative;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background-color: var(--White);
-  background-image: url(${(props) => props.$previewUrl});
-  background-size: cover;
-  background-position: center;
-
-  cursor: pointer;
-
-  ${(props) =>
-    props.type === "account" &&
-    css`
-      width: 100%;
-      height: 100%;
-    `}
-
-  &:hover ${HoverOverlay} {
-    display: ${(props) => (props.$previewUrl ? "flex" : "none")};
-  }
 `;
 
 const DeleteImage = styled.span`

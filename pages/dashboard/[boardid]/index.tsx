@@ -4,6 +4,7 @@ import Columns from "@/components/Dashboard/Column/Columns";
 import DashboardNav from "@/components/common/Nav/DashboardNav";
 import SideMenu from "@/components/common/SideMenu/SideMenu";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
@@ -11,26 +12,22 @@ import { styled } from "styled-components";
 const DashBoardPage = () => {
   const router = useRouter();
   const { boardid } = router.query;
-  const [dashboards, setDashboards] = useState<GetDashboardListData>();
+  const [, setDashboards] = useState<GetDashboardListData>();
 
   useEffect(() => {
     const loadDashboardData = async () => {
-      const res = await getDashboardList({ navigationMethod: "infiniteScroll", token: localStorage.getItem("accessToken") });
+      const res = await getDashboardList({ navigationMethod: "infiniteScroll", size: 500, token: localStorage.getItem("accessToken") });
 
       if (res !== null) {
         setDashboards(res);
+
+        const index = res.dashboards?.findIndex((v) => v.id == Number(boardid));
+
+        if (index === -1) {
+          router.push(`/404`);
+          return;
+        }
       }
-
-      // if (res !== null) {
-      //   const index = res.dashboards?.findIndex((v) => v.id == Number(boardid));
-
-      //   console.log(index);
-
-      //   if (index === -1) {
-      //     router.push(`/404`);
-      //     return;
-      //   }
-      // }
     };
     if (boardid) loadDashboardData();
   }, [boardid]);

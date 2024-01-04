@@ -205,6 +205,10 @@ const StyledTextArea = styled.textarea<InputAreaProps>`
     color: var(--Black33);
   }
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: ${(props) => (props.$inputType === "댓글" ? "1.2rem" : "1.4rem")};
   }

@@ -7,8 +7,8 @@ const Point1 = () => {
     <Box>
       <Title>Point 2</Title>
       <Description>
-        해야 할 일을
-        <br /> 등록하세요
+        해야 할 일을 편하게
+        <br /> 기록하고 관리하세요
       </Description>
       <LandingImage src={Landing2} alt="Landing Main" width={436} height={502} />
     </Box>
@@ -109,9 +109,11 @@ const LandingImage = styled(Image)`
   top: 9.8rem;
   left: 10.8rem;
 
+  border-radius: 8px 8px 0 0;
+
   @media screen and (max-width: 1060px) {
     width: 36rem;
-    height: 41.5rem;
+    height: 41.8rem;
 
     top: unset;
     left: 50%;
@@ -121,7 +123,7 @@ const LandingImage = styled(Image)`
 
   @media screen and (max-width: 608px) {
     width: 21.7em;
-    height: 25rem;
+    height: 25.2rem;
 
     top: unset;
     left: 50%;

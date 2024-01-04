@@ -14,10 +14,6 @@ interface ContactDropdownProps {
   assigneeNickname?: string | null;
 }
 
-interface InputProps {
-  showList: boolean;
-}
-
 const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps) => {
   const [membersData, setMembersData] = useState<Member[]>([]);
   const [filter, setFilter] = useState("");
@@ -114,7 +110,6 @@ const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps
             value={filter}
             onChange={handleChange}
             placeholder="이름을 입력해 주세요"
-            showList={showList}
             style={{
               paddingLeft: selectedMember ? "4.5rem" : "1.6rem",
             }}
@@ -208,7 +203,7 @@ const SelectedNoProfileImage = styled.div`
   }
 `;
 
-const Input = styled.input<InputProps>`
+const Input = styled.input`
   width: 100%;
   height: 100%;
 
@@ -219,7 +214,7 @@ const Input = styled.input<InputProps>`
   gap: 1rem;
 
   border-radius: 6px;
-  border: 1px solid ${({ showList }) => (showList ? "var(--Main)" : "var(--Grayd9)")};
+  border: 1px solid var(--Grayd9);
 
   background: var(--White);
 
@@ -231,7 +226,9 @@ const Input = styled.input<InputProps>`
   }
 `;
 
-const ArrowDownIcon = styled(DropdownIcon)`
+const ArrowDownIcon = styled(DropdownIcon).withConfig({
+  shouldForwardProp: (prop) => prop !== "show",
+})`
   position: absolute;
   top: 50%;
   right: 1.6rem;
