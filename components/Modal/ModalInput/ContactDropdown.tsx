@@ -6,12 +6,16 @@ import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import { cardAssigneeIdAtom } from "@/states/atoms";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 interface ContactDropdownProps {
   dashboardId: number;
   assigneeNickname?: string | null;
+}
+
+interface InputProps {
+  showList: boolean;
 }
 
 const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps) => {
@@ -22,6 +26,7 @@ const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps
   const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
   const [, setAssigneeId] = useAtom(cardAssigneeIdAtom);
   const [isSelected, setIsSelected] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -60,8 +65,8 @@ const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps
     const matchedMembers = membersData.filter((membersData) => membersData.nickname.toLowerCase().includes(input.toLowerCase()));
 
     setFilteredMembers(matchedMembers);
-    setAssigneeId(null); //input에 뭐 타이핑하면 무조건 담당자는 없음, 꼭 list중에서 Select해야함
-    setIsSelected(false); //선택되지 않았음을 사용자에게 보여주기 위해 프로필을 지움
+    setAssigneeId(null);
+    setIsSelected(false);
     if (input) {
       setShowList(true);
     } else {
@@ -78,10 +83,23 @@ const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps
     setIsSelected(true);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setShowList(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <Wrapper>
       <Text>담당자</Text>
-      <Container>
+      <Container ref={containerRef}>
         <InputContainer>
           {selectedMember && selectedMember.profileImageUrl && (
             <SelectProfileIcon className={`${isSelected ? "" : "hideProfile"}`} src={selectedMember.profileImageUrl} alt="Profile" />
@@ -96,11 +114,12 @@ const ContactDropdown = ({ dashboardId, assigneeNickname }: ContactDropdownProps
             value={filter}
             onChange={handleChange}
             placeholder="이름을 입력해 주세요"
+            showList={showList}
             style={{
               paddingLeft: selectedMember ? "4.5rem" : "1.6rem",
             }}
           />
-          <ArrowDownIcon onClick={toggleList} style={{ pointerEvents: "auto" }} />
+          <ArrowDownIcon onClick={toggleList} show={showList} style={{ pointerEvents: "auto" }} />
         </InputContainer>
 
         {showList && (
@@ -189,7 +208,7 @@ const SelectedNoProfileImage = styled.div`
   }
 `;
 
-const Input = styled.input`
+const Input = styled.input<InputProps>`
   width: 100%;
   height: 100%;
 
@@ -200,13 +219,14 @@ const Input = styled.input`
   gap: 1rem;
 
   border-radius: 6px;
-  border: 1px solid var(--Grayd9);
+  border: 1px solid ${({ showList }) => (showList ? "var(--Main)" : "var(--Grayd9)")};
+
   background: var(--White);
 
   font-size: 1.6rem;
 
   &:focus {
-    border: 1.4px solid var(--Main);
+    border: 1.2px solid var(--Main);
     outline: none;
   }
 `;
@@ -216,8 +236,9 @@ const ArrowDownIcon = styled(DropdownIcon)`
   top: 50%;
   right: 1.6rem;
 
-  transform: translateY(-50%);
-  pointer-events: none;
+  transform: translateY(-50%) rotate(${({ show }) => (show ? "180deg" : "0deg")});
+
+  cursor: pointer;
 `;
 
 const List = styled.ul`
