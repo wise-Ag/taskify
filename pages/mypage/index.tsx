@@ -35,14 +35,22 @@ const Mypage = () => {
 export default Mypage;
 
 const Wrapper = styled.div`
-  height: 145.3rem;
+  height: calc(100vh - 7rem);
 
   background-color: var(--MainLight);
+
+  position: relative;
+  top: 7rem;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    height: calc(100vh - 12rem);
+  }
 `;
 
 const Container = styled.div`
-  margin-top: 2rem;
-  margin-left: 32rem;
+  margin-left: 30rem;
+
+  padding: 2rem;
 
   display: flex;
   flex-direction: column;
@@ -54,6 +62,6 @@ const Container = styled.div`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
-    margin: 7rem 1.2rem 0 1.2rem;
+    margin: 5rem 1.2rem 0 1.2rem;
   }
 `;
