@@ -28,6 +28,7 @@ const Columns = () => {
 
   const rules = {
     required: "생성할 이름을 입력해주세요",
+    maxLength: { value: 15, message: "컬럼 이름은 15자를 초과할 수 없습니다." },
     validate: (v: string) => {
       if (isTitleExist(v)) return "이름이 중복되었습니다. 다시 입력해주세요!";
     },
@@ -35,11 +36,6 @@ const Columns = () => {
 
   const handleOnSubmit = async (data: FormData) => {
     const res = await postColumns({ title: data.inputData, dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
-
-    // if (totalColumns >= 10) {
-    //   toast("칼럼의 개수는 10개를 초과할 수 없습니다.");
-    //   setToastVisible((prev) => !prev);
-    // }
 
     if (res == null) {
       toast("칼럼 생성에 실패했습니다.");
@@ -55,7 +51,7 @@ const Columns = () => {
 
   const handleAddColumn = () => {
     if (totalColumns >= 10) {
-      toast("칼럼의 개수는 10개를 초과할 수 없습니다.");
+      toast("컬럼의 개수는 10개를 초과할 수 없습니다.");
       setToastVisible((prev) => !prev);
     } else {
       openModalFunc();
@@ -107,16 +103,16 @@ const Columns = () => {
 export default Columns;
 
 const Wrapper = styled.div`
-  height: 100vh;
   margin-left: 30rem;
 
   display: flex;
 
   @media (max-width: ${DeviceSize.tablet}) {
+    width: 58.5rem;
+
     margin-left: 16rem;
 
     flex-direction: column;
-    width: auto;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
@@ -126,17 +122,27 @@ const Wrapper = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-  width: 100%;
-  height: 11rem;
+  min-width: fit-content;
+  height: calc(100vh - 7rem);
 
-  margin-top: 6.3rem;
-  margin-left: 2rem;
+  padding: 2rem;
 
-  z-index: ${Z_INDEX.Column_ButtonWrapper};
+  border-right: 1px solid var(--Grayd9);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
 
   @media (max-width: ${DeviceSize.tablet}) {
-    position: sticky;
-    bottom: 0;
+    width: 35.5rem;
+    height: 100%;
+
+    border-bottom: 1px solid var(--Grayd9);
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 30.8rem;
   }
 `;
 

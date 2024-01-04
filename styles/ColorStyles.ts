@@ -32,4 +32,5 @@ export const MAIN = css`
   --MainLight: #faf6f0;
   --MainBG: #eef2e6;
   --MainHover: #dce6d1;
+  --ScrollBar: #8db877;
 `;

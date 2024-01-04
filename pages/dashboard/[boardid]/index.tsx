@@ -3,6 +3,7 @@ import { GetDashboardListData } from "@/api/dashboards/dashboards.types";
 import Columns from "@/components/Dashboard/Column/Columns";
 import DashboardNav from "@/components/common/Nav/DashboardNav";
 import SideMenu from "@/components/common/SideMenu/SideMenu";
+import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
@@ -44,7 +45,17 @@ export default DashBoardPage;
 
 const ColumnWrapper = styled.div`
   width: 100%;
+  height: calc(100vh - 7rem);
+
   overflow: scroll;
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   background-color: var(--Grayfa);
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    height: calc(100vh - 6rem);
+  }
 `;

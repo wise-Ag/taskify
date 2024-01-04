@@ -28,12 +28,8 @@ const Container = styled.div`
 
   background: var(--White);
 
-  @media screen and (max-width: ${DeviceSize.tablet}) {
-    width: 50.4rem;
-  }
-
   @media screen and (max-width: ${DeviceSize.mobile}) {
-    width: 26rem;
+    max-width: 40rem;
 
     padding: 2.4rem 1.6rem;
   }
@@ -54,6 +50,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media screen and (max-width: ${DeviceSize.mobile}) {
+    margin-top: 12em;
+  }
 `;
 
 const NoInviteImg = styled.img.attrs({
