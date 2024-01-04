@@ -33,6 +33,10 @@ const Container = styled.div`
   align-items: center;
 
   background-color: var(--MainLight);
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    top: 6rem;
+  }
 `;
 
 const MainImage = styled(Image)`

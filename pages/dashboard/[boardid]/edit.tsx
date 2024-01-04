@@ -83,6 +83,10 @@ const Wrapper = styled.div`
   top: 7rem;
 
   background-color: var(--MainLight);
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    top: 6rem;
+  }
 `;
 
 const Container = styled.div`

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { DeviceSize } from "@/styles/DeviceSize";
-import NoProfileImage from "../NoProfileImage/ProfileImage";
+import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import { Member } from "@/api/members/members.types";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 
@@ -34,11 +34,13 @@ const Dropdown = styled.div`
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
 
   position: absolute;
-  top: 8%;
-
-  background-color: white;
+  top: 6rem;
 
   z-index: ${Z_INDEX.MemberListDropdown_Dropdown};
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    top: 5rem;
+  }
 `;
 
 const Item = styled.div`
@@ -113,5 +115,9 @@ const Nickname = styled.div`
   &:hover {
     text-overflow: clip;
     overflow: auto;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;

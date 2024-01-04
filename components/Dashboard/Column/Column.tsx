@@ -131,15 +131,6 @@ const Wrapper = styled.div`
   &.show-scrollbar {
     overflow-y: auto;
   }
-
-  &::-webkit-scrollbar {
-    width: 0.2rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--ScrollBar);
-    border-radius: 5rem;
-  }
 `;
 
 const Container = styled.div`

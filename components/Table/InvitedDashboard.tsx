@@ -197,9 +197,24 @@ const MobileTableTitle = styled.h3`
 `;
 
 const TableBody = styled.h3`
+  width: 23rem;
+
   color: var(--Black33);
   font-size: 1.6rem;
   font-weight: 400;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    text-overflow: clip;
+    overflow: auto;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 70%;

@@ -3,6 +3,8 @@
  * 컴포넌트이름+스타일컴포넌트이름
  */
 export const Z_INDEX = {
+  ModalWrapper: 9999,
+
   MemberListDropdown_Dropdown: 2000,
 
   TaskModal_StyledKebabModal: 1500,
@@ -16,8 +18,6 @@ export const Z_INDEX = {
   SideMenu_Popup: 999,
 
   Navigation: 900,
-
-  MyDashboardList_ModalBackdrop: 10,
 
   ProfileImages_NumberWrapper: 3,
 

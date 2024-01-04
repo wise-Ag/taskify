@@ -11,7 +11,7 @@ import { useAtom } from "jotai";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import ModalWrapper from "./Modal/ModalWrapper";
+import ModalWrapper from "@/components/Modal/ModalWrapper";
 
 export interface Dashboards {
   id: number;

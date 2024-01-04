@@ -8,7 +8,7 @@ import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
-import ModalContainer, { FormData } from "./ModalContainer";
+import ModalContainer, { FormData } from "@/components/Modal/ModalContainer";
 
 interface KebabModalProps {
   columnId: number;

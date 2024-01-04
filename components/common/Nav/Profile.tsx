@@ -134,6 +134,10 @@ const Name = styled.div`
     overflow: auto;
   }
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   @media (max-width: ${DeviceSize.mobile}) {
     display: none;
   }

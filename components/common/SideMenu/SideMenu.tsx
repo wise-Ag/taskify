@@ -54,6 +54,7 @@ const SideMenu = () => {
   const [editDashboard, setEditDashboard] = useAtom(dashboardListAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const wrapperRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false); //스크롤바 커스텀
 
   const scrollContainerRef = useRef(null);
   const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
@@ -66,6 +67,14 @@ const SideMenu = () => {
 
   const togglePopup = () => {
     setIsPopupVisible((prev) => !prev);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
   };
 
   useEffect(() => {
@@ -205,18 +214,23 @@ const DashboardList = styled.div`
   width: 100%;
   height: 100%;
 
-  overflow: auto;
+  overflow-y: hidden;
 
   margin-top: 1.8rem;
 
   display: flex;
   flex-direction: column;
 
+  &:hover {
+    overflow-y: auto;
+  }
+
   @media (max-width: ${DeviceSize.tablet}) {
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
     width: 4rem;
+    max-height: 70rem;
 
     margin-top: 1.6rem;
   }
@@ -280,6 +294,15 @@ const DashboardTitle = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   position: relative;
+
+  &:hover {
+    text-overflow: clip;
+    overflow: auto;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   @media (max-width: ${DeviceSize.tablet}) {
     width: 55%;

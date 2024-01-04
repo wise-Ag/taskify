@@ -70,12 +70,24 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
-  width: 20rem;
+  width: 30rem;
+
+  display: flex;
+  align-items: center;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.8rem;
+  }
+`;
+
+const TitleText = styled.span`
+  width: 25rem;
+
+  display: block;
 
   color: var(--Black33);
   font-size: 2rem;
   font-weight: 700;
-
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -87,21 +99,6 @@ const Title = styled.div`
 
   &::-webkit-scrollbar {
     display: none;
-  }
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1.8rem;
-  }
-`;
-
-const TitleText = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  &:hover {
-    text-overflow: clip;
-    overflow: auto;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
