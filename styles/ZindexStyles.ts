@@ -22,4 +22,5 @@ export const Z_INDEX = {
   ProfileImages_NumberWrapper: 3,
 
   Column_ButtonWrapper: 1,
+  DropdownList_Wrapper: 1,
 };

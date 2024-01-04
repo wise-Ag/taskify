@@ -219,8 +219,11 @@ const CommentItem = styled.div`
   flex-direction: row;
 
   margin-bottom: 0.8rem;
+  padding: 1rem 0;
 
   font-size: 1.4rem;
+
+  border-bottom: 1px solid var(--Grayee);
 
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.2rem;

@@ -7,11 +7,15 @@ import { styled } from "styled-components";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { useAtom } from "jotai";
+import { columnsAtom } from "@/states/atoms";
 
 const MyDashboard = () => {
   const router = useRouter();
+  const [columns, setColumns] = useAtom(columnsAtom); //이전의 column들 초기화, 대시보드에 접근하려면 이곳을 거치므로 여기서 초기화
 
   useEffect(() => {
+    setColumns([]);
     const token = localStorage.getItem("accessToken");
 
     if (!token) {

@@ -13,17 +13,17 @@ interface ColumnHeaderProps {
 }
 
 const ColumnHeader = ({ title, count, columnId }: ColumnHeaderProps) => {
-  const [isClicked, setIsClicked] = useState(false);
+  const [isKebabOpen, setIsKebabOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleClick = () => {
-    setIsClicked((prev) => !prev);
+    setIsKebabOpen((prev) => !prev);
   };
 
   useEffect(() => {
     const handleOutsideClick = (event: Event) => {
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-        setIsClicked(false);
+        setIsKebabOpen(false);
       }
     };
 
@@ -42,7 +42,7 @@ const ColumnHeader = ({ title, count, columnId }: ColumnHeaderProps) => {
       </Content>
       <Div ref={modalRef}>
         <SettingIcon onClick={handleClick} style={{ cursor: "pointer" }} />
-        {isClicked && <KebabModal columnId={columnId} setIsClicked={setIsClicked} />}
+        {isKebabOpen && <KebabModal columnId={columnId} setIsKebabOpen={setIsKebabOpen} />}
       </Div>
     </Wrapper>
   );

@@ -39,6 +39,7 @@ const MyDashboardList = () => {
 
   const rules = {
     required: "생성할 이름을 입력해주세요",
+    maxLength: { value: 15, message: "대시보드 이름은 15자를 초과할 수 없습니다." },
     validate: (v: string) => {
       if (isTitleExist(v)) return "이름이 중복되었습니다. 다시 입력해주세요!";
     },
@@ -53,7 +54,7 @@ const MyDashboardList = () => {
       closeModalFunc();
       return;
     }
-    currentPage === 1 ? setDashboards(() => [res, ...dashboards.slice(0, dashboards.length - 1)]) : setCurrentPage(1);
+    currentPage === 1 ? loadDashboardList() : setCurrentPage(1);
 
     closeModalFunc();
   };
@@ -68,7 +69,7 @@ const MyDashboardList = () => {
 
     if (res !== null) {
       setDashboards([...res.dashboards]);
-      setTotalPageCount(Math.ceil(res.totalCount / PAGE_SIZE));
+      setTotalPageCount(Math.max(Math.ceil(res.totalCount / PAGE_SIZE), 1));
     }
   };
 
