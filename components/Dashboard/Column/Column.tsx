@@ -27,7 +27,6 @@ const Column = ({ columnId, title }: ColumnProps) => {
   const [cardsTotalCount, setCardsTotalCount] = useAtom(cardsTotalCountAtom);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const columnCards = cards[columnId] || [];
-  const [isHovered, setIsHovered] = useState(false); //스크롤바 커스텀
   const scrollContainerRef = useRef(null);
   const { startRef, endRef, handleScrollNavClick, isScrollingUp } = useInfiniteScrollNavigator(scrollContainerRef);
 
@@ -57,29 +56,21 @@ const Column = ({ columnId, title }: ColumnProps) => {
   };
   const { targetRef, setIsLoading } = useInfiniteScroll({ callbackFunc: loadCardList });
 
-  //스크롤바 커스텀
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
-
   useEffect(() => {
     loadCardList();
   }, []);
 
   return (
-    <Wrapper ref={scrollContainerRef} className={`${isHovered ? "show-scrollbar" : ""}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <Wrapper ref={scrollContainerRef}>
       <ColumnHeader title={title} columnId={columnId} count={cardsTotalCount[columnId]} />
-      <Container ref={startRef}>
-        <Button
-          type="plus"
-          onClick={() => {
-            openModalFunc();
-          }}
-        />
+      <Button
+        type="plus"
+        onClick={() => {
+          openModalFunc();
+        }}
+      />
+
+      <BodyContainer ref={startRef}>
         {isModalOpen && (
           <ModalWrapper>
             <AddTaskModal closeModalFunc={closeModalFunc} columnId={columnId} />
@@ -91,7 +82,7 @@ const Column = ({ columnId, title }: ColumnProps) => {
             {card.id === cursorId && <div ref={targetRef} />}
           </div>
         ))}
-      </Container>
+      </BodyContainer>
       <div ref={endRef} />
       {PAGE_SIZE < columnCards.length && (
         <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
@@ -111,8 +102,6 @@ const Wrapper = styled.div`
   padding: 2rem;
   border-right: 1px solid var(--Grayd9);
 
-  overflow: hidden;
-
   display: flex;
   flex-direction: column;
 
@@ -127,16 +116,22 @@ const Wrapper = styled.div`
   @media (max-width: ${DeviceSize.mobile}) {
     width: 30.8rem;
   }
-
-  &.show-scrollbar {
-    overflow-y: auto;
-  }
 `;
 
-const Container = styled.div`
+const HeaderContainer = styled.div``;
+
+const BodyContainer = styled.div`
+  margin-top: 2rem;
+
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const ScrollNavigateButton = styled.div`
