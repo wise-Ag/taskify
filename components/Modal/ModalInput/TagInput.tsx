@@ -147,15 +147,7 @@ const TagArea = styled.div`
 
   max-width: 100%;
   height: 3rem;
+  
   overflow-x: scroll;
   overflow-y: hidden;
-
-  &::-webkit-scrollbar {
-    height: 0.7rem;
-    border-radius: 0.6rem;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #a0cb9b;
-    border-radius: 0.6rem;
-  }
 `;

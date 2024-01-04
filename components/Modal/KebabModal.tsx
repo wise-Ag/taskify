@@ -8,15 +8,15 @@ import { Z_INDEX } from "@/styles/ZindexStyles";
 import { useAtom } from "jotai";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
-import ModalContainer, { FormData } from "./ModalContainer";
+import ModalContainer, { FormData } from "@/components/Modal/ModalContainer";
 
 interface KebabModalProps {
   columnId: number;
-  setIsClicked: Dispatch<SetStateAction<boolean>>;
+  setIsKebabOpen: Dispatch<SetStateAction<boolean>>;
   handleClick?: () => void;
 }
 
-const KebabModal = ({ columnId, setIsClicked, handleClick }: KebabModalProps) => {
+const KebabModal = ({ columnId, setIsKebabOpen, handleClick }: KebabModalProps) => {
   const [columns, setColumns] = useAtom(columnsAtom);
   const [totalColumns, setTotalColumns] = useAtom(totalColumnsAtom);
   const { isModalOpen: isDeleteModalOpen, openModalFunc: openDeleteModalFunc, closeModalFunc: closeDeleteModalFunc } = useModal();
@@ -45,6 +45,7 @@ const KebabModal = ({ columnId, setIsClicked, handleClick }: KebabModalProps) =>
 
     setColumns(columns.map((v) => (v.id == columnId ? res : v)));
     closeEditModalFunc();
+    setIsKebabOpen(false);
   };
 
   const handleDeleteColumn = async () => {
@@ -74,7 +75,7 @@ const KebabModal = ({ columnId, setIsClicked, handleClick }: KebabModalProps) =>
   return (
     <>
       <Wrapper>
-        <KebabListWrapper onBlur={() => setIsClicked} tabIndex={0}>
+        <KebabListWrapper>
           <KebabList onClick={openEditModalFunc}>수정하기</KebabList>
           <KebabList onClick={openDeleteModalFunc}>삭제하기</KebabList>
         </KebabListWrapper>

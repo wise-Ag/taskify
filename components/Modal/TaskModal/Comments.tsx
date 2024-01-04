@@ -1,6 +1,6 @@
 import { DeviceSize } from "@/styles/DeviceSize";
 import { styled } from "styled-components";
-import ModalInput from "../ModalInput/ModalInput";
+import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { deleteComments, getComments, postComments, putComments } from "@/api/comments";
@@ -8,7 +8,7 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { Card } from "@/api/cards/cards.types";
 import { Comment } from "@/api/comments/comments.types";
 import { formatUpdatedAt } from "@/utils/FormatDate";
-import NoProfileImage from "../../common/NoProfileImage/ProfileImage";
+import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import { useAtom } from "jotai";
 import { commentScrollAtom } from "@/states/atoms";
 
@@ -219,8 +219,11 @@ const CommentItem = styled.div`
   flex-direction: row;
 
   margin-bottom: 0.8rem;
+  padding: 1rem 0;
 
   font-size: 1.4rem;
+
+  border-bottom: 1px solid var(--Grayee);
 
   @media (max-width: ${DeviceSize.mobile}) {
     font-size: 1.2rem;

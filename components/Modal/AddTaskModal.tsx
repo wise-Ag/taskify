@@ -10,8 +10,8 @@ import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import ContactDropdown from "./ModalInput/ContactDropdown";
-import ImageUploadInput from "./ModalInput/ImageUploadInput";
+import ContactDropdown from "@/components/Modal/ModalInput/ContactDropdown";
+import ImageUploadInput from "@/components/Modal/ModalInput/ImageUploadInput";
 
 interface AddTaskModalProps {
   closeModalFunc: () => void;

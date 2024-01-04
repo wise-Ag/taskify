@@ -143,8 +143,16 @@ const Title = styled.div<{ $imageurl: string }>`
 `;
 
 const Tags = styled.div`
+  max-width: 27.4rem;
+
   display: flex;
   gap: 0.6rem;
+
+  overflow-x: hidden;
+
+  &:hover {
+    overflow-x: auto;
+  }
 
   @media (max-width: ${DeviceSize.tablet}) {
     height: 50%;

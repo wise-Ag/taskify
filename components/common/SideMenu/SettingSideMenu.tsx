@@ -37,7 +37,7 @@ const Wrapper = styled.div`
 
   padding: 2rem 1.2rem;
 
-  position: absolute;
+  position: fixed;
   top: 0;
 
   display: flex;
@@ -60,11 +60,14 @@ const Wrapper = styled.div`
 
     padding: 0;
 
+    border-right: none;
     border-bottom: 1px solid var(--Grayd9);
 
     flex-direction: row;
 
-    top: 6.5rem;
+    top: 6rem;
+
+    z-index: 1;
   }
 `;
 
@@ -91,7 +94,7 @@ const ButtonContainer = styled.div`
 
   @media (max-width: ${DeviceSize.mobile}) {
     margin: 0;
-    padding-left: 6.6rem;
+    padding-left: 7.2rem;
 
     flex-direction: row;
     align-items: center;

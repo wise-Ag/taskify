@@ -10,7 +10,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import NoProfileImage from "../common/NoProfileImage/ProfileImage";
+import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import { useAtom } from "jotai";
 import { membersAtom } from "@/states/atoms";
 

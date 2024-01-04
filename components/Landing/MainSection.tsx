@@ -25,11 +25,18 @@ export default MainSection;
 const Container = styled.div`
   padding: 9.4rem 0;
 
+  position: relative;
+  top: 7rem;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 
   background-color: var(--MainLight);
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    top: 6rem;
+  }
 `;
 
 const MainImage = styled(Image)`

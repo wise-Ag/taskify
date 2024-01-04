@@ -119,6 +119,10 @@ const Title = styled.h1`
     text-overflow: clip;
     overflow: auto;
   }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Form = styled.form`

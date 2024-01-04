@@ -156,6 +156,8 @@ const StyledForm = styled.form`
 `;
 
 const Container = styled.div`
+  width: 100%;
+
   display: flex;
   justify-content: space-between;
   gap: 1.6rem;
@@ -171,7 +173,7 @@ const StyledImageUploadInput = styled(ImageUploadInput)`
 `;
 
 const InputWrapper = styled.div`
-  width: 36.6rem;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
@@ -179,15 +181,7 @@ const InputWrapper = styled.div`
 `;
 
 const StyledInput = styled(Input)`
-  width: 36.6rem;
-
-  @media (max-width: ${DeviceSize.tablet}) {
-    width: 29rem;
-  }
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    width: 24.4rem;
-  }
+  width: 100%;
 `;
 
 const SaveButton = styled.button`

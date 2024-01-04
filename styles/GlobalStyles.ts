@@ -25,6 +25,16 @@ const GlobalStyles = createGlobalStyle`
       padding: 0;
       border: 0;
       vertical-align: baseline;
+
+      &::-webkit-scrollbar {
+        width: 0.5rem;
+        height: 0.5rem;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: var(--ScrollBar);
+        border-radius: 5rem;
+      }
   }
 
   a {
