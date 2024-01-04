@@ -5,6 +5,10 @@ import { Member } from "@/api/members/members.types";
 import { Z_INDEX } from "@/styles/ZindexStyles";
 
 const MemberListDropdown = ({ members }: { members: Member[] }) => {
+  if (members.length <= 1) {
+    return null;
+  }
+
   return (
     <Dropdown>
       {members.map((member) => (

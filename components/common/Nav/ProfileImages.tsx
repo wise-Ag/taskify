@@ -36,7 +36,7 @@ const ProfileImages = () => {
     return () => {
       document.removeEventListener("click", closeMenu);
     };
-  });
+  }, []);
 
   useEffect(() => {
     if (!boardid) return;
@@ -52,7 +52,7 @@ const ProfileImages = () => {
   }, [boardid, memberPage]);
 
   return (
-    <Container ref={dropdownRef}>
+    <Container ref={dropdownRef} onClick={toggleDropdown}>
       {totalCount > 0 && (
         <Contents>
           {members.slice(0, 4).map((member, index) =>
@@ -65,7 +65,7 @@ const ProfileImages = () => {
             ),
           )}
           {totalCount >= 4 && (
-            <NumberWrapper onClick={toggleDropdown}>
+            <NumberWrapper>
               <NumberBackground />
               <NumberPc>+{totalCount - 3}</NumberPc>
               <NumberTabletOrMobile>+{totalCount - 1}</NumberTabletOrMobile>
