@@ -5,10 +5,10 @@ import ModalWrapper from "@/components/Modal/ModalWrapper";
 import Input from "@/components/Sign/SignInput/Input";
 import { NICKNAME_RULES, PLACEHOLDER } from "@/constants/InputConstant";
 import { useModal } from "@/hooks/useModal";
-import { profileImageAtom } from "@/states/atoms";
+import { profileImageAtom, userProfileImageUrlAtom, userDataAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -19,6 +19,10 @@ interface ProfileFormData {
 
 const AccountProfile = () => {
   const [profileImage, setProfileImage] = useAtom(profileImageAtom);
+  const [userProfileImageUrl, setUserProfileImageUrl] = useAtom(userProfileImageUrlAtom);
+  const [userData, setUserData] = useAtom(userDataAtom);
+  const [initialNickname, setInitialNickname] = useState("");
+  const [isImageDeleted, setIsImageDeleted] = useState(false);
   const [token, setToken] = useState<string | null>(null);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const { control, handleSubmit, watch, setError, setValue, formState } = useForm({
@@ -30,10 +34,14 @@ const AccountProfile = () => {
     closeModalFunc();
   };
 
-  const handleProfileSubmit = async (data: ProfileFormData) => {
-    let imageUrl = null;
+  const handleImageDelete = (value: SetStateAction<boolean>) => {
+    setIsImageDeleted(value);
+  };
 
-    if (profileImage) {
+  const handleProfileSubmit = async (data: ProfileFormData) => {
+    let imageUrl = isImageDeleted ? null : userProfileImageUrl;
+
+    if (profileImage && profileImage instanceof File) {
       const formData = new FormData();
       formData.append("image", profileImage);
 
@@ -43,13 +51,26 @@ const AccountProfile = () => {
         return;
       }
       imageUrl = profileImageRes.profileImageUrl;
+      setUserProfileImageUrl(imageUrl);
     }
 
-    const userUpdateRes = await putUsers({ nickname: data.nickname, profileImageUrl: imageUrl, token });
-    if (userUpdateRes !== null) {
-      openModalFunc();
+    const nicknameChanged = data.nickname !== initialNickname;
+
+    if (nicknameChanged || imageUrl !== userProfileImageUrl) {
+      const userUpdateRes = await putUsers({
+        nickname: data.nickname,
+        profileImageUrl: imageUrl,
+        token,
+      });
+
+      if (userUpdateRes !== null) {
+        openModalFunc();
+        setUserData(userUpdateRes);
+      } else {
+        console.error("Failed to update profile", Error);
+      }
     } else {
-      // setError를 사용하여 오류 처리
+      alert("변경된 사항이 없습니다.");
     }
   };
 
@@ -65,12 +86,14 @@ const AccountProfile = () => {
         if (userData) {
           setValue("email", userData.email);
           setValue("nickname", userData.nickname);
+          setInitialNickname(userData.nickname);
+          setUserProfileImageUrl(userData.profileImageUrl);
         }
       }
     };
 
     fetchUserData();
-  }, [setValue]);
+  }, [setValue, setToken]);
 
   return (
     <>
@@ -78,7 +101,7 @@ const AccountProfile = () => {
         <Title>프로필</Title>
         <StyledForm onSubmit={handleSubmit(handleProfileSubmit)}>
           <Container>
-            <StyledImageUploadInput type="account" atomtype="profileImage" />
+            <StyledImageUploadInput type="account" atomtype="profileImage" initialImageUrl={userProfileImageUrl} handleDeleteClick={handleImageDelete} />
             <InputWrapper>
               <Controller control={control} name="email" render={({ field }) => <StyledInput label="이메일" {...field} disabled />} />
               <Controller

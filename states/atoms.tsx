@@ -3,6 +3,7 @@ import { Invitation } from "@/api/invitations/invitations.types";
 import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
 import { Columns } from "@/api/columns/columns.types";
 import { Card } from "@/api/cards/cards.types";
+import { UserData } from "@/api/users/users.types";
 import { Dashboard } from "@/api/dashboards/dashboards.types";
 
 // 현재 활성화된 드롭다운의 식별자를 저장하는 아톰
@@ -57,5 +58,10 @@ export const isOpenAtom = atom(false);
 export const statusAtom = atom("로딩 중");
 
 export const selectedIdAtom = atom<number | null>(null);
+
+
+export const userProfileImageUrlAtom = atom<string>("");
+
+export const userDataAtom = atom<UserData | null>(null);
 
 export const isTagModifyAtom = atom<boolean>(false);

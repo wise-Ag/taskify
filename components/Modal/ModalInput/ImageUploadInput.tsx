@@ -3,7 +3,7 @@ import EditIcon from "@/assets/icons/edit.svg";
 import { cardImageAtom, profileImageAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 
 interface ImageUploadInputProps {
@@ -25,6 +25,10 @@ const ImageUploadInput = ({ type, className, initialImageUrl, handleDeleteClick,
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
+
+  useEffect(() => {
+    setPreviewUrl(initialImageUrl as string | null);
+  }, [initialImageUrl]);
 
   return (
     <InputBox>

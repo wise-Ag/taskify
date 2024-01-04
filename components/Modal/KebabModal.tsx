@@ -112,8 +112,6 @@ const Wrapper = styled.div`
   background: var(--Grayfa);
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.08);
 
-  z-index: ${Z_INDEX.KebabModal_Wrapper};
-
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 8.6rem;
     height: 7.4rem;

@@ -50,8 +50,8 @@ export const putUsers = async ({ nickname, profileImageUrl, token }: PutUsersPro
     const res = await instance.put(
       ENDPOINTS.USERS.PUT,
       {
-        nickname: nickname,
-        profileImageUrl: profileImageUrl,
+        nickname,
+        profileImageUrl,
       },
       {
         headers: {
