@@ -68,3 +68,5 @@ export const userProfileImageUrlAtom = atom<string>("");
 export const userDataAtom = atom<UserData | null>(null);
 
 export const isTagModifyAtom = atom<boolean>(false);
+
+export const newDashboardAtom = atom<Dashboard | null>(null); //사아드메뉴, 대시보드리스트 연동
