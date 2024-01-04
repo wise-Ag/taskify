@@ -1,6 +1,7 @@
 import LogoButton from "@/components/common/Buttons/LogoButton";
 import Profile from "@/components/common/Nav/Profile";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { Z_INDEX } from "@/styles/ZindexStyles";
 import styled from "styled-components";
 
 const SettingNav = () => {
@@ -23,8 +24,15 @@ const SettingNav = () => {
 export default SettingNav;
 
 const Wrapper = styled.div`
+  height: 7rem;
+
   padding: 2.3rem 8rem 2.3rem 34rem;
   border-bottom: 1px solid var(--Grayd9);
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
 
   display: flex;
   flex-direction: row;
@@ -32,6 +40,8 @@ const Wrapper = styled.div`
   gap: 4rem;
 
   background-color: var(--MainBG);
+
+  z-index: ${Z_INDEX.Navigation};
 
   @media (max-width: ${DeviceSize.pc}) {
     gap: 3rem;
@@ -42,6 +52,8 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
+    height: 6rem;
+
     padding: 1.3rem 1.2rem;
   }
 `;

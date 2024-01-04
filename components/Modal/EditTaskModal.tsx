@@ -11,7 +11,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import ModalInput from "./ModalInput/ModalInput";
+import ModalInput from "@/components/Modal/ModalInput/ModalInput";
 
 interface EditTaskModalProps {
   card: Card;

@@ -76,14 +76,23 @@ const DashboardEditPage = () => {
 export default DashboardEditPage;
 
 const Wrapper = styled.div`
-  height: 100vh;
+  height: 100%;
+  min-height: calc(100vh - 7rem);
+
+  position: relative;
+  top: 7rem;
 
   background-color: var(--MainLight);
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    top: 6rem;
+  }
 `;
 
 const Container = styled.div`
-  margin-top: 2rem;
-  margin-left: 32rem;
+  margin-left: 30rem;
+
+  padding: 2rem;
 
   display: flex;
   flex-direction: column;

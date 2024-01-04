@@ -3,6 +3,7 @@ import SettingButton from "@/components/common/Nav/DashboardButtons";
 import Profile from "@/components/common/Nav/Profile";
 import ProfileImages from "@/components/common/Nav/ProfileImages";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { Z_INDEX } from "@/styles/ZindexStyles";
 import styled from "styled-components";
 
 interface NavContainerProps {
@@ -36,6 +37,11 @@ const Wrapper = styled.div`
   padding: 2.3rem 8rem 2.3rem 34rem;
   border-bottom: 1px solid var(--Grayd9);
 
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -43,6 +49,8 @@ const Wrapper = styled.div`
   gap: 4rem;
 
   background-color: var(--MainBG);
+
+  z-index: ${Z_INDEX.Navigation};
 
   @media (max-width: ${DeviceSize.pc}) {
     gap: 3rem;
@@ -62,12 +70,24 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
-  width: 20rem;
+  width: 30rem;
+
+  display: flex;
+  align-items: center;
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    font-size: 1.8rem;
+  }
+`;
+
+const TitleText = styled.span`
+  width: 25rem;
+
+  display: block;
 
   color: var(--Black33);
   font-size: 2rem;
   font-weight: 700;
-
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -79,21 +99,6 @@ const Title = styled.div`
 
   &::-webkit-scrollbar {
     display: none;
-  }
-
-  @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1.8rem;
-  }
-`;
-
-const TitleText = styled.span`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  &:hover {
-    text-overflow: clip;
-    overflow: auto;
   }
 
   @media (max-width: ${DeviceSize.mobile}) {

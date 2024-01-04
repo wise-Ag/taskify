@@ -30,7 +30,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: ${Z_INDEX.MyDashboardList_ModalBackdrop};
+  z-index: ${Z_INDEX.ModalWrapper};
 `;
 
 const Container = styled.div`

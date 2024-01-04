@@ -17,8 +17,8 @@ import { useAtom } from "jotai";
 import React, { useEffect, useRef, useState } from "react";
 import { FaArrowUpWideShort } from "react-icons/fa6";
 import styled from "styled-components";
-import NoProfileImage from "../../common/NoProfileImage/ProfileImage";
-import Comments from "./Comments";
+import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
+import Comments from "@/components/Modal/TaskModal/Comments";
 
 const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: () => void; columnTitle: string }> = ({ cardData, columnId, closeModalFunc, columnTitle }) => {
   const { isModalOpen: isEditModalOpen, openModalFunc: openEditModal, closeModalFunc: closeEditModal } = useModal();
@@ -327,9 +327,16 @@ const CategoryWrapper = styled.div`
 `;
 
 const Tags = styled.div`
-  display: flex;
+  max-width: 57rem;
 
+  display: flex;
   gap: 0.6rem;
+
+  overflow-x: hidden;
+
+  &:hover {
+    overflow-x: auto;
+  }
 
   @media (max-width: ${DeviceSize.tablet}) {
     height: 50%;

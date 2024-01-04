@@ -10,7 +10,7 @@ import { DeviceSize } from "@/styles/DeviceSize";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import NoProfileImage from "../common/NoProfileImage/ProfileImage";
+import NoProfileImage from "@/components/common/NoProfileImage/ProfileImage";
 import { getUsers } from "@/api/users";
 import { UserData } from "@/api/users/users.types";
 
@@ -84,12 +84,12 @@ const MembersList = () => {
           <MemberItem key={member.id}>
             <MemberInfo>
               {member.profileImageUrl ? (
-              <Profile $url={member.profileImageUrl} />
-            ) : (
-              <NoProfileImageWrapper>
-                <NoProfileImage id={member.userId} nickname={member.nickname} />
-              </NoProfileImageWrapper>
-            )}
+                <Profile $url={member.profileImageUrl} />
+              ) : (
+                <NoProfileImageWrapper>
+                  <NoProfileImage id={member.userId} nickname={member.nickname} />
+                </NoProfileImageWrapper>
+              )}
               <Name>{member.nickname}</Name>
             </MemberInfo>
             {!member.isOwner && <Button type="delete" children="삭제" onClick={() => handleDeleteButtonClick(member.id)} />}

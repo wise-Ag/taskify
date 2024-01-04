@@ -19,13 +19,18 @@ const DashBoardPage = () => {
 
       if (res !== null) {
         setDashboards(res);
-        const index = res.dashboards?.findIndex((v) => v.id == Number(boardid));
-
-        if (index === -1) {
-          router.push(`/404`);
-          return;
-        }
       }
+
+      // if (res !== null) {
+      //   const index = res.dashboards?.findIndex((v) => v.id == Number(boardid));
+
+      //   console.log(index);
+
+      //   if (index === -1) {
+      //     router.push(`/404`);
+      //     return;
+      //   }
+      // }
     };
     if (boardid) loadDashboardData();
   }, [boardid]);
@@ -47,15 +52,19 @@ const ColumnWrapper = styled.div`
   width: 100%;
   height: calc(100vh - 7rem);
 
-  overflow: scroll;
+  position: relative;
+  top: 7rem;
 
+  background-color: var(--Grayfa);
+
+  overflow: scroll;
   &::-webkit-scrollbar {
     display: none;
   }
 
-  background-color: var(--Grayfa);
-
   @media (max-width: ${DeviceSize.mobile}) {
+    top: 6rem;
+
     height: calc(100vh - 6rem);
   }
 `;

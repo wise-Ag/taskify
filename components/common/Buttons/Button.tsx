@@ -101,7 +101,6 @@ const StyledTitleWrapper = styled.div`
 
 const StyledDashboardTitle = styled.span`
   width: 85%;
-  /* max-width: 10.5rem; */
   height: 1.8rem;
 
   display: block;
@@ -110,4 +109,13 @@ const StyledDashboardTitle = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  &:hover {
+    text-overflow: clip;
+    overflow: auto;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
