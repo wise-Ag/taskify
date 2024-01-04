@@ -5,14 +5,14 @@ import { TiDelete } from "react-icons/ti";
 import { isTagModifyAtom } from "@/states/atoms";
 import { useAtom } from "jotai";
 
-const Tag = ({ tag, handleOnClick, isModifyMode }: { tag: string; handleOnClick: (targetTag: string) => void; isModifyMode?: boolean }) => {
+const Tag = ({ tag, handleOnClick }: { tag: string; handleOnClick?: (targetTag: string) => void }) => {
   const [isTagModify] = useAtom(isTagModifyAtom);
   const tagNum = tag?.charCodeAt(0) % 10;
 
   return (
     <Container $bgColor={TAG_COLOR[tagNum].bgColor} $textColor={TAG_COLOR[tagNum].textColor}>
       {tag}
-      {isTagModify && isModifyMode && (
+      {isTagModify && handleOnClick && (
         <div
           style={{ height: "1.6rem" }}
           onClick={() => {

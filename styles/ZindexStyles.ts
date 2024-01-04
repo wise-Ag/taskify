@@ -3,9 +3,9 @@
  * 컴포넌트이름+스타일컴포넌트이름
  */
 export const Z_INDEX = {
-  ModalWrapper: 9999,
+  ModalWrapper: 1000,
 
-  MemberListDropdown_Dropdown: 2000,
+  MemberListDropdown_Dropdown: 100,
 
   TaskModal_StyledKebabModal: 1500,
   ContactDropdown_List: 1500,

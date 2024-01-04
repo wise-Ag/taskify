@@ -64,6 +64,8 @@ const Comments = ({ cardData }: { cardData: Card }) => {
   };
 
   const submitComment = async (comment: string) => {
+    comment = comment.replaceAll(/(\n|\r\n)/g, "<br>");
+    console.log(comment);
     const res = await postComments({
       token,
       content: comment,
@@ -72,6 +74,7 @@ const Comments = ({ cardData }: { cardData: Card }) => {
       dashboardId: Number(boardid),
     });
 
+    if (res) res.content = res?.content.replaceAll("<br>", "\n");
     if (res && commentsData.length == 0) setCommentsData([res].splice(0));
     if (res && commentsData.length > 0) setCommentsData([res, ...commentsData]);
     watchCommentCount();
@@ -106,7 +109,9 @@ const Comments = ({ cardData }: { cardData: Card }) => {
   }, [boardid]);
   return (
     <>
-      <ModalInput label="댓글" $inputType="댓글" value={inputValue} onChange={handleInputChange} onSubmitComment={handleCommentSubmit} />
+      <StyledDiv>
+        <ModalInput label="댓글" $inputType="댓글" value={inputValue} onChange={handleInputChange} onSubmitComment={handleCommentSubmit} />
+      </StyledDiv>
       <CommentWrapper>
         {commentsData.map((comment) => (
           <CommentItem key={comment.id}>
@@ -156,6 +161,12 @@ const CommentWrapper = styled.div`
   margin-top: 1.6rem;
 `;
 
+const StyledDiv = styled.div`
+  position: sticky;
+  top: 2.7rem;
+  background-color: var(--White);
+`;
+
 const LeftWrapper = styled.div`
   display: flex;
   align-items: top;
@@ -187,6 +198,10 @@ const CommentTextarea = styled.textarea`
 
   &:focus {
     border-color: var(--Main);
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;
 
@@ -230,7 +245,7 @@ const CommentItem = styled.div`
   }
 `;
 
-const CommentContent = styled.div`
+const CommentContent = styled.pre`
   margin: 0.6rem 0 1.2rem 0;
 
   display: flex;

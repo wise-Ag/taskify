@@ -10,9 +10,16 @@ const MainSection = () => {
   return (
     <Container>
       <MainImage src={LandingMain} alt="Landing Main" />
-      <Text1>새로운 일정 관리</Text1>
-      <Text2>With Plan</Text2>
-      <Description>서비스의 메인 설명 들어갑니당 뭐라고 적으까~</Description>
+      <Text1>스마트한 할 일 관리</Text1>
+      <Text2>위드 플랜</Text2>
+      <Description>
+        대시보드를 생성해 다양한 프로젝트를 한 곳에서 관리하세요.
+        <br />
+        할 일 카드를 생성하고 구성원과 함께 소통하며 관리할 수 있습니다.
+        <br />
+        회사 업무부터 개인 목표 및 모임 활동까지, 할 일 관리는 위드 플랜과 함께!
+        <br />
+      </Description>
       <Point1 />
       <Point2 />
       <Setting />
@@ -91,13 +98,17 @@ const Text2 = styled.span`
 `;
 
 const Description = styled.span`
+  margin-top: 3rem;
   margin-bottom: 6.6rem;
 
+  text-align: center;
+
   color: var(--Black33);
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: 400;
+  line-height: 3.5rem;
 
   @media screen and (max-width: 608px) {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
   }
 `;

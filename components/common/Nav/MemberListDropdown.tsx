@@ -31,7 +31,7 @@ const MemberListDropdown = ({ members }: { members: Member[] }) => {
 export default MemberListDropdown;
 
 const Dropdown = styled.div`
-  width: 16rem;
+  width: 25rem;
 
   border: 1px solid var(--Grayd9);
   border-radius: 16px;
@@ -42,20 +42,27 @@ const Dropdown = styled.div`
 
   z-index: ${Z_INDEX.MemberListDropdown_Dropdown};
 
+  @media (max-width: ${DeviceSize.tablet}) {
+    width: 20rem;
+  }
+
   @media (max-width: ${DeviceSize.mobile}) {
+    width: 16rem;
+
     top: 5rem;
+    right: 5rem;
   }
 `;
 
 const Item = styled.div`
-  padding: 2rem;
+  padding: 1.5rem;
   border-bottom: 1px solid var(--Grayd9);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  background-color: var(--MainBG);
+  background-color: var(--White);
 
   color: var(--Black33);
   font-size: 1.6rem;
@@ -72,10 +79,8 @@ const Item = styled.div`
 `;
 
 const Profile = styled.div<{ $url: string }>`
-  width: 3rem;
-  height: 3rem;
-
-  margin-right: 1.2rem;
+  width: 3.4rem;
+  height: 3.4rem;
 
   border-radius: 50%;
 
@@ -84,33 +89,32 @@ const Profile = styled.div<{ $url: string }>`
   background-size: cover;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
-    width: 3.4rem;
-    height: 3.4rem;
+    width: 3rem;
+    height: 3rem;
 
     margin-right: 0.8rem;
   }
 `;
 
 const NoProfileImageWrapper = styled.div`
-  width: 3rem;
-  height: 3rem;
+  width: 3.4rem;
+  height: 3.4rem;
 
   font-size: 1.5rem;
-  line-height: 3rem;
-  margin-right: 1.2rem;
+  line-height: 3.4rem;
 
   border-radius: 100%;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
-    width: 3.4rem;
-    height: 3.4rem;
+    width: 3rem;
+    height: 3rem;
 
-    margin-right: 0.8rem;
+    line-height: 3rem;
   }
 `;
 
 const Nickname = styled.div`
-  width: 7rem;
+  width: 16rem;
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -123,5 +127,13 @@ const Nickname = styled.div`
 
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  @media (max-width: ${DeviceSize.tablet}) {
+    width: 12rem;
+  }
+
+  @media (max-width: ${DeviceSize.mobile}) {
+    width: 8rem;
   }
 `;

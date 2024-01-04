@@ -110,7 +110,6 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
       <Wrapper ref={scrollContainerRef}>
         <div ref={startRef} />
         <TitleWrapper>
-          <Title>{card.title}</Title>
           <IconContainer>
             <KebabIconContainer tabIndex={0} onBlur={handleDropdownClose}>
               <Kebab alt="kebab" width={28} height={28} onClick={toggleDropdown} />
@@ -121,45 +120,48 @@ const TaskModal: React.FC<{ cardData: Card; columnId: number; closeModalFunc: ()
             </div>
           </IconContainer>
         </TitleWrapper>
-        <ContactDeadLineWrapper>
-          <Contact>담당자</Contact>
-          <DeadLine>마감일</DeadLine>
-          <ContactName>
-            {card.assignee && (
-              <ProfileImageWrapper>
-                {card.assignee.profileImageUrl ? (
-                  <ProfileImage $image={card.assignee.profileImageUrl} />
-                ) : (
-                  <NoProfileImageWrapper>
-                    <NoProfileImage id={card.assignee.id} nickname={card.assignee.nickname} />
-                  </NoProfileImageWrapper>
-                )}
-              </ProfileImageWrapper>
-            )}
-            {card.assignee?.nickname}
-          </ContactName>
-          <DeadLineDate>{card.dueDate}</DeadLineDate>
-        </ContactDeadLineWrapper>
-        <CategoryWrapper>
-          <ColumnName status={columnTitleData} />
-          <DivisionWrapper>
-            <Division alt="category-division" width={10} height={20} />
-          </DivisionWrapper>
-          <Tags>
-            {card.tags.map((tag, idx) => (
-              <Tag key={idx} tag={tag} />
-            ))}
-          </Tags>
-        </CategoryWrapper>
-        <Description>{card.description}</Description>
-        {card.imageUrl && <Image src={card.imageUrl} alt="Task Image" />}
-        <Comments cardData={cardData} />
-        <div ref={endRef} />
-        {isScrollActive && (
-          <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
-            <ScrollNavigateIcon $isScrollingUp={isScrollingUp} />
-          </ScrollNavigateButton>
-        )}
+        <Container>
+          <Title>{card.title}</Title>
+          <ContactDeadLineWrapper>
+            <Contact>담당자</Contact>
+            <DeadLine>마감일</DeadLine>
+            <ContactName>
+              {card.assignee && (
+                <ProfileImageWrapper>
+                  {card.assignee.profileImageUrl ? (
+                    <ProfileImage $image={card.assignee.profileImageUrl} />
+                  ) : (
+                    <NoProfileImageWrapper>
+                      <NoProfileImage id={card.assignee.id} nickname={card.assignee.nickname} />
+                    </NoProfileImageWrapper>
+                  )}
+                </ProfileImageWrapper>
+              )}
+              {card.assignee?.nickname}
+            </ContactName>
+            <DeadLineDate>{card.dueDate}</DeadLineDate>
+          </ContactDeadLineWrapper>
+          <CategoryWrapper>
+            <ColumnName status={columnTitleData} />
+            <DivisionWrapper>
+              <Division alt="category-division" width={10} height={20} />
+            </DivisionWrapper>
+            <Tags>
+              {card.tags.map((tag, idx) => (
+                <Tag key={idx} tag={tag} />
+              ))}
+            </Tags>
+          </CategoryWrapper>
+          <Description>{card.description}</Description>
+          {card.imageUrl && <Image src={card.imageUrl} alt="Task Image" />}
+          <Comments cardData={cardData} />
+          <div ref={endRef} />
+          {isScrollActive && (
+            <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
+              <ScrollNavigateIcon $isScrollingUp={isScrollingUp} />
+            </ScrollNavigateButton>
+          )}
+        </Container>
       </Wrapper>
       {isEditModalOpen && (
         <ModalWrapper>
@@ -206,11 +208,24 @@ const Wrapper = styled.div`
   }
 `;
 
+const Container = styled.div`
+  padding-top: 3rem;
+`;
+
 const TitleWrapper = styled.div`
-  width: 100%;
+  padding: 1.7rem 2.8rem 1.7rem;
+
+  border-radius: 8px;
+
+  position: fixed;
+  top: 0;
+  right: 0.5rem;
+  left: 0;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+
+  background-color: var(--White);
 `;
 
 const Title = styled.div`

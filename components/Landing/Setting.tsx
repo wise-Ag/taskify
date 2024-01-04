@@ -15,8 +15,8 @@ const Setting = () => {
             <Image3 src={Landing3} alt="Landing3" width={323} height={133} />
           </ImageSection>
           <TextSection>
-            <Text>대시보드 설정</Text>
-            <Description>대시보드 사진과 이름을 변경할 수 있어요.</Description>
+            <Text>대시보드 & 상태 관리</Text>
+            <Description>대시보드와 컬럼을 목적에 맞게 관리하세요.</Description>
           </TextSection>
         </Box>
         <Box>
@@ -24,8 +24,8 @@ const Setting = () => {
             <Image4 src={Landing4} alt="Landing4" width={323} height={175} />
           </ImageSection>
           <TextSection>
-            <Text>초대</Text>
-            <Description>새로운 팀원을 초대할 수 있어요.</Description>
+            <Text>할 일 기록</Text>
+            <Description>세부사항과 함께 할 일을 구체적으로 기록하세요.</Description>
           </TextSection>
         </Box>
         <Box>
@@ -33,8 +33,8 @@ const Setting = () => {
             <Image5 src={Landing5} alt="Landing5" width={323} height={210} />
           </ImageSection>
           <TextSection>
-            <Text>구성원</Text>
-            <Description>구성원을 초대하고 내보낼 수 있어요.</Description>
+            <Text>구성원 관리</Text>
+            <Description>대시보드별 구성원을 편리하게 관리하세요.</Description>
           </TextSection>
         </Box>
       </Container>
@@ -72,7 +72,7 @@ const Box = styled.div`
 
 const ImageSection = styled.div`
   width: 37.8rem;
-  height: 26rem;
+  height: 28rem;
 
   position: relative;
 
@@ -82,7 +82,7 @@ const ImageSection = styled.div`
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 34.3rem;
-    height: 23.5rem;
+    height: 25.5rem;
   }
 `;
 
@@ -151,11 +151,13 @@ const Image3 = styled(Image)`
   ${commonStyles}
 
   width: 32.3rem;
-  height: 13.3rem;
+  height: 14rem;
+
+  border-radius: 8px;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 30.3rem;
-    height: 12.5rem;
+    height: 13.1rem;
   }
 `;
 
@@ -163,11 +165,13 @@ const Image4 = styled(Image)`
   ${commonStyles}
 
   width: 32.3rem;
-  height: 17.5rem;
+  height: 18.9rem;
+
+  border-radius: 8px;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 30.3rem;
-    height: 16.4rem;
+    height: 17.7rem;
   }
 `;
 
@@ -175,10 +179,12 @@ const Image5 = styled(Image)`
   ${commonStyles}
 
   width: 32.3rem;
-  height: 21rem;
+  height: 22.7rem;
+
+  border-radius: 8px;
 
   @media screen and (max-width: ${DeviceSize.mobile}) {
     width: 30.3rem;
-    height: 19.7rem;
+    height: 21.3rem;
   }
 `;
