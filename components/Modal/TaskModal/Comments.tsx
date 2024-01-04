@@ -64,6 +64,8 @@ const Comments = ({ cardData }: { cardData: Card }) => {
   };
 
   const submitComment = async (comment: string) => {
+    comment = comment.replaceAll(/(\n|\r\n)/g, "<br>");
+    console.log(comment);
     const res = await postComments({
       token,
       content: comment,
@@ -72,6 +74,7 @@ const Comments = ({ cardData }: { cardData: Card }) => {
       dashboardId: Number(boardid),
     });
 
+    if (res) res.content = res?.content.replaceAll("<br>", "\n");
     if (res && commentsData.length == 0) setCommentsData([res].splice(0));
     if (res && commentsData.length > 0) setCommentsData([res, ...commentsData]);
     watchCommentCount();
@@ -230,7 +233,7 @@ const CommentItem = styled.div`
   }
 `;
 
-const CommentContent = styled.div`
+const CommentContent = styled.pre`
   margin: 0.6rem 0 1.2rem 0;
 
   display: flex;
