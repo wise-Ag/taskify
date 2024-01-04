@@ -43,6 +43,8 @@ const Wrapper = styled.div`
   top: 7rem;
 
   @media (max-width: ${DeviceSize.mobile}) {
+    top: 6rem;
+
     height: calc(100vh - 12rem);
   }
 `;

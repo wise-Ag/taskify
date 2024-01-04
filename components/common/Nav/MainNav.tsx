@@ -39,6 +39,8 @@ const Wrapper = styled.nav`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
+    height: 6rem;
+
     padding: 1.6rem 2.4rem;
   }
 `;

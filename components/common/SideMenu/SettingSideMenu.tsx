@@ -65,7 +65,9 @@ const Wrapper = styled.div`
 
     flex-direction: row;
 
-    top: 7rem;
+    top: 6rem;
+
+    z-index: 1;
   }
 `;
 

@@ -44,7 +44,10 @@ const SideMenuWrapper = styled.div`
 
 const Container = styled.div`
   height: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 7rem);
+
+  position: relative;
+  top: 7rem;
 
   display: flex;
   flex-direction: column;
@@ -60,6 +63,8 @@ const Container = styled.div`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
+    top: 6rem;
+
     margin-left: 6.7rem;
   }
 `;

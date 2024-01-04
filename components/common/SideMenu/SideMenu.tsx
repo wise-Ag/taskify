@@ -48,7 +48,7 @@ const Dashboard = ({ color, title, createdByMe, boardId }: DashboardProps) => {
 
 const SideMenu = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [cursorId, setCursorId] = useState<number | null>(null);
+  // const [cursorId, setCursorId] = useState<number | null>(null);
   const [dashboards, setDashboards] = useState<Dashboard[]>([]);
   const [invitations, setInvitations] = useAtom(invitationsAtom); // 초대 목록!!
   const [editDashboard, setEditDashboard] = useAtom(dashboardListAtom);
@@ -72,6 +72,7 @@ const SideMenu = () => {
     const loadDashboardList = async () => {
       const res = await getDashboardList({
         token: localStorage.getItem("accessToken"),
+        size: 500,
         navigationMethod: "infiniteScroll",
       });
       if (res && res.dashboards) {
@@ -102,7 +103,7 @@ const SideMenu = () => {
           </DashboardList>
         </Popup>
       )}
-      <HeaderWrapper>
+      <HeaderWrapper ref={startRef}>
         <Title>Dash Boards</Title>
         <StyledAddButton
           alt="추가 버튼"
@@ -118,7 +119,7 @@ const SideMenu = () => {
           return (
             <div key={dashboard.id}>
               <Dashboard color={dashboard.color} title={dashboard.title} createdByMe={dashboard.createdByMe} boardId={dashboard.id} />
-              {cursorId == dashboard.id && <div ref={targetRef}>얍뽕짠</div>}
+              {/* {cursorId == dashboard.id && <div ref={targetRef}>얍뽕짠</div>} */}
             </div>
           );
         })}
@@ -129,11 +130,11 @@ const SideMenu = () => {
         </ModalWrapper>
       )}
       <div ref={endRef} />
-      {PAGE_SIZE < dashboards.length && (
+      {/* {dashboards.length > 17 && (
         <ScrollNavigateButton onClick={() => handleScrollNavClick()}>
           <ScrollNavigateIcon $isScrollingUp={isScrollingUp} />
         </ScrollNavigateButton>
-      )}
+      )} */}
     </Wrapper>
   );
 };
@@ -148,7 +149,7 @@ const Wrapper = styled.div`
 
   border-right: 1px solid var(--Grayd9);
 
-  position: absolute;
+  position: fixed;
   top: 0;
 
   display: flex;
@@ -202,7 +203,7 @@ const StyledAddButton = styled(AddButton)`
 
 const DashboardList = styled.div`
   width: 100%;
-  height: 10rem;
+  height: 100%;
 
   overflow: auto;
 

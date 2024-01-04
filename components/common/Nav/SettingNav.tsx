@@ -52,6 +52,8 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
+    height: 6rem;
+
     padding: 1.3rem 1.2rem;
   }
 `;
