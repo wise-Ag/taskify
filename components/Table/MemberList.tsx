@@ -11,13 +11,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import NoProfileImage from "../common/NoProfileImage/ProfileImage";
-import { getUsers } from "@/api/users";
-import { UserData } from "@/api/users/users.types";
+import { useAtom } from "jotai";
+import { membersAtom } from "@/states/atoms";
 
 const PAGE_SIZE = 4;
 
 const MembersList = () => {
   const [members, setMembers] = useState<Member[]>([]);
+  const [memberPage, setMemberPage] = useAtom(membersAtom);
   const [totalCount, setTotalCount] = useState(0);
   const [totalPageNum, setTotalPageNum] = useState(1);
   const [selectedMemberId, setSelectedMemberId] = useState(0);
@@ -47,7 +48,7 @@ const MembersList = () => {
   const handleOnCancel = async (memberId: number) => {
     await deleteMembers({ memberId: memberId, token: localStorage.getItem("accessToken") });
 
-    setMembers([...members.filter((v) => v.id !== memberId)]);
+    setMemberPage([...members.filter((v) => v.id !== memberId)]);
     closeModalFunc();
   };
 
@@ -58,7 +59,7 @@ const MembersList = () => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, boardid]);
+  }, [currentPage, boardid, memberPage]);
 
   return (
     <>
@@ -84,12 +85,12 @@ const MembersList = () => {
           <MemberItem key={member.id}>
             <MemberInfo>
               {member.profileImageUrl ? (
-              <Profile $url={member.profileImageUrl} />
-            ) : (
-              <NoProfileImageWrapper>
-                <NoProfileImage id={member.userId} nickname={member.nickname} />
-              </NoProfileImageWrapper>
-            )}
+                <Profile $url={member.profileImageUrl} />
+              ) : (
+                <NoProfileImageWrapper>
+                  <NoProfileImage id={member.userId} nickname={member.nickname} />
+                </NoProfileImageWrapper>
+              )}
               <Name>{member.nickname}</Name>
             </MemberInfo>
             {!member.isOwner && <Button type="delete" children="삭제" onClick={() => handleDeleteButtonClick(member.id)} />}

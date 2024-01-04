@@ -9,6 +9,7 @@ import { activeDropdownAtom } from "@/states/atoms";
 import { getMembers } from "@/api/members";
 import { useRouter } from "next/router";
 import { Member } from "@/api/members/members.types";
+import { membersAtom } from "@/states/atoms";
 
 const ProfileImages = () => {
   const [members, setMembers] = useState<Member[]>([]);
@@ -17,6 +18,7 @@ const ProfileImages = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { boardid } = router.query;
+  const [memberPage, setMemberPage] = useAtom(membersAtom);
 
   const toggleDropdown = (event: MouseEvent) => {
     event.stopPropagation();
@@ -47,7 +49,7 @@ const ProfileImages = () => {
     };
 
     loadMembersData();
-  }, [boardid]);
+  }, [boardid, memberPage]);
 
   return (
     <Container ref={dropdownRef}>

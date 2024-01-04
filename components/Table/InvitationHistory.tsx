@@ -10,9 +10,11 @@ import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { useModal } from "@/hooks/useModal";
 import { usePagination } from "@/hooks/usePagination";
 import { DeviceSize } from "@/styles/DeviceSize";
+import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { invitationsPageAtom } from "@/states/atoms";
 
 const PAGE_SIZE = 5;
 
@@ -23,6 +25,8 @@ const InvitationHistory = () => {
   const [totalPageNum, setTotalPageNum] = useState(1);
   const [selectedInvitationId, setSelectedInvitationId] = useState<number>(0);
   const { handlePageChange, currentPage } = usePagination(totalPageNum);
+  const [invitationsPage, setInvitationsPage] = useAtom(invitationsPageAtom);
+
   const { isModalOpen: isInvitaionModalOpen, openModalFunc: openInvitationModalFunc, closeModalFunc: closeInvitationModalFunc } = useModal();
   const { isModalOpen: isAlertModalOpen, openModalFunc: openAlertModalFunc, closeModalFunc: closeAlertModalFunc } = useModal();
   const { isModalOpen: isCancelModalOpen, openModalFunc: openCancelModalFunc, closeModalFunc: closeCancelModalFunc } = useModal();
@@ -95,7 +99,7 @@ const InvitationHistory = () => {
   const handleOnCancel = async (invitationId: number) => {
     await deleteDashboardInvitations({ dashboardId: Number(boardid), invitationId: invitationId, token: localStorage.getItem("accessToken") });
 
-    setInvitations([...invitations.filter((v) => v.id !== invitationId)]);
+    setInvitationsPage([...invitations.filter((v) => v.id !== invitationId)]);
     closeCancelModalFunc();
   };
 
@@ -107,7 +111,7 @@ const InvitationHistory = () => {
   useEffect(() => {
     getInvitedUsers();
     fetchData();
-  }, [currentPage, boardid, isInvitaionModalOpen]);
+  }, [currentPage, boardid, isInvitaionModalOpen, invitationsPage]);
 
   return (
     <>
