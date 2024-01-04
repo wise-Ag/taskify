@@ -17,7 +17,7 @@ const DashboardNav = () => {
       const res = await getDashboard({ dashboardId: String(boardid), token: localStorage.getItem("accessToken") });
       if (res !== null) setDashboard(res);
     };
-    loadDashboardData();
+    if (boardid) loadDashboardData();
   }, [boardid, editDashboards]);
 
   return <>{dashboard && <NavContainer title={dashboard.title} $isDashboard={true} createdByMe={dashboard.createdByMe} />}</>;
