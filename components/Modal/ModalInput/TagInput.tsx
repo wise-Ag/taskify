@@ -8,10 +8,9 @@ import styled from "styled-components";
 interface TagsProps {
   handleOnClick: (targetValue: string) => void;
   tagValue: string[];
-  isModifyMode?: boolean;
 }
 
-const Tags = ({ handleOnClick, tagValue, isModifyMode }: TagsProps) => {
+const Tags = ({ handleOnClick, tagValue }: TagsProps) => {
   const scrollRef = useRef<HTMLDivElement>(null); //태그가 추가되어 스크롤이 생기면 오른쪽으로 스크롤이 이동하여 항상 최근태그를 보도록함
 
   useEffect(() => {
@@ -25,7 +24,7 @@ const Tags = ({ handleOnClick, tagValue, isModifyMode }: TagsProps) => {
       {tagValue.map((tag) => {
         return (
           <div key={tag} style={{ cursor: "pointer" }}>
-            <Tag tag={tag} handleOnClick={handleOnClick} isModifyMode={isModifyMode} />
+            <Tag tag={tag} handleOnClick={handleOnClick} />
           </div>
         );
       })}
@@ -33,7 +32,7 @@ const Tags = ({ handleOnClick, tagValue, isModifyMode }: TagsProps) => {
   );
 };
 
-const TagInput = ({ isModify = false }: { isModify?: boolean }) => {
+const TagInput = () => {
   const [inputValue, setInputValue] = useState("");
   const [tagValue, setTagValue] = useAtom(tagAtom);
   const [isTagModify, setIsTagModify] = useAtom(isTagModifyAtom);
@@ -75,7 +74,7 @@ const TagInput = ({ isModify = false }: { isModify?: boolean }) => {
     <InputBox>
       <Label>태그</Label>
       <InputArea ref={containerRef} onClick={() => setIsTagModify(true)}>
-        {tagValue && <Tags handleOnClick={handleDeleteTag} tagValue={tagValue} isModifyMode={isModify} />}
+        {tagValue && <Tags handleOnClick={handleDeleteTag} tagValue={tagValue} />}
         <StyledInput type="text" value={inputValue} onChange={handleInputChange} placeholder={tagValue.length == 0 ? "입력 후 Enter" : ""} onKeyDown={handlePressEnter} />
       </InputArea>
     </InputBox>
@@ -147,7 +146,7 @@ const TagArea = styled.div`
 
   max-width: 100%;
   height: 3rem;
-  
+
   overflow-x: scroll;
   overflow-y: hidden;
 `;

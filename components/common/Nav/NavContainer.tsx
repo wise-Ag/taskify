@@ -63,7 +63,7 @@ const Wrapper = styled.div`
   @media (max-width: ${DeviceSize.mobile}) {
     height: 6rem;
 
-    padding: 1.3rem 1rem 1.3rem 9.1rem;
+    padding: 1.3rem 1rem 1.3rem 8.1rem;
 
     gap: 1rem;
   }
@@ -76,7 +76,7 @@ const Title = styled.div`
   align-items: center;
 
   @media (max-width: ${DeviceSize.mobile}) {
-    font-size: 1.8rem;
+    min-width: 10rem;
   }
 `;
 
@@ -102,7 +102,8 @@ const TitleText = styled.span`
   }
 
   @media (max-width: ${DeviceSize.mobile}) {
-    display: none;
+    width: 80%;
+    font-size: 1.6rem;
   }
 `;
 
@@ -115,6 +116,9 @@ const Content = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  @media (max-width: ${DeviceSize.mobile}) {
+    gap: 0.5rem;
+  }
 `;
 
 const Line = styled.div`

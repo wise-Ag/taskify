@@ -5,7 +5,7 @@ import ButtonSet from "@/components/common/Buttons/ButtonSet";
 import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
 import { useModal } from "@/hooks/useModal";
 import { usePagination } from "@/hooks/usePagination";
-import { dashboardColorAtom, invitationsAtom } from "@/states/atoms";
+import { dashboardColorAtom, invitationsAtom, newDashboardAtom } from "@/states/atoms";
 import { DeviceSize } from "@/styles/DeviceSize";
 import { useAtom } from "jotai";
 import Link from "next/link";
@@ -32,6 +32,7 @@ const MyDashboardList = () => {
   const { currentPage, setCurrentPage, handlePageChange } = usePagination(totalPageCount);
   const [invitations] = useAtom(invitationsAtom);
   const [dashboardColor, setDashboardColor] = useAtom(dashboardColorAtom);
+  const [newDashboard, setNewDashboard] = useAtom(newDashboardAtom);
 
   const isTitleExist = (titleToCheck: string) => {
     return dashboards.some((v) => v.title === titleToCheck);
@@ -47,14 +48,15 @@ const MyDashboardList = () => {
 
   const handleAddModal = async (data: FormData) => {
     const res = await postDashboard({ token: localStorage.getItem("accessToken"), title: data.inputData, color: dashboardColor });
-    setDashboardColor(`${DASHBOARD_COLOR[0]}`);
+    setDashboardColor(`${DASHBOARD_COLOR[0]}`); //초기화
 
     if (res == null) {
       alert("대시보드 생성에 실패했습니다.");
       closeModalFunc();
       return;
     }
-    currentPage === 1 ? loadDashboardList() : setCurrentPage(1);
+
+    setNewDashboard(res);
 
     closeModalFunc();
   };
@@ -76,6 +78,10 @@ const MyDashboardList = () => {
   useEffect(() => {
     loadDashboardList();
   }, [currentPage, invitations]);
+
+  useEffect(() => {//사이드메뉴 바뀌면 대시보드리스트도 반영
+    currentPage === 1 ? loadDashboardList() : setCurrentPage(1);
+  }, [newDashboard]);
 
   return (
     <Wrapper>

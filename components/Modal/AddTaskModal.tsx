@@ -85,7 +85,7 @@ const AddTaskModal = ({ closeModalFunc, columnId }: AddTaskModalProps) => {
       <ModalInput $inputType="제목" label="제목" value={title} onChange={handleTitleChange} />
       <ModalInput $inputType="설명" label="설명" value={description} onChange={handleDescriptionChange} />
       <ModalInput $inputType="마감일" label="마감일" value={dueDate} />
-      <TagInput isModify={true} />
+      <TagInput />
       <ImageUploadInput type="modal" atomtype="cardImage" />
       <ButtonWrapper>
         <ButtonSet
