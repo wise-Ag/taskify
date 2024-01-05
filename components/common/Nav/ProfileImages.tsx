@@ -83,6 +83,8 @@ export default ProfileImages;
 const Container = styled.div`
   width: 13rem;
 
+  cursor: pointer;
+
   @media (max-width: ${DeviceSize.tablet}) {
     width: 9.8rem;
   }

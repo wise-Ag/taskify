@@ -26,11 +26,18 @@ const AccountPassword = () => {
         <StyledForm
           onSubmit={handleSubmit(async (data) => {
             const res = await putPassword({ password: data.currentPassword, newPassword: data.newPassword, token: localStorage.getItem("accessToken") });
+            if (res == "현재 비밀번호가 틀렸습니다.") {
+              setError("currentPassword", { message: ERROR_MESSAGE.currentPasswordDifferent });
+              return;
+            }
+            if (res == "기존 비밀번호와 동일합니다.") {
+              setError("newPassword", { message: ERROR_MESSAGE.currentEqualNewPassword });
+              return;
+            }
             if (res !== null) {
               reset();
               return openModalFunc();
             }
-            setError("currentPassword", { message: ERROR_MESSAGE.currentPasswordDifferent });
           })}
         >
           <InputWrapper>

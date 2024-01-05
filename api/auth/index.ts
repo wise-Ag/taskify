@@ -34,6 +34,6 @@ export const putPassword = async ({ password, newPassword, token }: PutPasswordP
     return res.data;
   } catch (error: any) {
     console.error(error.response.data.message);
-    return null;
+    return error.response.data.message;
   }
 };

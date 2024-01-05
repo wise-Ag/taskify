@@ -28,6 +28,7 @@ export const ERROR_MESSAGE = {
 
   currentPasswordRequired: "현재 비밀번호를 입력해 주세요.",
   currentPasswordDifferent: "현재 비밀번호와 다릅니다. 다시 입력해주세요.",
+  currentEqualNewPassword: "현재 비밀번호와 동일합니다. 다른 비밀번호로 변경해주세요.",
   newPasswordRequired: "새 비밀번호를 입력해 주세요.",
   confirmNewPasswordRequired: "새 비밀번호 확인을 입력해 주세요.",
 };

@@ -9,6 +9,7 @@ import { getDashboard, putDashboard } from "@/api/dashboards";
 import { Dashboard } from "@/api/dashboards/dashboards.types";
 import { useAtom } from "jotai";
 import { dashboardListAtom, dashboardColorAtom } from "@/states/atoms";
+import { DASHBOARD_COLOR } from "@/constants/ColorConstant";
 
 const EditDashboard = () => {
   const [toastVisible, setToastVisible] = useState(false);
@@ -20,9 +21,6 @@ const EditDashboard = () => {
   const [dashboardColor, setDashboardColor] = useAtom(dashboardColorAtom);
 
   const handleClick = async () => {
-    toast("변경이 완료되었습니다.");
-    setToastVisible((prev) => !prev);
-
     if (boardid && newTitle) {
       const updatedDashboard = await putDashboard({
         dashboardId: Number(boardid),
@@ -35,6 +33,9 @@ const EditDashboard = () => {
         setDashboard(updatedDashboard);
         setEditDashboard(updatedDashboard);
         setDashboardColor(updatedDashboard.color);
+        setNewTitle("");
+        toast("변경이 완료되었습니다.");
+        setToastVisible((prev) => !prev);
       }
     }
   };
@@ -44,6 +45,7 @@ const EditDashboard = () => {
       const res = await getDashboard({ dashboardId: Number(boardid), token: localStorage.getItem("accessToken") });
       if (res !== null) {
         setDashboard(res);
+        setDashboardColor(res.color);
       }
     };
 
@@ -58,7 +60,7 @@ const EditDashboard = () => {
       </Header>
       <Form>
         <Label>대시보드 이름</Label>
-        <Input onChange={(e) => setNewTitle(e.target.value)} placeholder="변경할 이름을 입력해 주세요." />
+        <Input onChange={(e) => setNewTitle(e.target.value)} placeholder="변경할 이름을 입력해 주세요." value={newTitle} />
       </Form>
       <ButtonWrapper>
         <Button onClick={handleClick}> 변경</Button>

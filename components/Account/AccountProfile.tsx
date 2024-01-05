@@ -11,6 +11,8 @@ import { useAtom } from "jotai";
 import { SetStateAction, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import styled from "styled-components";
+import ToastModal from "../Modal/ToastModal";
+import { toast } from "react-toastify";
 
 interface ProfileFormData {
   email: string;
@@ -24,6 +26,7 @@ const AccountProfile = () => {
   const [initialNickname, setInitialNickname] = useState("");
   const [isImageDeleted, setIsImageDeleted] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+  const [toastVisible, setToastVisible] = useState(false);
   const { isModalOpen, openModalFunc, closeModalFunc } = useModal();
   const { control, handleSubmit, watch, setError, setValue, formState } = useForm({
     defaultValues: { email: "", nickname: "" },
@@ -70,7 +73,8 @@ const AccountProfile = () => {
         console.error("Failed to update profile", Error);
       }
     } else {
-      alert("변경된 사항이 없습니다.");
+      toast("변경된 사항이 없습니다.");
+      setToastVisible((prev) => !prev);
     }
   };
 
@@ -122,6 +126,7 @@ const AccountProfile = () => {
           <AlertModal type="profileChangeComplete" onClick={handleCloseModal} />
         </ModalWrapper>
       )}
+      {toastVisible && <ToastModal />}
     </>
   );
 };
